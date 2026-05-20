@@ -753,8 +753,8 @@
     background-color: rgba(108, 117, 125, 0.1);
 }
 
-/* === RESPONSIVO DE PESTAÑAS SEGMENTADAS EN MÓVILES (CELULARES) === */
-@media (max-width: 767.98px) {
+/* === RESPONSIVO DE PESTAÑAS SEGMENTADAS EN MÓVILES Y TABLETAS === */
+@media (max-width: 991.98px) {
     /* Forzar que el contenedor flex padre ocupe todo el ancho */
     .d-flex:has(> .custom-segmented-tabs),
     div.d-flex.justify-content-center {

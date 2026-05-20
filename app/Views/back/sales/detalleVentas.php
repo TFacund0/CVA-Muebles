@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=26.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=27.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -213,7 +213,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                                             <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
                                                 <?= strtoupper(substr($v['nombre'] ?? 'M', 0, 1)) ?><?= strtoupper(substr($v['apellido'] ?? 'P', 0, 1)) ?>
                                             </div>
-                                            <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-md-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $v['id'] ?></span>
+                                            <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $v['id'] ?></span>
                                         </div>
                                         <div class="order-text-details">
                                             <div class="fw-bold text-cva-brown"><?= esc(($v['nombre'] ?? 'VENTA') . ' ' . ($v['apellido'] ?? 'MANUAL')) ?></div>
@@ -339,22 +339,35 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr class="x-small text-uppercase text-muted fw-bold">
-                                <th class="ps-4 py-3 col-solicitud-id">ID</th>
-                                <th class="py-3 col-solicitud-fecha">Fecha</th>
-                                <th class="py-3 col-solicitud-cliente">Cliente</th>
+                                <th class="ps-4 py-3 col-solicitud-cliente">Cliente</th>
+                                <th class="py-3 col-solicitud-id d-none d-lg-table-cell">ID</th>
+                                <th class="py-3 col-solicitud-fecha d-none d-lg-table-cell">Fecha</th>
                                 <th class="py-3 text-end col-solicitud-monto">Monto</th>
                                 <th class="py-3 text-center col-solicitud-acciones">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($solicitados as $s): ?>
-                                <tr>
-                                    <td class="ps-4 col-solicitud-id" data-label="ID"><span class="badge bg-light text-muted">#<?= $s['id'] ?></span></td>
-                                    <td class="small fw-bold col-solicitud-fecha" data-label="FECHA"><?= date('d/m/Y H:i', strtotime($s['fecha'])) ?></td>
-                                    <td class="col-solicitud-cliente" data-label="CLIENTE">
-                                        <div class="fw-bold text-brown"><?= esc($s['nombre'] . ' ' . $s['apellido']) ?></div>
-                                        <div class="x-small text-muted"><?= esc($s['email']) ?></div>
+                                <tr class="solicitud-row">
+                                    <td class="ps-4 col-solicitud-cliente" data-label="CLIENTE">
+                                        <div class="d-flex align-items-center gap-3 py-1 order-info-wrapper">
+                                            <div class="position-relative">
+                                                <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
+                                                    <?= strtoupper(substr($s['nombre'] ?? 'M', 0, 1)) ?><?= strtoupper(substr($s['apellido'] ?? 'P', 0, 1)) ?>
+                                                </div>
+                                                <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $s['id'] ?></span>
+                                            </div>
+                                            <div class="order-text-details">
+                                                <div class="fw-bold text-cva-brown"><?= esc($s['nombre'] . ' ' . $s['apellido']) ?></div>
+                                                <div class="d-flex gap-2 align-items-center mt-1">
+                                                    <span class="badge bg-light text-muted border d-none d-md-inline-block" style="font-size: 0.65rem;">ID: #<?= $s['id'] ?></span>
+                                                    <span class="badge bg-gold-soft text-gold border border-gold border-opacity-25 x-small" style="font-size: 0.6rem;"><?= esc($s['email']) ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
+                                    <td class="col-solicitud-id d-none d-lg-table-cell" data-label="ID"><span class="badge bg-light text-muted">#<?= $s['id'] ?></span></td>
+                                    <td class="small fw-bold col-solicitud-fecha d-none d-lg-table-cell" data-label="FECHA"><?= date('d/m/Y H:i', strtotime($s['fecha'])) ?></td>
                                     <td class="text-end fw-bold text-dark col-solicitud-monto" data-label="MONTO">$ <?= number_format($s['total_venta'], 2, ',', '.') ?></td>
                                     <td class="text-center pe-4 col-solicitud-acciones" data-label="GESTIÓN">
                                         <div class="d-flex justify-content-center gap-2">

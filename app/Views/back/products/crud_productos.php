@@ -93,7 +93,7 @@
                             role="tab" 
                             aria-selected="true">
                         <i class="bi bi-eye text-gold"></i>
-                        <span>Activos (Públicos)</span>
+                        <span>Activos<span class="d-none d-sm-inline"> (Públicos)</span></span>
                         <span class="badge bg-gold text-brown rounded-pill x-small fw-bold px-2 py-1 shadow-sm"><?= $counts['activos'] ?></span>
                     </button>
                 </li>
@@ -104,7 +104,7 @@
                             role="tab" 
                             aria-selected="false">
                         <i class="bi bi-archive text-gold"></i>
-                        <span>Archivados (Borradores)</span>
+                        <span>Archivados<span class="d-none d-sm-inline"> (Borradores)</span></span>
                         <span class="badge bg-secondary-soft text-muted rounded-pill x-small fw-bold px-2 py-1"><?= $counts['eliminados'] ?></span>
                     </button>
                 </li>

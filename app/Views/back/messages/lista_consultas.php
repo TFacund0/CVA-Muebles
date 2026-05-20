@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=2.0') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=27.0') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -101,7 +101,7 @@
                         role="tab"
                         aria-selected="false">
                         <i class="bi bi-check2-all text-gold"></i>
-                        <span>Contestados / Archivados</span>
+                        <span>Contestados<span class="d-none d-sm-inline"> / Archivados</span></span>
                         <span class="badge bg-secondary-soft text-muted rounded-pill x-small fw-bold px-2 py-1"><?= $counts['total'] - $counts['activos'] ?></span>
                     </button>
                 </li>
@@ -163,8 +163,8 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-light">
                 <tr>
-                    <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 8%;">Fecha</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted" style="width: 22%;">Interesado</th>
+                    <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted" style="width: 22%;">Interesado</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 8%;">Fecha</th>
                     <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 18%;">Contacto</th>
                     <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 12%;">Asunto</th>
                     <th class="py-3 text-uppercase x-small fw-bold text-muted" style="width: 25%;">Mensaje</th>
@@ -178,25 +178,25 @@
                             data-search="<?= $consulta['search_data'] ?>"
                             data-asunto="<?= esc($consulta['asunto']) ?>"
                             data-activo="<?= $consulta['activo'] ?>">
-                            <td class="ps-4 d-none d-lg-table-cell" data-label="FECHA">
-                                <div class="fw-bold text-cva-brown small"><?= date('d/m/Y', strtotime($consulta['fecha'])) ?></div>
-                            </td>
-                            <td data-label="INTERESADO">
+                            <td class="ps-4" data-label="INTERESADO">
                                 <div class="d-flex align-items-center gap-3 py-1 inquiry-info-wrapper">
                                     <div class="position-relative">
                                         <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
                                             <?= strtoupper(substr($consulta['nombre'], 0, 1)) ?><?= strtoupper(substr($consulta['apellido'], 0, 1)) ?>
                                         </div>
-                                        <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);"><?= date('d/m/y', strtotime($consulta['fecha'])) ?></span>
+                                        <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $consulta['id_consulta'] ?></span>
                                     </div>
                                     <div class="inquiry-text-details">
-                                        <div class="fw-bold text-cva-brown fs-5"><?= esc($consulta['nombre']) ?> <?= esc($consulta['apellido']) ?></div>
-                                        <div class="x-small text-muted d-lg-none"><?= esc($consulta['email']) ?></div>
-                                        <div class="d-lg-none mt-1">
+                                        <div class="fw-bold text-cva-brown"><?= esc($consulta['nombre']) ?> <?= esc($consulta['apellido']) ?></div>
+                                        <div class="d-flex gap-2 align-items-center mt-1">
+                                            <span class="badge bg-light text-muted border d-none d-md-inline-block" style="font-size: 0.65rem;">ID: #<?= $consulta['id_consulta'] ?></span>
                                             <span class="badge bg-gold-soft text-gold border border-gold border-opacity-25 x-small" style="font-size: 0.6rem;"><?= esc($consulta['asunto']) ?></span>
                                         </div>
                                     </div>
                                 </div>
+                            </td>
+                            <td class="d-none d-lg-table-cell" data-label="FECHA">
+                                <div class="fw-bold text-cva-brown small"><?= date('d/m/Y', strtotime($consulta['fecha'])) ?></div>
                             </td>
                             <td class="d-none d-lg-table-cell" data-label="CONTACTO">
                                 <div class="small text-end text-md-start"><i class="bi bi-envelope me-1 text-gold"></i> <?= esc($consulta['email']) ?></div>
