@@ -108,6 +108,20 @@
                         </div>
                     </a>
                 </div>
+                <div class="col-12 col-md-6 d-flex">
+                    <a href="<?= base_url('/admin/galeria') ?>" class="action-btn-v2 flex-grow-1 position-relative">
+                        <?php if (isset($total_galeria_pendientes) && $total_galeria_pendientes > 0): ?>
+                            <span class="position-absolute top-0 end-0 m-3 badge rounded-pill bg-danger" style="font-size: 0.75rem; padding: 0.4em 0.65em;">
+                                <?= $total_galeria_pendientes ?>
+                            </span>
+                        <?php endif; ?>
+                        <div class="action-icon"><i class="bi bi-images"></i></div>
+                        <div class="action-text">
+                            <span class="d-block fw-bold">Moderar Galería</span>
+                            <small class="text-muted">Fotos de Clientes</small>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

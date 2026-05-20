@@ -16,6 +16,8 @@ class UsuarioController extends BaseController {
 
     /**
      * Muestra la vista de registro.
+     * Nota: los clientes logueados (perfil_id != 1) son redirigidos al inicio.
+     * Los admins logueados SÍ pueden acceder para dar de alta nuevos usuarios.
      */
     public function index_registrar() {    
         if (session()->get('logged_in') && session()->get('perfil_id') != 1) return redirect()->to('/');

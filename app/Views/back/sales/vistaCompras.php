@@ -16,24 +16,58 @@
             <div style="width: 100px; height: 4px; background: var(--cva-gold); border-radius: 2px;"></div>
         </div>
 
-        <!-- Alerta de Éxito Notable -->
-        <?php if (session()->getFlashdata('success')): ?>
-            <div class="alert alert-artisan-success mb-5 p-4 border-0 shadow-lg animate__animated animate__backInDown" style="background: white; border-left: 10px solid #28a745 !important; border-radius: 1.5rem;">
-                <div class="d-flex align-items-center">
-                    <div class="bg-success text-white rounded-circle p-3 me-4 shadow">
-                        <i class="bi bi-check-lg fs-3"></i>
+        <?php if (!empty($ventas)): ?>
+            <!-- Buscador y Filtros Premium de Pedidos -->
+            <div class="row mb-5 g-3 align-items-center animate-fade-in">
+                <!-- Filtros (Izquierda) -->
+                <div class="col-lg-8 col-md-12">
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-filter-artisan active" data-filter="todos">
+                            <i class="bi bi-collection-fill me-1"></i> Todos
+                        </button>
+                        <button class="btn btn-filter-artisan" data-filter="solicitado">
+                            <i class="bi bi-clock-history me-1"></i> Por Aprobar
+                        </button>
+                        <button class="btn btn-filter-artisan" data-filter="pendiente">
+                            <i class="bi bi-hourglass-split me-1"></i> Pendientes
+                        </button>
+                        <button class="btn btn-filter-artisan" data-filter="en_proceso">
+                            <i class="bi bi-hammer me-1"></i> En Taller
+                        </button>
+                        <button class="btn btn-filter-artisan" data-filter="entregado">
+                            <i class="bi bi-truck me-1"></i> Entregados
+                        </button>
+                        <button class="btn btn-filter-artisan" data-filter="rechazado">
+                            <i class="bi bi-x-circle-fill me-1"></i> Rechazados
+                        </button>
                     </div>
-                    <div>
-                        <h4 class="fw-bold text-success mb-1"><?= session()->getFlashdata('success') ?></h4>
-                        <p class="text-muted mb-0 fw-semibold">Nuestro equipo revisará tu solicitud a la brevedad para confirmar los detalles.</p>
+                </div>
+
+                <!-- Ordenar por (Derecha) -->
+                <div class="col-lg-4 col-md-12 text-lg-end">
+                    <div class="d-inline-flex align-items-center gap-2 bg-white rounded-pill px-3 py-2 border shadow-sm" style="height: 48px;">
+                        <span class="small text-muted fw-bold text-nowrap"><i class="bi bi-sort-down text-gold me-1"></i> Ordenar:</span>
+                        <select id="sort-purchases" class="form-select border-0 bg-transparent py-0 px-2 fw-semibold text-cva-brown" style="box-shadow: none; font-size: 0.85rem; cursor: pointer; min-width: 150px;">
+                            <option value="recent">Más recientes</option>
+                            <option value="oldest">Más antiguos</option>
+                            <option value="high-price">Mayor inversión</option>
+                            <option value="low-price">Menor inversión</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
 
-        <?php if (!empty($ventas)): ?>
+            <!-- Estado Vacío Auxiliar para Filtros de Pedidos -->
+            <div id="no-results-purchases" class="text-center py-5 d-none animate-fade-in mb-5" style="background: rgba(255,255,255,0.5); border-radius: 2rem; border: 1px dashed rgba(184, 134, 11, 0.2); padding: 3rem !important;">
+                <div class="mb-4">
+                    <i class="bi bi-funnel text-gold opacity-25" style="font-size: 4rem;"></i>
+                </div>
+                <h4 class="fw-bold text-cva-brown font-lora">No hay pedidos con este estado</h4>
+                <p class="text-muted mb-0">Probá seleccionando otra opción de filtrado o de ordenamiento.</p>
+            </div>
+
             <div class="row">
-                <div class="col-lg-10 mx-auto">
+                <div class="col-lg-10 mx-auto" id="purchases-list">
                     <?php foreach ($ventas as $venta): ?>
                         <?php 
                             $status_class = 'status-' . strtolower($venta['estado'] ?? 'solicitado');
@@ -48,7 +82,7 @@
                                 $status_label = 'RECHAZADO';
                             }
                         ?>
-                        <div class="purchase-card">
+                        <div class="purchase-card" data-status="<?= str_replace('status-', '', $status_class) ?>" data-fecha="<?= strtotime($venta['fecha']) ?>" data-id="<?= $venta['id'] ?>" data-total="<?= $venta['total_venta'] ?>">
                             <div class="purchase-header">
                                 <div>
                                     <span class="info-label">IDENTIFICADOR DE OBRA</span>
@@ -144,6 +178,96 @@
                 }
             });
         }
+
+        // Sistema de Filtrado y Ordenamiento de Pedidos
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.btn-filter-artisan');
+            const sortSelect = document.getElementById('sort-purchases');
+            const container = document.getElementById('purchases-list');
+            const cards = Array.from(document.querySelectorAll('.purchase-card'));
+            const noResults = document.getElementById('no-results-purchases');
+
+            let currentFilter = 'todos';
+
+            function filterAndSort() {
+                let visibleCount = 0;
+
+                // 1. Filtrar
+                cards.forEach(card => {
+                    const status = card.dataset.status;
+
+                    let matchesFilter = false;
+                    if (currentFilter === 'todos') {
+                        matchesFilter = true;
+                    } else if (currentFilter === 'entregado') {
+                        matchesFilter = (status === 'entregado' || status === 'terminado');
+                    } else {
+                        matchesFilter = (status === currentFilter);
+                    }
+
+                    if (matchesFilter) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Mostrar / ocultar estado vacío
+                if (visibleCount === 0) {
+                    noResults.classList.remove('d-none');
+                } else {
+                    noResults.classList.add('d-none');
+                }
+
+                // 2. Ordenar
+                const sortBy = sortSelect ? sortSelect.value : 'recent';
+                const sorted = [...cards].sort((a, b) => {
+                    const idA = parseInt(a.dataset.id) || 0;
+                    const idB = parseInt(b.dataset.id) || 0;
+
+                    const priceA = parseFloat(a.dataset.total) || 0;
+                    const priceB = parseFloat(b.dataset.total) || 0;
+
+                    const dateA = parseInt(a.dataset.fecha) || 0;
+                    const dateB = parseInt(b.dataset.fecha) || 0;
+
+                    if (sortBy === 'recent') {
+                        return dateB - dateA; // Más reciente primero
+                    } else if (sortBy === 'oldest') {
+                        return dateA - dateB; // Más antiguo primero
+                    } else if (sortBy === 'high-price') {
+                        return priceB - priceA; // Mayor precio primero
+                    } else if (sortBy === 'low-price') {
+                        return priceA - priceB; // Menor precio primero
+                    }
+                    return 0;
+                });
+
+                // Reordenar en el DOM
+                sorted.forEach(el => {
+                    if (container) {
+                        container.appendChild(el);
+                    }
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    filterAndSort();
+                });
+            });
+
+            if (sortSelect) {
+                sortSelect.addEventListener('change', filterAndSort);
+            }
+            
+            // Inicializar ordenamiento y filtrado por defecto
+            filterAndSort();
+        });
     </script>
 </div>
 <?= $this->endSection() ?>

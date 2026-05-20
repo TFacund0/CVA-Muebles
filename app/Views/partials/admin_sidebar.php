@@ -30,6 +30,10 @@
             <i class="bi bi-chat-dots"></i>
             <span>Consultas</span>
         </a>
+        <a href="<?= base_url('/admin/galeria') ?>" class="nav-item-admin <?= (current_url() == base_url('/admin/galeria')) ? 'active' : '' ?>">
+            <i class="bi bi-images"></i>
+            <span>Galería</span>
+        </a>
 
         <!-- 3. INVENTARIO Y CATÁLOGO -->
         <div class="sidebar-group-label">Catálogo de Obras</div>

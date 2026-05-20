@@ -70,7 +70,6 @@ class CarritoController extends BaseController
             if ($resultado && $resultado['status'] === 'error') {
                 return $this->response->setJSON(['status' => 'error', 'message' => $resultado['message']]);
             }
-            $cartCount = $this->carritoService->getContenido(); // Refresh content
             return $this->response->setJSON([
                 'status' => 'success', 
                 'cart' => $this->carritoService->getContenido(),
@@ -102,11 +101,4 @@ class CarritoController extends BaseController
         return redirect()->to("/muestro");
     }
 
-    /**
-     * Devuelve el contenido (para el VentasController).
-     */
-    public function devolver_carrito()
-    {
-        return $this->carritoService->getContenido();
-    }
 }

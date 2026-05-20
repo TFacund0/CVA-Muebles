@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/galeria.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/galeria.css?v=2.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -9,12 +9,39 @@
     <div class="container">
         <h1 class="display-2 fw-bold font-lora">CVA en tu Hogar</h1>
         <p class="lead">Nuestra mayor satisfacción es ver cómo nuestras piezas cobran vida en tu espacio.</p>
-        <div class="mx-auto mt-4" style="width: 100px; height: 5px; background: var(--cva-gold); border-radius: 5px;"></div>
+        <div class="gold-divider mx-auto mt-4"></div>
     </div>
 </header>
 
 <section class="py-5">
     <div class="container py-5">
+        
+        <?php if (session()->get('logged_in') && session()->get('perfil_id') == 1): ?>
+            <div class="moderation-active-panel p-4 mb-5 rounded-4 shadow-sm animate-fade-in mx-auto border-artisan-gold">
+                <div class="d-md-flex align-items-center justify-content-between text-center text-md-start gap-4">
+                    <div class="d-flex flex-column flex-md-row align-items-center gap-3 mb-3 mb-md-0">
+                        <div class="icon-badge-gold text-white rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-shield-check fs-4"></i>
+                        </div>
+                        <div>
+                            <h4 class="h5 fw-bold text-cva-brown mb-1">Panel de Moderación Activo</h4>
+                            <p class="text-muted mb-0 small">
+                                <?php if ($pendientesCount > 0): ?>
+                                    Hay <span class="badge bg-danger px-2.5 py-1 rounded-pill fw-bold badge-sm-text"><?= $pendientesCount ?></span> solicitud<?= $pendientesCount > 1 ? 'es' : '' ?> de foto<?= $pendientesCount > 1 ? 's' : '' ?> pendiente<?= $pendientesCount > 1 ? 's' : '' ?> por evaluar.
+                                <?php else: ?>
+                                    No hay fotos pendientes de revisión en este momento.
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-100 w-md-auto">
+                        <a href="<?= base_url('admin/galeria') ?>" class="btn btn-vivid px-4 py-2.5 rounded-pill fw-bold btn-sm shadow w-100 text-center">
+                            <i class="bi bi-check2-square me-2"></i> IR A EVALUAR
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         
         <?php if (session()->get('logged_in')): ?>
             <div class="text-center mb-5">
@@ -51,7 +78,7 @@
 
         <div class="masonry-gallery">
             <?php if (empty($fotos)): ?>
-                <div class="text-center py-5 w-100" style="column-span: all;">
+                <div class="text-center py-5 w-100" style="grid-column: 1 / -1;">
                     <i class="bi bi-camera text-muted opacity-25" style="font-size: 5rem;"></i>
                     <h3 class="text-muted font-lora mt-3">Pronto veremos aquí las fotos de nuestros clientes</h3>
                 </div>

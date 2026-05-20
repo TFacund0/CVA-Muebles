@@ -2,19 +2,22 @@
 
 namespace App\Controllers;
 
-use App\Models\VentasCabeceraModel;
-use App\Models\VentasDetalleModel;
-
 /**
  * Controlador para gestión de ventas refactorizado para usar Capa de Servicios.
  */
 class VentasController extends BaseController {
 
     protected $ventasService;
+    protected $usuarioService;
+    protected $consultaService;
+    protected $galeriaService;
 
     public function __construct() {
         helper(['url', 'form']);
-        $this->ventasService = new \App\Services\VentasService();
+        $this->ventasService  = new \App\Services\VentasService();
+        $this->usuarioService = new \App\Services\UsuarioService();
+        $this->consultaService = new \App\Services\ConsultaService();
+        $this->galeriaService = new \App\Services\GaleriaService();
     }
 
     /**
@@ -129,13 +132,11 @@ class VentasController extends BaseController {
     public function estadisticas() {
 
 
-        // Podríamos crear un ConsultaService, por ahora mantenemos el modelo para esta métrica específica
-        $consultasModel = new \App\Models\ConsultaModel();
-        
         return view('back/sales/estadisticas', [
-            'stats' => $this->ventasService->getDashboardStats(),
-            'total_consultas' => $consultasModel->where('activo', 'SI')->countAllResults(),
-            'title' => 'Estadísticas del Taller'
+            'stats'                    => $this->ventasService->getDashboardStats(),
+            'total_consultas'          => $this->consultaService->countActivas(),
+            'total_galeria_pendientes' => $this->galeriaService->getPendientesCount(),
+            'title'                    => 'Estadísticas del Taller'
         ]);
     }
 
@@ -143,13 +144,8 @@ class VentasController extends BaseController {
      * Muestra el formulario para registrar un pedido manual.
      */
     public function nuevo_pedido_personalizado() {
-
-        
-        $usuarioModel = new \App\Models\UsuarioModel();
-        $clientes = $usuarioModel->where('perfil_id', 2)->where('baja', 'NO')->findAll();
-
         return view('back/sales/nuevo_pedido_personalizado', [
-            'clientes' => $clientes,
+            'clientes' => $this->usuarioService->getClientesActivos(),
             'title'    => 'Nuevo Pedido Personalizado'
         ]);
     }
@@ -198,11 +194,15 @@ class VentasController extends BaseController {
      * Registra un pago delegando al servicio.
      */
     public function registrar_pago() {
+        $monto = $this->request->getPost('monto');
 
+        if (!is_numeric($monto) || (float) $monto <= 0) {
+            return redirect()->back()->with('fail', 'El monto ingresado no es válido. Debe ser un número mayor a 0.');
+        }
 
         $this->ventasService->registrarPago(
             $this->request->getPost('venta_id'),
-            $this->request->getPost('monto'),
+            (float) $monto,
             $this->request->getPost('nota')
         );
 
@@ -213,12 +213,12 @@ class VentasController extends BaseController {
      * Actualiza las observaciones delegando al servicio.
      */
     public function guardar_observaciones() {
-
-
         $observaciones = $this->request->getPost('observaciones');
-        $img_ref_tag = $this->request->getPost('img_ref_tag');
-        
-        if ($img_ref_tag) {
+        $img_ref_tag   = $this->request->getPost('img_ref_tag');
+
+        // Seguridad: solo se permite el formato exacto [IMG_REF:nombre_de_archivo].
+        // Descarta cualquier otro contenido para prevenir XSS persistente.
+        if ($img_ref_tag && preg_match('/^\[IMG_REF:[a-zA-Z0-9_\-.]+\]$/', $img_ref_tag)) {
             $observaciones .= "\n" . $img_ref_tag;
         }
 

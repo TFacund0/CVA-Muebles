@@ -14,12 +14,14 @@
             loading="lazy">
 
         <!-- Badge de Favorito -->
-        <?php $isFavorite = isset($user_favs) && in_array($producto['id_producto'], $user_favs); ?>
-        <button class="btn-fav-artisan <?= $isFavorite ? 'active' : '' ?>"
-            onclick="toggleFav(event, <?= $producto['id_producto'] ?>, this)"
-            aria-label="<?= $isFavorite ? 'Quitar favorito' : 'Agregar favorito' ?>">
-            <i class="bi <?= $isFavorite ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
-        </button>
+        <?php if (session()->get('logged_in')): ?>
+            <?php $isFavorite = isset($user_favs) && in_array($producto['id_producto'], $user_favs); ?>
+            <button class="btn-fav-artisan <?= $isFavorite ? 'active' : '' ?>"
+                onclick="toggleFav(event, <?= $producto['id_producto'] ?>, this)"
+                aria-label="<?= $isFavorite ? 'Quitar favorito' : 'Agregar favorito' ?>">
+                <i class="bi <?= $isFavorite ? 'bi-heart-fill' : 'bi-heart' ?>"></i>
+            </button>
+        <?php endif; ?>
 
         <!-- Overlay de Categoría -->
         <div class="category-overlay">

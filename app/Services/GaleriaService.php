@@ -37,6 +37,14 @@ class GaleriaService
     }
 
     /**
+     * Obtiene la cantidad de fotos pendientes de moderación.
+     */
+    public function getPendientesCount()
+    {
+        return $this->galeriaModel->where('activo', 'NO')->countAllResults();
+    }
+
+    /**
      * Procesa la subida de una foto por parte de un cliente.
      */
     public function subir($usuario_id, $img, $comentario)

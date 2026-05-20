@@ -44,11 +44,4 @@ class ProductoModel extends Model
         return $query->getRowArray();
     }
 
-    public function updateStock($id = null, $stock = null) {
-        $builder = $this->getBuilderProductos();
-        $builder->where('productos.id_producto', $id);
-        $builder->set('productos.stock', $stock);
-        
-        $builder->update();
-    }
 }
