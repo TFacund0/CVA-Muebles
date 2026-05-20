@@ -96,12 +96,12 @@
             <div class="swiper-wrapper">                
                 <?php 
                     $destacados = [
-                        ['id' => 1, 'img' => 'Muebles 56.jpeg', 'tit' => 'Mesa Comedor Roble', 'desc' => 'Roble macizo tallado a mano.', 'price' => '$1.2M'],
-                        ['id' => 2, 'img' => 'Muebles 10.jpeg', 'tit' => 'Alacena Rústica', 'desc' => 'Pino seleccionado con forja.', 'price' => '$650k'],
-                        ['id' => 3, 'img' => 'Muebles 46.jpeg', 'tit' => 'Set de 4 Sillas', 'desc' => 'Diseño ergonómico recuperado.', 'price' => '$1.2M'],
-                        ['id' => 4, 'img' => 'Muebles 68.jpeg', 'tit' => 'Mesa Ratona', 'desc' => 'Acabado rústico premium.', 'price' => '$450k'],
-                        ['id' => 5, 'img' => 'Muebles 22.jpeg', 'tit' => 'Mueble de TV', 'desc' => 'Líneas modernas y madera noble.', 'price' => '$850k'],
-                        ['id' => 6, 'img' => 'Muebles 69.jpeg', 'tit' => 'Respaldo de Cama', 'desc' => 'Textura natural y robustez.', 'price' => '$550k'],
+                        ['id' => 10, 'img' => 'Muebles 56.jpeg', 'tit' => 'Mesa Comedor Roble', 'desc' => 'Roble macizo tallado a mano.', 'price' => '$1.2M'],
+                        ['id' => 14, 'img' => 'Muebles 10.jpeg', 'tit' => 'Alacena Rústica', 'desc' => 'Pino seleccionado con forja.', 'price' => '$650k'],
+                        ['id' => 21, 'img' => 'Muebles 46.jpeg', 'tit' => 'Set de 4 Sillas', 'desc' => 'Diseño ergonómico recuperado.', 'price' => '$1.2M'],
+                        ['id' => 11, 'img' => 'Muebles 68.jpeg', 'tit' => 'Mesa Ratona', 'desc' => 'Acabado rústico premium.', 'price' => '$450k'],
+                        ['id' => 22, 'img' => 'Muebles 22.jpeg', 'tit' => 'Mueble de TV', 'desc' => 'Líneas modernas y madera noble.', 'price' => '$850k'],
+                        ['id' => 16, 'img' => 'Muebles 69.jpeg', 'tit' => 'Respaldo de Cama', 'desc' => 'Textura natural y robustez.', 'price' => '$550k'],
                     ];
                     foreach($destacados as $p):
                 ?>
@@ -116,7 +116,7 @@
                             <p class="x-small text-muted mb-3"><?= $p['desc'] ?></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="x-small fw-bold text-vivid">Pieza de Autor</span>
-                                <a href="<?= base_url('productos') ?>" class="btn-detail-artisan" style="width: 35px; height: 35px;"><i class="bi bi-eye"></i></a>
+                                <a href="<?= base_url('producto/detalle/' . $p['id']) ?>" class="btn-detail-artisan" style="width: 35px; height: 35px;"><i class="bi bi-eye"></i></a>
                             </div>
                         </div>
                     </div>
