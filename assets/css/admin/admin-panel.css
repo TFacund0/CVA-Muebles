@@ -184,6 +184,23 @@
     .message-cell .message-action {
         display: block !important;
     }
+
+    /* Soporte de scroll horizontal para evitar desbordes en pantallas estrechas de escritorio */
+    .table-responsive-stack {
+        overflow-x: auto !important;
+        max-width: 100% !important;
+    }
+    
+    #inquiry-table {
+        min-width: 950px !important;
+        table-layout: fixed !important;
+    }
+    
+    .col-inquiry-interesado { width: 25% !important; min-width: 220px !important; }
+    .col-inquiry-fecha { width: 10% !important; min-width: 100px !important; }
+    .col-inquiry-contacto { width: 20% !important; min-width: 180px !important; }
+    .col-inquiry-mensaje { width: 30% !important; min-width: 250px !important; }
+    .col-inquiry-acciones { width: 15% !important; min-width: 150px !important; }
 }
 
 /* CONTENIDO PRINCIPAL */

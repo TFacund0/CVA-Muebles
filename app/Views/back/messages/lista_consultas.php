@@ -158,14 +158,14 @@
         </h6>
     </div>
     <div class="table-responsive-stack table-layout-fixed">
-        <table class="table table-hover align-middle mb-0">
+        <table id="inquiry-table" class="table table-hover align-middle mb-0">
             <thead class="bg-light">
                 <tr>
-                    <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted" style="width: 25%;">Interesado</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 10%;">Fecha</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 20%;">Contacto</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted" style="width: 30%;">Mensaje</th>
-                    <th class="pe-4 py-3 text-uppercase x-small fw-bold text-muted text-center" style="width: 15%;">Acciones</th>
+                    <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted col-inquiry-interesado" style="width: 25%;">Interesado</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell col-inquiry-fecha" style="width: 10%;">Fecha</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell col-inquiry-contacto" style="width: 20%;">Contacto</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted col-inquiry-mensaje" style="width: 30%;">Mensaje</th>
+                    <th class="pe-4 py-3 text-uppercase x-small fw-bold text-muted text-center col-inquiry-acciones" style="width: 15%;">Acciones</th>
                 </tr>
             </thead>
             <tbody id="inquiry-table-body">
@@ -175,7 +175,7 @@
                             data-search="<?= $consulta['search_data'] ?>"
                             data-asunto="<?= esc($consulta['asunto']) ?>"
                             data-activo="<?= $consulta['activo'] ?>">
-                            <td class="ps-4" data-label="INTERESADO">
+                            <td class="ps-4 col-inquiry-interesado" data-label="INTERESADO">
                                 <div class="d-flex align-items-center gap-3 py-1 inquiry-info-wrapper">
                                     <div class="position-relative">
                                         <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
@@ -192,15 +192,15 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="d-none d-lg-table-cell" data-label="FECHA">
+                            <td class="d-none d-lg-table-cell col-inquiry-fecha" data-label="FECHA">
                                 <div class="fw-bold text-cva-brown small"><?= date('d/m/Y', strtotime($consulta['fecha'])) ?></div>
                             </td>
-                            <td class="d-none d-lg-table-cell" data-label="CONTACTO">
+                            <td class="d-none d-lg-table-cell col-inquiry-contacto" data-label="CONTACTO">
                                 <div class="small text-end text-md-start"><i class="bi bi-envelope me-1 text-gold"></i> <?= esc($consulta['email']) ?></div>
                                 <div class="x-small fw-bold text-muted text-end text-md-start"><i class="bi bi-phone me-1"></i> <?= esc($consulta['telefono']) ?></div>
                             </td>
 
-                            <td data-label="MENSAJE" class="message-cell">
+                            <td data-label="MENSAJE" class="message-cell col-inquiry-mensaje">
                                 <div class="message-preview text-truncate small text-muted mb-1"><?= esc($consulta['descripcion']) ?></div>
                                 <div class="message-action">
                                     <a href="#" class="text-gold x-small fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalConsulta<?= $index ?>">
@@ -208,7 +208,7 @@
                                     </a>
                                 </div>
                             </td>
-                            <td class="pe-4 text-center" data-label="ACCIONES">
+                            <td class="pe-4 text-center col-inquiry-acciones" data-label="ACCIONES">
                                 <div class="d-flex justify-content-center gap-2">
                                     <?php
                                     $num = preg_replace('/[^0-9]/', '', $consulta['telefono']);
