@@ -27,7 +27,6 @@ $routes->get('/admin/galeria', 'GaleriaController::admin_index', ['filter' => 'a
 $routes->post('/admin/galeria/aprobar/(:num)', 'GaleriaController::aprobar/$1', ['filter' => 'adminAuth']);
 $routes->post('/admin/galeria/eliminar/(:num)', 'GaleriaController::eliminar/$1', ['filter' => 'adminAuth']);
 $routes->get('/producto/detalle/(:num)', 'ProductoController::ver_detalle/$1');
-$routes->get('/detalle_producto/(:num)', 'ProductoController::ver_detalle/$1');
 
 // -------------------- Registro de usuarios --------------------
 $routes->get('/registro', 'UsuarioController::index_registrar');

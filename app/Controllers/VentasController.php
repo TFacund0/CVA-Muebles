@@ -8,10 +8,14 @@ namespace App\Controllers;
 class VentasController extends BaseController {
 
     protected $ventasService;
+    protected $usuarioService;
+    protected $consultaService;
 
     public function __construct() {
         helper(['url', 'form']);
-        $this->ventasService = new \App\Services\VentasService();
+        $this->ventasService  = new \App\Services\VentasService();
+        $this->usuarioService = new \App\Services\UsuarioService();
+        $this->consultaService = new \App\Services\ConsultaService();
     }
 
     /**
@@ -126,13 +130,10 @@ class VentasController extends BaseController {
     public function estadisticas() {
 
 
-        // Podríamos crear un ConsultaService, por ahora mantenemos el modelo para esta métrica específica
-        $consultasModel = new \App\Models\ConsultaModel();
-        
         return view('back/sales/estadisticas', [
-            'stats' => $this->ventasService->getDashboardStats(),
-            'total_consultas' => $consultasModel->where('activo', 'SI')->countAllResults(),
-            'title' => 'Estadísticas del Taller'
+            'stats'           => $this->ventasService->getDashboardStats(),
+            'total_consultas' => $this->consultaService->countActivas(),
+            'title'           => 'Estadísticas del Taller'
         ]);
     }
 
@@ -140,13 +141,8 @@ class VentasController extends BaseController {
      * Muestra el formulario para registrar un pedido manual.
      */
     public function nuevo_pedido_personalizado() {
-
-        
-        $usuarioModel = new \App\Models\UsuarioModel();
-        $clientes = $usuarioModel->where('perfil_id', 2)->where('baja', 'NO')->findAll();
-
         return view('back/sales/nuevo_pedido_personalizado', [
-            'clientes' => $clientes,
+            'clientes' => $this->usuarioService->getClientesActivos(),
             'title'    => 'Nuevo Pedido Personalizado'
         ]);
     }

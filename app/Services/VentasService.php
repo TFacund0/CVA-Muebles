@@ -200,16 +200,24 @@ class VentasService
     }
 
     /**
-     * Obtiene estadísticas agregadas para el dashboard.
+     * Obtiene estadísticas agregadas para el dashboard en una sola query.
      */
     public function getDashboardStats()
     {
-        return [
-            'PENDIENTE'  => $this->ventasModel->where('estado', 'PENDIENTE')->countAllResults(),
-            'EN_PROCESO' => $this->ventasModel->where('estado', 'EN_PROCESO')->countAllResults(),
-            'TERMINADO'  => $this->ventasModel->where('estado', 'TERMINADO')->countAllResults(),
-            'ENTREGADO'  => $this->ventasModel->where('estado', 'ENTREGADO')->countAllResults(),
-        ];
+        $rows = $this->db
+            ->table('ventas_cabecera')
+            ->select('estado, COUNT(*) as total')
+            ->whereIn('estado', ['PENDIENTE', 'EN_PROCESO', 'TERMINADO', 'ENTREGADO'])
+            ->groupBy('estado')
+            ->get()
+            ->getResultArray();
+
+        $stats = ['PENDIENTE' => 0, 'EN_PROCESO' => 0, 'TERMINADO' => 0, 'ENTREGADO' => 0];
+        foreach ($rows as $row) {
+            $stats[$row['estado']] = (int) $row['total'];
+        }
+
+        return $stats;
     }
 
     /**

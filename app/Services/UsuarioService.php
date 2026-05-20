@@ -209,6 +209,17 @@ class UsuarioService
     }
 
     /**
+     * Obtiene todos los clientes activos (perfil_id = 2, baja = NO).
+     */
+    public function getClientesActivos()
+    {
+        return $this->usuarioModel
+            ->where('perfil_id', 2)
+            ->where('baja', 'NO')
+            ->findAll();
+    }
+
+    /**
      * Elimina permanentemente a un usuario si no tiene compras asociadas.
      */
     public function eliminarPermanente($id)

@@ -90,4 +90,12 @@ class ConsultaService
     {
         return $this->consultaModel->delete($id);
     }
+
+    /**
+     * Cuenta las consultas activas (pendientes de responder).
+     */
+    public function countActivas()
+    {
+        return $this->consultaModel->where('activo', 'SI')->countAllResults();
+    }
 }

@@ -7,16 +7,6 @@ namespace App\Controllers;
  */
 class PagesController extends BaseController
 {
-    protected $productoService;
-    protected $favoritosService;
-    protected $categoriaService;
-
-    public function __construct() {
-        $this->productoService = new \App\Services\ProductoService();
-        $this->favoritosService = new \App\Services\FavoritosService();
-        $this->categoriaService = new \App\Services\CategoriaService();
-    }
-
     public function quienesSomos() {
         return view('front/pages/quienesSomos', ['title' => 'Quiénes Somos']);
     }
@@ -41,10 +31,14 @@ class PagesController extends BaseController
      * Muestra el catálogo de productos delegando al servicio.
      */
     public function productos() {
+        $productoService  = new \App\Services\ProductoService();
+        $categoriaService = new \App\Services\CategoriaService();
+        $favoritosService = new \App\Services\FavoritosService();
+
         return view('front/pages/productos', [
-            'productos'  => $this->productoService->getProductosPublicos(),
-            'categorias' => $this->categoriaService->getCategoriasConStats(true),
-            'user_favs'  => session()->get('logged_in') ? $this->favoritosService->getFavoritosIds(session()->get('id_usuario')) : [],
+            'productos'  => $productoService->getProductosPublicos(),
+            'categorias' => $categoriaService->getCategoriasConStats(true),
+            'user_favs'  => session()->get('logged_in') ? $favoritosService->getFavoritosIds(session()->get('id_usuario')) : [],
             'title'      => 'Nuestros Productos'
         ]);
     }
