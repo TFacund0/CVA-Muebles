@@ -158,7 +158,7 @@
                         </div>
                     </div>
 
-                    <a href="https://maps.google.com/?q=Ruta+Nacional+12,+Km+885,+Mantilla,+Corrientes" target="_blank" class="btn btn-vivid px-5 py-4 rounded-pill fw-bold w-100 shadow-lg">
+                    <a href="https://www.google.com/maps/place//@-28.7442352,-58.8024496,12z/data=!4m3!1m2!2m1!1sRuta+Nacional+12,+Km+885,+Mantilla,+Corrientes?entry=ttu" target="_blank" class="btn btn-vivid px-5 py-4 rounded-pill fw-bold w-100 shadow-lg">
                         CÓMO LLEGAR <i class="bi bi-arrow-right ms-2"></i>
                     </a>
                 </div>
