@@ -1,35 +1,54 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/productos.css?v=9.5')?>">
-    <style>
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/productos.css?v=9.5') ?>">
+<style>
+    .btn-fav-artisan {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        background: white !important;
+        border: none !important;
+        border-radius: 50% !important;
+        color: var(--cva-brown) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        z-index: 10 !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+    }
+    .btn-fav-artisan:hover {
+        transform: scale(1.15) !important;
+        color: #e74c3c !important;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2) !important;
+    }
+    .btn-fav-artisan.active {
+        color: #e74c3c !important;
+    }
+    .btn-fav-artisan i {
+        font-size: 1.2rem !important;
+        line-height: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    @media (max-width: 991.98px) {
         .btn-fav-artisan {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border: none;
-            border-radius: 50%;
-            color: var(--cva-brown);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 5;
+            width: 34px !important;
+            height: 34px !important;
+            top: 12px !important;
+            right: 12px !important;
         }
-        .btn-fav-artisan:hover {
-            transform: scale(1.1);
-            color: #e74c3c;
+        .btn-fav-artisan i {
+            font-size: 1rem !important;
         }
-        .btn-fav-artisan.active {
-            color: #e74c3c;
-            background: white;
-        }
-
-    </style>
+    }
+</style>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -51,12 +70,12 @@
         <div class="filter-container mb-5 animate-fade-in">
             <div class="filter-group d-flex">
                 <button type="button" class="btn filtro-categoria active" data-categoria="todos">Todos</button>
-                <?php 
-                    $descripciones_vistas = [];
-                    foreach ($categorias as $cat): 
-                        $desc = trim(mb_strtolower($cat['descripcion']));
-                        if (in_array($desc, $descripciones_vistas)) continue;
-                        $descripciones_vistas[] = $desc;
+                <?php
+                $descripciones_vistas = [];
+                foreach ($categorias as $cat):
+                    $desc = trim(mb_strtolower($cat['descripcion']));
+                    if (in_array($desc, $descripciones_vistas)) continue;
+                    $descripciones_vistas[] = $desc;
                 ?>
                     <button type="button" class="btn filtro-categoria" data-categoria="<?= esc($cat['descripcion']) ?>">
                         <?= esc($cat['descripcion']) ?>
@@ -78,19 +97,19 @@
 
 <?= $this->section('extra-js') ?>
 <script>
-    function toggleFav(id, btn) {
-        if (typeof event !== 'undefined') {
+    function toggleFav(event, id, btn) {
+        if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
 
         fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
-            method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
-            }
-        })
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+                }
+            })
             .then(response => response.json())
             .then(data => {
                 const icon = btn.querySelector('i');
@@ -109,7 +128,7 @@
             .catch(err => console.error('Error:', err));
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         const botones = document.querySelectorAll('.filtro-categoria');
         const productos = document.querySelectorAll('#lista-productos > div');
 

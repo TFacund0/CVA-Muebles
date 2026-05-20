@@ -4,40 +4,88 @@
 <style>
     .fav-header {
         background: linear-gradient(rgba(45, 27, 25, 0.9), rgba(45, 27, 25, 0.7)), url('<?= base_url('assets/img/ui/backgrounds/artisan_fav_bg.png') ?>');
-        background-size: cover; background-position: center;
-        padding: 100px 0; color: white; margin-bottom: 50px;
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        color: white;
+        margin-bottom: 50px;
     }
+
     .fav-item {
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
+
     .fav-card {
-        border: none; border-radius: 2rem; overflow: hidden;
+        border: none;
+        border-radius: 2rem;
+        overflow: hidden;
         transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-        background: white; box-shadow: 0 15px 35px rgba(62, 39, 35, 0.05);
-        position: relative; height: 100%;
+        background: white;
+        box-shadow: 0 15px 35px rgba(62, 39, 35, 0.05);
+        position: relative;
+        height: 100%;
         display: flex;
         flex-direction: column;
     }
-    .fav-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(62, 39, 35, 0.12); }
-    .fav-img-wrapper { height: 280px; overflow: hidden; position: relative; }
-    .fav-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s; }
-    .fav-card:hover .fav-img-wrapper img { transform: scale(1.1); }
-    
+
+    .fav-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px rgba(62, 39, 35, 0.12);
+    }
+
+    .fav-img-wrapper {
+        height: 280px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .fav-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s;
+    }
+
+    .fav-card:hover .fav-img-wrapper img {
+        transform: scale(1.1);
+    }
+
     .remove-fav-btn {
-        position: absolute; top: 15px; right: 15px;
-        width: 40px; height: 40px; border-radius: 50%;
-        background: rgba(255,255,255,0.9); border: none;
-        color: #e74c3c; display: flex; align-items: center; justify-content: center;
-        transition: all 0.3s; z-index: 10; backdrop-filter: blur(5px);
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        color: #e74c3c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        z-index: 10;
+        backdrop-filter: blur(5px);
     }
-    .remove-fav-btn:hover { background: #e74c3c; color: white; transform: rotate(90deg); }
-    
+
+    .remove-fav-btn:hover {
+        background: #e74c3c;
+        color: white;
+        transform: rotate(90deg);
+    }
+
     .price-tag-fav {
-        background: var(--cva-gold); color: white;
-        padding: 5px 15px; border-radius: 10px;
-        font-weight: 800; font-size: 0.9rem;
+        background: var(--cva-gold);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 0.9rem;
     }
-    .empty-state-fav { padding: 100px 0; }
+
+    .empty-state-fav {
+        padding: 100px 0;
+    }
 
     /* Search & Filter Styles */
     .btn-filter-artisan {
@@ -50,7 +98,7 @@
         font-weight: 700;
         letter-spacing: 0.5px;
         transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-        box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
     }
 
     .btn-filter-artisan:hover {
@@ -89,13 +137,14 @@
         font-size: 0.85rem;
         letter-spacing: 0.5px;
     }
+
     .btn-add-cart-fav:hover {
         background-color: var(--cva-gold) !important;
         color: white !important;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(184, 134, 11, 0.2);
     }
-    
+
     .empty-search-state {
         text-align: center;
         padding: 5rem 2rem;
@@ -108,7 +157,7 @@
     .line-clamp-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;  
+        -webkit-box-orient: vertical;
         overflow: hidden;
     }
 </style>
@@ -144,27 +193,27 @@
                     <button class="btn btn-link py-0 px-2 d-none clear-search-btn" id="clear-search" type="button"><i class="bi bi-x-circle-fill fs-5"></i></button>
                 </div>
             </div>
-            
+
             <!-- Filtro de Categorías -->
             <div class="col-lg-7 col-md-6">
                 <div class="d-flex flex-wrap gap-2 justify-content-md-end">
                     <button class="btn btn-filter-artisan active" data-filter="todos">
                         <i class="bi bi-collection-fill me-1"></i> Todos
                     </button>
-                    <?php 
-                        $categorias_vistas = [];
-                        foreach ($favoritos as $fav) {
-                            $cat_name = trim($fav['categoria'] ?? '');
-                            if (empty($cat_name)) continue;
-                            $cat_lower = mb_strtolower($cat_name);
-                            if (in_array($cat_lower, $categorias_vistas)) continue;
-                            $categorias_vistas[] = $cat_lower;
-                            ?>
-                            <button class="btn btn-filter-artisan" data-filter="<?= esc($cat_lower) ?>">
-                                <?= esc($cat_name) ?>
-                            </button>
-                            <?php
-                        }
+                    <?php
+                    $categorias_vistas = [];
+                    foreach ($favoritos as $fav) {
+                        $cat_name = trim($fav['categoria'] ?? '');
+                        if (empty($cat_name)) continue;
+                        $cat_lower = mb_strtolower($cat_name);
+                        if (in_array($cat_lower, $categorias_vistas)) continue;
+                        $categorias_vistas[] = $cat_lower;
+                    ?>
+                        <button class="btn btn-filter-artisan" data-filter="<?= esc($cat_lower) ?>">
+                            <?= esc($cat_name) ?>
+                        </button>
+                    <?php
+                    }
                     ?>
                 </div>
             </div>
@@ -182,15 +231,15 @@
         <!-- Grid de Favoritos -->
         <div class="row g-4" id="fav-container">
             <?php foreach ($favoritos as $fav): ?>
-                <?php 
-                    $cat_lower = mb_strtolower(trim($fav['categoria'] ?? ''));
-                    $nombre_lower = mb_strtolower(trim($fav['nombre_prod'] ?? ''));
+                <?php
+                $cat_lower = mb_strtolower(trim($fav['categoria'] ?? ''));
+                $nombre_lower = mb_strtolower(trim($fav['nombre_prod'] ?? ''));
                 ?>
                 <div class="col-lg-4 col-md-6 fav-item" data-categorias="<?= esc($cat_lower) ?>" data-nombre="<?= esc($nombre_lower) ?>">
                     <div class="fav-card">
                         <div class="fav-img-wrapper">
                             <img src="<?= base_url('assets/uploads/' . $fav['imagen']) ?>" alt="<?= $fav['nombre_prod'] ?>">
-                            <button onclick="toggleFav(<?= $fav['producto_id'] ?>, this)" class="remove-fav-btn shadow-sm" title="Quitar de favoritos">
+                            <button onclick="toggleFav(event, <?= $fav['producto_id'] ?>, this)" class="remove-fav-btn shadow-sm" title="Quitar de favoritos">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </div>
@@ -203,7 +252,7 @@
                             </div>
                             <h4 class="font-lora fw-bold text-cva-brown mb-2"><?= $fav['nombre_prod'] ?></h4>
                             <p class="small text-muted mb-4 line-clamp-2"><?= esc($fav['descripcion']) ?></p>
-                            
+
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <span class="price-tag-fav">$<?= number_format($fav['precio_vta'], 0, ',', '.') ?></span>
@@ -235,97 +284,99 @@
 </div>
 
 <script>
-function toggleFav(id, btn) {
-    if(!confirm('¿Quitar este mueble de tus favoritos?')) return;
-    
-    fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'removed') {
-                const item = btn.closest('.fav-item');
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.8)';
-                setTimeout(() => {
-                    item.remove();
-                    if (document.querySelectorAll('.fav-item').length === 0) {
-                        location.reload();
-                    }
-                }, 400);
-            }
-        })
-        .catch(err => console.error('Error:', err));
-}
+    function toggleFav(event, id, btn) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!confirm('¿Quitar este mueble de tus favoritos?')) return;
 
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('search-favs');
-    const clearBtn = document.getElementById('clear-search');
-    const filterBtns = document.querySelectorAll('.btn-filter-artisan');
-    const cards = document.querySelectorAll('.fav-item');
-    const noResults = document.getElementById('no-results-fav');
-    
-    let currentSearch = '';
-    let currentFilter = 'todos';
+        fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'removed') {
+                    const item = btn.closest('.fav-item');
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.8)';
+                    setTimeout(() => {
+                        item.remove();
+                        if (document.querySelectorAll('.fav-item').length === 0) {
+                            location.reload();
+                        }
+                    }, 400);
+                }
+            })
+            .catch(err => console.error('Error:', err));
+    }
 
-    function filterFavorites() {
-        let visibleCount = 0;
-        
-        cards.forEach(card => {
-            const nombre = card.dataset.nombre.toLowerCase();
-            const category = card.dataset.categorias.toLowerCase();
-            
-            const matchesSearch = nombre.includes(currentSearch);
-            const matchesFilter = currentFilter === 'todos' || category === currentFilter;
-            
-            if (matchesSearch && matchesFilter) {
-                card.style.display = 'block';
-                visibleCount++;
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-favs');
+        const clearBtn = document.getElementById('clear-search');
+        const filterBtns = document.querySelectorAll('.btn-filter-artisan');
+        const cards = document.querySelectorAll('.fav-item');
+        const noResults = document.getElementById('no-results-fav');
+
+        let currentSearch = '';
+        let currentFilter = 'todos';
+
+        function filterFavorites() {
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const nombre = card.dataset.nombre.toLowerCase();
+                const category = card.dataset.categorias.toLowerCase();
+
+                const matchesSearch = nombre.includes(currentSearch);
+                const matchesFilter = currentFilter === 'todos' || category === currentFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.classList.remove('d-none');
             } else {
-                card.style.display = 'none';
+                noResults.classList.add('d-none');
             }
-        });
-        
-        if (visibleCount === 0) {
-            noResults.classList.remove('d-none');
-        } else {
-            noResults.classList.add('d-none');
         }
-    }
 
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            currentSearch = this.value.toLowerCase().trim();
-            if (currentSearch.length > 0) {
-                clearBtn.classList.remove('d-none');
-            } else {
-                clearBtn.classList.add('d-none');
-            }
-            filterFavorites();
-        });
-    }
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase().trim();
+                if (currentSearch.length > 0) {
+                    clearBtn.classList.remove('d-none');
+                } else {
+                    clearBtn.classList.add('d-none');
+                }
+                filterFavorites();
+            });
+        }
 
-    if (clearBtn) {
-        clearBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            currentSearch = '';
-            this.classList.add('d-none');
-            filterFavorites();
-        });
-    }
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                currentSearch = '';
+                this.classList.add('d-none');
+                filterFavorites();
+            });
+        }
 
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentFilter = this.dataset.filter;
-            filterFavorites();
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                filterFavorites();
+            });
         });
     });
-});
 </script>
 <?= $this->endSection() ?>

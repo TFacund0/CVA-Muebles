@@ -71,6 +71,22 @@
 </div>
 
 <style>
+    /* Override Bootstrap constraints to center the flexbox layout completely */
+    #heroCarousel .carousel-caption {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        display: flex !important;
+        align-items: center;
+        z-index: 10;
+    }
+
     /* Hero Visuals */
     .hero-overlay-artisan {
         position: absolute;
@@ -89,6 +105,8 @@
         color: white;
         z-index: 2;
         box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        max-width: 700px;
+        width: 100%;
     }
 
     .glass-caption.left-align { border-left: 5px solid var(--cva-gold); }
@@ -133,12 +151,12 @@
     /* Responsive Hero */
     @media (max-width: 991.98px) {
         .carousel-inner { height: 70vh !important; min-height: 500px !important; }
-        .glass-caption { padding: 2rem !important; margin: 0 1rem; }
+        .glass-caption { padding: 2rem !important; margin: 0 1.5rem; max-width: calc(100% - 3rem); }
         .display-2 { font-size: 2.5rem !important; }
         .display-3 { font-size: 2.2rem !important; }
         .fs-5 { font-size: 1rem !important; }
         .btn-vivid, .btn-outline-light, .btn-gold { padding: 0.8rem 1.5rem !important; font-size: 0.9rem !important; }
-        .carousel-caption { padding-bottom: 2rem !important; }
+        #heroCarousel .carousel-caption { padding: 0 !important; }
     }
 
     @media (max-width: 575.98px) {
