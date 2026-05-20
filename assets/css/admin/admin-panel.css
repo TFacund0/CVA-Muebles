@@ -163,7 +163,6 @@
     }
 
     .inquiry-row .inquiry-text-details,
-    .inquiry-row .message-cell,
     .inquiry-row .small {
         overflow: hidden !important;
         text-overflow: ellipsis !important;
