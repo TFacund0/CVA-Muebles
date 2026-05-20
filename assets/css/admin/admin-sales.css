@@ -246,7 +246,6 @@
     font-size: 1.2rem;
 }
 
-/* === CORRECCIÓN RESPONSIVA PARA TABLAS EN ESCRITORIO (MIN-WIDTH: 992PX) === */
 @media (min-width: 992px) {
     /* Por defecto, permitir que las tablas se ajusten automáticamente en ventas */
     .table-responsive-stack table {
@@ -257,6 +256,12 @@
     /* Excepto para consultas, donde queremos preservar el table-layout: fixed para recortar mensajes */
     .table-responsive-stack.table-layout-fixed table {
         table-layout: fixed !important;
+    }
+
+    /* Soporte de scroll horizontal para evitar desbordes en pantallas estrechas de escritorio */
+    .table-responsive-stack {
+        overflow-x: auto !important;
+        max-width: 100% !important;
     }
     
     .inquiry-row td {
@@ -291,6 +296,26 @@
         margin-top: 2px !important;
     }
 
+    /* Ajustar celdas en la tabla de solicitudes pendientes para ganar espacio horizontal */
+    #panel-solicitudes table th,
+    #panel-solicitudes table td {
+        padding: 0.75rem 0.4rem !important;
+    }
+
+    /* Botones más compactos y legibles en la tabla de solicitudes pendientes en escritorio */
+    #panel-solicitudes table .btn-sm {
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.3px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Evitar saltos de línea en celdas de Monto y ajustar padding lateral */
+    #panel-solicitudes table td[data-label="MONTO"] {
+        white-space: nowrap !important;
+        padding-right: 15px !important;
+    }
+
     /* Proporciones perfectas y anchos mínimos para la tabla de solicitudes pendientes */
     #panel-solicitudes table th:nth-child(1),
     #panel-solicitudes table td:nth-child(1) {
@@ -312,12 +337,11 @@
         width: 15% !important;
         min-width: 110px !important;
         text-align: right !important;
-        padding-right: 20px !important;
     }
     #panel-solicitudes table th:nth-child(5),
     #panel-solicitudes table td:nth-child(5) {
         width: 30% !important;
-        min-width: 340px !important;
+        min-width: 330px !important;
         text-align: center !important;
     }
 
