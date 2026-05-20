@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=30.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=31.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -187,7 +187,6 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted">Cliente / Origen</th>
-                            <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell">ID</th>
                             <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell">Fecha y Hora</th>
                             <th class="py-3 text-uppercase x-small fw-bold text-muted text-end">Total / Pagado</th>
                             <th class="py-3 text-uppercase x-small fw-bold text-muted text-center">Estado</th>
@@ -215,9 +214,6 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                                             </div>
                                         </div>
                                     </div>
-                                </td>
-                                <td class="d-none d-lg-table-cell" data-label="ID">
-                                    <span class="badge bg-light text-muted border">#<?= $v['id'] ?></span>
                                 </td>
                                 <td class="d-none d-lg-table-cell" data-label="FECHA">
                                     <div class="fw-bold text-cva-brown"><?= date('d/m/Y', strtotime($v['fecha'])) ?></div>
@@ -306,7 +302,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
 
                         <!-- Filas de Estados Vacíos -->
                         <tr id="no-results-row" style="display: none;">
-                            <td colspan="7" class="text-center py-5">
+                            <td colspan="6" class="text-center py-5">
                                 <i class="bi bi-search display-4 text-muted opacity-25"></i>
                                 <p class="text-muted mt-3">No hay pedidos que coincidan con la búsqueda.</p>
                             </td>
@@ -340,7 +336,6 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                         <thead class="bg-light">
                             <tr class="x-small text-uppercase text-muted fw-bold">
                                 <th class="ps-4 py-3 col-solicitud-cliente">Cliente</th>
-                                <th class="py-3 col-solicitud-id d-none d-lg-table-cell">ID</th>
                                 <th class="py-3 col-solicitud-fecha d-none d-lg-table-cell">Fecha</th>
                                 <th class="py-3 text-end col-solicitud-monto">Monto</th>
                                 <th class="py-3 text-center col-solicitud-acciones">Acciones</th>
@@ -366,7 +361,6 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="col-solicitud-id d-none d-lg-table-cell" data-label="ID"><span class="badge bg-light text-muted">#<?= $s['id'] ?></span></td>
                                     <td class="small fw-bold col-solicitud-fecha d-none d-lg-table-cell" data-label="FECHA"><?= date('d/m/Y H:i', strtotime($s['fecha'])) ?></td>
                                     <td class="text-end fw-bold text-dark col-solicitud-monto" data-label="MONTO">$ <?= number_format($s['total_venta'], 2, ',', '.') ?></td>
                                     <td class="text-center pe-4 col-solicitud-acciones" data-label="GESTIÓN">

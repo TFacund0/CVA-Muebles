@@ -234,10 +234,6 @@
     }
 
     /* Asignar anchos y mínimos robustos a cada columna usando clases específicas */
-    .col-solicitud-id {
-        width: 70px !important;
-        min-width: 70px !important;
-    }
     .col-solicitud-fecha {
         width: 150px !important;
         min-width: 150px !important;
