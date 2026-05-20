@@ -296,10 +296,16 @@
         margin-top: 2px !important;
     }
 
+    /* Garantizar ancho mínimo global de la tabla de solicitudes en escritorio para evitar que se aplaste */
+    #panel-solicitudes table {
+        min-width: 880px !important;
+        table-layout: auto !important;
+    }
+
     /* Ajustar celdas en la tabla de solicitudes pendientes para ganar espacio horizontal */
     #panel-solicitudes table th,
     #panel-solicitudes table td {
-        padding: 0.75rem 0.4rem !important;
+        padding: 0.75rem 0.5rem !important;
     }
 
     /* Botones más compactos y legibles en la tabla de solicitudes pendientes en escritorio */
@@ -310,40 +316,40 @@
         white-space: nowrap !important;
     }
 
-    /* Evitar saltos de línea en celdas de Monto y ajustar padding lateral */
-    #panel-solicitudes table td[data-label="MONTO"] {
-        white-space: nowrap !important;
-        padding-right: 15px !important;
+    /* Asegurar que el contenedor de los botones de acción no haga wrap y se centre correctamente */
+    #panel-solicitudes .col-solicitud-acciones > div {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        flex-wrap: nowrap !important;
     }
 
-    /* Proporciones perfectas y anchos mínimos para la tabla de solicitudes pendientes */
-    #panel-solicitudes table th:nth-child(1),
-    #panel-solicitudes table td:nth-child(1) {
-        width: 6% !important;
-        min-width: 65px !important;
+    /* Asignar anchos y mínimos robustos a cada columna usando clases específicas */
+    .col-solicitud-id {
+        width: 70px !important;
+        min-width: 70px !important;
     }
-    #panel-solicitudes table th:nth-child(2),
-    #panel-solicitudes table td:nth-child(2) {
-        width: 16% !important;
+    .col-solicitud-fecha {
+        width: 150px !important;
+        min-width: 150px !important;
+        white-space: nowrap !important;
+    }
+    .col-solicitud-cliente {
+        /* Se adapta automáticamente al espacio restante */
+    }
+    .col-solicitud-monto {
+        width: 140px !important;
         min-width: 140px !important;
-    }
-    #panel-solicitudes table th:nth-child(3),
-    #panel-solicitudes table td:nth-child(3) {
-        width: 33% !important;
-        min-width: 200px !important;
-    }
-    #panel-solicitudes table th:nth-child(4),
-    #panel-solicitudes table td:nth-child(4) {
-        width: 15% !important;
-        min-width: 110px !important;
         text-align: right !important;
+        white-space: nowrap !important;
     }
-    #panel-solicitudes table th:nth-child(5),
-    #panel-solicitudes table td:nth-child(5) {
-        width: 30% !important;
-        min-width: 330px !important;
+    .col-solicitud-acciones {
+        width: 350px !important;
+        min-width: 350px !important;
         text-align: center !important;
     }
+
 
     /* Proporciones perfectas y anchos mínimos para la tabla de pedidos activos en desktop */
     #panel-activos table th:nth-child(1),

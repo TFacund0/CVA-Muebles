@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=25.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -339,39 +339,39 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr class="x-small text-uppercase text-muted fw-bold">
-                                <th class="ps-4 py-3">ID</th>
-                                <th class="py-3">Fecha</th>
-                                <th class="py-3">Cliente</th>
-                                <th class="py-3 text-end">Monto</th>
-                                <th class="py-3 text-center">Acciones</th>
+                                <th class="ps-4 py-3 col-solicitud-id">ID</th>
+                                <th class="py-3 col-solicitud-fecha">Fecha</th>
+                                <th class="py-3 col-solicitud-cliente">Cliente</th>
+                                <th class="py-3 text-end col-solicitud-monto">Monto</th>
+                                <th class="py-3 text-center col-solicitud-acciones">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($solicitados as $s): ?>
                                 <tr>
-                                    <td class="ps-4" data-label="ID"><span class="badge bg-light text-muted">#<?= $s['id'] ?></span></td>
-                                    <td class="small fw-bold" data-label="FECHA"><?= date('d/m/Y H:i', strtotime($s['fecha'])) ?></td>
-                                    <td data-label="CLIENTE">
+                                    <td class="ps-4 col-solicitud-id" data-label="ID"><span class="badge bg-light text-muted">#<?= $s['id'] ?></span></td>
+                                    <td class="small fw-bold col-solicitud-fecha" data-label="FECHA"><?= date('d/m/Y H:i', strtotime($s['fecha'])) ?></td>
+                                    <td class="col-solicitud-cliente" data-label="CLIENTE">
                                         <div class="fw-bold text-brown"><?= esc($s['nombre'] . ' ' . $s['apellido']) ?></div>
                                         <div class="x-small text-muted"><?= esc($s['email']) ?></div>
                                     </td>
-                                    <td class="text-end fw-bold text-dark" data-label="MONTO">$ <?= number_format($s['total_venta'], 2, ',', '.') ?></td>
-                                    <td class="text-center pe-4" data-label="GESTIÓN">
+                                    <td class="text-end fw-bold text-dark col-solicitud-monto" data-label="MONTO">$ <?= number_format($s['total_venta'], 2, ',', '.') ?></td>
+                                    <td class="text-center pe-4 col-solicitud-acciones" data-label="GESTIÓN">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="<?= base_url('ventas/gestion/' . $s['id']) ?>" class="btn btn-sm btn-outline-brown rounded-pill px-3 fw-bold">
+                                            <a href="<?= base_url('ventas/gestion/' . $s['id']) ?>" class="btn btn-sm btn-outline-brown btn-solicitud-action rounded-pill px-3 fw-bold">
                                                 <i class="bi bi-eye me-1"></i> REVISAR
                                             </a>
                                             <form action="<?= base_url('ventas/actualizar_estado/' . $s['id']) ?>" method="post" class="d-inline">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="estado" value="ACEPTADO">
-                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
+                                                <button type="submit" class="btn btn-sm btn-success btn-solicitud-action rounded-pill px-3 fw-bold">
                                                     <i class="bi bi-check-lg me-1"></i> APROBAR
                                                 </button>
                                             </form>
                                             <form action="<?= base_url('ventas/actualizar_estado/' . $s['id']) ?>" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de rechazar este pedido? No se mostrará en la lista.')">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="estado" value="RECHAZADO">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger btn-solicitud-action rounded-pill px-3 fw-bold">
                                                     <i class="bi bi-x-lg me-1"></i> RECHAZAR
                                                 </button>
                                             </form>
