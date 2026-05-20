@@ -37,8 +37,11 @@ class CategoriaController extends BaseController {
             return redirect()->back()->withInput()->with('error', 'Descripción inválida o ya existente.');
         }
 
-        $this->categoriaService->crear(['descripcion' => $this->request->getPost('descripcion')]);
-        return redirect()->to('/crud-categorias')->with('success', 'Categoría creada con éxito.');
+        $resultado = $this->categoriaService->crear(['descripcion' => $this->request->getPost('descripcion')]);
+        if ($resultado['status'] === 'error') {
+            return redirect()->back()->withInput()->with('error', $resultado['message']);
+        }
+        return redirect()->to('/crud-categorias')->with('success', $resultado['message']);
     }
 
     /**
@@ -55,8 +58,11 @@ class CategoriaController extends BaseController {
             return redirect()->back()->withInput()->with('error', 'Esa descripción ya está siendo utilizada por otra categoría.');
         }
 
-        $this->categoriaService->actualizar($id, ['descripcion' => $this->request->getPost('descripcion')]);
-        return redirect()->to('/crud-categorias')->with('success', 'Categoría actualizada.');
+        $resultado = $this->categoriaService->actualizar($id, ['descripcion' => $this->request->getPost('descripcion')]);
+        if ($resultado['status'] === 'error') {
+            return redirect()->back()->withInput()->with('error', $resultado['message']);
+        }
+        return redirect()->to('/crud-categorias')->with('success', $resultado['message']);
     }
 
     /**

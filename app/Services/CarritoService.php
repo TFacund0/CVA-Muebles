@@ -23,6 +23,10 @@ class CarritoService
      */
     public function agregar($data)
     {
+        if (!isset($data['id_producto'])) {
+            return ['status' => 'error', 'message' => 'Identificador de producto no especificado.'];
+        }
+
         $producto = $this->productoModel->find($data['id_producto']);
         if (!$producto) {
             return ['status' => 'error', 'message' => 'Producto no encontrado.'];

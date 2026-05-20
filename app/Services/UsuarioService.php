@@ -85,6 +85,10 @@ class UsuarioService
     public function registrarUsuario($data)
     {
         try {
+            if (empty($data['pass']) || strlen($data['pass']) < 6) {
+                return ['status' => 'error', 'message' => 'La contraseña es obligatoria y debe tener al menos 6 caracteres.'];
+            }
+
             $userData = [
                 'nombre'    => $data['name'],
                 'apellido'  => $data['surname'],

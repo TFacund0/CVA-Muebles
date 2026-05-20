@@ -206,7 +206,7 @@
                                     <div class="product-img-zoom-container rounded-3 border overflow-hidden shadow-sm" style="width: 70px; height: 70px;">
                                         <img src="<?= base_url('assets/uploads/' . $det['imagen']) ?>" 
                                              class="img-fluid h-100 w-100 object-fit-cover transition-all" 
-                                             alt="<?= esc($det['nombre_prod']) ?>">
+                                             alt="<?= esc($det['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?>">
                                     </div>
                                 <?php else: ?>
                                     <div class="bg-light rounded-3 d-flex align-items-center justify-content-center text-muted" style="width: 70px; height: 70px;">
@@ -215,7 +215,7 @@
                                 <?php endif; ?>
                             </td>
                             <td class="py-3" data-label="PRODUCTO">
-                                <div class="fw-bold text-brown"><?= esc($det['nombre_prod']) ?></div>
+                                <div class="fw-bold text-brown"><?= esc($det['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?></div>
                                 <div class="x-small text-muted">ID: <?= $det['producto_id'] ?? 'CUSTOM' ?></div>
                             </td>
                             <td class="text-center fw-bold" data-label="CANTIDAD"><?= $det['cantidad'] ?></td>

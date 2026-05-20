@@ -46,7 +46,10 @@ class CategoriaService
     public function crear($data)
     {
         $data['activo'] = 1;
-        return $this->categoriaModel->insert($data);
+        if ($this->categoriaModel->insert($data) === false) {
+            return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->categoriaModel->errors())];
+        }
+        return ['status' => 'success', 'message' => 'Categoría creada con éxito.'];
     }
 
     /**
@@ -54,7 +57,10 @@ class CategoriaService
      */
     public function actualizar($id, $data)
     {
-        return $this->categoriaModel->update($id, $data);
+        if ($this->categoriaModel->update($id, $data) === false) {
+            return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->categoriaModel->errors())];
+        }
+        return ['status' => 'success', 'message' => 'Categoría actualizada con éxito.'];
     }
 
     /**
@@ -85,10 +91,7 @@ class CategoriaService
         if (!$cat) return false;
 
         $nuevo_estado = ($cat['activo'] == 1) ? 0 : 1;
-        return $this->categoriaModel->builder()
-                                    ->where('id_categoria', $id)
-                                    ->set('activo', $nuevo_estado)
-                                    ->update();
+        return $this->categoriaModel->update($id, ['activo' => $nuevo_estado]);
     }
 
     /**

@@ -1,4 +1,4 @@
-﻿<?= $this->extend('layout/main') ?>
+<?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/ver-factura.css?v=1.0')?>">
@@ -47,20 +47,20 @@
                                     <td class="py-4">
                                         <div class="position-relative d-inline-block">
                                             <div class="badge-preview-trigger" onclick="togglePreview('preview-<?= $item['id'] ?>', this)">
-                                                <div class="fw-bold text-cva-brown"><?= esc($item['nombre_prod']) ?></div>
+                                                <div class="fw-bold text-cva-brown"><?= esc($item['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?></div>
                                                 <small class="text-muted">Ver detalle artesanal <i class="bi bi-chevron-right x-small"></i></small>
                                             </div>
-
+ 
                                             <div id="preview-<?= $item['id'] ?>" class="product-preview-card position-absolute z-3" style="width: 320px; left: calc(100% + 20px); top: -40px;">
                                                 <div class="text-center mb-3">
                                                     <?php if(!empty($item['imagen'])): ?>
-                                                        <img src="<?= base_url('assets/uploads/' . $item['imagen']) ?>" class="preview-img mb-3" alt="<?= esc($item['nombre_prod']) ?>">
+                                                        <img src="<?= base_url('assets/uploads/' . $item['imagen']) ?>" class="preview-img mb-3" alt="<?= esc($item['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?>">
                                                     <?php else: ?>
                                                         <div class="preview-img bg-light d-flex align-items-center justify-content-center mx-auto mb-3">
                                                             <i class="bi bi-hammer text-muted display-6"></i>
                                                         </div>
                                                     <?php endif; ?>
-                                                    <h5 class="fw-bold text-cva-brown mb-1"><?= esc($item['nombre_prod']) ?></h5>
+                                                    <h5 class="fw-bold text-cva-brown mb-1"><?= esc($item['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?></h5>
                                                     <span class="text-gold fw-bold">$<?= number_format($item['precio'], 0, ',', '.') ?></span>
                                                 </div>
                                                 <p class="text-muted small italic mb-0 text-center">

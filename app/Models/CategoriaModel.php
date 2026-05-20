@@ -11,7 +11,7 @@ class CategoriaModel extends Model {
     
     protected $validationRules = [
         'descripcion' => 'required|min_length[3]|max_length[100]',
-        'activo'      => 'required|max_length[2]'
+        'activo'      => 'permit_empty|numeric|max_length[2]'
     ];
 
     public function getCategorias() {
