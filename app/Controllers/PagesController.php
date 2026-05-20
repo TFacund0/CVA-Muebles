@@ -41,10 +41,9 @@ class PagesController extends BaseController
      * Muestra el catálogo de productos delegando al servicio.
      */
     public function productos() {
-        $resultado = $this->productoService->getProductosConStats();
         return view('front/pages/productos', [
-            'productos'  => $resultado['productos'],
-            'categorias' => $this->categoriaService->getCategoriasConStats(),
+            'productos'  => $this->productoService->getProductosPublicos(),
+            'categorias' => $this->categoriaService->getCategoriasConStats(true),
             'user_favs'  => session()->get('logged_in') ? $this->favoritosService->getFavoritosIds(session()->get('id_usuario')) : [],
             'title'      => 'Nuestros Productos'
         ]);

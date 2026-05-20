@@ -67,7 +67,7 @@
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center gap-3 text-decoration-none dropdown-toggle hide-caret" data-bs-toggle="dropdown">
                             <div class="text-end d-none d-md-block me-1">
-                                <div class="small fw-bold text-cva-brown mb-0 lh-1" style="font-size: 0.95rem;"><?= session()->get('nombre') ?> <?= session()->get('apellido') ?></div>
+                                <div class="small fw-bold text-cva-brown mb-0 lh-1" style="font-size: 0.95rem;"><?= esc(session()->get('nombre')) ?> <?= esc(session()->get('apellido')) ?></div>
                                 <div class="x-small text-gold fw-bold mt-1" style="font-size: 0.7rem; letter-spacing: 1px;">MODO ADMINISTRADOR</div>
                             </div>
                             <div class="avatar-container position-relative">

@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/comercializacion.css?v=7.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/comercializacion.css?v=8.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -129,13 +129,14 @@
         </div>
     </section>
 
-    <!-- BLOQUE 4: GARANTÍA (BROWN WOOD) -->
-    <section class="section-garantia-full py-5" style="background-image: linear-gradient(rgba(38, 20, 18, 0.9), rgba(38, 20, 18, 0.9)), url('<?= base_url('assets/img/ui/textures/madera.jpg') ?>'); background-size: cover; background-position: center; color: white; text-align: center;">
-        <div class="container py-5">
-            <h2 class="display-4 fw-bold font-lora mb-4">Compromiso para Generaciones</h2>
+    <!-- BLOQUE 4: GARANTÍA (PREMIUM LIGHT ARTISAN) -->
+    <section class="section-garantia-full py-5" style="background-color: #fdfbf7; border-top: 1px solid rgba(184, 134, 11, 0.1); color: var(--cva-brown); text-align: center;">
+        <div class="container py-5 animate-fade-in">
+            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Seguridad y Garantía</span>
+            <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2 mb-4">Compromiso para Generaciones</h2>
             <div class="mx-auto" style="width: 100px; height: 3px; background: var(--cva-gold); margin-bottom: 2.5rem;"></div>
-            <p class="lead mb-5 opacity-90 mx-auto" style="max-width: 800px;">Cada mueble CVA cuenta con **1 año de garantía estructural**. Nuestra meta es que tu única preocupación sea disfrutar de la calidez de la madera en tu hogar.</p>
-            <a href="<?= base_url('terminosYCondiciones') ?>" class="btn btn-outline-light px-5 py-3 rounded-pill fw-bold" style="letter-spacing: 2px;">TÉRMINOS Y CONDICIONES</a>
+            <p class="lead mb-5 mx-auto" style="max-width: 800px; color: #5c4a44; font-weight: 500;">Cada mueble CVA cuenta con <strong>1 año de garantía estructural</strong>. Nuestra meta es que tu única preocupación sea disfrutar de la calidez de la madera en tu hogar.</p>
+            <a href="<?= base_url('terminosYCondiciones') ?>" class="btn btn-outline-brown px-5 py-3 rounded-pill fw-bold" style="letter-spacing: 2px;">VER TÉRMINOS Y CONDICIONES</a>
         </div>
     </section>
 </div>

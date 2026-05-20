@@ -60,7 +60,11 @@ class ConsultaService
         $data['fecha'] = date('Y-m-d H:i:s');
         $data['activo'] = 'SI';
         
-        return $this->consultaModel->insert($data);
+        if ($this->consultaModel->insert($data) === false) {
+            return ['status' => 'error', 'message' => 'Errores de validación: ' . implode(', ', $this->consultaModel->errors())];
+        }
+        
+        return ['status' => 'success', 'message' => 'Consulta enviada correctamente.'];
     }
 
     /**
@@ -69,5 +73,21 @@ class ConsultaService
     public function desactivar($id)
     {
         return $this->consultaModel->update($id, ['activo' => 'NO']);
+    }
+
+    /**
+     * Restaura una consulta a estado activo (Pendiente).
+     */
+    public function restaurar($id)
+    {
+        return $this->consultaModel->update($id, ['activo' => 'SI']);
+    }
+
+    /**
+     * Elimina físicamente una consulta de la base de datos.
+     */
+    public function eliminarPermanente($id)
+    {
+        return $this->consultaModel->delete($id);
     }
 }

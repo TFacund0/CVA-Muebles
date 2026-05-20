@@ -12,9 +12,9 @@ class ProductoModel extends Model
     protected $validationRules = [
         'nombre_prod'  => 'required|min_length[3]|max_length[100]',
         'categoria_id' => 'required|numeric',
-        'precio'       => 'required|numeric',
-        'precio_vta'   => 'required|numeric',
-        'stock'        => 'required|numeric'
+        'precio'       => 'required|numeric|greater_than_equal_to[0]',
+        'precio_vta'   => 'required|numeric|greater_than_equal_to[0]',
+        'stock'        => 'required|numeric|greater_than_equal_to[0]'
     ];
 
     public function getProductoAll() {
@@ -23,8 +23,16 @@ class ProductoModel extends Model
                     ->findAll();
     }
 
-    public function getBuilderProductos() {
+    public function getProductosPublicos() {
         return $this->select('productos.*, categorias.descripcion as categoria')
+                    ->join('categorias', 'categorias.id_categoria = productos.categoria_id')
+                    ->where('productos.eliminado', 'NO')
+                    ->where('categorias.activo', 1)
+                    ->findAll();
+    }
+
+    public function getBuilderProductos() {
+        return $this->select('productos.*, categorias.descripcion as categoria, categorias.activo as categoria_activa')
                     ->join('categorias', 'categorias.id_categoria = productos.categoria_id');
     }
 

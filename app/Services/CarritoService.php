@@ -29,11 +29,11 @@ class CarritoService
         }
 
         $this->cart->insert([
-            'id'     => $data['id_producto'],
+            'id'     => $producto['id_producto'],
             'qty'    => 1,
-            'name'   => $data['nombre_prod'],
-            'price'  => $data['precio_vta'],
-            'imagen' => $data['imagen'],
+            'name'   => $producto['nombre_prod'],
+            'price'  => $producto['precio_vta'],
+            'imagen' => $producto['imagen'],
         ]);
 
         return ['status' => 'success', 'message' => 'Producto agregado al carrito.'];

@@ -10,7 +10,7 @@
             </button>
         </div>
     </div>
-    
+
     <nav class="sidebar-nav">
         <!-- 1. DASHBOARD & MÉTRICAS -->
         <div class="sidebar-group-label">Métricas y Control</div>
@@ -21,35 +21,21 @@
 
         <!-- 2. OPERACIONES TALLER -->
         <div class="sidebar-group-label">Operaciones Taller</div>
-        <?php 
-            $db = \Config\Database::connect();
-            $cant_solicitados = $db->table('ventas_cabecera')->where('estado_aprobacion', 'SOLICITUD')->countAllResults();
-        ?>
         <a href="<?= base_url('/ventas-list') ?>" class="nav-item-admin <?= (current_url() == base_url('/ventas-list')) ? 'active' : '' ?>">
             <i class="bi bi-tools"></i>
-            <span>Control de Ventas</span>
-            <?php if ($cant_solicitados > 0): ?>
-                <span class="badge rounded-pill bg-danger ms-auto shadow-sm animate__animated animate__pulse animate__infinite" style="font-size: 0.65rem;"><?= $cant_solicitados ?></span>
-            <?php endif; ?>
-        </a>
-        <a href="<?= base_url('/ventas/nuevo-personalizado') ?>" class="nav-item-admin <?= (current_url() == base_url('/ventas/nuevo-personalizado')) ? 'active' : '' ?>">
-            <i class="bi bi-pencil-square"></i>
-            <span>Nuevo Pedido Manual</span>
+            <span>Ventas</span>
+            <?= view_cell('\App\Cells\AdminSidebarCell::renderSolicitadosBadge') ?>
         </a>
         <a href="<?= base_url('/consultas') ?>" class="nav-item-admin <?= (current_url() == base_url('/consultas')) ? 'active' : '' ?>">
             <i class="bi bi-chat-dots"></i>
-            <span>Inbox Consultas</span>
+            <span>Consultas</span>
         </a>
 
         <!-- 3. INVENTARIO Y CATÁLOGO -->
         <div class="sidebar-group-label">Catálogo de Obras</div>
         <a href="<?= base_url('/crud-productos') ?>" class="nav-item-admin <?= (current_url() == base_url('/crud-productos')) ? 'active' : '' ?>">
             <i class="bi bi-box-seam"></i>
-            <span>Ver Productos</span>
-        </a>
-        <a href="<?= base_url('/alta-producto') ?>" class="nav-item-admin <?= (current_url() == base_url('/alta-producto')) ? 'active' : '' ?>">
-            <i class="bi bi-plus-circle"></i>
-            <span>Añadir Producto</span>
+            <span>Productos</span>
         </a>
         <a href="<?= base_url('/crud-categorias') ?>" class="nav-item-admin <?= (current_url() == base_url('/crud-categorias')) ? 'active' : '' ?>">
             <i class="bi bi-tags"></i>

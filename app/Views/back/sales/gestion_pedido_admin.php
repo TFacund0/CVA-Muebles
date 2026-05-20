@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item"><a href="<?= base_url('/ventas-list') ?>" class="text-decoration-none text-muted">CONTROL DE PEDIDOS</a></li>
     <li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">GESTIÓN DE PRODUCCIÓN</li>
@@ -31,6 +35,9 @@
         </div>
     </div>
 </div>
+
+<!-- Mensajes modularizados -->
+<?= view('components/alert_message') ?>
 
 <div class="row g-4 mb-5">
     <!-- COLUMNA PRINCIPAL: DETALLES Y PRODUCCIÓN -->
@@ -134,7 +141,7 @@
                     <i class="bi bi-chat-left-quote fs-4 text-gold opacity-50"></i>
                     <div>
                         <span class="admin-label mb-1">Nota del Cliente / Pedido</span>
-                        <p class="mb-0 text-brown fw-semibold italic"><?= nl2br(esc($obs_clean)) ?></p>
+                        <p class="mb-0 text-brown fw-semibold italic" style="font-size: 1.25rem; line-height: 1.6; color: #2b1d0c !important;"><?= nl2br(esc($obs_clean)) ?></p>
                     </div>
                 </div>
             </div>
@@ -308,113 +315,6 @@
     </div>
 </div>
 
-<style>
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 1.2rem;
-        font-size: 1.8rem;
-    }
-    .bg-gold-soft { background: #fff9f0; }
-    .bg-success-soft { background: #f0fff4; }
-    .bg-info-soft { background: #f0f7ff; }
-    .tracking-wider { letter-spacing: 1.5px; }
 
-    /* Stepper Producción */
-    .step-dot { 
-        width: 18px; height: 18px; 
-        border-radius: 50%; 
-        background-color: #f0ece2; 
-        border: 3px solid #fff; 
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        position: relative; 
-        z-index: 2; 
-    }
-    .step-item.active .step-dot { 
-        background-color: var(--cva-gold); 
-        transform: scale(1.2);
-        box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.15); 
-    }
-    
-    /* Estilo Cuaderno Artisan */
-    .artisan-notebook-textarea {
-        background-color: #fff;
-        background-image: linear-gradient(#f9f9f9 .1em, transparent .1em);
-        background-size: 100% 1.5em;
-        line-height: 1.5em;
-        padding: 1.5em;
-        border: 1px solid #e0d5c5;
-        border-radius: 1rem;
-        color: #5d4037;
-        font-family: inherit;
-        transition: all 0.3s ease;
-    }
-    .artisan-notebook-textarea:focus {
-        border-color: var(--cva-gold);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    
-    .opacity-05 { opacity: 0.05; }
-    .shadow-inner { box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
-    .hover-bg-light:hover { background-color: #fcfcfc !important; }
-    .transition-all { transition: all 0.3s ease; }
-
-    .btn-admin-gold {
-        background: var(--cva-brown);
-        color: var(--cva-gold);
-        border: 2px solid var(--cva-gold);
-        border-radius: 12px;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .btn-admin-gold:hover {
-        background: var(--cva-gold);
-        color: white;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(184, 134, 11, 0.2);
-    }
-
-    /* Zoom Effect for Images */
-    .product-img-zoom-container {
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    .product-img-zoom-container:hover img {
-        transform: scale(1.5);
-    }
-    .object-fit-cover { object-fit: cover; }
-    .transition-all { transition: all 0.4s ease; }
-
-    @media (max-width: 767.98px) {
-        .step-item span { 
-            font-size: 0.55rem !important; 
-            letter-spacing: 0 !important;
-            white-space: nowrap;
-        }
-        .step-item:nth-child(even) span {
-            margin-top: 5px;
-        }
-        .production-stepper { padding: 10px 0 !important; }
-        .finance-card h3 { font-size: 1.4rem !important; }
-        .finance-card h2 { font-size: 1.7rem !important; }
-        .artisan-notebook-textarea { padding: 1rem; font-size: 0.9rem; }
-        
-        .d-flex.justify-content-center.gap-3.mt-4 {
-            flex-direction: column !important;
-            width: 100% !important;
-            gap: 0.75rem !important;
-            margin-top: 2rem !important;
-        }
-        .d-flex.justify-content-center.gap-3.mt-4 form, 
-        .d-flex.justify-content-center.gap-3.mt-4 button {
-            width: 100% !important;
-            margin: 0 !important;
-        }
-        
-        .display-6.display-md-5 { font-size: 1.6rem !important; }
-        .w-sm-100 { width: 100% !important; }
-        .admin-card-v2 { overflow: hidden !important; }
-        .bi-wallet2 { font-size: 5rem !important; opacity: 0.03 !important; }
-    }
-</style>
 
 <?= $this->endSection() ?>

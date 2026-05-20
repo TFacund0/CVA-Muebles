@@ -22,9 +22,13 @@ class CategoriaService
     /**
      * Obtiene todas las categorías con estadísticas de uso.
      */
-    public function getCategoriasConStats()
+    public function getCategoriasConStats($soloActivas = false)
     {
-        $categorias = $this->categoriaModel->findAll();
+        if ($soloActivas) {
+            $categorias = $this->categoriaModel->where('activo', 1)->findAll();
+        } else {
+            $categorias = $this->categoriaModel->findAll();
+        }
         
         foreach ($categorias as &$cat) {
             $cat['total_productos'] = $this->productoModel->where('categoria_id', $cat['id_categoria'])->countAllResults();
@@ -41,7 +45,7 @@ class CategoriaService
      */
     public function crear($data)
     {
-        $data['activo'] = 'SI';
+        $data['activo'] = 1;
         return $this->categoriaModel->insert($data);
     }
 
@@ -80,8 +84,11 @@ class CategoriaService
         $cat = $this->categoriaModel->find($id);
         if (!$cat) return false;
 
-        $nuevo_estado = ($cat['activo'] == 'SI') ? 'NO' : 'SI';
-        return $this->categoriaModel->update($id, ['activo' => $nuevo_estado]);
+        $nuevo_estado = ($cat['activo'] == 1) ? 0 : 1;
+        return $this->categoriaModel->builder()
+                                    ->where('id_categoria', $id)
+                                    ->set('activo', $nuevo_estado)
+                                    ->update();
     }
 
     /**

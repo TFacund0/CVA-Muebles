@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.0')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item"><a href="<?= base_url('/crud-productos') ?>" class="text-decoration-none text-muted">CATÁLOGO</a></li>
     <li class="breadcrumb-item active text-gold fw-bold" aria-current="page">NUEVO PRODUCTO</li>
@@ -99,25 +103,23 @@
                 </div>
                 <div class="p-4">
                     <div class="row g-3 g-md-4 align-items-end">
-                        <div class="col-md-3 col-12">
+                        <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Costo ($)</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-0 text-muted shadow-sm" style="border-radius: 10px 0 0 10px;">$</span>
                                 <input type="number" step="0.01" name="precio" id="costo" class="form-control border-0 bg-light py-3 shadow-sm" style="border-radius: 0 10px 10px 0; height: 58px;" placeholder="0.00" required>
                             </div>
                         </div>
-                        <div class="col-md-3 col-12">
+                        <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Venta ($)</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-0 text-gold fw-bold shadow-sm" style="border-radius: 10px 0 0 10px;">$</span>
                                 <input type="number" step="0.01" name="precio-vta" id="venta" class="form-control border-0 py-3 fw-bold text-cva-brown shadow-sm" style="background: #fffdf5; border-radius: 0 10px 10px 0; height: 58px;" placeholder="0.00" required>
                             </div>
                         </div>
-                        <div class="col-md-3 col-6">
-                            <label class="x-small fw-bold text-muted text-uppercase mb-2">Stock</label>
-                            <input type="number" name="stock" class="form-control border-0 bg-light py-3 shadow-sm" style="border-radius: 10px; height: 58px;" placeholder="0" required>
-                        </div>
-                        <div class="col-md-3 col-6">
+                        <input type="hidden" name="stock" value="999">
+                        <input type="hidden" name="stock-min" value="0">
+                        <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Estado</label>
                             <select name="eliminado" class="form-select border-0 py-3 shadow-sm fw-bold text-uppercase" style="font-size: 0.75rem; border-radius: 10px; height: 58px; background-color: #f8fafc;">
                                 <option value="NO">Activo</option>
@@ -190,58 +192,6 @@
         </div>
     </div>
 </form>
-
-<style>
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        background: #1a0f0d;
-        color: var(--cva-gold);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem;
-        border-radius: 1.2rem;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .bg-gold-soft { background: #fff9f0; }
-    .icon-circle-bg {
-        width: 80px; height: 80px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 50%;
-    }
-    .dropzone-premium-v2 {
-        border: 2px dashed #e2e8f0;
-        background: #f8fafc;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .dropzone-premium-v2:hover {
-        border-color: var(--cva-gold);
-        background: #fffdf9;
-        transform: translateY(-2px);
-    }
-    .upload-icon-container {
-        transition: transform 0.3s ease;
-    }
-    .dropzone-premium-v2:hover .upload-icon-container {
-        transform: scale(1.1) translateY(-5px);
-    }
-    .border-gold-glow {
-        border: 1px solid rgba(201, 161, 107, 0.2) !important;
-        box-shadow: 0 10px 30px rgba(201, 161, 107, 0.08) !important;
-    }
-    .admin-control:focus, .form-control:focus, .form-select:focus {
-        background: white !important;
-        border-color: var(--cva-gold) !important;
-        box-shadow: 0 0 0 4px rgba(201, 161, 107, 0.1) !important;
-    }
-
-    @media (max-width: 767.98px) {
-        .dropzone-premium-v2 { height: 300px !important; }
-        .dashboard-icon-main { width: 50px; height: 50px; font-size: 1.5rem; border-radius: 0.8rem; }
-        .display-6 { font-size: 1.8rem !important; }
-        .admin-card-v2 .p-4 { padding: 1.5rem !important; }
-        .btn-admin-primary { padding: 1.2rem !important; }
-        .shadow-gold { box-shadow: 0 10px 20px rgba(201, 161, 107, 0.2) !important; }
-    }
-</style>
 
 <?= $this->endSection() ?>
 

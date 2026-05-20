@@ -33,46 +33,40 @@ class VentasService
      */
     public function getVentasConEstadisticas()
     {
-        $ventas = $this->ventasModel->getVentas();
         $currentMonth = date('m');
         $currentYear = date('Y');
 
+        $totalRecaudado = $this->pagosModel->selectSum('monto')->first();
+        $recaudadoReal = (float) ($totalRecaudado['monto'] ?? 0);
+
+        // Fetch only non-rejected to save memory
+        $ventas = $this->ventasModel->select('ventas_cabecera.id, ventas_cabecera.fecha, ventas_cabecera.usuario_id, ventas_cabecera.total_venta, ventas_cabecera.estado, ventas_cabecera.estado_aprobacion, ventas_cabecera.tipo_pedido, ventas_cabecera.observaciones, ventas_cabecera.prioridad, usuarios.nombre, usuarios.apellido, usuarios.email, usuarios.usuario')
+                                    ->join('usuarios', 'usuarios.id_usuario = ventas_cabecera.usuario_id', 'left')
+                                    ->where('ventas_cabecera.estado_aprobacion !=', 'RECHAZADO')
+                                    ->orderBy('ventas_cabecera.prioridad', 'DESC')
+                                    ->orderBy('ventas_cabecera.fecha', 'DESC')
+                                    ->findAll();
+
         $counts = [
             'total'      => count($ventas),
-            'mensuales'  => 0,
-            'pendientes' => 0,
-            'en_proceso' => 0,
-            'terminados' => 0,
-            'ingresos'   => 0
+            'mensuales'  => $this->ventasModel->countMensuales($currentMonth, $currentYear),
+            'pendientes' => $this->ventasModel->countEstado('PENDIENTE') + $this->ventasModel->countEstado('ACEPTADO'),
+            'en_proceso' => $this->ventasModel->countEstado('EN_PROCESO'),
+            'terminados' => $this->ventasModel->countEstado('TERMINADO') + $this->ventasModel->countEstado('ENTREGADO'),
+            'ingresos'   => $recaudadoReal
         ];
 
         $ventas_procesadas = [];
         $solicitados = [];
 
         foreach ($ventas as &$venta) {
-            // Un pedido rechazado no se muestra
-            if (($venta['estado_aprobacion'] ?? '') == 'RECHAZADO') continue;
-
-            $ventaDate = strtotime($venta['fecha']);
-            
-            if (date('m', $ventaDate) == $currentMonth && date('Y', $ventaDate) == $currentYear) {
-                $counts['mensuales']++;
-                // Los ingresos solo cuentan si ya fue aprobado
-                if (($venta['estado_aprobacion'] ?? '') == 'ACEPTADO') {
-                    $counts['ingresos'] += $venta['total_venta'];
-                }
-            }
-
+            $venta['total_pagado'] = $this->pagosModel->getTotalPagado($venta['id']);
             $nombre_completo = ($venta['nombre'] ?? '') . ' ' . ($venta['apellido'] ?? '');
             $venta['search_data'] = strtolower(esc($venta['id'] . ' ' . $nombre_completo . ' ' . ($venta['usuario'] ?? '')));
 
-            // Si el pedido está en espera de aprobación
             if (($venta['estado_aprobacion'] ?? '') == 'SOLICITUD') {
                 $solicitados[] = $venta;
             } else {
-                if ($venta['estado'] == 'PENDIENTE' || $venta['estado'] == 'ACEPTADO') $counts['pendientes']++;
-                if ($venta['estado'] == 'EN_PROCESO') $counts['en_proceso']++;
-                if ($venta['estado'] == 'TERMINADO' || $venta['estado'] == 'ENTREGADO') $counts['terminados']++;
                 $ventas_procesadas[] = $venta;
             }
         }
@@ -165,32 +159,7 @@ class VentasService
         if ($estado == 'ACEPTADO' || $estado == 'RECHAZADO') {
             $this->db->transStart();
             try {
-                // Si pasa a ACEPTADO y antes no lo estaba, descontamos stock
-                if ($estado == 'ACEPTADO' && $venta_actual['estado_aprobacion'] != 'ACEPTADO') {
-                    $detalles = $this->detalleModel->getDetalles($venta_id);
-                    foreach ($detalles as $detalle) {
-                        if (!empty($detalle['producto_id'])) {
-                            $producto = $this->productoModel->find($detalle['producto_id']);
-                            if ($producto) {
-                                $nuevo_stock = max(0, $producto['stock'] - $detalle['cantidad']);
-                                $this->productoModel->update($detalle['producto_id'], ['stock' => $nuevo_stock]);
-                            }
-                        }
-                    }
-                }
-
-                // Si se RECHAZA y antes estaba ACEPTADO (raro pero posible), devolvemos stock
-                if ($estado == 'RECHAZADO' && $venta_actual['estado_aprobacion'] == 'ACEPTADO') {
-                    $detalles = $this->detalleModel->getDetalles($venta_id);
-                    foreach ($detalles as $detalle) {
-                        if (!empty($detalle['producto_id'])) {
-                            $producto = $this->productoModel->find($detalle['producto_id']);
-                            if ($producto) {
-                                $this->productoModel->update($detalle['producto_id'], ['stock' => $producto['stock'] + $detalle['cantidad']]);
-                            }
-                        }
-                    }
-                }
+                // Lógica de stock removida ya que se trabaja bajo pedido.
 
                 $this->ventasModel->update($venta_id, [
                     'estado_aprobacion' => $estado,
@@ -206,7 +175,7 @@ class VentasService
         }
 
         // --- FLUJO DE PRODUCCIÓN (PENDIENTE -> EN_PROCESO -> TERMINADO -> ENTREGADO) ---
-        // Aquí ya no tocamos stock, solo actualizamos la fase del pedido.
+        // Aquí no se toca stock, solo actualizamos la fase del pedido.
         return $this->ventasModel->update($venta_id, ['estado' => $estado]);
     }
 
@@ -304,9 +273,93 @@ class VentasService
     public function getVentasPorUsuario($usuario_id)
     {
         $ventas = $this->ventasModel->getVentas(null, $usuario_id);
+        
+        // Sort strictly by date DESC (most recent first) for customer view
+        usort($ventas, function($a, $b) {
+            return strtotime($b['fecha']) - strtotime($a['fecha']);
+        });
+
         foreach ($ventas as &$v) {
             $v['items'] = $this->detalleModel->getDetalles($v['id']);
         }
         return $ventas;
+    }
+
+    /**
+     * Incrementa la prioridad del pedido para subirlo en el listado activo.
+     */
+    public function subirPrioridad($venta_id)
+    {
+        $ventas_activas = $this->ventasModel->getVentasActivas();
+
+        // Encontrar la posición actual en la lista activa
+        $index = -1;
+        for ($i = 0; $i < count($ventas_activas); $i++) {
+            if ($ventas_activas[$i]['id'] == $venta_id) {
+                $index = $i;
+                break;
+            }
+        }
+
+        if ($index > 0) {
+            $item_current = $ventas_activas[$index];
+            $item_above = $ventas_activas[$index - 1];
+
+            $p_current = (int) ($item_current['prioridad'] ?? 0);
+            $p_above = (int) ($item_above['prioridad'] ?? 0);
+
+            if ($p_current != $p_above) {
+                // Si las prioridades son distintas, las intercambiamos
+                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_above]);
+                $this->ventasModel->update($item_above['id'], ['prioridad' => $p_current]);
+            } else {
+                // Si son iguales, al que sube (current) le damos la del de arriba + 1
+                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_above + 1]);
+            }
+        } elseif ($index == 0 && !empty($ventas_activas)) {
+            // Ya está arriba de todo, pero incrementamos para asegurar
+            $item_current = $ventas_activas[0];
+            $p_current = (int) ($item_current['prioridad'] ?? 0);
+            $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current + 1]);
+        }
+    }
+
+    /**
+     * Decrementa la prioridad del pedido para bajarlo en el listado activo.
+     */
+    public function bajarPrioridad($venta_id)
+    {
+        $ventas_activas = $this->ventasModel->getVentasActivas();
+
+        // Encontrar la posición actual en la lista activa
+        $index = -1;
+        for ($i = 0; $i < count($ventas_activas); $i++) {
+            if ($ventas_activas[$i]['id'] == $venta_id) {
+                $index = $i;
+                break;
+            }
+        }
+
+        if ($index != -1 && $index < count($ventas_activas) - 1) {
+            $item_current = $ventas_activas[$index];
+            $item_below = $ventas_activas[$index + 1];
+
+            $p_current = (int) ($item_current['prioridad'] ?? 0);
+            $p_below = (int) ($item_below['prioridad'] ?? 0);
+
+            if ($p_current != $p_below) {
+                // Si las prioridades son distintas, las intercambiamos
+                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_below]);
+                $this->ventasModel->update($item_below['id'], ['prioridad' => $p_current]);
+            } else {
+                // Si son iguales, al que sube (below) le damos la del de arriba (current) + 1
+                $this->ventasModel->update($item_below['id'], ['prioridad' => $p_current + 1]);
+            }
+        } elseif ($index == count($ventas_activas) - 1 && $index != -1) {
+            // Ya está en el fondo, pero decrementamos para asegurar
+            $item_current = $ventas_activas[$index];
+            $p_current = (int) ($item_current['prioridad'] ?? 0);
+            $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current - 1]);
+        }
     }
 }

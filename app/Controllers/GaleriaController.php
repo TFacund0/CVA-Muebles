@@ -21,8 +21,6 @@ class GaleriaController extends BaseController {
     }
 
     public function subir() {
-        if (!session()->get('logged_in')) return redirect()->to('/login');
-
         $rules = [
             'imagen' => [
                 'rules'  => 'uploaded[imagen]|is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen,2048]',
@@ -55,7 +53,7 @@ class GaleriaController extends BaseController {
     }
 
     public function admin_index() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         return view('back/gallery/gestion_galeria', [
             'fotos' => $this->galeriaService->getAllConUsuarios(),
@@ -64,33 +62,15 @@ class GaleriaController extends BaseController {
     }
 
     public function aprobar($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         $this->galeriaService->aprobar($id);
         return redirect()->back()->with('success', 'Foto aprobada y publicada.');
     }
 
     public function eliminar($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         $this->galeriaService->eliminar($id);
         return redirect()->back()->with('success', 'La foto ha sido eliminada.');
     }
 
-    public function setupDb() {
-        $db = \Config\Database::connect();
-        $sql = "CREATE TABLE IF NOT EXISTS galeria_clientes (
-            id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            usuario_id INT(11) UNSIGNED NOT NULL,
-            imagen VARCHAR(255) NOT NULL,
-            comentario TEXT,
-            fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-            activo ENUM('SI', 'NO') DEFAULT 'NO'
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
-        
-        try {
-            $db->query($sql);
-            return "Tabla 'galeria_clientes' configurada.";
-        } catch (\Exception $e) {
-            return "Error: " . $e->getMessage();
-        }
-    }
 }

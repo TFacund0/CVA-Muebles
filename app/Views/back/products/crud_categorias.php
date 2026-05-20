@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.2')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">GESTIÓN DE CATEGORÍAS</li>
 <?= $this->endSection() ?>
@@ -13,7 +17,7 @@
             </div>
             <div>
                 <h1 class="display-6 display-md-5 fw-bold text-cva-brown mb-1">Categorías</h1>
-                <p class="text-muted mb-0 small"><i class="bi bi-info-circle text-gold me-1"></i> Organización del catálogo de muebles.</p>
+                <p class="text-muted mb-0 small"><i class="bi bi-info-circle text-gold me-1"></i> Organiza tus muebles. Las categorías <strong>Visibles</strong> se muestran a los clientes en la tienda; las <strong>Ocultas</strong> se guardan en borrador.</p>
             </div>
         </div>
     </div>
@@ -49,22 +53,21 @@
                         <?= esc($cat['descripcion']) ?>
                     </td>
                     <td class="text-center" data-label="PRODUCTOS">
-                        <div class="d-flex flex-column align-items-center gap-2">
-                            <span class="badge bg-gold-soft text-gold border border-gold border-opacity-10 px-3 py-2 shadow-sm" style="min-width: 60px;">
+                        <div class="d-flex flex-column align-items-center">
+                            <span class="badge bg-gold-soft text-gold border border-gold border-opacity-10 px-3 py-2 shadow-sm" style="min-width: 60px;" title="Total de productos vinculados a esta categoría">
                                 <span class="fs-6"><?= $cat['total_productos'] ?></span> <i class="bi bi-box-seam ms-1"></i>
                             </span>
-                            <?php if($cat['productos_activos'] > 0): ?>
-                                <span class="x-small text-success fw-bold bg-success-subtle px-2 py-1 rounded-pill" style="font-size: 0.65rem;">
-                                    <i class="bi bi-check-circle-fill me-1"></i><?= $cat['productos_activos'] ?> ACTIVOS
-                                </span>
-                            <?php endif; ?>
                         </div>
                     </td>
                     <td class="text-center" data-label="ESTADO">
-                        <?php if($cat['activo'] == 'SI'): ?>
-                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill x-small fw-bold border border-success border-opacity-10">ACTIVO</span>
+                        <?php if($cat['activo'] == 1): ?>
+                            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill x-small fw-bold border border-success border-opacity-10 d-inline-flex align-items-center gap-1 shadow-sm" title="Visible: Los clientes pueden ver esta categoría en el menú y catálogo">
+                                <i class="bi bi-eye-fill"></i> VISIBLE
+                            </span>
                         <?php else: ?>
-                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill x-small fw-bold border border-danger border-opacity-10">INACTIVO</span>
+                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill x-small fw-bold border border-danger border-opacity-10 d-inline-flex align-items-center gap-1 shadow-sm" title="Oculta: Guardada como borrador, no se muestra a los clientes">
+                                <i class="bi bi-eye-slash-fill"></i> OCULTA
+                            </span>
                         <?php endif; ?>
                     </td>
                     <td class="pe-4 text-center" data-label="GESTIÓN">
@@ -75,10 +78,17 @@
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                             
-                            <button type="button" onclick="submitAction('<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>', '¿Cambiar el estado de esta categoría?')" 
-                               class="btn btn-action-premium <?= $cat['activo'] == 'SI' ? 'text-warning border-warning' : 'text-success border-success' ?> border-opacity-10">
-                                <i class="bi <?= $cat['activo'] == 'SI' ? 'bi-slash-circle' : 'bi-check-circle' ?>"></i>
-                            </button>
+                            <?php if ($cat['activo'] == 1): ?>
+                                <button type="button" onclick="submitAction('<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>', '¿Quieres OCULTAR esta categoría? Los clientes no podrán verla ni acceder a sus productos en el catálogo público.')" 
+                                   class="btn btn-action-premium text-warning border-warning border-opacity-10 shadow-sm" title="Ocultar de la tienda (Pasar a borrador)">
+                                    <i class="bi bi-eye-slash-fill"></i>
+                                </button>
+                            <?php else: ?>
+                                <button type="button" onclick="submitAction('<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>', '¿Quieres MOSTRAR esta categoría? Será visible para todos los clientes en el menú de la tienda.')" 
+                                   class="btn btn-action-premium text-success border-success border-opacity-10 shadow-sm" title="Mostrar en la tienda (Hacer visible)">
+                                    <i class="bi bi-eye-fill"></i>
+                                </button>
+                            <?php endif; ?>
 
                             <button type="button" onclick="submitAction('<?= base_url('admin/categorias/eliminar/' . $cat['id_categoria']) ?>', '¿Estás seguro de eliminar esta categoría? Solo se podrá si no tiene productos vinculados.')" 
                                class="btn btn-action-premium text-danger border-danger border-opacity-10">
@@ -150,27 +160,5 @@
     }
 </script>
 
-<style>
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        background: #1a0f0d;
-        color: var(--cva-gold);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem;
-        border-radius: 1.2rem;
-    }
-    .bg-gold-soft { background: #fff9f0; }
-    .btn-action-premium {
-        width: 40px; height: 40px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 12px;
-        background: white;
-        border: 1px solid #eee;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-action-premium:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-</style>
+
 <?= $this->endSection() ?>

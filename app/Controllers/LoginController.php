@@ -38,6 +38,7 @@ class LoginController extends BaseController {
         );
 
         if($resultado['status'] === 'success') {
+            session()->regenerate();
             session()->set($resultado['data']);
             return redirect()->to('/')->with('success', '¡Bienvenido de nuevo!');
         } else {

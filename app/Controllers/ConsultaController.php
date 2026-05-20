@@ -18,7 +18,7 @@ class ConsultaController extends BaseController {
      * Muestra el listado de consultas para administración.
      */
     public function index() {    
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $resultado = $this->consultaService->getConsultasConStats();
         $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -45,29 +45,47 @@ class ConsultaController extends BaseController {
             return redirect()->to('/')->with('error', 'Detectamos actividad inusual. Por favor intenta más tarde.');
         }
 
-        $rules = [
-            'nombre'      => 'required|min_length[3]',
-            'apellido'    => 'required|min_length[3]',
-            'email'       => 'required|valid_email',
-            'descripcion' => 'required|min_length[10]',
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('error', 'Por favor, revisa los datos ingresados.');
+        $resultado = $this->consultaService->registrar($this->request->getPost());
+        
+        if ($resultado['status'] === 'error') {
+            return redirect()->back()->withInput()->with('error', $resultado['message']);
         }
-
-        $this->consultaService->registrar($this->request->getPost());
-        return redirect()->back()->with('success', 'Consulta enviada correctamente.');
+        
+        return redirect()->back()->with('success', $resultado['message']);
     }
 
 
 
     /**
-     * Desactiva una consulta delegando al servicio.
+     * Desactiva (archiva) una consulta delegando al servicio.
      */
     public function eliminarConsulta($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         $this->consultaService->desactivar($id);
-        return redirect()->to('/consultas')->with('success', 'Consulta desactivada correctamente.');
+        $vista = $this->request->getGet('vista') ?? 'SI';
+        return redirect()->to('/consultas?vista=' . $vista)->with('success', 'Consulta archivada correctamente.');
+    }
+
+    /**
+     * Restaura una consulta a pendientes delegando al servicio.
+     */
+    public function restaurarConsulta($id) {
+
+        $this->consultaService->restaurar($id);
+        $vista = $this->request->getGet('vista') ?? 'NO';
+        return redirect()->to('/consultas?vista=' . $vista)->with('success', 'Consulta restaurada a pendientes.');
+    }
+
+    /**
+     * Elimina permanentemente una consulta delegando al servicio.
+     */
+    public function eliminarPermanente($id) {
+
+        
+        $razon = $this->request->getPost('razon_eliminacion') ?? 'No especificada';
+        $this->consultaService->eliminarPermanente($id);
+        
+        $vista = $this->request->getGet('vista') ?? 'NO';
+        return redirect()->to('/consultas?vista=' . $vista)->with('success', 'Consulta eliminada permanentemente de forma segura (Motivo: ' . esc($razon) . ').');
     }
 }

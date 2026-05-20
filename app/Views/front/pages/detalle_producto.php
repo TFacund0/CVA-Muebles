@@ -67,13 +67,8 @@
                         <span><?= number_format($producto['precio_vta'], 0, ',', '.') ?></span>
                     </div>
                     <div class="stock-info">
-                        <?php if ($producto['stock'] > 0): ?>
-                            <i class="bi bi-check-circle-fill text-success"></i>
-                            <span>Disponible para entrega inmediata</span>
-                        <?php else: ?>
-                            <i class="bi bi-clock-history text-warning"></i>
-                            <span>Sin stock por el momento - ¡Consultanos!</span>
-                        <?php endif; ?>
+                        <i class="bi bi-hammer text-gold" style="color: var(--cva-gold, #b8860b) !important;"></i>
+                        <span class="fw-bold" style="color: var(--cva-gold, #b8860b);">Fabricación bajo pedido (Consultar tiempos de entrega)</span>
                     </div>
                 </div>
 
@@ -109,9 +104,9 @@
                                     </button>
                                 </form>
                             <?php else: ?>
-                                <a href="https://wa.me/<?= env('WHATSAPP_NUMBER') ?>?text=Hola!%20Me%20interesa%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>%20pero%20no%20hay%20stock.%20¿Me%20avisarías%20cuando%20vuelvan%20a%20fabricar?" 
+                                <a href="https://wa.me/<?= env('WHATSAPP_NUMBER') ?>?text=Hola!%20Me%20interesa%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>%20y%20me%20gustaría%20consultar%20para%20encargarlo." 
                                    target="_blank" class="btn btn-outline-brown w-100 py-3 mb-3 rounded-3 fs-5">
-                                    <i class="bi bi-whatsapp me-2"></i> CONSULTAR DISPONIBILIDAD
+                                    <i class="bi bi-whatsapp me-2"></i> CONSULTAR FABRICACIÓN
                                 </a>
                             <?php endif; ?>
                         <?php else: ?>

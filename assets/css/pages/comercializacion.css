@@ -78,6 +78,46 @@
     flex-shrink: 0;
 }
 
+/* 4.5. BOTÓN TÉRMINOS Y CONDICIONES CON ANIMACIÓN ULTRA PREMIUM */
+.section-garantia-full .btn-outline-brown {
+    position: relative;
+    background-color: transparent !important;
+    color: var(--cva-brown) !important;
+    border: 2px solid var(--cva-brown) !important;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.section-garantia-full .btn-outline-brown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--cva-brown);
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.section-garantia-full .btn-outline-brown:hover {
+    color: white !important;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(45, 27, 25, 0.2) !important;
+}
+
+.section-garantia-full .btn-outline-brown:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.section-garantia-full .btn-outline-brown:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
 /* 5. RESPONSIVE (DIMENSIONES ESTABLECIDAS) */
 @media (max-width: 991.98px) {
     .comercializacion-header { padding: 100px 20px 60px; background-attachment: scroll !important; }
@@ -101,7 +141,7 @@
     
     .section-garantia-full .display-4 { font-size: 1.8rem !important; }
     .section-garantia-full .lead { font-size: 0.9rem !important; }
-    .section-garantia-full .btn-outline-light { 
+    .section-garantia-full .btn-outline-brown { 
         padding: 0.6rem 1.5rem !important; 
         font-size: 0.75rem !important; 
         letter-spacing: 1px !important;

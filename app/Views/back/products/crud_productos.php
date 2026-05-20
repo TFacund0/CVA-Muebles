@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.2')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item active text-gold fw-bold" aria-current="page">GESTIÓN DE CATÁLOGO</li>
 <?= $this->endSection() ?>
@@ -24,14 +28,15 @@
     </div>
 </div>
 
-<!-- Resumen de Stock (KPIs Rápidos) -->
+<!-- Mensajes modularizados -->
+<?= view('components/alert_message') ?>
+
+<!-- Resumen del Catálogo (KPIs Rápidos) -->
 <div class="row g-3 g-md-4 mb-5">
     <?php 
         $total_items = count($productos);
-        $unidades_fisicas = 0;
         $categorias_activas = [];
         foreach($productos as $p) {
-            $unidades_fisicas += $p['stock'];
             if(!empty($p['categoria'])) $categorias_activas[$p['categoria']] = true;
         }
     ?>
@@ -39,8 +44,8 @@
         <div class="admin-card-v2 p-3 p-md-4 border-start border-4 border-info h-100 shadow-sm">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Catálogo</span>
-                    <h4 class="fw-bold text-cva-brown mb-0"><?= $total_items ?></h4>
+                    <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Catálogo Total</span>
+                    <h4 class="fw-bold text-cva-brown mb-0"><?= $total_items ?> Diseños</h4>
                 </div>
                 <div class="bg-info-soft text-info p-2 p-md-3 rounded-circle d-none d-sm-block">
                     <i class="bi bi-collection fs-4"></i>
@@ -52,11 +57,11 @@
         <div class="admin-card-v2 p-3 p-md-4 border-start border-4 h-100 shadow-sm" style="border-color: var(--cva-gold) !important;">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Stock</span>
-                    <h4 class="fw-bold text-gold mb-0"><?= $unidades_fisicas ?></h4>
+                    <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Diseños Activos</span>
+                    <h4 class="fw-bold text-gold mb-0"><?= $counts['activos'] ?> en Tienda</h4>
                 </div>
                 <div class="bg-gold-soft text-gold p-2 p-md-3 rounded-circle d-none d-sm-block">
-                    <i class="bi bi-box-seam-fill fs-4"></i>
+                    <i class="bi bi-hammer fs-4"></i>
                 </div>
             </div>
         </div>
@@ -76,6 +81,38 @@
     </div>
 </div>
 
+<!-- Selector de Pestañas Premium (Segmented Tabs) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-center justify-content-md-start">
+            <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="productosTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2" 
+                            id="activos-tab" 
+                            type="button" 
+                            role="tab" 
+                            aria-selected="true">
+                        <i class="bi bi-eye text-gold"></i>
+                        <span>Activos (Públicos)</span>
+                        <span class="badge bg-gold text-brown rounded-pill x-small fw-bold px-2 py-1 shadow-sm"><?= $counts['activos'] ?></span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2" 
+                            id="archivados-tab" 
+                            type="button" 
+                            role="tab" 
+                            aria-selected="false">
+                        <i class="bi bi-archive text-gold"></i>
+                        <span>Archivados (Borradores)</span>
+                        <span class="badge bg-secondary-soft text-muted rounded-pill x-small fw-bold px-2 py-1"><?= $counts['eliminados'] ?></span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <!-- Filtros Avanzados -->
 <div class="admin-card-v2 mb-4 border-0 shadow-sm overflow-hidden">
     <div class="bg-light p-3 border-bottom d-flex align-items-center justify-content-between" style="min-height: 52px;">
@@ -87,31 +124,26 @@
     <div class="p-4">
         <form id="filter-form">
             <div class="row g-3 align-items-end">
-                <div class="col-lg-5 col-md-12">
-                    <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador</label>
+                <div class="col-md-7 col-12">
+                    <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
                     <div class="input-group shadow-sm rounded-3 overflow-hidden border">
                         <span class="input-group-text bg-white border-0"><i class="bi bi-search text-gold"></i></span>
                         <input type="text" id="input-search" class="form-control border-0 py-2" placeholder="Buscar pieza...">
                     </div>
                 </div>
-                <div class="col-lg-4 col-6">
+                <div class="col-md-4 col-6">
                     <label class="x-small fw-bold text-muted text-uppercase mb-2">Categoría</label>
-                    <select id="select-category" class="form-select border shadow-sm py-2">
+                    <select id="select-category" class="form-select border shadow-sm py-2 x-small fw-bold text-uppercase">
                         <option value="all">Todas</option>
                         <?php foreach ($categorias as $cat): ?>
                             <option value="<?= esc($cat['descripcion']) ?>"><?= esc($cat['descripcion']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-lg-3 col-6">
-                    <div class="d-flex gap-2">
-                        <button type="button" id="toggle-view" class="btn btn-outline-dark w-100 py-2 rounded-3 shadow-sm x-small fw-bold" data-current="<?= $vista ?>">
-                            <i class="bi bi-archive"></i>
-                        </button>
-                        <button type="button" id="btn-reset" class="btn btn-light border py-2 px-3 rounded-3 shadow-sm">
-                            <i class="bi bi-arrow-counterclockwise"></i>
-                        </button>
-                    </div>
+                <div class="col-md-1 col-6">
+                    <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
                 </div>
             </div>
         </form>
@@ -124,9 +156,8 @@
         <table class="table table-hover align-middle mb-0" id="products-table">
             <thead class="bg-brown text-white">
                 <tr>
-                    <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest" style="width: 45%;">PIEZA Y ESPECIFICACIONES</th>
+                    <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest" style="width: 55%;">PIEZA Y ESPECIFICACIONES</th>
                     <th class="py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest">CATEGORÍA</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest">STOCK</th>
                     <th class="py-4 text-gold x-small fw-bold border-0 text-end text-uppercase tracking-widest">PRECIO VENTA</th>
                     <th class="pe-4 py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest">GESTIÓN</th>
                 </tr>
@@ -159,14 +190,6 @@
                                     <i class="bi bi-tag-fill me-1"></i> <?= esc($p['categoria'] ?? 'Sin Categoría') ?>
                                 </span>
                             </td>
-                            <td class="text-center" data-label="STOCK">
-                                <div class="d-inline-block text-center">
-                                    <div class="h3 fw-bold mb-0 <?= $p['stock'] > 0 ? 'text-success' : 'text-muted' ?>">
-                                        <?= $p['stock'] ?>
-                                    </div>
-                                    <div class="x-small fw-bold text-uppercase text-muted" style="font-size: 0.65rem;">Unidades</div>
-                                </div>
-                            </td>
                             <td class="text-end" data-label="PRECIO">
                                 <div class="fw-bold text-cva-brown mb-0">$<?= number_format($p['precio_vta'], 2, ',', '.') ?></div>
                             </td>
@@ -186,6 +209,10 @@
                                                 class="btn btn-action-premium text-success border-success border-opacity-25 w-100 action-restore <?= $p['eliminado'] == 'NO' ? 'd-none' : '' ?>">
                                             <i class="bi bi-arrow-counterclockwise me-2"></i> RESTAURAR
                                         </button>
+                                        <button type="button" onclick="submitAction('<?= base_url('/eliminar-producto-permanente/' . $p['id_producto']) ?>', '¿Confirmas eliminar PERMANENTEMENTE este mueble del catálogo? Esta acción no se puede deshacer y borrará toda la información asociada.')" 
+                                                class="btn btn-action-premium text-danger border-danger border-opacity-25 w-100 mt-2 action-delete-permanent <?= $p['eliminado'] == 'NO' ? 'd-none' : '' ?>">
+                                            <i class="bi bi-trash-fill me-2"></i> ELIMINAR
+                                        </button>
                                     </div>
                                 </div>
                             </td>
@@ -195,7 +222,7 @@
                 
                 <!-- Fila de "No hay resultados" (JS la controla) -->
                 <tr id="no-results-row" style="display: none;">
-                    <td colspan="5" class="text-center py-5 bg-light bg-opacity-50">
+                    <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-search display-1 text-muted opacity-25"></i>
                             <h4 class="text-muted mt-4">Sin coincidencias</h4>
@@ -206,7 +233,7 @@
                 </tr>
 
                 <tr id="empty-active-row" style="display: none;">
-                    <td colspan="5" class="text-center py-5 bg-light bg-opacity-50">
+                    <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-box-seam-fill display-1 text-muted opacity-25"></i>
                             <h4 class="text-muted mt-4">Catálogo Vacío</h4>
@@ -217,7 +244,7 @@
                 </tr>
 
                 <tr id="empty-archive-row" style="display: none;">
-                    <td colspan="5" class="text-center py-5 bg-light bg-opacity-50">
+                    <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-archive-fill display-1 text-muted opacity-25"></i>
                             <h4 class="text-muted mt-4">Archivo Vacío</h4>
@@ -230,72 +257,25 @@
     </div>
 </div>
 
-<style>
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        background: #1a0f0d;
-        color: var(--cva-gold);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem;
-        border-radius: 1.2rem;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .bg-info-soft { background: #e7f5ff; }
-    .bg-success-soft { background: #f2fcf5; }
-    .bg-gold-soft { background: #fff9f0; }
 
-    /* Botones Premium con Dinamismo */
-    .btn-action-premium {
-        background: white;
-        border: 1px solid;
-        border-radius: 50px;
-        padding: 8px 15px;
-        font-size: 0.7rem;
-        font-weight: 800;
-        letter-spacing: 1px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .btn-action-premium:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        filter: brightness(0.95);
-    }
-    .btn-action-premium:active {
-        transform: translateY(0) scale(0.98);
-    }
-
-    /* Animación de Imagen */
-    .product-img-container:hover img {
-        transform: scale(1.08) rotate(2deg);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
-    }
-    .transition-transform { transition: all 0.4s ease; }
-
-    /* Pulso para el botón de catálogo vacío */
-    .animate-pulse-gold {
-        animation: pulse-gold 2s infinite;
-    }
-    @keyframes pulse-gold {
-        0% { box-shadow: 0 0 0 0 rgba(201, 161, 107, 0.7); }
-        70% { box-shadow: 0 0 0 15px rgba(201, 161, 107, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(201, 161, 107, 0); }
-    }
-
-    @media (max-width: 767.98px) {
-        .product-img-container { width: 80px; }
-        .product-row td[data-label="PIEZA"] { min-height: 80px; }
-    }
-</style>
 
 <script>
+    function submitAction(url, message) {
+        if (confirm(message)) {
+            const form = document.getElementById('global-action-form');
+            const separator = url.includes('?') ? '&' : '?';
+            const activosTab = document.getElementById('activos-tab');
+            const vista = (activosTab && activosTab.classList.contains('active')) ? 'NO' : 'SI';
+            form.action = url + separator + 'vista=' + vista;
+            form.submit();
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const inputSearch = document.getElementById('input-search');
         const selectCategory = document.getElementById('select-category');
-        const toggleView = document.getElementById('toggle-view');
+        const activosTab = document.getElementById('activos-tab');
+        const archivadosTab = document.getElementById('archivados-tab');
         const rows = document.querySelectorAll('.product-row');
         const noResults = document.getElementById('no-results-row');
         const emptyActive = document.getElementById('empty-active-row');
@@ -303,7 +283,7 @@
         const filterStatus = document.getElementById('filter-status');
         const btnReset = document.getElementById('btn-reset');
 
-        let currentView = 'NO'; // 'NO' para Activos, 'SI' para Archivados
+        let currentView = '<?= esc($vista) ?>'; // 'NO' para Activos, 'SI' para Archivados
 
         function filterProducts() {
             const searchTerm = inputSearch.value.toLowerCase();
@@ -336,29 +316,33 @@
             });
 
             // Control de filas vacías
-            noResults.style.display = (visibleCount === 0 && totalInCurrentView > 0) ? '' : 'none';
-            emptyActive.style.display = (totalInCurrentView === 0 && currentView === 'NO') ? '' : 'none';
-            emptyArchive.style.display = (totalInCurrentView === 0 && currentView === 'SI') ? '' : 'none';
+            if (noResults) noResults.style.display = (visibleCount === 0 && totalInCurrentView > 0) ? '' : 'none';
+            if (emptyActive) emptyActive.style.display = (totalInCurrentView === 0 && currentView === 'NO') ? '' : 'none';
+            if (emptyArchive) emptyArchive.style.display = (totalInCurrentView === 0 && currentView === 'SI') ? '' : 'none';
             
             setTimeout(() => {
                 filterStatus.style.opacity = '0';
-            }, 300);
+            }, 200);
         }
 
-        toggleView.addEventListener('click', function() {
-            currentView = (currentView === 'NO') ? 'SI' : 'NO';
-            
-            // Actualizar botón
-            if (currentView === 'SI') {
-                this.innerHTML = '<i class="bi bi-eye me-1"></i> VER ACTIVOS';
-                this.classList.replace('btn-outline-dark', 'btn-dark');
+        function switchTab(view) {
+            currentView = view;
+            if (currentView === 'NO') {
+                activosTab.classList.add('active');
+                activosTab.setAttribute('aria-selected', 'true');
+                archivadosTab.classList.remove('active');
+                archivadosTab.setAttribute('aria-selected', 'false');
             } else {
-                this.innerHTML = '<i class="bi bi-archive me-1"></i> VER ARCHIVADOS';
-                this.classList.replace('btn-dark', 'btn-outline-dark');
+                archivadosTab.classList.add('active');
+                archivadosTab.setAttribute('aria-selected', 'true');
+                activosTab.classList.remove('active');
+                activosTab.setAttribute('aria-selected', 'false');
             }
-            
             filterProducts();
-        });
+        }
+
+        if (activosTab) activosTab.addEventListener('click', () => switchTab('NO'));
+        if (archivadosTab) archivadosTab.addEventListener('click', () => switchTab('SI'));
 
         inputSearch.addEventListener('input', filterProducts);
         selectCategory.addEventListener('change', filterProducts);
@@ -370,7 +354,7 @@
         });
 
         // Inicializar vista
-        filterProducts();
+        switchTab(currentView);
     });
 
     function resetFilters() {

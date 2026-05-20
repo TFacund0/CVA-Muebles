@@ -95,9 +95,10 @@ class UsuarioService
                 'baja'      => 'NO'
             ];
 
-            return $this->usuarioModel->insert($userData) 
-                ? ['status' => 'success', 'message' => 'Usuario registrado con éxito.']
-                : ['status' => 'error', 'message' => 'No se pudo guardar el usuario.'];
+            if ($this->usuarioModel->insert($userData) === false) {
+                return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->usuarioModel->errors())];
+            }
+            return ['status' => 'success', 'message' => 'Usuario registrado con éxito.'];
 
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -130,8 +131,8 @@ class UsuarioService
                 $updateData['imagen'] = $nombre_imagen;
             }
 
-            if (!$this->usuarioModel->update($userId, $updateData)) {
-                return ['status' => 'error', 'message' => 'No se pudieron actualizar los datos.'];
+            if ($this->usuarioModel->update($userId, $updateData) === false) {
+                return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->usuarioModel->errors())];
             }
 
             return ['status' => 'success', 'message' => 'Perfil actualizado correctamente.', 'updated_data' => $updateData];
@@ -139,6 +140,32 @@ class UsuarioService
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
+    }
+
+    /**
+     * Cambia la contraseña de un usuario validando su contraseña actual.
+     */
+    public function cambiarPassword($userId, $currentPassword, $newPassword, $confirmPassword)
+    {
+        if ($newPassword !== $confirmPassword) {
+            return ['status' => 'error', 'message' => 'Las nuevas contraseñas no coinciden.'];
+        }
+
+        $usuario = $this->usuarioModel->find($userId);
+        if (!$usuario) {
+            return ['status' => 'error', 'message' => 'Usuario no encontrado.'];
+        }
+
+        if (!password_verify($currentPassword, $usuario['pass'])) {
+            return ['status' => 'error', 'message' => 'La contraseña actual es incorrecta.'];
+        }
+
+        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+        if ($this->usuarioModel->update($userId, ['pass' => $hash]) === false) {
+            return ['status' => 'error', 'message' => 'No se pudo actualizar la contraseña.'];
+        }
+
+        return ['status' => 'success', 'message' => 'Contraseña actualizada correctamente.'];
     }
 
     /**
@@ -175,5 +202,40 @@ class UsuarioService
     public function getUsuario($id)
     {
         return $this->usuarioModel->find($id);
+    }
+
+    /**
+     * Elimina permanentemente a un usuario si no tiene compras asociadas.
+     */
+    public function eliminarPermanente($id)
+    {
+        $db = \Config\Database::connect();
+        
+        // 1. Verificar si tiene compras o pedidos asociados en ventas_cabecera
+        $compras = $db->table('ventas_cabecera')->where('usuario_id', $id)->countAllResults();
+        if ($compras > 0) {
+            return [
+                'status' => 'error',
+                'message' => 'No se puede eliminar permanentemente este usuario porque tiene compras o pedidos asociados en el sistema. Puedes mantenerlo como Suspendido para resguardar el historial comercial.'
+            ];
+        }
+
+        try {
+            // 2. Eliminar favoritos en favoritos
+            $db->table('favoritos')->where('usuario_id', $id)->delete();
+
+            // 3. Eliminar de la tabla usuarios
+            $this->usuarioModel->delete($id);
+
+            return [
+                'status' => 'success',
+                'message' => 'Usuario eliminado permanentemente del sistema.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => 'Ocurrió un error al intentar eliminar el usuario: ' . $e->getMessage()
+            ];
+        }
     }
 }

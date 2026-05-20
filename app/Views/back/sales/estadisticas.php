@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item active text-gold fw-bold" aria-current="page">ESTADÍSTICAS DEL TALLER</li>
 <?= $this->endSection() ?>
@@ -138,80 +142,5 @@
     </div>
 </div>
 
-<style>
-    /* Estilos Locales de Dashboard - No tocan el CORE */
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        background: #1a0f0d;
-        color: var(--cva-gold);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem;
-        border-radius: 1.2rem;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .stats-timer {
-        display: inline-flex; align-items: center;
-        background: white; padding: 0.5rem 1.2rem;
-        border-radius: 50px; font-weight: 700; font-size: 0.8rem;
-        color: #5d4037;
-    }
-    .pulse-dot {
-        width: 8px; height: 8px; background: #28a745;
-        border-radius: 50%; margin-right: 10px;
-        animation: pulse-green 2s infinite;
-    }
-    @keyframes pulse-green {
-        0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-        70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-    }
-    .kpi-card-premium {
-        background: white; border-radius: 1.5rem;
-        box-shadow: var(--admin-card-shadow);
-        border-bottom: 4px solid transparent;
-        transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    }
-    .kpi-card-premium:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-    }
-    .kpi-icon-container {
-        width: 65px; height: 65px; border-radius: 1.2rem;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 1.8rem;
-    }
-    .kpi-label { font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #999; }
-    .kpi-value { font-size: 2.8rem; font-weight: 800; line-height: 1; margin: 0.5rem 0; }
-    
-    .action-btn-v2 {
-        display: flex; align-items: center; gap: 1rem;
-        background: white; padding: 1.5rem; border-radius: 1.2rem;
-        border: 1px solid #eeebe6; text-decoration: none; color: inherit;
-        transition: all 0.3s ease;
-    }
-    .action-btn-v2:hover {
-        background: #fdfaf7; border-color: var(--cva-gold); transform: translateX(5px);
-    }
-    .action-icon {
-        width: 45px; height: 45px; background: #eeebe6;
-        border-radius: 50%; display: flex; align-items: center; justify-content: center;
-        font-size: 1.2rem; color: var(--cva-brown);
-    }
-    .action-btn-v2:hover .action-icon { background: var(--cva-gold); color: white; }
-    
-    .shadow-gold { box-shadow: 0 20px 40px rgba(184, 134, 11, 0.15); }
-    .bg-warning-soft { background: #fff9db; }
-    .bg-info-soft { background: #e7f5ff; }
-    .bg-success-soft { background: #ebfbee; }
-    .bg-gold-soft { background: #fff4e6; }
 
-    @media (max-width: 767.98px) {
-        .kpi-value { font-size: 2rem; }
-        .kpi-icon-container { width: 50px; height: 50px; font-size: 1.4rem; }
-        .kpi-body { padding: 1.5rem 1rem !important; }
-        .action-btn-v2 { padding: 1rem; }
-        .action-icon { width: 35px; height: 35px; font-size: 1rem; }
-        .action-text span { font-size: 0.9rem; }
-    }
-</style>
 <?= $this->endSection() ?>

@@ -22,7 +22,7 @@ class ProductoController extends BaseController {
      * Muestra el listado de productos para administración.
      */
     public function index() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $resultado = $this->productoService->getProductosConStats();
         
@@ -39,7 +39,7 @@ class ProductoController extends BaseController {
      * Muestra el formulario de alta de producto.
      */
     public function create_alta_producto() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         return view('back/products/alta_producto', [
             'categorias' => $this->categoriaService->getCategoriasConStats(),
@@ -51,20 +51,14 @@ class ProductoController extends BaseController {
      * Valida y crea un producto delegando al servicio.
      */
     public function formValidation() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
 
+        // Validación estricta de la imagen para prevenir subida de archivos maliciosos (RCE)
         $rules = [
-            'nombre_producto' => 'required|min_length[2]',
-            'categoria_id'    => 'is_not_unique[categorias.id_categoria]',
-            'precio'          => 'required|numeric',
-            'precio-vta'      => 'required|numeric',
-            'stock'           => 'required|integer',
-            'stock-min'       => 'required|integer'
+            'image' => 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]'
         ];
-
-        if (!$this->validate($rules)) {
-            session()->setFlashData('fail', 'No se cumple con todos los requisitos de los campos');
-            return $this->create_alta_producto();
+        
+        if ($this->request->getFile('image')->isValid() && !$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('fail', 'El archivo subido no es una imagen válida o supera los 2MB.');
         }
 
         $resultado = $this->productoService->crearProducto([
@@ -89,7 +83,7 @@ class ProductoController extends BaseController {
      * Muestra el formulario de edición de producto.
      */
     public function index_editar_producto($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $producto = $this->productoService->getProductoConGaleria($id);
         if (!$producto) return redirect()->to('/crud-productos')->with('fail', 'Producto no encontrado');
@@ -105,7 +99,16 @@ class ProductoController extends BaseController {
      * Actualiza un producto delegando al servicio.
      */
     public function modificar_producto($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
+
+        // Validación estricta de la imagen principal
+        $rulesMain = [
+            'imagen' => 'is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen,2048]'
+        ];
+        
+        if ($this->request->getFile('imagen')->isValid() && !$this->validate($rulesMain)) {
+            return redirect()->back()->with('fail', 'La imagen principal no es válida o supera los 2MB.');
+        }
 
         // Actualizar datos básicos e imagen principal
         $resultado = $this->productoService->actualizarProducto($id, [
@@ -135,7 +138,7 @@ class ProductoController extends BaseController {
      * Elimina un producto delegando al servicio.
      */
     public function delete_producto($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         $this->productoService->eliminar($id);
         return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'NO'));
     }
@@ -144,7 +147,7 @@ class ProductoController extends BaseController {
      * Reactiva un producto delegando al servicio.
      */
     public function activar_producto($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         $this->productoService->reactivar($id);
         return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'SI'));
     }
@@ -154,7 +157,9 @@ class ProductoController extends BaseController {
      */
     public function ver_detalle($id) {
         $producto = $this->productoService->getProductoConGaleria($id);
-        if (!$producto) return redirect()->to('/productos')->with('fail', 'Producto no encontrado');
+        if (!$producto || $producto['eliminado'] == 'SI' || $producto['categoria_activa'] == 0) {
+            return redirect()->to('/productos')->with('fail', 'Producto no disponible.');
+        }
 
         return view('front/pages/detalle_producto', [
             'producto' => $producto,
@@ -166,9 +171,21 @@ class ProductoController extends BaseController {
      * Sube fotos a la galería de un producto.
      */
     public function subir_fotos_galeria($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
 
+
+        // Validación estricta de imágenes múltiples
+        $rulesGaleria = [
+            'fotos_galeria' => 'is_image[fotos_galeria]|mime_in[fotos_galeria,image/jpg,image/jpeg,image/png,image/webp]|max_size[fotos_galeria,2048]'
+        ];
+
+        // Solo validamos si efectivamente subieron algo
         $files = $this->request->getFileMultiple('fotos_galeria');
+        if ($files && $files[0]->isValid()) {
+            if (!$this->validate($rulesGaleria)) {
+                return redirect()->back()->with('fail', 'Una o más imágenes de la galería no son válidas o superan los 2MB.');
+            }
+        }
+
         if ($this->productoService->subirImagenesGaleria($id, $files)) {
             return redirect()->back()->with('success', 'Galería actualizada.');
         }
@@ -179,12 +196,27 @@ class ProductoController extends BaseController {
      * Elimina una foto de la galería.
      */
     public function eliminar_foto_galeria($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         if ($this->productoService->eliminarImagenGaleria($id)) {
             return redirect()->back()->with('success', 'Imagen eliminada.');
         }
         return redirect()->back()->with('fail', 'No se pudo eliminar la imagen.');
+    }
+
+    /**
+     * Elimina permanentemente un producto delegando al servicio.
+     */
+    public function eliminar_permanente($id) {
+
+        
+        $resultado = $this->productoService->eliminarPermanente($id);
+        
+        if ($resultado['status'] === 'success') {
+            return redirect()->to('/crud-productos?vista=SI')->with('success', $resultado['message']);
+        } else {
+            return redirect()->to('/crud-productos?vista=SI')->with('fail', $resultado['message']);
+        }
     }
 
 }

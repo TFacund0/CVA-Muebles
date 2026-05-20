@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.1')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item"><a href="<?= base_url('/crud-productos') ?>" class="text-decoration-none text-muted">CATÁLOGO</a></li>
     <li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">EDITAR PRODUCTO</li>
@@ -106,26 +110,18 @@
                     </div>
 
                     <div class="row g-4">
-                        <div class="col-6 col-lg-3">
+                        <div class="col-md-6 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Costo</label>
                             <input type="number" step="0.01" name="precio" class="form-control admin-control py-2 fw-bold" 
                                    value="<?= esc($producto['precio']) ?>" required>
                         </div>
-                        <div class="col-6 col-lg-3">
+                        <div class="col-md-6 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Venta</label>
-                            <input type="number" step="0.01" name="precio-vta" class="form-control admin-control py-2 fw-bold text-gold" 
+                            <input type="number" step="0.01" name="precio-vta" class="form-control admin-control py-2 text-gold" 
                                    value="<?= esc($producto['precio_vta']) ?>" required>
                         </div>
-                        <div class="col-6 col-lg-3">
-                            <label class="x-small fw-bold text-muted text-uppercase mb-2">Stock</label>
-                            <input type="number" name="stock" class="form-control admin-control py-2 text-center fw-bold fs-5" 
-                                   value="<?= esc($producto['stock']) ?>" required>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <label class="x-small fw-bold text-muted text-uppercase mb-2">Stock Mín.</label>
-                            <input type="number" name="stock-min" class="form-control admin-control py-2 text-center fw-bold text-danger" 
-                                   value="<?= esc($producto['stock_min']) ?>" required>
-                        </div>
+                        <input type="hidden" name="stock" value="<?= esc($producto['stock'] ?? '999') ?>">
+                        <input type="hidden" name="stock-min" value="<?= esc($producto['stock_min'] ?? '0') ?>">
                     </div>
                 </div>
 
@@ -191,71 +187,7 @@
     </div>
 </form>
 
-<style>
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 1.2rem;
-        font-size: 1.8rem;
-    }
-    .bg-gold-soft { background: #fff9f0; }
-    .bg-success-soft { background: #f0fff4; }
-    .bg-info-soft { background: #f0f7ff; }
-    .bg-warning-soft { background: #fff8e1; }
-    .bg-light-gold { background: #faf9f6; }
-    .tracking-wider { letter-spacing: 1.5px; }
-    
-    .upload-zone, .upload-zone-secondary {
-        transition: all 0.3s ease;
-        border-style: dashed !important;
-    }
-    .upload-zone:hover, .upload-zone-secondary:hover {
-        background: #fdfaf5 !important;
-        border-color: var(--cva-gold) !important;
-    }
 
-    .gallery-item-admin img {
-        transition: transform 0.3s ease;
-    }
-    .gallery-item-admin:hover img {
-        transform: scale(1.1);
-    }
-    .gallery-actions {
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        background: rgba(0,0,0,0.2);
-    }
-    .gallery-item-admin:hover .gallery-actions {
-        opacity: 1;
-    }
-    
-    .admin-control:focus {
-        border-color: var(--cva-gold);
-        box-shadow: 0 0 0 4px rgba(184, 134, 11, 0.08);
-    }
-    
-    .form-select.admin-control {
-        background-position: right 1rem center;
-    }
-
-    .btn-admin-gold {
-        background: var(--cva-brown);
-        color: var(--cva-gold);
-        border: 2px solid var(--cva-gold);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative;
-        overflow: hidden;
-    }
-    .btn-admin-gold:hover {
-        background: var(--cva-gold);
-        color: white;
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2) !important;
-    }
-    .btn-admin-gold:active {
-        transform: translateY(-2px);
-    }
-</style>
 
 <?= $this->endSection() ?>
 

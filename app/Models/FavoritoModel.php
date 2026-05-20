@@ -23,8 +23,11 @@ class FavoritoModel extends Model {
      * Obtiene los productos favoritos de un usuario con sus detalles
      */
     public function getFavoritosByUser($usuario_id) {
-        return $this->select('favoritos.*, productos.nombre_prod, productos.imagen, productos.precio_vta, productos.descripcion')
+        return $this->select('favoritos.*, productos.nombre_prod, productos.imagen, productos.precio_vta, productos.descripcion, productos.categoria_id, categorias.descripcion as categoria')
                     ->join('productos', 'productos.id_producto = favoritos.producto_id')
+                    ->join('categorias', 'categorias.id_categoria = productos.categoria_id')
+                    ->where('productos.eliminado', 'NO')
+                    ->where('categorias.activo', 1)
                     ->where('usuario_id', $usuario_id)
                     ->findAll();
     }

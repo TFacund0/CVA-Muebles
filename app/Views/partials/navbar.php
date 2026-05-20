@@ -12,23 +12,24 @@ $active_comercializacion = (strpos(current_url(), 'comercializacion') !== false)
 $active_info = (strpos(current_url(), 'quienesSomos') !== false) ? 'active' : '';
 $active_contacto = (strpos(current_url(), 'informacionContacto') !== false) ? 'active' : '';
 $active_galeria = (strpos(current_url(), 'galeria') !== false) ? 'active' : '';
+$active_consultas = (strpos(current_url(), 'consultas') !== false) ? 'active' : '';
 
 // Carrito
 $cartCount = 0;
 if (env('SHOPPING_CART_ENABLED')) {
-    $cartCount = \Config\Services::cart()->totalItems();
+  $cartCount = \Config\Services::cart()->totalItems();
 }
 ?>
 
 <!-- NAVBAR PRINCIPAL (ESTRUCTURA HÍBRIDA ARTISAN) -->
 <nav class="navbar navbar-expand-lg artisan-main-nav sticky-top">
   <div class="container-fluid px-3 px-lg-5 d-flex align-items-center justify-content-between">
-    
+
     <div class="d-lg-none d-flex align-items-center gap-2" style="flex: 1;">
       <button class="boton-icon-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
         <i class="bi bi-list fs-4"></i>
       </button>
-      
+
       <?php if (env('SHOPPING_CART_ENABLED') && $isLogged): ?>
         <a href="<?= base_url('muestro') ?>" class="boton-icon-circle position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5"></i>
@@ -63,28 +64,28 @@ if (env('SHOPPING_CART_ENABLED')) {
 
     <!-- [DERECHA] ICONOS USUARIO / AUTH -->
     <div class="d-flex align-items-center justify-content-end gap-2" style="flex: 1;">
-        <?php if (env('SHOPPING_CART_ENABLED') && $isLogged): ?>
-          <a href="<?= base_url('muestro') ?>" class="boton-icon-circle d-none d-lg-flex position-relative text-decoration-none">
-            <i class="bi bi-cart3 fs-5"></i>
-            <?php if ($cartCount > 0): ?>
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                <?= $cartCount ?>
-              </span>
-            <?php endif; ?>
-          </a>
-        <?php endif; ?>
+      <?php if (env('SHOPPING_CART_ENABLED') && $isLogged): ?>
+        <a href="<?= base_url('muestro') ?>" class="boton-icon-circle d-none d-lg-flex position-relative text-decoration-none">
+          <i class="bi bi-cart3 fs-5"></i>
+          <?php if ($cartCount > 0): ?>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+              <?= $cartCount ?>
+            </span>
+          <?php endif; ?>
+        </a>
+      <?php endif; ?>
 
-        <?php if (!$isLogged): ?>
-          <div class="auth-pill-artisan d-none d-lg-flex">
-            <a href="<?= base_url('login') ?>" class="auth-pill-link">Ingresar</a>
-            <div class="auth-pill-divider"></div>
-            <a href="<?= base_url('registro') ?>" class="auth-pill-link">Registrarse</a>
-          </div>
-        <?php else: ?>
-          <button class="boton-icon-circle d-none d-lg-flex" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
-            <img src="<?= base_url('assets/img/ui/icons/person.svg') ?>" alt="Perfil" class="icono-svg">
-          </button>
-        <?php endif; ?>
+      <?php if (!$isLogged): ?>
+        <div class="auth-pill-artisan d-none d-lg-flex">
+          <a href="<?= base_url('login') ?>" class="auth-pill-link">Ingresar</a>
+          <div class="auth-pill-divider"></div>
+          <a href="<?= base_url('registro') ?>" class="auth-pill-link">Registrarse</a>
+        </div>
+      <?php else: ?>
+        <button class="boton-icon-circle d-none d-lg-flex" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
+          <img src="<?= base_url('assets/img/ui/icons/person.svg') ?>" alt="Perfil" class="icono-svg">
+        </button>
+      <?php endif; ?>
     </div>
 
   </div>
@@ -103,9 +104,9 @@ if (env('SHOPPING_CART_ENABLED')) {
     <?php if ($isLogged): ?>
       <div class="user-profile-card p-4 text-center">
         <div class="avatar-wrapper mx-auto mb-3" style="width: 80px; height: 80px;">
-            <div class="avatar-bg shadow-sm">
-                <?php if (!empty($imagen)): ?><img src="<?= base_url('assets/uploads/perfil/' . $imagen) ?>" alt="Perfil"><?php else: ?><i class="bi bi-person-fill text-secondary" style="font-size: 3rem;"></i><?php endif; ?>
-            </div>
+          <div class="avatar-bg shadow-sm">
+            <?php if (!empty($imagen)): ?><img src="<?= base_url('assets/uploads/perfil/' . $imagen) ?>" alt="Perfil"><?php else: ?><i class="bi bi-person-fill text-secondary" style="font-size: 3rem;"></i><?php endif; ?>
+          </div>
         </div>
         <h5 class="mb-1 fw-bold"><?= esc($nombre) ?></h5>
         <span class="badge bg-cva-brown rounded-pill px-3 py-1 mb-2" style="font-size: 0.6rem;"><?= ($perfil == 1) ? 'ADMINISTRADOR' : 'CLIENTE CVA' ?></span>
@@ -113,16 +114,16 @@ if (env('SHOPPING_CART_ENABLED')) {
       </div>
     <?php else: ?>
       <div class="auth-section-mobile p-4 text-center">
-          <div class="avatar-wrapper mx-auto mb-3" style="width: 60px; height: 60px;">
-              <div class="avatar-bg shadow-sm" style="background: white; border: 1px solid var(--cva-brown); display: flex; align-items: center; justify-content: center; border-radius: 50%;">
-                  <i class="bi bi-person-plus text-cva-brown" style="font-size: 1.8rem;"></i>
-              </div>
+        <div class="avatar-wrapper mx-auto mb-3" style="width: 60px; height: 60px;">
+          <div class="avatar-bg shadow-sm" style="background: white; border: 1px solid var(--cva-brown); display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+            <i class="bi bi-person-plus text-cva-brown" style="font-size: 1.8rem;"></i>
           </div>
-          <p class="small text-muted mb-3">Bienvenido a nuestra carpintería artesanal.</p>
-          <div class="d-grid gap-2">
-              <a href="<?= base_url('login') ?>" class="btn btn-brown-solid rounded-pill">Iniciar Sesión</a>
-              <a href="<?= base_url('registro') ?>" class="btn btn-outline-brown rounded-pill">Registrarse</a>
-          </div>
+        </div>
+        <p class="small text-muted mb-3">Bienvenido a nuestra carpintería artesanal.</p>
+        <div class="d-grid gap-2">
+          <a href="<?= base_url('login') ?>" class="btn btn-brown-solid rounded-pill">Iniciar Sesión</a>
+          <a href="<?= base_url('registro') ?>" class="btn btn-outline-brown rounded-pill">Registrarse</a>
+        </div>
       </div>
     <?php endif; ?>
     <div class="menu-navigation-mobile d-lg-none p-3 border-bottom">
@@ -141,7 +142,8 @@ if (env('SHOPPING_CART_ENABLED')) {
           <p class="sidebar-section-label">ADMINISTRACIÓN</p>
           <div class="list-group list-group-flush rounded-4 overflow-hidden border shadow-sm mb-4">
             <a href="<?= base_url('/admin-dashboard') ?>" class="list-group-item list-group-item-action"><i class="bi bi-speedometer2 me-3 text-cva-gold"></i> Dashboard</a>
-            <a href="<?= base_url('/ventas-list') ?>" class="list-group-item list-group-item-action"><i class="bi bi-receipt me-3 text-cva-gold"></i> Ventas</a>
+            <a href="<?= base_url('/ventas-list') ?>" class="list-group-item list-group-item-action"><i class="bi bi-receipt me-3 text-cva-gold"></i> Ventas/Pedidos</a>
+            <a href="<?= base_url('/consultas') ?>" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-3 text-cva-gold"></i> Consultas</a>
             <a href="<?= base_url('/crud-productos') ?>" class="list-group-item list-group-item-action"><i class="bi bi-box-seam me-3 text-cva-gold"></i> Productos</a>
           </div>
         <?php endif; ?>

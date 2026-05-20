@@ -1,5 +1,9 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
     <li class="breadcrumb-item active text-uppercase small fw-bold" aria-current="page">NUEVO PEDIDO MANUAL</li>
 <?= $this->endSection() ?>
@@ -162,21 +166,5 @@
     });
 </script>
 
-<style>
-    .shadow-gold { box-shadow: 0 10px 25px rgba(184, 134, 11, 0.15); }
-    .bg-gold-soft { background: #fff9f0; }
-    .admin-control { width: 100%; border: 2px solid #eeebe6; border-radius: 1rem; padding: 0.8rem 1.2rem; }
-    .input-group .admin-control { width: 1% !important; flex: 1 1 auto !important; }
 
-    @media (max-width: 767.98px) {
-        .col-lg-5.text-lg-end { text-align: center !important; margin-top: 1rem; }
-        .btn-admin-outline { width: 100%; justify-content: center; }
-        .btn-admin-primary { width: 100%; padding: 1rem !important; font-size: 1.1rem !important; }
-        .display-6.display-md-5 { font-size: 1.8rem !important; }
-        .admin-card-body-v2 { padding: 1.5rem !important; }
-        .bg-light.p-3 { padding: 1rem !important; }
-        .mb-5 { margin-bottom: 2.5rem !important; }
-        .input-group-text { padding: 0.5rem 0.75rem !important; }
-    }
-</style>
 <?= $this->endSection() ?>

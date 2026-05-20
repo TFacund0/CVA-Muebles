@@ -22,8 +22,6 @@ class CarritoController extends BaseController
      */
     public function add()
     {
-        if (!session()->get('logged_in')) return redirect()->to('/login');
-        
         $resultado = $this->carritoService->agregar($this->request->getPost());
         
         if ($resultado['status'] === 'error') {
@@ -55,8 +53,6 @@ class CarritoController extends BaseController
      */
     public function muestra()
     {
-        if (!session()->get('logged_in')) return redirect()->to('/login');
-
         return view('front/pages/carrito', [
             'cart'  => $this->carritoService->getContenido(),
             'title' => 'Carrito de Compras'

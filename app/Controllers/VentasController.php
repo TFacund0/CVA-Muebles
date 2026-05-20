@@ -21,7 +21,7 @@ class VentasController extends BaseController {
      * Muestra el listado de ventas con estadísticas procesadas por el servicio.
      */
     public function index_ventas() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $resultado = $this->ventasService->getVentasConEstadisticas();
         
@@ -76,13 +76,19 @@ class VentasController extends BaseController {
         $data = $this->ventasService->getGestionDetalle($venta_id);
         if (!$data) return redirect()->to('/productos')->with('error', 'Pedido no encontrado.');
 
+        $isAdmin = session()->get('perfil_id') == 1;
+
         // Seguridad: Verificar que el pedido sea del usuario o que el usuario sea Admin
-        if (session()->get('perfil_id') != 1 && $data['venta']['usuario_id'] != session()->get('id_usuario')) {
+        if (!$isAdmin && $data['venta']['usuario_id'] != session()->get('id_usuario')) {
             return redirect()->to('/productos')->with('error', 'No tienes permiso para ver este pedido.');
         }
 
+        $layout = $isAdmin ? 'layout/admin_layout' : 'layout/main';
+
         return view('back/sales/ver_factura_usuario', array_merge($data, [
-            'title' => 'Detalle de mi Pedido #' . $venta_id
+            'title' => $isAdmin ? 'Comprobante Pedido #' . $venta_id : 'Detalle de mi Pedido #' . $venta_id,
+            'layout' => $layout,
+            'isAdmin' => $isAdmin
         ]));
     }
 
@@ -103,7 +109,7 @@ class VentasController extends BaseController {
      * Actualiza el estado de una venta delegando al servicio.
      */
     public function actualizar_estado($venta_id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $nuevo_estado = $this->request->getPost('estado');
         $this->ventasService->actualizarEstado($venta_id, $nuevo_estado);
@@ -121,7 +127,7 @@ class VentasController extends BaseController {
      * Muestra estadísticas agregadas del taller.
      */
     public function estadisticas() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         // Podríamos crear un ConsultaService, por ahora mantenemos el modelo para esta métrica específica
         $consultasModel = new \App\Models\ConsultaModel();
@@ -137,7 +143,7 @@ class VentasController extends BaseController {
      * Muestra el formulario para registrar un pedido manual.
      */
     public function nuevo_pedido_personalizado() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         
         $usuarioModel = new \App\Models\UsuarioModel();
         $clientes = $usuarioModel->where('perfil_id', 2)->where('baja', 'NO')->findAll();
@@ -152,9 +158,20 @@ class VentasController extends BaseController {
      * Procesa el registro de un pedido manual delegando al servicio.
      */
     public function guardar_pedido_personalizado() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $file = $this->request->getFile('imagen_referencia');
+
+        // Validación estricta de la imagen de referencia
+        if ($file && $file->isValid()) {
+            $rulesRef = [
+                'imagen_referencia' => 'is_image[imagen_referencia]|mime_in[imagen_referencia,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen_referencia,2048]'
+            ];
+            if (!$this->validate($rulesRef)) {
+                return redirect()->back()->withInput()->with('error', 'La imagen de referencia no es válida o supera los 2MB.');
+            }
+        }
+
         $resultado = $this->ventasService->registrarPedidoPersonalizado($this->request->getPost(), $file);
 
         if ($resultado['status'] === 'success') {
@@ -168,7 +185,7 @@ class VentasController extends BaseController {
      * Vista de gestión detallada para el administrador.
      */
     public function ver_gestion_pedido($venta_id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $data = $this->ventasService->getGestionDetalle($venta_id);
         if (!$data) return redirect()->to('/ventas-list')->with('error', 'Pedido no encontrado.');
@@ -181,7 +198,7 @@ class VentasController extends BaseController {
      * Registra un pago delegando al servicio.
      */
     public function registrar_pago() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $this->ventasService->registrarPago(
             $this->request->getPost('venta_id'),
@@ -196,7 +213,7 @@ class VentasController extends BaseController {
      * Actualiza las observaciones delegando al servicio.
      */
     public function guardar_observaciones() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $observaciones = $this->request->getPost('observaciones');
         $img_ref_tag = $this->request->getPost('img_ref_tag');
@@ -211,5 +228,25 @@ class VentasController extends BaseController {
         );
 
         return redirect()->back()->with('success', 'Detalles del pedido actualizados.');
+    }
+
+    /**
+     * Sube un pedido en el orden de prioridad del listado activo.
+     */
+    public function subir_prioridad($venta_id) {
+
+
+        $this->ventasService->subirPrioridad($venta_id);
+        return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
+    }
+
+    /**
+     * Baja un pedido en el orden de prioridad del listado activo.
+     */
+    public function bajar_prioridad($venta_id) {
+
+
+        $this->ventasService->bajarPrioridad($venta_id);
+        return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
     }
 }

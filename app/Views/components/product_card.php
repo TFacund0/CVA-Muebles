@@ -30,11 +30,7 @@
         
         <div class="d-flex justify-content-between align-items-center mb-4 mt-auto">
             <span class="precio-tag">$<?= number_format($producto['precio_vta'], 0, ',', '.') ?></span>
-            <?php if ($producto['stock'] > 0): ?>
-                <span class="badge-stock available"><i class="bi bi-check-circle-fill me-1"></i> Disponible</span>
-            <?php else: ?>
-                <span class="badge-stock out-of-stock"><i class="bi bi-clock-history me-1"></i> Sin Stock</span>
-            <?php endif; ?>
+            <span class="badge-stock bespoke" style="background: #fff9f0; color: #b8860b; font-weight: 700; border: 1px solid rgba(184, 134, 11, 0.15);"><i class="bi bi-hammer me-1"></i> Fabricación bajo pedido</span>
         </div>
         
         <div class="action-buttons mb-3">
@@ -60,11 +56,11 @@
                     <?php else: ?>
                         <?php 
                             $whatsapp_num = env('WHATSAPP_NUMBER') ?? "5493794098511";
-                            $msg_stock = urlencode("Hola! Me interesa el mueble " . $producto['nombre_prod'] . " pero veo que no hay stock.");
+                            $msg_stock = urlencode("Hola! Me interesa el mueble " . $producto['nombre_prod'] . " y me gustaría consultar para encargarlo.");
                         ?>
                         <a href="https://wa.me/<?= $whatsapp_num ?>?text=<?= $msg_stock ?>" 
                            target="_blank" class="btn btn-outline-brown w-100 py-3">
-                            <i class="bi bi-whatsapp me-2"></i> Consultar Disponibilidad
+                            <i class="bi bi-whatsapp me-2"></i> Consultar Fabricación
                         </a>
                     <?php endif; ?>
                 <?php else: ?>

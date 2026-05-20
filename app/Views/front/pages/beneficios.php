@@ -1,4 +1,4 @@
-<?= $this->extend('layout/main') ?>
+﻿<?= $this->extend('layout/main') ?>
 
 <?= $this->section('content') ?>
 <section class="beneficios-page py-5">
@@ -55,12 +55,4 @@
     </div>
 </section>
 
-<style>
-    .level-card {
-        transition: transform 0.3s ease;
-    }
-    .level-card:hover {
-        transform: translateY(-10px);
-    }
-</style>
 <?= $this->endSection() ?>

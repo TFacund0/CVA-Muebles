@@ -49,6 +49,14 @@ class ProductoService
     }
 
     /**
+     * Obtiene el listado de productos públicos (no eliminados y con categorías activas).
+     */
+    public function getProductosPublicos()
+    {
+        return $this->productoModel->getProductosPublicos();
+    }
+
+    /**
      * Crea un nuevo producto.
      */
     public function crearProducto($data, $image = null)
@@ -60,9 +68,10 @@ class ProductoService
                 $data['imagen'] = $nombre_imagen;
             }
 
-            return $this->productoModel->insert($data)
-                ? ['status' => 'success', 'message' => 'Producto creado con éxito.']
-                : ['status' => 'error', 'message' => 'No se pudo guardar el producto.'];
+            if ($this->productoModel->insert($data) === false) {
+                return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->productoModel->errors())];
+            }
+            return ['status' => 'success', 'message' => 'Producto creado con éxito.'];
 
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -88,9 +97,10 @@ class ProductoService
                 $data['imagen'] = $nombre_imagen;
             }
 
-            return $this->productoModel->update($id, $data)
-                ? ['status' => 'success', 'message' => 'Producto actualizado con éxito.']
-                : ['status' => 'error', 'message' => 'No se pudo actualizar el producto.'];
+            if ($this->productoModel->update($id, $data) === false) {
+                return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->productoModel->errors())];
+            }
+            return ['status' => 'success', 'message' => 'Producto actualizado con éxito.'];
 
         } catch (\Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -163,5 +173,67 @@ class ProductoService
             return $this->imagenModel->delete($id);
         }
         return false;
+    }
+
+    /**
+     * Elimina permanentemente un producto del catálogo si no tiene ventas o pedidos asociados.
+     */
+    public function eliminarPermanente($id)
+    {
+        $db = \Config\Database::connect();
+        
+        // 1. Verificar si tiene registros asociados en ventas_detalle
+        $ventas = $db->table('ventas_detalle')->where('producto_id', $id)->countAllResults();
+        if ($ventas > 0) {
+            return [
+                'status' => 'error',
+                'message' => 'No se puede eliminar permanentemente este mueble porque ya está asociado a pedidos o ventas registradas. Puedes mantenerlo como Archivado para proteger el historial de ventas.'
+            ];
+        }
+
+        try {
+            // Obtener datos del producto para borrar su imagen principal
+            $producto = $this->productoModel->find($id);
+            if (!$producto) {
+                return [
+                    'status' => 'error',
+                    'message' => 'El mueble especificado no existe.'
+                ];
+            }
+
+            // 2. Eliminar todas las imágenes de la galería (física y lógicamente)
+            $imagenesGaleria = $this->imagenModel->getImagenesPorProducto($id);
+            foreach ($imagenesGaleria as $img) {
+                $imgPath = FCPATH . 'assets/uploads/' . $img['imagen'];
+                if (file_exists($imgPath)) {
+                    @unlink($imgPath);
+                }
+            }
+            $db->table('producto_imagenes')->where('producto_id', $id)->delete();
+
+            // 3. Eliminar de la tabla favoritos
+            $db->table('favoritos')->where('producto_id', $id)->delete();
+
+            // 4. Borrar la imagen principal del producto
+            if (!empty($producto['imagen'])) {
+                $mainImgPath = FCPATH . 'assets/uploads/' . $producto['imagen'];
+                if (file_exists($mainImgPath)) {
+                    @unlink($mainImgPath);
+                }
+            }
+
+            // 5. Borrar físicamente el producto
+            $this->productoModel->delete($id);
+
+            return [
+                'status' => 'success',
+                'message' => 'Mueble eliminado permanentemente del catálogo.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => 'Ocurrió un error al intentar eliminar el producto: ' . $e->getMessage()
+            ];
+        }
     }
 }

@@ -18,7 +18,7 @@ class CategoriaController extends BaseController {
      * Listado de categorías.
      */
     public function index() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         return view('back/products/crud_categorias', [
             'categorias' => $this->categoriaService->getCategoriasConStats(),
@@ -30,7 +30,7 @@ class CategoriaController extends BaseController {
      * Procesa la creación de una categoría.
      */
     public function guardar() {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $rules = ['descripcion' => 'required|min_length[3]|is_unique[categorias.descripcion]'];
         if (!$this->validate($rules)) {
@@ -45,7 +45,7 @@ class CategoriaController extends BaseController {
      * Procesa la edición de una categoría.
      */
     public function editar($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
 
         $rules = [
             'descripcion' => "required|min_length[3]|is_unique[categorias.descripcion,id_categoria,{$id}]"
@@ -63,7 +63,7 @@ class CategoriaController extends BaseController {
      * Alterna el estado de una categoría.
      */
     public function toggle($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         $this->categoriaService->toggleEstado($id);
         return redirect()->to('/crud-categorias');
     }
@@ -72,7 +72,7 @@ class CategoriaController extends BaseController {
      * Elimina una categoría si es seguro.
      */
     public function eliminar($id) {
-        if (session()->get('perfil_id') != 1) return redirect()->to('/login');
+
         
         $resultado = $this->categoriaService->eliminar($id);
         if ($resultado['status'] === 'error') {

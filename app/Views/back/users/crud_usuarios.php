@@ -1,7 +1,11 @@
 <?= $this->extend('layout/admin_layout') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-users.css?v=1.0')?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('breadcrumbs') ?>
-    <li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">GESTIÓN DE USUARIOS</li>
+<li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">GESTIÓN DE USUARIOS</li>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -24,6 +28,9 @@
         </a>
     </div>
 </div>
+
+<!-- Mensajes modularizados -->
+<?= view('components/alert_message') ?>
 
 <!-- KPIs de Usuarios -->
 <div class="row g-3 g-md-4 mb-5">
@@ -57,13 +64,45 @@
         <div class="admin-card-v2 p-3 p-md-4 border-start border-4 border-success h-100 shadow-sm">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Activos Online</span>
+                    <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Activos</span>
                     <h4 class="fw-bold text-success mb-0"><?= $counts['activos'] ?> Cuentas</h4>
                 </div>
                 <div class="bg-light text-success p-2 p-md-3 rounded-circle d-none d-sm-block">
                     <i class="bi bi-person-check-fill fs-4"></i>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Selector de Pestañas Premium (Segmented Tabs) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-center justify-content-md-start">
+            <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="usuariosTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2"
+                        id="activos-tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="true">
+                        <i class="bi bi-person-check text-gold"></i>
+                        <span>Activos</span>
+                        <span class="badge bg-gold text-brown rounded-pill x-small fw-bold px-2 py-1 shadow-sm"><?= $counts['activos'] ?></span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2"
+                        id="suspendidos-tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="false">
+                        <i class="bi bi-person-dash text-gold"></i>
+                        <span>Suspendidos</span>
+                        <span class="badge bg-secondary-soft text-muted rounded-pill x-small fw-bold px-2 py-1"><?= $counts['suspendidos'] ?></span>
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
@@ -78,26 +117,27 @@
     </div>
     <div class="p-4">
         <div class="row g-3 align-items-end">
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-7 col-md-8 col-12">
                 <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 1rem 0 0 1rem;">
+                <div class="input-group rounded-3 overflow-hidden border">
+                    <span class="input-group-text bg-white border-0">
                         <i class="bi bi-search text-gold"></i>
                     </span>
-                    <input type="text" id="input-search" class="form-control border-start-0 border-2 py-2" 
-                           style="border-radius: 0 1rem 1rem 0;"
-                           placeholder="Nombre, email o usuario...">
+                    <input type="text" id="input-search" class="form-control border-0 py-2"
+                        placeholder="Nombre, email o usuario...">
                 </div>
             </div>
-            <div class="col-lg-3 col-6">
-                <label class="x-small fw-bold text-muted text-uppercase mb-2">Filtro</label>
-                <button type="button" id="toggle-view" class="btn btn-outline-dark w-100 py-2 rounded-3 shadow-sm x-small fw-bold">
-                    <i class="bi bi-person-dash me-1"></i> SUSPENDIDOS
-                </button>
+            <div class="col-lg-4 col-md-4 col-10">
+                <label class="x-small fw-bold text-muted text-uppercase mb-2">Rango / Perfil</label>
+                <select id="select-perfil" class="form-select border shadow-sm py-2 x-small fw-bold text-uppercase" style="border-radius: 10px; height: 42px;">
+                    <option value="all">Todos los Perfiles</option>
+                    <option value="ADMIN">Administradores</option>
+                    <option value="CLIENTE">Clientes</option>
+                </select>
             </div>
-            <div class="col-lg-3 col-6">
-                <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm x-small fw-bold text-uppercase">
-                    <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar
+            <div class="col-lg-1 col-md-12 col-2 text-end">
+                <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm" style="height: 42px;">
+                    <i class="bi bi-arrow-counterclockwise"></i>
                 </button>
             </div>
         </div>
@@ -118,12 +158,13 @@
                 </tr>
             </thead>
             <tbody id="user-table-body">
-                <?php foreach ($usuarios as $u): 
+                <?php foreach ($usuarios as $u):
                     $isSelf = (session()->get('id_usuario') == $u['id_usuario']);
                 ?>
-                    <tr class="user-row" 
+                    <tr class="user-row"
                         data-search="<?= strtolower(esc($u['nombre'] . ' ' . $u['apellido'] . ' ' . $u['email'] . ' ' . $u['usuario'])) ?>"
-                        data-baja="<?= $u['baja'] ?>">
+                        data-baja="<?= $u['baja'] ?>"
+                        data-perfil="<?= $u['perfil_id'] == 1 ? 'ADMIN' : 'CLIENTE' ?>">
                         <td class="ps-4 d-none d-lg-table-cell" data-label="ID">
                             <span class="badge bg-light text-muted border">#<?= $u['id_usuario'] ?></span>
                         </td>
@@ -131,8 +172,8 @@
                             <div class="d-flex align-items-center gap-3 py-1 user-info-wrapper">
                                 <div class="position-relative">
                                     <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
-                                        <?php if(!empty($u['imagen'])): ?>
-                                            <img src="<?= base_url('assets/uploads/perfil/'.$u['imagen']) ?>" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                                        <?php if (!empty($u['imagen'])): ?>
+                                            <img src="<?= base_url('assets/uploads/perfil/' . $u['imagen']) ?>" class="rounded-circle w-100 h-100" style="object-fit: cover;">
                                         <?php else: ?>
                                             <?= substr($u['nombre'], 0, 1) ?><?= substr($u['apellido'], 0, 1) ?>
                                         <?php endif; ?>
@@ -140,10 +181,15 @@
                                     <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-md-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $u['id_usuario'] ?></span>
                                 </div>
                                 <div class="user-text-details">
-                                    <div class="fw-bold text-cva-brown"><?= esc($u['nombre']) ?> <?= esc($u['apellido']) ?></div>
+                                    <div class="fw-bold text-cva-brown">
+                                        <?= esc($u['nombre']) ?> <?= esc($u['apellido']) ?>
+                                        <?php if ($u['baja'] == 'SI'): ?>
+                                            <span class="badge bg-danger-soft text-danger x-small ms-1" style="font-size: 0.6rem; border: 1px solid rgba(220, 53, 69, 0.2);">SUSPENDIDO</span>
+                                        <?php endif; ?>
+                                    </div>
                                     <div class="d-flex gap-2 align-items-center">
                                         <span class="badge bg-light text-muted border d-none d-md-inline-block" style="font-size: 0.65rem;">ID: #<?= $u['id_usuario'] ?></span>
-                                        <?php if($isSelf): ?>
+                                        <?php if ($isSelf): ?>
                                             <span class="badge bg-gold-soft text-gold x-small fw-bold" style="font-size: 0.6rem;">TU SESIÓN</span>
                                         <?php endif; ?>
                                     </div>
@@ -155,7 +201,7 @@
                             <div class="x-small text-muted user-access-info"><i class="bi bi-envelope me-1"></i><?= esc($u['email']) ?></div>
                         </td>
                         <td class="text-center" data-label="PERFIL">
-                            <?php if($u['perfil_id'] == 1): ?>
+                            <?php if ($u['perfil_id'] == 1): ?>
                                 <span class="badge bg-brown text-gold px-3 py-2 rounded-pill x-small fw-bold border border-gold border-opacity-25 shadow-sm">
                                     <i class="bi bi-shield-fill-check me-1"></i> ADMIN
                                 </span>
@@ -167,25 +213,32 @@
                         </td>
                         <td class="pe-4 text-center" data-label="ACCIONES">
                             <div class="d-flex justify-content-center gap-2">
-                                <?php if($isSelf): ?>
+                                <?php if ($isSelf): ?>
                                     <a href="<?= base_url('/perfil') ?>" class="btn btn-action-premium text-gold border-gold border-opacity-25 shadow-sm">
                                         <i class="bi bi-person-gear"></i>
                                     </a>
                                 <?php else: ?>
-                                    <button type="button" onclick="submitAction('<?= base_url('/editar-usuario/' . $u['id_usuario']) ?>', '¿Cambiar perfil de este usuario?')" 
-                                            class="btn btn-action-premium text-primary border-primary border-opacity-25 shadow-sm" 
-                                            title="Cambiar Rango">
+                                    <button type="button" onclick="submitAction('<?= base_url('/editar-usuario/' . $u['id_usuario']) ?>', '¿Cambiar perfil de este usuario?')"
+                                        class="btn btn-action-premium text-primary border-primary border-opacity-25 shadow-sm"
+                                        title="Cambiar Rango">
                                         <i class="bi bi-arrow-repeat"></i>
                                     </button>
-                                    
-                                    <div class="action-toggle-container">
+
+                                    <div class="action-toggle-container d-flex gap-2">
                                         <button type="button" onclick="submitAction('<?= base_url('/delete-usuario/' . $u['id_usuario']) ?>', '¿Confirmas suspender a este usuario?')"
-                                                class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm btn-archive <?= $u['baja'] == 'SI' ? 'd-none' : '' ?>">
+                                            class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm btn-archive <?= $u['baja'] == 'SI' ? 'd-none' : '' ?>"
+                                            title="Suspender Usuario">
                                             <i class="bi bi-person-x-fill"></i>
                                         </button>
                                         <button type="button" onclick="submitAction('<?= base_url('/activar-usuario/' . $u['id_usuario']) ?>', '¿Confirmas reactivar a este usuario?')"
-                                                class="btn btn-action-premium text-success border-success border-opacity-25 shadow-sm btn-restore <?= $u['baja'] == 'NO' ? 'd-none' : '' ?>">
+                                            class="btn btn-action-premium text-success border-success border-opacity-25 shadow-sm btn-restore <?= $u['baja'] == 'NO' ? 'd-none' : '' ?>"
+                                            title="Reactivar Usuario">
                                             <i class="bi bi-person-check-fill"></i>
+                                        </button>
+                                        <button type="button" onclick="submitAction('<?= base_url('/eliminar-usuario-permanente/' . $u['id_usuario']) ?>', '¿Confirmas eliminar PERMANENTEMENTE a este usuario? Esta acción es irreversible y borrará todos sus accesos.')"
+                                            class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm btn-delete-permanent <?= $u['baja'] == 'NO' ? 'd-none' : '' ?>"
+                                            title="Eliminar Permanente">
+                                            <i class="bi bi-trash-fill"></i>
                                         </button>
                                     </div>
                                 <?php endif; ?>
@@ -218,41 +271,7 @@
     </div>
 </div>
 
-<style>
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        background: #1a0f0d;
-        color: var(--cva-gold);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem;
-        border-radius: 1.2rem;
-    }
-    .avatar-premium {
-        width: 45px; height: 45px;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-    }
-    .user-row:hover .avatar-premium {
-        transform: scale(1.1) rotate(5deg);
-        background: var(--cva-gold);
-        color: #1a0f0d;
-    }
-    .bg-gold-soft { background: #fff9f0; }
-    .btn-action-premium {
-        width: 40px; height: 40px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 12px;
-        background: white;
-        border: 1px solid #eee;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-action-premium:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-</style>
 
-<!-- Formulario oculto para acciones POST -->
 <form id="action-form" method="POST" style="display: none;">
     <?= csrf_field() ?>
 </form>
@@ -264,14 +283,19 @@
     function submitAction(url, message) {
         if (confirm(message)) {
             const form = document.getElementById('action-form');
-            form.action = url;
+            const separator = url.includes('?') ? '&' : '?';
+            const activosTab = document.getElementById('activos-tab');
+            const vista = (activosTab && activosTab.classList.contains('active')) ? 'NO' : 'SI';
+            form.action = url + separator + 'vista=' + vista;
             form.submit();
         }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
         const inputSearch = document.getElementById('input-search');
-        const toggleView = document.getElementById('toggle-view');
+        const selectPerfil = document.getElementById('select-perfil');
+        const activosTab = document.getElementById('activos-tab');
+        const suspendidosTab = document.getElementById('suspendidos-tab');
         const rows = document.querySelectorAll('.user-row');
         const noResults = document.getElementById('no-results-row');
         const emptyActive = document.getElementById('empty-active-row');
@@ -279,10 +303,11 @@
         const filterStatus = document.getElementById('filter-status');
         const btnReset = document.getElementById('btn-reset');
 
-        let currentView = 'NO'; // 'NO' para Activos, 'SI' para Suspendidos
+        let currentView = '<?= esc($vista) ?>'; // 'NO' para Activos, 'SI' para Suspendidos
 
         function filterUsers() {
             const searchTerm = inputSearch.value.toLowerCase();
+            const perfilTerm = selectPerfil.value;
             let visibleCount = 0;
             let totalInCurrentView = 0;
 
@@ -291,13 +316,15 @@
             rows.forEach(row => {
                 const searchData = row.getAttribute('data-search');
                 const baja = row.getAttribute('data-baja');
-                
+                const perfil = row.getAttribute('data-perfil');
+
                 const isCorrectView = (baja === currentView);
                 const matchesSearch = searchData.includes(searchTerm);
+                const matchesPerfil = (perfilTerm === 'all' || perfil === perfilTerm);
 
                 if (isCorrectView) {
                     totalInCurrentView++;
-                    if (matchesSearch) {
+                    if (matchesSearch && matchesPerfil) {
                         row.style.display = '';
                         visibleCount++;
                     } else {
@@ -312,35 +339,49 @@
             noResults.style.display = (visibleCount === 0 && totalInCurrentView > 0) ? '' : 'none';
             emptyActive.style.display = (totalInCurrentView === 0 && currentView === 'NO') ? '' : 'none';
             emptySuspended.style.display = (totalInCurrentView === 0 && currentView === 'SI') ? '' : 'none';
-            
+
             setTimeout(() => {
                 filterStatus.style.opacity = '0';
             }, 300);
         }
 
-        toggleView.addEventListener('click', function() {
-            currentView = (currentView === 'NO') ? 'SI' : 'NO';
-            
-            if (currentView === 'SI') {
-                this.innerHTML = '<i class="bi bi-person-check me-1"></i> VER ACTIVOS';
-                this.classList.replace('btn-outline-dark', 'btn-dark');
+        function switchTab(view) {
+            currentView = view;
+
+            if (currentView === 'NO') {
+                activosTab.classList.add('active');
+                activosTab.setAttribute('aria-selected', 'true');
+                suspendidosTab.classList.remove('active');
+                suspendidosTab.setAttribute('aria-selected', 'false');
             } else {
-                this.innerHTML = '<i class="bi bi-person-dash me-1"></i> VER SUSPENDIDOS';
-                this.classList.replace('btn-dark', 'btn-outline-dark');
+                suspendidosTab.classList.add('active');
+                suspendidosTab.setAttribute('aria-selected', 'true');
+                activosTab.classList.remove('active');
+                activosTab.setAttribute('aria-selected', 'false');
             }
-            
+
             filterUsers();
+        }
+
+        activosTab.addEventListener('click', function() {
+            switchTab('NO');
+        });
+
+        suspendidosTab.addEventListener('click', function() {
+            switchTab('SI');
         });
 
         inputSearch.addEventListener('input', filterUsers);
-        
+        selectPerfil.addEventListener('change', filterUsers);
+
         btnReset.addEventListener('click', function() {
             inputSearch.value = '';
+            selectPerfil.value = 'all';
             filterUsers();
         });
 
         // Inicializar vista
-        filterUsers();
+        switchTab(currentView);
     });
 </script>
 <?= $this->endSection() ?>

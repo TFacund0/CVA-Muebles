@@ -15,7 +15,7 @@ class VentasPagosModel extends Model {
 
     protected $validationRules = [
         'venta_id' => 'required|numeric',
-        'monto'    => 'required|numeric'
+        'monto'    => 'required|numeric|greater_than[0]'
     ];
 
     /**
