@@ -161,11 +161,10 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-light">
                 <tr>
-                    <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted" style="width: 22%;">Interesado</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 8%;">Fecha</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 18%;">Contacto</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 12%;">Asunto</th>
-                    <th class="py-3 text-uppercase x-small fw-bold text-muted" style="width: 25%;">Mensaje</th>
+                    <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted" style="width: 25%;">Interesado</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 10%;">Fecha</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell" style="width: 20%;">Contacto</th>
+                    <th class="py-3 text-uppercase x-small fw-bold text-muted" style="width: 30%;">Mensaje</th>
                     <th class="pe-4 py-3 text-uppercase x-small fw-bold text-muted text-center" style="width: 15%;">Acciones</th>
                 </tr>
             </thead>
@@ -200,16 +199,7 @@
                                 <div class="small text-end text-md-start"><i class="bi bi-envelope me-1 text-gold"></i> <?= esc($consulta['email']) ?></div>
                                 <div class="x-small fw-bold text-muted text-end text-md-start"><i class="bi bi-phone me-1"></i> <?= esc($consulta['telefono']) ?></div>
                             </td>
-                            <td class="d-none d-lg-table-cell" data-label="ASUNTO">
-                                <?php
-                                $asunto_class = "bg-light text-muted";
-                                if (stripos($consulta['asunto'], 'presupuesto') !== false) $asunto_class = "bg-warning-soft text-warning border-warning";
-                                if (stripos($consulta['asunto'], 'pedido') !== false) $asunto_class = "bg-info-soft text-info border-info";
-                                ?>
-                                <span class="badge px-2 py-1 rounded-pill x-small fw-bold border <?= $asunto_class ?>">
-                                    <?= esc($consulta['asunto']) ?>
-                                </span>
-                            </td>
+
                             <td data-label="MENSAJE" class="message-cell">
                                 <div class="message-preview text-truncate small text-muted mb-1"><?= esc($consulta['descripcion']) ?></div>
                                 <div class="message-action">
@@ -296,7 +286,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr id="empty-row">
-                        <td colspan="6" class="text-center py-5">
+                        <td colspan="5" class="text-center py-5">
                             <div class="py-4">
                                 <i class="bi bi-chat-dots fs-1 text-muted opacity-25"></i>
                                 <p class="text-muted mt-3 fw-bold">No hay consultas registradas en el sistema.</p>
@@ -304,18 +294,18 @@
                         </td>
                     </tr>
                 <?php endif; ?>
-
+ 
                 <!-- Fila de Sin Resultados JS -->
                 <tr id="no-results-row" style="display: none;">
-                    <td colspan="6" class="text-center py-5">
+                    <td colspan="5" class="text-center py-5">
                         <i class="bi bi-search display-4 text-muted opacity-25"></i>
                         <p class="text-muted mt-3">No hay consultas que coincidan con la búsqueda.</p>
                     </td>
                 </tr>
-
+ 
                 <!-- Fila de Vista Vacía JS -->
                 <tr id="empty-view-row" style="display: none;">
-                    <td colspan="6" class="text-center py-5">
+                    <td colspan="5" class="text-center py-5">
                         <div class="py-4">
                             <i id="empty-view-icon" class="bi bi-chat-dots display-4 text-muted opacity-25"></i>
                             <p id="empty-view-text" class="text-muted mt-3 fw-bold">No hay consultas en esta bandeja.</p>
