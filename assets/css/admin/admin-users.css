@@ -49,3 +49,47 @@
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
+
+/* Soporte de scroll horizontal para evitar desbordes en pantallas estrechas de escritorio */
+@media (min-width: 992px) {
+    .table-responsive-stack {
+        overflow-x: auto !important;
+        max-width: 100% !important;
+    }
+
+    .table-responsive-stack table {
+        min-width: 900px !important;
+        table-layout: auto !important;
+    }
+
+    /* Definir proporciones y anchos mínimos perfectos para cada columna de usuarios en escritorio */
+    .table-responsive-stack table th:nth-child(1),
+    .table-responsive-stack table td:nth-child(1) {
+        width: 8% !important;
+        min-width: 70px !important;
+    }
+
+    .table-responsive-stack table th:nth-child(2),
+    .table-responsive-stack table td:nth-child(2) {
+        width: 32% !important;
+        min-width: 250px !important;
+    }
+
+    .table-responsive-stack table th:nth-child(3),
+    .table-responsive-stack table td:nth-child(3) {
+        width: 30% !important;
+        min-width: 230px !important;
+    }
+
+    .table-responsive-stack table th:nth-child(4),
+    .table-responsive-stack table td:nth-child(4) {
+        width: 15% !important;
+        min-width: 120px !important;
+    }
+
+    .table-responsive-stack table th:nth-child(5),
+    .table-responsive-stack table td:nth-child(5) {
+        width: 15% !important;
+        min-width: 160px !important;
+    }
+}

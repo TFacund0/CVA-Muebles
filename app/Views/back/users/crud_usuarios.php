@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-users.css?v=2.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-users.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>

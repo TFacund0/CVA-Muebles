@@ -147,8 +147,12 @@
 
 @media (min-width: 992px) {
     .table-responsive-stack table {
-        table-layout: fixed !important;
+        table-layout: auto !important;
         width: 100% !important;
+    }
+    
+    .table-responsive-stack.table-layout-fixed table {
+        table-layout: fixed !important;
     }
     
     .inquiry-row td {
@@ -695,6 +699,21 @@
     .inquiry-row td[data-label="ACCIONES"] {
         justify-content: center !important;
         padding: 1.5rem !important;
+    }
+
+    /* Reiniciar alturas de contenedores y tarjetas flex que se apilan en mobile */
+    .admin-card-v2.h-100,
+    .row.h-100,
+    .d-flex.h-100,
+    .kpi-card-premium.h-100 {
+        height: auto !important;
+    }
+
+    /* Utilidad global para elementos de ancho completo en pantallas móviles/tabletas */
+    .w-sm-100 {
+        width: 100% !important;
+        display: inline-flex !important;
+        justify-content: center !important;
     }
 }
 
