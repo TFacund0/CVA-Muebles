@@ -335,7 +335,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
             </div>
 
             <?php if ($has_solicitados): ?>
-                <div class="table-responsive">
+                <div class="table-responsive-stack">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr class="x-small text-uppercase text-muted fw-bold">

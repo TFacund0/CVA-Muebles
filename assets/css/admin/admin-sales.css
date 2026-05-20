@@ -175,7 +175,7 @@
     display: flex; align-items: center; justify-content: space-between;
 }
 
-/* === RESPONSIVE === */
+/* === RESPONSIVE UTILITIES === */
 @media (max-width: 767.98px) {
     .kpi-value { font-size: 2rem; }
     .kpi-icon-container { width: 50px; height: 50px; font-size: 1.4rem; }
@@ -194,61 +194,60 @@
     .order-card { border-radius: 1rem; }
 }
 
-/* === LISTA CONSULTAS === */
-<style>
-    /* Pesta�as Segmentadas Premium */
-    .custom-segmented-tabs {
-        border-color: #e0d5c5 !important;
-        background: #fdfaf7 !important;
-    }
+/* === LISTA CONSULTAS Y COMPARTIDOS === */
+/* Pestañas Segmentadas Premium */
+.custom-segmented-tabs {
+    border-color: #e0d5c5 !important;
+    background: #fdfaf7 !important;
+}
 
-    .custom-segmented-tabs .nav-link {
-        color: var(--cva-brown, #5c4033) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: none !important;
-        background: transparent;
-    }
+.custom-segmented-tabs .nav-link {
+    color: var(--cva-brown, #5c4033) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none !important;
+    background: transparent;
+}
 
-    .custom-segmented-tabs .nav-link.active {
-        background-color: var(--cva-brown, #5c4033) !important;
-        color: #ffffff !important;
-        box-shadow: 0 4px 15px rgba(92, 64, 51, 0.2);
-    }
+.custom-segmented-tabs .nav-link.active {
+    background-color: var(--cva-brown, #5c4033) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(92, 64, 51, 0.2);
+}
 
-    .custom-segmented-tabs .nav-link.active .text-gold,
-    .custom-segmented-tabs .nav-link.active .bi {
-        color: var(--cva-gold, #b8860b) !important;
-    }
+.custom-segmented-tabs .nav-link.active .text-gold,
+.custom-segmented-tabs .nav-link.active .bi {
+    color: var(--cva-gold, #b8860b) !important;
+}
 
-    .custom-segmented-tabs .nav-link:not(.active):hover {
-        background-color: rgba(92, 64, 51, 0.05);
-        color: var(--cva-brown, #5c4033);
-    }
+.custom-segmented-tabs .nav-link:not(.active):hover {
+    background-color: rgba(92, 64, 51, 0.05);
+    color: var(--cva-brown, #5c4033);
+}
 
-    .py-2-5 {
-        padding-top: 0.6rem;
-        padding-bottom: 0.6rem;
-    }
+.py-2-5 {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+}
 
-    .bg-secondary-soft {
-        background-color: rgba(108, 117, 125, 0.1);
-    }
+.bg-secondary-soft {
+    background-color: rgba(108, 117, 125, 0.1);
+}
 
-    .dashboard-icon-main {
-        width: 60px; height: 60px;
-        background: #1a0f0d;
-        color: var(--cva-gold);
-        display: flex; align-items: center; justify-content: center;
-        font-size: 2rem;
-        border-radius: 1.2rem;
-    }
-    
-    .nav-item-admin-special i {
-        font-size: 1.2rem;
-    }
+.dashboard-icon-main {
+    width: 60px; height: 60px;
+    background: #1a0f0d;
+    color: var(--cva-gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    border-radius: 1.2rem;
+}
 
-    /* Fix para evitar desbordamiento en tablas de administraci�n */
-    @media (min-width: 992px) {
+.nav-item-admin-special i {
+    font-size: 1.2rem;
+}
+
+/* Fix para evitar desbordamiento en tablas de administración */
+@media (min-width: 992px) {
     .table-responsive-stack table {
         table-layout: fixed !important;
         width: 100% !important;
@@ -286,53 +285,133 @@
     }
 }
 
-    .bg-gold-soft { background: #fff9f0; }
-    .btn-action-premium {
-        width: 40px; height: 40px;
-        display: flex; align-items: center; justify-content: center;
-        border-radius: 12px;
-        background: white;
-        border: 1px solid #eee;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .btn-action-premium:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    .bg-warning-soft { background: #fff8eb; }
-    .bg-info-soft { background: #f0f7ff; }
-    .bg-success-soft { background: #f0fff4; }
+.bg-gold-soft { background: #fff9f0; }
+.btn-action-premium {
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px;
+    background: white;
+    border: 1px solid #eee;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-action-premium:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.bg-warning-soft { background: #fff8eb; }
+.bg-info-soft { background: #f0f7ff; }
+.bg-success-soft { background: #f0fff4; }
 
-    /* Status Dots con Animaci�n de Pulso */
-    .status-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        flex-shrink: 0;
-    }
-    .status-dot-pulse-gold {
-        background-color: var(--cva-gold, #b8860b);
+/* Status Dots con Animación de Pulso */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.status-dot-pulse-gold {
+    background-color: var(--cva-gold, #b8860b);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.7);
+    animation: pulse-gold-dot 1.5s infinite;
+}
+.status-dot-green {
+    background-color: #198754;
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4);
+}
+
+@keyframes pulse-gold-dot {
+    0% {
+        transform: scale(0.95);
         box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.7);
-        animation: pulse-gold-dot 1.5s infinite;
     }
-    .status-dot-green {
-        background-color: #198754;
-        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4);
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(184, 134, 11, 0);
     }
-    
-    @keyframes pulse-gold-dot {
-        0% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.7);
-        }
-        70% {
-            transform: scale(1);
-            box-shadow: 0 0 0 6px rgba(184, 134, 11, 0);
-        }
-        100% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
-        }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
     }
-</style>
+}
+
+/* === ESTILOS RESPONSIVE PREMIUM PARA TABLAS EN PILA (STOCKED CARDS) === */
+@media (max-width: 991.98px) {
+    /* Convertir la estructura de la tabla en bloques */
+    .table-responsive-stack table,
+    .table-responsive-stack thead,
+    .table-responsive-stack tbody,
+    .table-responsive-stack th,
+    .table-responsive-stack td,
+    .table-responsive-stack tr {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* Ocultar el encabezado original de la tabla */
+    .table-responsive-stack thead {
+        display: none !important;
+    }
+
+    /* Convertir cada fila en una tarjeta premium e independiente */
+    .table-responsive-stack tr {
+        margin-bottom: 1.5rem !important;
+        background: #ffffff !important;
+        border: 1px solid #f0e6d6 !important;
+        border-radius: 1.25rem !important;
+        padding: 1.25rem !important;
+        box-shadow: 0 4px 15px rgba(62, 39, 35, 0.04) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .table-responsive-stack tr:hover {
+        box-shadow: 0 8px 25px rgba(62, 39, 35, 0.08) !important;
+        transform: translateY(-2px);
+        border-color: var(--cva-gold, #b8860b) !important;
+    }
+
+    /* Formatear cada celda como una fila de clave-valor dentro de la tarjeta */
+    .table-responsive-stack td {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0.85rem 0.5rem !important;
+        border-bottom: 1px solid rgba(240, 230, 214, 0.5) !important;
+        text-align: right !important;
+        background: transparent !important;
+    }
+
+    .table-responsive-stack td:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Generar etiqueta a la izquierda a partir del atributo data-label */
+    .table-responsive-stack td::before {
+        content: attr(data-label);
+        font-weight: 800 !important;
+        text-transform: uppercase !important;
+        font-size: 0.7rem !important;
+        color: var(--cva-brown, #5c4033) !important;
+        text-align: left !important;
+        margin-right: 1.5rem !important;
+        letter-spacing: 0.8px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Asegurar que las columnas originalmente ocultas (ID, FECHA) se muestren en mobile */
+    .table-responsive-stack .d-none.d-lg-table-cell {
+        display: flex !important;
+    }
+
+    /* Ajustes específicos de visualización interna */
+    .table-responsive-stack td > div,
+    .table-responsive-stack td > span,
+    .table-responsive-stack td > form {
+        text-align: right !important;
+    }
+
+    /* Alineaciones y espaciados para elementos complejos en mobile */
+    .table-responsive-stack .order-info-wrapper {
+        justify-content: flex-end;
+    }
+}
