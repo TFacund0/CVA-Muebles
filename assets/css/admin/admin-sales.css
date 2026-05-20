@@ -518,10 +518,12 @@
     /* Encabezado para Pedidos Activos (order-row) */
     .order-row td[data-label="CLIENTE"] {
         display: block !important;
+        width: auto !important;
         background: #fdfaf5 !important;
         margin: -1.25rem -1.25rem 1rem -1.25rem !important;
         padding: 1.2rem 1.25rem !important;
         border-bottom: 1px solid #f0e6d6 !important;
+        border-radius: 1.15rem 1.15rem 0 0 !important;
     }
     .order-row td[data-label="CLIENTE"]::before {
         display: none !important;
@@ -548,10 +550,12 @@
     /* Encabezado para Solicitudes (solicitud-row) */
     .solicitud-row td[data-label="CLIENTE"] {
         display: block !important;
+        width: auto !important;
         background: #fdfaf5 !important;
         margin: -1.25rem -1.25rem 1rem -1.25rem !important;
         padding: 1.2rem 1.25rem !important;
         border-bottom: 1px solid #f0e6d6 !important;
+        border-radius: 1.15rem 1.15rem 0 0 !important;
     }
     .solicitud-row td[data-label="CLIENTE"]::before {
         display: none !important;
@@ -578,10 +582,12 @@
     /* Encabezado para Consultas (inquiry-row) */
     .inquiry-row td[data-label="INTERESADO"] {
         display: block !important;
+        width: auto !important;
         background: #fdfaf5 !important;
         margin: -1.25rem -1.25rem 1rem -1.25rem !important;
         padding: 1.2rem 1.25rem !important;
         border-bottom: 1px solid #f0e6d6 !important;
+        border-radius: 1.15rem 1.15rem 0 0 !important;
     }
     .inquiry-row td[data-label="INTERESADO"]::before {
         display: none !important;
