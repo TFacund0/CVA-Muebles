@@ -34,29 +34,6 @@
         </div>
     </div>
 
-    <style>
-        .animate-slide-up {
-            animation: slideUpToast 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes slideUpToast {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .toast-progress-bar {
-            height: 4px;
-            width: 100%;
-            border-bottom-left-radius: 1rem;
-            border-bottom-right-radius: 1rem;
-            animation: progressToast var(--toast-duration, 4s) linear forwards;
-        }
-
-        @keyframes progressToast {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-    </style>
 
     <script>
         setTimeout(() => {

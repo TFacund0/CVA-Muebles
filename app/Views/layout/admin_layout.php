@@ -18,24 +18,6 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=3.0')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-panel.css?v=23.0')?>">
 
-    <style>
-        .hide-caret::after { display: none !important; }
-        .avatar-circle-wrapper {
-            position: relative;
-            z-index: 1;
-        }
-        .avatar-circle-wrapper img {
-            position: relative;
-            z-index: 5;
-            background: white;
-        }
-        #avatar-fallback {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-    </style>
 
     <?= $this->renderSection('extra-css') ?>
 </head>

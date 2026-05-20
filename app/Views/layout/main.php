@@ -21,6 +21,7 @@
     <!-- Design System & Global Styles -->
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=3.0')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/layout/main-layout.css?v=7.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/components/floating-alert.css?v=1.0')?>">
 
 
     <!-- Page Specific CSS Section -->

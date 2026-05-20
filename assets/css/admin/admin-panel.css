@@ -694,3 +694,21 @@
 .nav-item-admin-special i {
     font-size: 1.2rem;
 }
+
+/* Extra styles from admin layout refactoring */
+.hide-caret::after { display: none !important; }
+.avatar-circle-wrapper {
+    position: relative;
+    z-index: 1;
+}
+.avatar-circle-wrapper img {
+    position: relative;
+    z-index: 5;
+    background: white;
+}
+#avatar-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}

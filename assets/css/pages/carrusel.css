@@ -1,58 +1,58 @@
 /* 
   =============================================
-  CVA MUEBLES - HERO CAROUSEL DESIGN
+  CVA MUEBLES - HERO CAROUSEL DESIGN (CONSOLIDADO)
   =============================================
 */
 
-.hero-carousel-inner,
-.carousel-inner.hero-carousel-inner {
-    position: relative;
-    height: 85vh;
-    min-height: 600px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.hero-overlay-artisan {
+/* Override Bootstrap constraints to center the flexbox layout completely */
+#heroCarousel .carousel-caption {
     position: absolute;
     top: 0;
+    bottom: 0;
     left: 0;
-    width: 100%;
+    right: 0;
+    padding: 0;
+    margin: 0;
     height: 100%;
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Hero Visuals */
+.hero-overlay-artisan {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
     z-index: 1;
 }
 
 .glass-caption {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 3rem;
     border-radius: 2rem;
     color: white;
     z-index: 2;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
     max-width: 700px;
+    width: 100%;
 }
 
 .glass-caption.left-align { border-left: 5px solid var(--cva-gold); }
 .glass-caption.right-align { border-right: 5px solid var(--cva-vivid); }
 
-.hero-badge {
-    letter-spacing: 2px;
-}
-
-.hero-caption-text {
-    max-width: 600px;
-}
-
+/* Animations */
 .zoom-animation {
     animation: slowZoom 20s infinite alternate linear;
 }
 
 @keyframes slowZoom {
     from { transform: scale(1); }
-    to { transform: scale(1.08); }
+    to { transform: scale(1.1); }
 }
 
 .animate-up { animation: fadeInUp 1s ease-out; }
@@ -63,19 +63,17 @@
 @keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
 
+/* Controls */
 .control-circle {
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     background: rgba(255,255,255,0.1);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
     color: white;
     font-size: 1.5rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
 }
 
 .control-circle:hover {
@@ -84,77 +82,21 @@
     transform: scale(1.1);
 }
 
-.carousel-item {
-    height: 100%;
+/* Responsive Hero */
+@media (max-width: 991.98px) {
+    .carousel-inner { height: 70vh !important; min-height: 500px !important; }
+    .glass-caption { padding: 2rem !important; margin: 0 1.5rem; max-width: calc(100% - 3rem); }
+    .display-2 { font-size: 2.5rem !important; }
+    .display-3 { font-size: 2.2rem !important; }
+    .fs-5 { font-size: 1rem !important; }
+    .btn-vivid, .btn-outline-light, .btn-gold { padding: 0.8rem 1.5rem !important; font-size: 0.9rem !important; }
+    #heroCarousel .carousel-caption { padding: 0 !important; }
 }
 
-.carousel-img-overlay,
-.carousel-inner .carousel-item img {
-    object-fit: cover;
-}
-
-.carousel-inner .carousel-item img {
-    min-height: 100%;
-    width: 100%;
-}
-
-.carousel-caption {
-    z-index: 10;
-    bottom: 20%;
-    left: 10%;
-    right: 10%;
-    padding: 0;
-}
-
-.caption-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.text-end .caption-content { margin-right: 0; }
-.text-start .caption-content { margin-left: 0; }
-
-.carousel-caption h1, .carousel-caption h2 {
-    color: #ffffff !important;
-    text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
-    font-family: var(--font-heading);
-}
-
-.carousel-caption p {
-    color: #ffffff !important;
-    text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
-    opacity: 0.95;
-}
-
-.carousel-control-prev, .carousel-control-next {
-    width: 8%;
-    z-index: 20;
-}
-
-.carousel-control-prev-icon, .carousel-control-next-icon {
-    width: 3.5rem;
-    height: 3.5rem;
-    background-color: rgba(0,0,0,0.3);
-    border-radius: 50%;
-    background-size: 40%;
-    transition: var(--transition-base);
-}
-
-.carousel-control-prev:hover .carousel-control-prev-icon,
-.carousel-control-next:hover .carousel-control-next-icon {
-    background-color: var(--cva-gold);
-    transform: scale(1.1);
-}
-
-@media (max-width: 992px) {
-    .carousel-caption { bottom: 15%; }
-    .display-2 { font-size: 3rem !important; }
-    .display-3 { font-size: 2.5rem !important; }
-}
-
-@media (max-width: 768px) {
-    .carousel-caption { bottom: 10%; }
-    .display-2 { font-size: 2.2rem !important; }
+@media (max-width: 575.98px) {
+    .carousel-inner { height: 60vh !important; min-height: 400px !important; }
+    .display-2 { font-size: 2rem !important; }
     .display-3 { font-size: 1.8rem !important; }
-    .fs-4 { font-size: 1.1rem !important; }
+    .glass-caption { padding: 1.5rem !important; border-radius: 1.5rem !important; }
+    .carousel-control-prev, .carousel-control-next { display: none; } /* Ocultar flechas en móvil muy pequeño */
 }

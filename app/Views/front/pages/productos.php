@@ -2,53 +2,6 @@
 
 <?= $this->section('extra-css') ?>
 <link rel="stylesheet" href="<?= base_url('assets/css/pages/productos.css?v=9.5') ?>">
-<style>
-    .btn-fav-artisan {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 40px;
-        height: 40px;
-        background: white !important;
-        border: none !important;
-        border-radius: 50% !important;
-        color: var(--cva-brown) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        z-index: 10 !important;
-        cursor: pointer !important;
-        padding: 0 !important;
-    }
-    .btn-fav-artisan:hover {
-        transform: scale(1.15) !important;
-        color: #e74c3c !important;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.2) !important;
-    }
-    .btn-fav-artisan.active {
-        color: #e74c3c !important;
-    }
-    .btn-fav-artisan i {
-        font-size: 1.2rem !important;
-        line-height: 1 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-    @media (max-width: 991.98px) {
-        .btn-fav-artisan {
-            width: 34px !important;
-            height: 34px !important;
-            top: 12px !important;
-            right: 12px !important;
-        }
-        .btn-fav-artisan i {
-            font-size: 1rem !important;
-        }
-    }
-</style>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
