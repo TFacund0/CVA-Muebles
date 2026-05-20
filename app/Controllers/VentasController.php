@@ -2,9 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\VentasCabeceraModel;
-use App\Models\VentasDetalleModel;
-
 /**
  * Controlador para gestión de ventas refactorizado para usar Capa de Servicios.
  */

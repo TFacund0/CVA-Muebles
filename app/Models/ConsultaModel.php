@@ -15,8 +15,4 @@ class ConsultaModel extends Model {
         'email'       => 'required|valid_email',
         'descripcion' => 'required|min_length[10]'
     ];
-
-    public function getConsultas() {
-        return $this->findAll();
-    }
 }

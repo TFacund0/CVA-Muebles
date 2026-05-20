@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\CategoriaModel;
-
 /**
  * Controlador para gestión de productos refactorizado para usar Capa de Servicios.
  */
