@@ -1,142 +1,134 @@
 # 🪵 CVA Muebles - Carpintería de Autor & Showroom Manager
 
+[<img src="https://img.shields.io/badge/Demo_Disponible-blue?style=for-the-badge&logo=web" />](#-instalación-y-configuración)
 [![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-777bb4?style=for-the-badge&logo=php)](https://www.php.net/)
 [![Framework](https://img.shields.io/badge/Framework-CodeIgniter--4-ee4323?style=for-the-badge&logo=codeigniter)](https://codeigniter.com/)
 [![Database](https://img.shields.io/badge/Database-MySQL-4479a1?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
 [![Design](https://img.shields.io/badge/Design-100%25--Responsive-blueviolet?style=for-the-badge&logo=css3)](https://caniuse.com/)
-[![Architecture](https://img.shields.io/badge/Architecture-MVC%20%2B%20Service%20Layer-brightgreen?style=for-the-badge)](https://en.wikipedia.org/wiki/Service_layer_pattern)
-[![Security](https://img.shields.io/badge/Security-Hardened%20%26%20Protected-success?style=for-the-badge&logo=dependabot)](https://owasp.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**CVA Muebles** es una plataforma web de alto rendimiento y diseño premium diseñada a medida para la gestión estratégica y exhibición del taller de carpintería artesanal de **César Víctor Acevedo** en Mantilla, Corrientes. 
+## 🌟 Descripción General
 
-El proyecto va más allá de un e-commerce tradicional: implementa un innovador **Modo Híbrido (Showroom / Venta directa)** y una arquitectura de software robusta basada en estándares de la industria, ideal como caso de estudio de ingeniería de software para procesos de reclutamiento y entrevistas técnicas.
+Este proyecto es una **Plataforma Web Híbrida (E-Commerce y Showroom)** diseñada a medida para la gestión estratégica y exhibición del taller de carpintería artesanal de **César Víctor Acevedo**. Fue desarrollado con un enfoque en alto rendimiento, diseño premium y buenas prácticas de ingeniería de software.
 
----
+El sistema permite gestionar todo el ciclo operativo del taller, desde la exhibición interactiva de productos, gestión de pedidos personalizados y ventas, hasta un monitoreo estadístico detallado a través de un panel de administración robusto.
 
-## 📸 Arquitectura y Experiencia Responsiva
-
-El frontend ha sido desarrollado bajo la filosofía **Mobile-First** utilizando una combinación fluida de **Bootstrap 5** y **Vanilla CSS** altamente optimizado. El diseño se adapta perfectamente y de forma dinámica a cualquier dispositivo:
-* 📱 **Smartphones:** Menús colapsables táctiles, tarjetas apiladas fluidas y controles simplificados para una experiencia fluida con una sola mano.
-* 📟 **Tablets:** Cuadrículas autoajustables y aprovechamiento dinámico del espacio para catálogos y paneles de control.
-* 💻 **Desktops de Alta Resolución:** Tipografías estilizadas (Google Fonts Outfit/Inter), transiciones premium con efectos de desenfoque (*Glassmorphic Carousel*), animaciones de zoom suave al pasar el cursor y modales inmersivos.
+<p align="center">
+  <!-- Reemplazar con screenshot real -->
+  <img src="https://via.placeholder.com/800x400.png?text=Pantalla+Principal+CVA+Muebles" width="70%" alt="Pantalla Principal CVA Muebles" />
+</p>
 
 ---
 
-## 🏗️ Patrón de Arquitectura: MVC + Capa de Servicios (*Service Layer*)
+## 🛠️ Arquitectura y Tecnologías
 
-Para maximizar la mantenibilidad, escalabilidad y testabilidad del sistema, el backend de CodeIgniter 4 ha sido desacoplado del patrón MVC estándar mediante la introducción de una **Capa de Servicios (`Service Layer`)**. 
+El sistema sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)**, potenciado con la introducción de una **Capa de Servicios (Service Layer)** para maximizar la mantenibilidad, escalabilidad y testabilidad:
 
-```text
-       [ Cliente / Navegador ]
-                 │ (Peticiones HTTP / AJAX)
-                 ▼
-          [ Controladores ]  <─── (Filtros de Seguridad: Auth, AdminAuth)
-                 │ (Reciben datos, controlan flujo, retornan respuestas JSON/Vistas)
-                 ▼
-         [ Capa de Servicios ]  <─── (Lógica de Negocio, validaciones complejas)
-                 │
-                 ▼
-            [ Modelos ]
-                 │ (Consultas usando Query Builder con bind-parameters)
-                 ▼
-        [ Base de Datos SQL ]
-```
+- **Capa de Presentación (UI)**: Desarrollada bajo la filosofía **Mobile-First**, utilizando **Bootstrap 5** y **Vanilla CSS** altamente optimizado. El diseño ofrece transiciones premium, _Glassmorphism_ y tipografías estilizadas (Outfit/Inter).
+- **Controladores (Controllers)**: Componentes delgados (_Slim Controllers_) que se encargan exclusivamente del protocolo HTTP (recibir parámetros de entrada y retornar vistas o respuestas JSON).
+- **Capa de Servicios (BLL)**: Aísla y centraliza toda la lógica de negocio (procesamiento de ventas, control de inventario, algoritmos de prioridad de pedidos), evitando acoplamientos innecesarios.
+- **Capa de Datos (DAL)**: Interactúa de forma segura con la base de datos MySQL mediante los Modelos y el **Query Builder** integrado en el framework.
 
-### ¿Por qué esta arquitectura destaca en una entrevista técnica?
-1. **Controladores Delgados (*Slim Controllers*):** Los controladores solo se encargan del protocolo HTTP (recibir parámetros de entrada y retornar vistas o respuestas JSON). No contienen lógica de base de datos ni reglas de negocio.
-2. **Reutilización y Aislamiento:** Toda la lógica comercial (procesamiento de ventas, control de inventario, algoritmos de prioridad de pedidos) reside en servicios independientes (`app/Services`).
-3. **Mantenibilidad:** Si las reglas de negocio cambian, solo se modifica la clase de servicio correspondiente, sin alterar la interfaz gráfica ni los controladores.
+### Tecnologías Clave:
+
+- **Lenguaje**: PHP 8.1+
+- **Framework Backend**: CodeIgniter 4
+- **Base de Datos**: MySQL
+- **Frontend**: HTML5, CSS3, JavaScript (Fetch/AJAX), Bootstrap 5
+- **Patrones de Diseño**: MVC, Service Layer Pattern
 
 ---
 
-## 🔒 Auditoría y Hardening de Seguridad (OWASP Top 10)
+## 📋 Módulos del Sistema
 
-El proyecto cuenta con un esquema de protección integral contra vulnerabilidades de seguridad en aplicaciones web:
+El sistema ofrece un **Modo Dual** gestionado por variables de entorno y está dividido en dos grandes ecosistemas:
 
-* **Protección contra Inyecciones SQL (SQLi):** Uso exclusivo del **Query Builder de CodeIgniter 4**. Toda interacción con la base de datos se realiza a través de consultas parametrizadas (PDO Bindings) nativas, anulando cualquier intento de inyección de código.
-* **Mitigación de Cross-Site Scripting (XSS):** Todo dato dinámico ingresado por el usuario se escapa en las vistas contextuales utilizando de forma rigurosa la función helper `esc()`.
-* **Protección CSRF (Cross-Site Request Forgery):** Filtro global activo para peticiones POST. Todos los formularios HTML dinámicos incluyen `<?= csrf_field() ?>`, y las llamadas asíncronas vía Fetch/AJAX inyectan dinámicamente el token `csrf_hash()` en las cabeceras HTTP.
-* **Control contra Ataques de Fuerza Bruta:** El inicio de sesión en `LoginController` implementa un limitador de tasa de peticiones (*Throttler*) que bloquea temporalmente las IPs que realicen más de 5 intentos fallidos por minuto.
-* **Mitigación de Secuestro y Fijación de Sesión:** Tras una autenticación exitosa, el sistema invoca `session()->regenerate()` para cambiar el ID de sesión activo. Además, las cookies del sistema están configuradas como `HTTPOnly` y `SameSite = Lax`.
-* **Carga Segura de Archivos (Unrestricted File Upload):** El sistema de subida de fotos (productos y galería de clientes) valida físicamente el archivo con `is_image[file]`, restringe la extensión por tipo MIME estricto (`image/jpg,image/jpeg,image/png,image/webp`) y renombra automáticamente el archivo en el servidor mediante criptografía aleatoria con `$img->getRandomName()` para evitar ejecuciones maliciosas remotas.
-* **Prevención de IDOR (Insecure Direct Object Reference):** Endpoints sensibles (como la visualización de facturas o detalles de pedidos personales) comprueban activamente en el controlador que el ID del propietario del recurso coincida con el ID de la sesión autenticada, a menos que el usuario sea administrador.
+### 1. 🛋️ Catálogo y Showroom (Frontend / Cliente)
 
----
+- **Modo Híbrido**: El administrador puede alternar dinámicamente entre un e-commerce completamente funcional (con checkout) o un catálogo de exhibición (_Showroom Mode_), donde los botones de compra se transforman en enlaces directos y parametrizados a WhatsApp.
+- **Experiencia Responsiva**: Menús colapsables táctiles, cuadrículas fluidas para catálogos y animaciones de zoom inmersivas en productos de alta resolución.
+- **Galería Moderada**: Exhibición de los muebles instalados en los hogares de los clientes.
 
-## 🌟 Funcionalidades Destacadas
+<p align="center">
+  <!-- Reemplazar con screenshots reales -->
+  <img src="https://via.placeholder.com/400x200.png?text=Catalogo+de+Productos" width="45%" alt="Catálogo de Productos" />
+  <img src="https://via.placeholder.com/400x200.png?text=Modo+Carrito" width="45%" alt="Carrito de Compras" />
+</p>
 
-### 🛋️ Showroom Mode (Dual Mode)
-El sistema permite alternar mediante variables de entorno en el archivo `.env` entre un portal de e-commerce totalmente funcional con checkout integrado y un catálogo de exhibición premium (Showroom). Al desactivar el carrito, los botones de compra se transforman de manera dinámica en enlaces directos y parametrizados a **WhatsApp**, permitiendo una atención artesanal directa.
+### 2. 🛠️ Panel Administrativo (Backend / Gestor)
 
-### 🛠️ Artisan Panel (Gestión Administrativa)
-Un backend de administración robusto e intuitivo diseñado para el artesano:
-* **Dashboard Estadístico:** Monitoreo en tiempo real de facturación, carga de pedidos pendientes e inventario crítico.
-* **Algoritmo de Prioridad Atómica:** Sistema de arrastre de prioridad para organizar el orden de fabricación en el taller de forma atómica en base de datos.
-* **Gestión de Pedidos Personalizados:** Interfaz administrativa para registrar ventas de muebles a medida con notas detalladas que no están en el catálogo estándar.
-* **Moderación de Galería:** Panel interactivo para aprobar o rechazar fotos de muebles enviadas por clientes satisfechos en sus hogares.
+- **Dashboard Estadístico**: Monitoreo en tiempo real de métricas de facturación, pedidos pendientes e inventario crítico.
+- **Algoritmo de Prioridad Atómica**: Sistema de arrastre (drag-and-drop) para organizar el orden de fabricación en el taller de forma atómica en la base de datos.
+- **Gestión de Pedidos Personalizados**: Interfaz para el registro de ventas de muebles a medida, con notas detalladas que escapan al catálogo estándar.
+- **Moderación de Interacciones**: Control total sobre la aprobación y publicación de fotografías de clientes.
 
----
-
-## 📂 Estructura Limpia del Directorio
-
-```bash
-├── app/
-│   ├── Config/         # Configuración del Sistema (Seguridad, Filtros, Rutas)
-│   ├── Controllers/    # Controladores delgados (Control de flujos de entrada/salida)
-│   ├── Filters/        # Filtros de Seguridad (Auth y AdminAuth)
-│   ├── Models/         # Modelos del ORM interactuando con la DB de forma segura
-│   ├── Services/       # Capa de Servicios (Lógica de Negocio centralizada)
-│   └── Views/          # Vistas (Back y Front Office, modulares y responsivas)
-├── assets/
-│   ├── css/            # Estilos estáticos segmentados por módulo (carrusel, catálogo)
-│   ├── js/             # Funcionalidad y controladores AJAX en frontend
-│   └── uploads/        # Directorio seguro de almacenamiento de imágenes
-├── public/             # Punto de entrada público del servidor web
-└── arce_acevedo.sql    # Estructura e inserciones demo de la Base de Datos
-```
+<p align="center">
+  <!-- Reemplazar con screenshots reales -->
+  <img src="https://via.placeholder.com/400x200.png?text=Dashboard+Administrativo" width="45%" alt="Dashboard Estadístico" />
+  <img src="https://via.placeholder.com/400x200.png?text=Gestion+de+Pedidos" width="45%" alt="Gestión de Pedidos" />
+</p>
 
 ---
 
-## 📝 Guía de Instalación y Puesta en Marcha (Entorno de Desarrollo)
+## 🔒 Auditoría y Seguridad
 
-1. **Clonar el Repositorio:**
-   ```bash
-   git clone https://github.com/TFacund0/Proyecto-CVA-Muebles.git
-   cd Proyecto-CVA-Muebles
-   ```
+El proyecto cuenta con un esquema de protección integral contra vulnerabilidades, mitigando riesgos basándose en el estándar **OWASP Top 10**:
 
-2. **Configurar el Entorno local (`.env`):**
-   Renombra el archivo `.env.example` o edita el `.env` existente en la raíz y configura tus credenciales locales:
-   ```env
-   CI_ENVIRONMENT = development
-   app.baseURL = 'http://localhost/Proyecto-CVA-Muebles/'
-   
-   # Modo de catálogo
-   SHOPPING_CART_ENABLED = true
-   ```
-
-3. **Restaurar la Base de Datos:**
-   * Crea una base de datos MySQL llamada `arce_acevedo` (cotejamiento preferido: `utf8mb4_general_ci`).
-   * Importa el archivo `arce_acevedo.sql` disponible en la raíz del proyecto.
-   * Ajusta los valores de conexión en `app/Config/Database.php` o en el archivo `.env`.
-
-4. **Credenciales por Defecto de Demostración:**
-   * **Administrador:**
-     * **Email/Usuario:** `admin@cvamuebles.com` (o usuario `admin`)
-     * **Contraseña:** `admin123`
-   * **Cliente Demo:**
-     * **Email/Usuario:** `cliente@gmail.com` (o usuario `cliente`)
-     * **Contraseña:** `cliente123`
+- **Prevención de Inyecciones SQL (SQLi)**: Todas las consultas a la base de datos utilizan el _Query Builder_ de CodeIgniter 4 y _PDO Bindings_ parametrizados.
+- **Mitigación Cross-Site Scripting (XSS)**: Escapado riguroso de todo dato dinámico renderizado en vistas mediante la función `esc()`.
+- **Protección CSRF (Cross-Site Request Forgery)**: Filtro global activo que inyecta y valida tokens en cada formulario y llamada AJAX o Fetch de forma obligatoria.
+- **Control contra Fuerza Bruta**: El sistema de login emplea un limitador de tasa (_Throttler_) que bloquea temporalmente IPs con más de 5 intentos fallidos por minuto.
+- **Hardening de Sesión**: Invocación a `session()->regenerate()` post-autenticación y almacenamiento de cookies bajo directivas `HTTPOnly` y `SameSite = Lax`.
+- **Carga Segura de Archivos**: Validación física y del tipo MIME en subidas de imágenes, implementando renombrado criptográfico aleatorio (`getRandomName()`) para prevenir la carga de binarios maliciosos.
+- **Prevención de IDOR**: Restricción activa y validación en controladores para asegurar que solo el propietario de un recurso (o un administrador) tenga acceso a datos sensibles (facturas, detalles de perfil).
 
 ---
 
-## 👨‍💻 Autor y Contacto de Desarrollo
+## 🚀 Instalación y Configuración
 
-Proyecto ideado, estructurado y programado para la optimización de procesos y showroom interactivo de **César Víctor Acevedo**. 
+1.  **Clonar el repositorio**:
+    ```bash
+    git clone https://github.com/TFacund0/Proyecto-CVA-Muebles.git
+    cd Proyecto-CVA-Muebles
+    ```
+2.  **Configurar el Entorno Local (`.env`)**:
+    Renombra el archivo `.env.example` a `.env` (o edita el `.env` existente) y define los parámetros del sistema:
 
-* **Contacto del Desarrollador Principal:** [LinkedIn](https://www.linkedin.com/in/tobiascesarfacundoacevedo/) | [GitHub](https://github.com/TFacund0)
+    ```env
+    CI_ENVIRONMENT = development
+    app.baseURL = 'http://localhost/Proyecto-CVA-Muebles/'
+
+    # Modo Híbrido: True = E-commerce completo, False = Showroom / WhatsApp
+    SHOPPING_CART_ENABLED = true
+    ```
+
+3.  **Base de Datos**:
+    - Crea una base de datos MySQL local llamada `arce_acevedo` (con cotejamiento `utf8mb4_general_ci`).
+    - Importa el archivo `arce_acevedo.sql` localizado en la raíz del proyecto.
+    - Actualiza las credenciales de base de datos en `app/Config/Database.php` o preferentemente en `.env`.
+4.  **Credenciales de Demostración**:
+    - **Administrador**: Email: `admin@cvamuebles.com` (o `admin`) | Contraseña: `admin123`
+    - **Cliente**: Email: `cliente@gmail.com` (o `cliente`) | Contraseña: `cliente123`
 
 ---
 
-> [!TIP]
-> **Filosofía de Carpintería de Autor:** Cada veta de madera cuenta una historia única. Esta plataforma web asegura que la ingeniería digital detrás de cada pieza creada a mano sea igualmente impecable y precisa.
+## 💡 Aprendizajes y Evolución
+
+El desarrollo de este sistema representa la aplicación de buenas prácticas de ingeniería de software en entornos PHP modernos:
+
+- **Desacoplamiento Avanzado**: La implementación de la _Service Layer_ permitió lograr Controladores puramente dedicados al flujo de red, extrayendo las reglas de negocio complejas hacia módulos testeables.
+- **Adaptabilidad Real**: El desarrollo de variables lógicas (Modo Showroom) ha dotado al proyecto de versatilidad empresarial.
+- **Conciencia de Seguridad Web**: Implementar los lineamientos de OWASP Top 10 fue clave para solidificar un sistema de ventas en línea preparado contra vectores de ataque contemporáneos.
+
+> [!NOTE]
+> **Filosofía del Proyecto:** Al igual que en la carpintería de autor, donde cada veta de madera cuenta una historia, la arquitectura detrás de esta plataforma está diseñada de forma artesanal. Meticulosa en el código, segura en sus procesos y fluida en su experiencia visual.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+_Diseñado y programado por **[Tobías César Facundo Acevedo](https://github.com/TFacund0)**._
