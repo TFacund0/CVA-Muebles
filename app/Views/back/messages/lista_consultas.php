@@ -163,7 +163,7 @@
             <i class="bi bi-envelope-open me-1 text-gold"></i> Listado de Consultas Pendientes
         </h6>
     </div>
-    <div class="table-responsive-stack">
+    <div class="table-responsive-stack table-layout-fixed">
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-light">
                 <tr>
