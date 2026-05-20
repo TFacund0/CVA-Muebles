@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.2')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.3')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -36,21 +36,34 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-brown text-white">
                 <tr>
-                    <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest" style="width: 100px;">ID</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest">DESCRIPCIÓN</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest">PRODUCTOS</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest">ESTADO</th>
-                    <th class="pe-4 py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest">GESTIÓN</th>
+                    <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest">DESCRIPCIÓN</th>
+                    <th class="py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest d-none d-lg-table-cell" style="width: 100px;">ID</th>
+                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest" style="width: 150px;">PRODUCTOS</th>
+                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest" style="width: 150px;">ESTADO</th>
+                    <th class="pe-4 py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest" style="width: 200px;">GESTIÓN</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($categorias as $cat): ?>
-                <tr>
-                    <td class="ps-4" data-label="ID">
-                        <span class="badge bg-light text-muted border">#<?= $cat['id_categoria'] ?></span>
+                <tr class="category-row">
+                    <td class="ps-4" data-label="DESCRIPCIÓN">
+                        <div class="d-flex align-items-center gap-3 py-1 order-info-wrapper">
+                            <div class="position-relative">
+                                <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
+                                    <?= strtoupper(substr(trim($cat['descripcion']), 0, 2)) ?>
+                                </div>
+                                <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $cat['id_categoria'] ?></span>
+                            </div>
+                            <div class="order-text-details">
+                                <div class="fw-bold text-cva-brown"><?= esc($cat['descripcion']) ?></div>
+                                <div class="d-flex gap-2 align-items-center mt-1">
+                                    <span class="badge bg-light text-muted border d-none d-md-inline-block" style="font-size: 0.65rem;">CATEGORÍA: #<?= $cat['id_categoria'] ?></span>
+                                </div>
+                            </div>
+                        </div>
                     </td>
-                    <td class="fw-bold text-cva-brown" data-label="DESCRIPCIÓN">
-                        <?= esc($cat['descripcion']) ?>
+                    <td class="d-none d-lg-table-cell" data-label="ID">
+                        <span class="badge bg-light text-muted border">#<?= $cat['id_categoria'] ?></span>
                     </td>
                     <td class="text-center" data-label="PRODUCTOS">
                         <div class="d-flex flex-column align-items-center">
