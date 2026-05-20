@@ -1,60 +1,134 @@
-# CodeIgniter 4 Framework
+# 🪵 CVA Muebles - Carpintería de Autor & Showroom Manager
 
-## What is CodeIgniter?
+[<img src="https://img.shields.io/badge/Demo_Disponible-blue?style=for-the-badge&logo=web" />](#-instalación-y-configuración)
+[![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-777bb4?style=for-the-badge&logo=php)](https://www.php.net/)
+[![Framework](https://img.shields.io/badge/Framework-CodeIgniter--4-ee4323?style=for-the-badge&logo=codeigniter)](https://codeigniter.com/)
+[![Database](https://img.shields.io/badge/Database-MySQL-4479a1?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
+[![Design](https://img.shields.io/badge/Design-100%25--Responsive-blueviolet?style=for-the-badge&logo=css3)](https://caniuse.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 🌟 Descripción General
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Este proyecto es una **Plataforma Web Híbrida (E-Commerce y Showroom)** diseñada a medida para la gestión estratégica y exhibición del taller de carpintería artesanal de **César Víctor Acevedo**. Fue desarrollado con un enfoque en alto rendimiento, diseño premium y buenas prácticas de ingeniería de software.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+El sistema permite gestionar todo el ciclo operativo del taller, desde la exhibición interactiva de productos, gestión de pedidos personalizados y ventas, hasta un monitoreo estadístico detallado a través de un panel de administración robusto.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+<p align="center">
+  <!-- Reemplazar con screenshot real -->
+  <img src="https://via.placeholder.com/800x400.png?text=Pantalla+Principal+CVA+Muebles" width="70%" alt="Pantalla Principal CVA Muebles" />
+</p>
 
-## Important Change with index.php
+---
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 🛠️ Arquitectura y Tecnologías
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+El sistema sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)**, potenciado con la introducción de una **Capa de Servicios (Service Layer)** para maximizar la mantenibilidad, escalabilidad y testabilidad:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+- **Capa de Presentación (UI)**: Desarrollada bajo la filosofía **Mobile-First**, utilizando **Bootstrap 5** y **Vanilla CSS** altamente optimizado. El diseño ofrece transiciones premium, _Glassmorphism_ y tipografías estilizadas (Outfit/Inter).
+- **Controladores (Controllers)**: Componentes delgados (_Slim Controllers_) que se encargan exclusivamente del protocolo HTTP (recibir parámetros de entrada y retornar vistas o respuestas JSON).
+- **Capa de Servicios (BLL)**: Aísla y centraliza toda la lógica de negocio (procesamiento de ventas, control de inventario, algoritmos de prioridad de pedidos), evitando acoplamientos innecesarios.
+- **Capa de Datos (DAL)**: Interactúa de forma segura con la base de datos MySQL mediante los Modelos y el **Query Builder** integrado en el framework.
 
-## Repository Management
+### Tecnologías Clave:
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+- **Lenguaje**: PHP 8.1+
+- **Framework Backend**: CodeIgniter 4
+- **Base de Datos**: MySQL
+- **Frontend**: HTML5, CSS3, JavaScript (Fetch/AJAX), Bootstrap 5
+- **Patrones de Diseño**: MVC, Service Layer Pattern
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+---
 
-## Contributing
+## 📋 Módulos del Sistema
 
-We welcome contributions from the community.
+El sistema ofrece un **Modo Dual** gestionado por variables de entorno y está dividido en dos grandes ecosistemas:
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+### 1. 🛋️ Catálogo y Showroom (Frontend / Cliente)
 
-## Server Requirements
+- **Modo Híbrido**: El administrador puede alternar dinámicamente entre un e-commerce completamente funcional (con checkout) o un catálogo de exhibición (_Showroom Mode_), donde los botones de compra se transforman en enlaces directos y parametrizados a WhatsApp.
+- **Experiencia Responsiva**: Menús colapsables táctiles, cuadrículas fluidas para catálogos y animaciones de zoom inmersivas en productos de alta resolución.
+- **Galería Moderada**: Exhibición de los muebles instalados en los hogares de los clientes.
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+<p align="center">
+  <!-- Reemplazar con screenshots reales -->
+  <img src="https://via.placeholder.com/400x200.png?text=Catalogo+de+Productos" width="45%" alt="Catálogo de Productos" />
+  <img src="https://via.placeholder.com/400x200.png?text=Modo+Carrito" width="45%" alt="Carrito de Compras" />
+</p>
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+### 2. 🛠️ Panel Administrativo (Backend / Gestor)
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+- **Dashboard Estadístico**: Monitoreo en tiempo real de métricas de facturación, pedidos pendientes e inventario crítico.
+- **Algoritmo de Prioridad Atómica**: Sistema de arrastre (drag-and-drop) para organizar el orden de fabricación en el taller de forma atómica en la base de datos.
+- **Gestión de Pedidos Personalizados**: Interfaz para el registro de ventas de muebles a medida, con notas detalladas que escapan al catálogo estándar.
+- **Moderación de Interacciones**: Control total sobre la aprobación y publicación de fotografías de clientes.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+<p align="center">
+  <!-- Reemplazar con screenshots reales -->
+  <img src="https://via.placeholder.com/400x200.png?text=Dashboard+Administrativo" width="45%" alt="Dashboard Estadístico" />
+  <img src="https://via.placeholder.com/400x200.png?text=Gestion+de+Pedidos" width="45%" alt="Gestión de Pedidos" />
+</p>
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+---
+
+## 🔒 Auditoría y Seguridad
+
+El proyecto cuenta con un esquema de protección integral contra vulnerabilidades, mitigando riesgos basándose en el estándar **OWASP Top 10**:
+
+- **Prevención de Inyecciones SQL (SQLi)**: Todas las consultas a la base de datos utilizan el _Query Builder_ de CodeIgniter 4 y _PDO Bindings_ parametrizados.
+- **Mitigación Cross-Site Scripting (XSS)**: Escapado riguroso de todo dato dinámico renderizado en vistas mediante la función `esc()`.
+- **Protección CSRF (Cross-Site Request Forgery)**: Filtro global activo que inyecta y valida tokens en cada formulario y llamada AJAX o Fetch de forma obligatoria.
+- **Control contra Fuerza Bruta**: El sistema de login emplea un limitador de tasa (_Throttler_) que bloquea temporalmente IPs con más de 5 intentos fallidos por minuto.
+- **Hardening de Sesión**: Invocación a `session()->regenerate()` post-autenticación y almacenamiento de cookies bajo directivas `HTTPOnly` y `SameSite = Lax`.
+- **Carga Segura de Archivos**: Validación física y del tipo MIME en subidas de imágenes, implementando renombrado criptográfico aleatorio (`getRandomName()`) para prevenir la carga de binarios maliciosos.
+- **Prevención de IDOR**: Restricción activa y validación en controladores para asegurar que solo el propietario de un recurso (o un administrador) tenga acceso a datos sensibles (facturas, detalles de perfil).
+
+---
+
+## 🚀 Instalación y Configuración
+
+1.  **Clonar el repositorio**:
+    ```bash
+    git clone https://github.com/TFacund0/Proyecto-CVA-Muebles.git
+    cd Proyecto-CVA-Muebles
+    ```
+2.  **Configurar el Entorno Local (`.env`)**:
+    Renombra el archivo `.env.example` a `.env` (o edita el `.env` existente) y define los parámetros del sistema:
+
+    ```env
+    CI_ENVIRONMENT = development
+    app.baseURL = 'http://localhost/Proyecto-CVA-Muebles/'
+
+    # Modo Híbrido: True = E-commerce completo, False = Showroom / WhatsApp
+    SHOPPING_CART_ENABLED = true
+    ```
+
+3.  **Base de Datos**:
+    - Crea una base de datos MySQL local llamada `arce_acevedo` (con cotejamiento `utf8mb4_general_ci`).
+    - Importa el archivo `arce_acevedo.sql` localizado en la raíz del proyecto.
+    - Actualiza las credenciales de base de datos en `app/Config/Database.php` o preferentemente en `.env`.
+4.  **Credenciales de Demostración**:
+    - **Administrador**: Email: `admin@cvamuebles.com` (o `admin`) | Contraseña: `admin123`
+    - **Cliente**: Email: `cliente@gmail.com` (o `cliente`) | Contraseña: `cliente123`
+
+---
+
+## 💡 Aprendizajes y Evolución
+
+El desarrollo de este sistema representa la aplicación de buenas prácticas de ingeniería de software en entornos PHP modernos:
+
+- **Desacoplamiento Avanzado**: La implementación de la _Service Layer_ permitió lograr Controladores puramente dedicados al flujo de red, extrayendo las reglas de negocio complejas hacia módulos testeables.
+- **Adaptabilidad Real**: El desarrollo de variables lógicas (Modo Showroom) ha dotado al proyecto de versatilidad empresarial.
+- **Conciencia de Seguridad Web**: Implementar los lineamientos de OWASP Top 10 fue clave para solidificar un sistema de ventas en línea preparado contra vectores de ataque contemporáneos.
+
+> [!NOTE]
+> **Filosofía del Proyecto:** Al igual que en la carpintería de autor, donde cada veta de madera cuenta una historia, la arquitectura detrás de esta plataforma está diseñada de forma artesanal. Meticulosa en el código, segura en sus procesos y fluida en su experiencia visual.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+_Diseñado y programado por **[Tobías César Facundo Acevedo](https://github.com/TFacund0)**._

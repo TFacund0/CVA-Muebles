@@ -2,176 +2,251 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
-use App\Models\Usuarios_model;
-use App\Models\VentasCabecera_model;
-use App\Models\VentasDetalle_model;
-use App\Models\Productos_model;
+use App\Models\VentasCabeceraModel;
+use App\Models\VentasDetalleModel;
 
 /**
- * Controlador para gestión de ventas
- * 
- * Funcionalidades:
- * - Listado y filtrado de ventas
- * - Registro de nuevas ventas
- * - Visualización de facturas
+ * Controlador para gestión de ventas refactorizado para usar Capa de Servicios.
  */
 class VentasController extends BaseController {
 
-    /**
-     * Constructor - Inicializa helpers
-     */
+    protected $ventasService;
+
     public function __construct() {
         helper(['url', 'form']);
+        $this->ventasService = new \App\Services\VentasService();
     }
 
     /**
-     * Muestra el listado de ventas con filtros
-     * @return View Vista de detalle de ventas
+     * Muestra el listado de ventas con estadísticas procesadas por el servicio.
      */
     public function index_ventas() {
-        $perfil = session()->get('perfil_id');
 
-        if ($perfil != 1) {
-            return redirect()->to('/login');
-        }
 
-        helper('text');
-        $request = service('request');
-
-        $ventasDetalle = new VentasDetalle_model();
-
-        // Parámetros de filtrado
-        $search = strtolower(trim($request->getGet('search') ?? ''));
-        $tipo = $request->getGet('filtro_tipo') ?? '';
-
-        $ventas = $ventasDetalle->getDetallesAll();
-        $ventas_filtradas = [];
-
-        foreach ($ventas as $venta) {
-            $coincide = true;
-
-            if ($search) {
-                switch ($tipo) {
-                    case 'id':
-                        $coincide = strpos((string) $venta['venta_id'], $search) !== false;
-                        break;
-                    case 'usuario':
-                        $coincide = stripos($venta['usuario'], $search) !== false;
-                        break;
-                    case 'descripcion':
-                        $coincide = stripos($venta['nombre_prod'], $search) !== false;
-                        break;
-                    default:
-                        $coincide = true;
-                }
-            }
-
-            if ($coincide) {
-                // Calcula subtotal directamente en el foreach
-                $venta['subtotal'] = $venta['cantidad'] * $venta['precio'];
-                $ventas_filtradas[] = $venta;
-            }
-        }
-
-        return view('front/main', [
-            'title' => 'Ventas',
-            'content' => view('back/ventas/detalleVentas', ['ventas' => $ventas_filtradas, 'search' => $search, 'filtro_tipo' => $tipo])
+        $resultado = $this->ventasService->getVentasConEstadisticas();
+        
+        $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        
+        return view('back/sales/detalleVentas', [
+            'ventas'      => $resultado['ventas'],
+            'solicitados' => $resultado['solicitados'],
+            'counts'      => $resultado['counts'],
+            'nombreMes'   => $meses[(int)date('m') - 1],
+            'title'       => 'Control de Pedidos'
         ]);
     }
 
     /**
-     * Procesa el registro de una nueva venta
-     * @return Redirect Redirección con mensaje de estado
+     * Procesa el registro de una nueva venta delegando al servicio.
      */
     public function registrar_venta() {
-        $session = session();
-        require(APPPATH . 'Controllers/carrito_controller.php');
-        $cartController = new carrito_controller();
-        $carrito_contents = $cartController->devolver_carrito();
+        $items_seleccionados_ids = $this->request->getPost('selected_items');
+        $observaciones = $this->request->getPost('observaciones');
+        
+        if (empty($items_seleccionados_ids)) {
+            return redirect()->to('/muestro')->with('error', 'Debes seleccionar al menos un producto para generar el pedido.');
+        }
 
-        $productoModel = new Productos_model();
-        $ventasModel = new VentasCabecera_model();
-        $ventasDetalleModel = new VentasDetalle_model();
-
-        $productos_validos = [];
-        $productos_sin_stock = [];
-        $total = 0;
-
-        foreach ($carrito_contents as $item) {
-            $producto = $productoModel->getProducto($item['id']);
-
-            if ($producto && $producto['stock'] >= $item['qty']) {
-                $productos_validos[] = $item;
-                $total += $item['subtotal'];
-            } else {
-                $productos_sin_stock[] = $item['name'];
-                $cartController->eliminar_item($item['rowid']);
+        $cartService = new \App\Services\CarritoService();
+        $carrito_completo = $cartService->getContenido();
+        
+        $items_a_procesar = [];
+        foreach ($items_seleccionados_ids as $rowid) {
+            if (isset($carrito_completo[$rowid])) {
+                $items_a_procesar[] = $carrito_completo[$rowid];
             }
         }
 
-        if(!empty($productos_sin_stock)) {
-            $mensaje = 'Los siguientes productos no tienen stock suficiente: ' . implode(', ', $productos_sin_stock);
-            $session->setFlashdata('error', $mensaje);
-            return redirect()->to('muestro');
+        $resultado = $this->ventasService->procesarVenta(session()->get('id_usuario'), $items_a_procesar, $observaciones);
+
+        if ($resultado['status'] === 'success') {
+            // Eliminar solo los items procesados del carrito
+            $cartService->eliminarVarios($items_seleccionados_ids);
+            
+            return redirect()->to('/ventas_lista')->with('success', '¡Pedido Recibido! Tu orden ha sido registrada con éxito y está en espera de ser aceptada por nuestro taller. Podrás seguir el progreso aquí mismo.');
+        } else {
+            return redirect()->to('/muestro')->with('error', $resultado['message']);
         }
-
-        if(empty($productos_validos)) {
-            $session->setFlashdata('error', 'No hay productos válidos en el carrito.');
-            return redirect()->to('muestro');
-        }
-
-        $nueva_venta = [
-            'usuario_id' => $session->get('id_usuario'),
-            'fecha' => date('Y-m-d H:i:s'),
-            'total_venta' => $total
-        ];
-
-        $venta_id = $ventasModel->insert($nueva_venta);
-
-        //Registrar detalles de la venta y actualizar stock
-        foreach ($productos_validos as $item) {
-            $detalle_venta = [
-                'venta_id' => $venta_id,
-                'producto_id' => $item['id'],
-                'cantidad' => $item['qty'],
-                'precio' => $item['price'],
-            ];
-            $ventasDetalleModel->insert($detalle_venta);
-
-            $producto = $productoModel->getProducto($item['id']);
-            $productoModel->update($item['id'], ['stock' => $producto['stock'] - $item['qty']]);
-        }
-        
-        //Vaciar Carrito y mostrar confirmación
-        $cartController->borrar_carrito();
-        $session->setFlashdata('success', 'Venta registrada exitosamente. Total: ' . $total);
-        return redirect()->to('muestro');
     }
 
     /**
-     * Muestra la factura de una venta específica
-     * @param int $venta_id ID de la venta
-     * @return View Vista de factura
+     * Muestra la factura de una venta específica.
      */
     public function ver_factura($venta_id) {
-        $detalles_venta = new VentasDetalle_model();
-        $data['venta'] = $detalles_venta->getDetalles($venta_id);
+        $data = $this->ventasService->getGestionDetalle($venta_id);
+        if (!$data) return redirect()->to('/productos')->with('error', 'Pedido no encontrado.');
 
-        return view('front/main', [
-            'title' => 'Mi Compra',
-            'content' => view('back/ventas/ver_factura_usuario', $data)
+        $isAdmin = session()->get('perfil_id') == 1;
+
+        // Seguridad: Verificar que el pedido sea del usuario o que el usuario sea Admin
+        if (!$isAdmin && $data['venta']['usuario_id'] != session()->get('id_usuario')) {
+            return redirect()->to('/productos')->with('error', 'No tienes permiso para ver este pedido.');
+        }
+
+        $layout = $isAdmin ? 'layout/admin_layout' : 'layout/main';
+
+        return view('back/sales/ver_factura_usuario', array_merge($data, [
+            'title' => $isAdmin ? 'Comprobante Pedido #' . $venta_id : 'Detalle de mi Pedido #' . $venta_id,
+            'layout' => $layout,
+            'isAdmin' => $isAdmin
+        ]));
+    }
+
+    /**
+     * Muestra todas las facturas del usuario actual.
+     */
+    public function ver_facturas_usuario() {
+        $id_usuario = session()->get('id_usuario');
+        $ventas = $this->ventasService->getVentasPorUsuario($id_usuario);
+
+        return view('back/sales/vistaCompras', [
+            'ventas' => $ventas,
+            'title'  => 'Todas mis Compras'
         ]);
     }
 
-    public function ver_facturas_usuario() {
-        $id_usuario = session()->get('id_usuario');
-        $ventasModel = new VentasCabecera_model();
-        $data['ventas'] = $ventasModel->getVentas(NULL, $id_usuario);
+    /**
+     * Actualiza el estado de una venta delegando al servicio.
+     */
+    public function actualizar_estado($venta_id) {
 
-        return view('front/main', [
-            'title' => 'Todas mis Compras',
-            'content' => view('back/ventas/vistaCompras', $data)
+
+        $nuevo_estado = $this->request->getPost('estado');
+        $this->ventasService->actualizarEstado($venta_id, $nuevo_estado);
+
+        // Si se rechaza, volvemos al listado general de solicitudes.
+        // Si se acepta o cambia de fase de producción, nos quedamos en la gestión.
+        if ($nuevo_estado == 'RECHAZADO') {
+            return redirect()->to('/ventas-list')->with('success', 'Pedido rechazado correctamente.');
+        }
+
+        return redirect()->back()->with('success', 'Estado de pedido actualizado a: ' . $nuevo_estado);
+    }
+
+    /**
+     * Muestra estadísticas agregadas del taller.
+     */
+    public function estadisticas() {
+
+
+        // Podríamos crear un ConsultaService, por ahora mantenemos el modelo para esta métrica específica
+        $consultasModel = new \App\Models\ConsultaModel();
+        
+        return view('back/sales/estadisticas', [
+            'stats' => $this->ventasService->getDashboardStats(),
+            'total_consultas' => $consultasModel->where('activo', 'SI')->countAllResults(),
+            'title' => 'Estadísticas del Taller'
         ]);
+    }
+
+    /**
+     * Muestra el formulario para registrar un pedido manual.
+     */
+    public function nuevo_pedido_personalizado() {
+
+        
+        $usuarioModel = new \App\Models\UsuarioModel();
+        $clientes = $usuarioModel->where('perfil_id', 2)->where('baja', 'NO')->findAll();
+
+        return view('back/sales/nuevo_pedido_personalizado', [
+            'clientes' => $clientes,
+            'title'    => 'Nuevo Pedido Personalizado'
+        ]);
+    }
+
+    /**
+     * Procesa el registro de un pedido manual delegando al servicio.
+     */
+    public function guardar_pedido_personalizado() {
+
+
+        $file = $this->request->getFile('imagen_referencia');
+
+        // Validación estricta de la imagen de referencia
+        if ($file && $file->isValid()) {
+            $rulesRef = [
+                'imagen_referencia' => 'is_image[imagen_referencia]|mime_in[imagen_referencia,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen_referencia,2048]'
+            ];
+            if (!$this->validate($rulesRef)) {
+                return redirect()->back()->withInput()->with('error', 'La imagen de referencia no es válida o supera los 2MB.');
+            }
+        }
+
+        $resultado = $this->ventasService->registrarPedidoPersonalizado($this->request->getPost(), $file);
+
+        if ($resultado['status'] === 'success') {
+            return redirect()->to('/ventas/gestion/' . $resultado['venta_id'])->with('success', 'Pedido personalizado registrado correctamente.');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Error: ' . $resultado['message']);
+        }
+    }
+
+    /**
+     * Vista de gestión detallada para el administrador.
+     */
+    public function ver_gestion_pedido($venta_id) {
+
+
+        $data = $this->ventasService->getGestionDetalle($venta_id);
+        if (!$data) return redirect()->to('/ventas-list')->with('error', 'Pedido no encontrado.');
+
+        $data['title'] = 'Gestión de Pedido #' . $venta_id;
+        return view('back/sales/gestion_pedido_admin', $data);
+    }
+
+    /**
+     * Registra un pago delegando al servicio.
+     */
+    public function registrar_pago() {
+
+
+        $this->ventasService->registrarPago(
+            $this->request->getPost('venta_id'),
+            $this->request->getPost('monto'),
+            $this->request->getPost('nota')
+        );
+
+        return redirect()->back()->with('success', 'Pago registrado exitosamente.');
+    }
+
+    /**
+     * Actualiza las observaciones delegando al servicio.
+     */
+    public function guardar_observaciones() {
+
+
+        $observaciones = $this->request->getPost('observaciones');
+        $img_ref_tag = $this->request->getPost('img_ref_tag');
+        
+        if ($img_ref_tag) {
+            $observaciones .= "\n" . $img_ref_tag;
+        }
+
+        $this->ventasService->actualizarObservaciones(
+            $this->request->getPost('venta_id'),
+            $observaciones
+        );
+
+        return redirect()->back()->with('success', 'Detalles del pedido actualizados.');
+    }
+
+    /**
+     * Sube un pedido en el orden de prioridad del listado activo.
+     */
+    public function subir_prioridad($venta_id) {
+
+
+        $this->ventasService->subirPrioridad($venta_id);
+        return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
+    }
+
+    /**
+     * Baja un pedido en el orden de prioridad del listado activo.
+     */
+    public function bajar_prioridad($venta_id) {
+
+
+        $this->ventasService->bajarPrioridad($venta_id);
+        return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
     }
 }

@@ -2,109 +2,55 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
-use App\Models\Usuarios_model;
-
 /**
- * Controlador para la gestión de login de usuarios.
+ * Controlador para login refactorizado para usar Capa de Servicios.
  */
 class LoginController extends BaseController {
     
-    /**
-     * Carga los helpers necesarios para formularios y URLs.
-     */
-    public function index(){
-        helper(['form', 'url']);
+    protected $usuarioService;
+
+    public function __construct() {
+        $this->usuarioService = new \App\Services\UsuarioService();
     }
 
     /**
      * Muestra la vista del formulario de login.
-     *
-     * @return \CodeIgniter\HTTP\Response
      */
     public function create() {
-        if (session()->get('logged_in')) {
-            // Si el usuario ya está autenticado, redirige a la página principal
-            return redirect()->to('/');
-        }
-
-        return view('front/main', [
-            'title' => 'Login',
-            'content' => view('back/usuario/login')
-        ]);
+        if (session()->get('logged_in')) return redirect()->to('/');
+        return view('back/users/login', ['title' => 'Login']);
     }
 
     /**
-     * Autentica al usuario verificando email/usuario y contraseña.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * Autentica al usuario delegando al servicio con protección de Throttling.
      */
     public function auth() {
-        $session = session();
-        $model = new Usuarios_model();
+        $throttler = \Config\Services::throttler();
 
-        // Obtiene el email o usuario y la contraseña desde el formulario
-        $login = $this->request->getVar('email'); // puede ser email o usuario
-        $password = $this->request->getVar('pass');
-
-        // Busca en la base de datos el usuario por email o usuario
-        $data = $model->where('email', $login)
-                        ->orWhere('usuario', $login)
-                        ->first();
-
-        if($data) {
-            $pass = $data['pass'];
-            $baja = $data['baja'];
-
-            // Verifica si el usuario está dado de baja
-            if($baja == 'SI') {
-                session()->setFlashdata('fallo_login', 'Usuario dado de baja');
-                return redirect()->to('/login');
-            }
-            
-            // Verifica la contraseña usando password_verify
-            $verify_pass = password_verify($password, $pass);
-            
-            if($verify_pass) {
-                // Datos de sesión para usuario autenticado
-                $ses_data = [
-                    'id_usuario' => $data['id_usuario'],
-                    'nombre' => $data['nombre'],
-                    'apellido' => $data['apellido'],
-                    'email' => $data['email'],
-                    'usuario' => $data['usuario'],
-                    
-                    'perfil_id' => $data['perfil_id'],
-                    'logged_in' => TRUE
-                ];
-
-                $session->set($ses_data);
-
-                session()->setFlashdata('msg', 'Bienvenido');
-                return redirect()->to('/');
-
-            }else{
-                // Contraseña incorrecta
-                session()->setFlashdata('fallo_login', 'Contraseña Incorrecta');
-                return redirect()->to('/login');
-            }
+        // Limitar a 5 intentos por minuto por cada IP
+        if ($throttler->check(md5($this->request->getIPAddress()), 5, MINUTE) === false) {
+            return redirect()->back()->withInput()->with('error', 'Demasiados intentos. Por favor, espera un minuto.');
         }
-        else{
-            // Usuario o email no encontrado
-            session()->setFlashdata('fallo_login', 'Email o nombre de usuario incorrectos');
-            return redirect()->to('/login');
+
+        $resultado = $this->usuarioService->autenticar(
+            $this->request->getVar('email'),
+            $this->request->getVar('pass')
+        );
+
+        if($resultado['status'] === 'success') {
+            session()->regenerate();
+            session()->set($resultado['data']);
+            return redirect()->to('/')->with('success', '¡Bienvenido de nuevo!');
+        } else {
+            return redirect()->back()->withInput()->with('error', $resultado['message']);
         }
     }
 
     /**
-     * Destruye la sesión y realiza el logout del usuario.
-     *
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * Destruye la sesión.
      */
     public function logout() {
-        $session = session();
-        $session->destroy();
-
+        session()->destroy();
         return redirect()->to('/');
     }
 }

@@ -1,153 +1,143 @@
-<!-- Sección de encabezado -->
-<header class="comercializacion-header titulo-comercializacion">
-    <h1>Comercialización</h1>
-    <p class="lead">Cómo adquirir nuestros muebles artesanales</p>
-</header>
+<?= $this->extend('layout/main') ?>
 
-<!-- Contenedor principal -->
-<section class="container" id="container-comercializacion">
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/comercializacion.css?v=8.0')?>">
+<?= $this->endSection() ?>
 
-    <!-- Introducción -->
-    <div class="row my-3 p-3 contenedor-seccion">
-        <div class="col-lg-8 mx-auto text-center">
-            <p class="intro-text">
-                En CVA Muebles nos esforzamos por hacer que la adquisición de nuestros productos
-                sea tan placentera como su uso. Aquí encontrarás toda la información necesaria para realizar tu compra.
-            </p>
+<?= $this->section('content') ?>
+<div id="container-comercializacion-wrapper">
+    <!-- Sección de encabezado Premium (FONDO FIJO) -->
+    <header class="comercializacion-header">
+        <div class="container animate-fade-in">
+            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Transparencia y Confianza</span>
+            <h1 class="display-3 fw-bold font-lora">Comercialización</h1>
+            <div class="divider-artisan mx-auto mb-4"></div>
+            <p class="lead">Descubrí el camino que recorre cada una de nuestras piezas desde el taller hasta tu hogar.</p>
         </div>
-    </div>
+    </header>
 
-    <!-- Sección de métodos de pago y envíos -->
-    <div class="row my-3 p-3 contenedor-seccion g-4">
+    <!-- BLOQUE 1: INTRODUCCIÓN (BLANCO) -->
+    <section class="section-intro-comercializacion py-5 bg-white text-center">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="font-lora fw-bold text-cva-brown mb-4">El Compromiso CVA</h2>
+                    <p class="lead text-muted">
+                        En <strong>CVA Muebles</strong> nos esforzamos por hacer que la adquisición de nuestros productos
+                        sea tan placentera como su uso. Cada pieza es tratada con el respeto que merece la madera noble.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Formas de pago -->
-        <div class="col-md-6">
-            <div class="card-style h-100 p-4">
-                <h3 class="text-center mb-4 subtitulo-comercializacion">Formas de Pago</h3>
-                <p class="text-center mb-4">Aceptamos diversas formas de pago para tu comodidad:</p>
-
-                <div class="row g-3">
-                    <!-- Pago en efectivo -->
-                    <div class="col-md-6">
-                        <div class="card-style text-center p-3 h-100">
-                            <img src="assets/img/iconos/cash.svg" alt="Efectivo" class="icon-comercializacion">
-                            <h5 class="mt-3 subtitulo-comercializacion">Efectivo</h5>
-                            <p>Pago en nuestro taller o contra entrega</p>
+    <!-- BLOQUE 2: MÉTODOS DE PAGO (ARENA) -->
+    <section class="section-pagos-full py-5" style="background-color: var(--cva-sand);">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <span class="text-vivid fw-bold text-uppercase small" style="letter-spacing: 2px;">Inversión Segura</span>
+                    <h2 class="display-5 fw-bold font-lora text-cva-brown mt-2">Formas de Pago</h2>
+                    <p class="text-muted mt-3">Facilitamos tu inversión en calidad artesanal con diversas modalidades adaptadas a tu comodidad.</p>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="payment-card-premium">
+                                <div class="icon-wrap"><i class="bi bi-cash-stack"></i></div>
+                                <h5>Efectivo</h5>
+                                <p class="small text-muted mb-0">Bonificaciones especiales en taller o contra-entrega.</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Pago con tarjeta -->
-                    <div class="col-md-6">
-                        <div class="card-style text-center p-3 h-100">
-                            <img src="assets/img/iconos/credit-card.svg" alt="Tarjetas" class="icon-comercializacion">
-                            <h5 class="mt-3 subtitulo-comercializacion">Tarjetas</h5>
-                            <p>Visa, MasterCard y American Express (hasta 12 cuotas)</p>
+                        <div class="col-md-6">
+                            <div class="payment-card-premium">
+                                <div class="icon-wrap"><i class="bi bi-credit-card"></i></div>
+                                <h5>Tarjetas de Crédito</h5>
+                                <p class="small text-muted mb-0">Hasta 12 cuotas fijas con todos los bancos.</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Pago por transferencia -->
-                    <div class="col-md-6">
-                        <div class="card-style text-center p-3 h-100">
-                            <img src="assets/img/iconos/paypal.svg" alt="Transferencia" class="icon-comercializacion">
-                            <h5 class="mt-3 subtitulo-comercializacion">Transferencia</h5>
-                            <p>Bancaria o por Mercado Pago</p>
+                        <div class="col-md-6">
+                            <div class="payment-card-premium">
+                                <div class="icon-wrap"><i class="bi bi-bank"></i></div>
+                                <h5>Transferencia</h5>
+                                <p class="small text-muted mb-0">Bancaria o vía Mercado Pago de forma inmediata.</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Financiamiento -->
-                    <div class="col-md-6">
-                        <div class="card-style text-center p-3 h-100">
-                            <img src="assets/img/iconos/wallet.svg" alt="Financiación" class="icon-comercializacion">
-                            <h5 class="mt-3 subtitulo-comercializacion">Financiación</h5>
-                            <p>Planes especiales para pedidos mayores a $500.000</p>
+                        <div class="col-md-6">
+                            <div class="payment-card-premium">
+                                <div class="icon-wrap"><i class="bi bi-wallet2"></i></div>
+                                <h5>Financiación</h5>
+                                <p class="small text-muted mb-0">Planes a medida para proyectos especiales.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Envíos y entregas -->
-        <div class="col-md-6">
-            <div class="card-style h-100 p-4">
-                <h3 class="text-center mb-4 subtitulo-comercializacion">Envíos y Entregas</h3>
-                <p class="text-center mb-4">Realizamos envíos a todo la provincia con los siguientes tiempos estimados:</p>
-
-                <div class="pasos-envio">
-                    <!-- Fase 1: Fabricación -->
-                    <div class="card-style p-3 mb-3">
-                        <h5 class="fw-bold">1. Proceso de Fabricación</h5>
-                        <p>De 15 a 30 días hábiles según complejidad del mueble</p>
+    <!-- BLOQUE 3: LOGÍSTICA (VERDE BOSQUE) -->
+    <section class="section-logistica-full py-5" style="background-color: var(--cva-forest); color: white;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-6 mb-5 mb-lg-0 pe-lg-5">
+                    <span class="text-gold fw-bold text-uppercase small" style="letter-spacing: 2px;">Del Taller a tu Casa</span>
+                    <h2 class="display-5 fw-bold font-lora text-white mt-2">Logística Artesanal</h2>
+                    <p class="opacity-75 mt-3">Entendemos que un mueble de autor requiere un traslado a su altura. No somos solo un flete, somos custodios de tu pieza.</p>
+                    
+                    <div class="mt-5">
+                        <div class="d-flex align-items-center gap-4 mb-4">
+                            <div class="badge-logistica">01</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Fabricación Cuidadosa</h6>
+                                <p class="small opacity-75 mb-0">Respetamos los 15-30 días de creación artesanal.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-4 mb-4">
+                            <div class="badge-logistica">02</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Embalaje de Alta Resistencia</h6>
+                                <p class="small opacity-75 mb-0">Protección extrema para cada veta y arista.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="badge-logistica">03</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Entrega Especializada</h6>
+                                <p class="small opacity-75 mb-0">Personal capacitado para el manejo de muebles pesados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 bg-white rounded-5 p-5 shadow-lg text-cva-brown">
+                    <h3 class="font-lora fw-bold mb-4">Área de Cobertura</h3>
+                    <p class="text-muted mb-5">Llegamos a toda la provincia de **Corrientes** con logística propia. Consultanos por envíos nacionales.</p>
+                    
+                    <div class="p-4 rounded-4 mb-4" style="background: var(--cva-sand);">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-geo-alt-fill text-vivid fs-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Retiro en Taller</h6>
+                                <p class="small text-muted mb-0">Mantilla, Corrientes (Sin costo adicional)</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Fase 2: Embalaje -->
-                    <div class="card-style p-3 mb-3">
-                        <h5 class="fw-bold">2. Preparación para Envío</h5>
-                        <p>3 días hábiles para embalaje especializado</p>
-                    </div>
-
-                    <!-- Fase 3: Tiempo de tránsito -->
-                    <div class="card-style p-3">
-                        <h5 class="fw-bold">3. Tiempo de Tránsito</h5>
-                        <ul class="ps-3">
-                            <li>Localidades cercanas: 1-3 días</li>
-                            <li>Corrientes y otras localidades: 5-15 días</li>
-                        </ul>
-                    </div>
+                    <a href="<?= base_url('informacionContacto')?>" class="btn btn-vivid w-100 py-3 rounded-pill fw-bold">CONSULTAR COSTO DE ENVÍO</a>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Sección de cobertura de envíos y opción de retiro -->
-    <div class="row my-3 p-3 contenedor-seccion g-4">
-
-        <!-- Cobertura de envíos nacionales e internacionales -->
-        <div class="col-md-6">
-            <div class="card-style h-100 p-4">
-                <h3 class="text-center mb-4 subtitulo-comercializacion">Cobertura de Envíos</h3>
-                <p>Envíos seguros en toda la provincia de Corrientes.
-                Nos especializamos en llevar tus muebles con cuidado y dedicación a cada rincón de la provincia. Utilizamos transporte especializado para garantizar que cada pieza llegue en perfecto estado, tal como salió de nuestro taller.</p>
-
-                <!-- Botón para consultas de envíos -->
-                <div class="text-center mt-4">
-                    <a href="<?= base_url('informacionContacto')?>" class="btn boton-comercializacion text-dark">Consultas envio y costo</a>
-                </div>
-            </div>
+    <!-- BLOQUE 4: GARANTÍA (PREMIUM LIGHT ARTISAN) -->
+    <section class="section-garantia-full py-5" style="background-color: #fdfbf7; border-top: 1px solid rgba(184, 134, 11, 0.1); color: var(--cva-brown); text-align: center;">
+        <div class="container py-5 animate-fade-in">
+            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Seguridad y Garantía</span>
+            <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2 mb-4">Compromiso para Generaciones</h2>
+            <div class="mx-auto" style="width: 100px; height: 3px; background: var(--cva-gold); margin-bottom: 2.5rem;"></div>
+            <p class="lead mb-5 mx-auto" style="max-width: 800px; color: #5c4a44; font-weight: 500;">Cada mueble CVA cuenta con <strong>1 año de garantía estructural</strong>. Nuestra meta es que tu única preocupación sea disfrutar de la calidez de la madera en tu hogar.</p>
+            <a href="<?= base_url('terminosYCondiciones') ?>" class="btn btn-outline-brown px-5 py-3 rounded-pill fw-bold" style="letter-spacing: 2px;">VER TÉRMINOS Y CONDICIONES</a>
         </div>
-
-        <!-- Retiro en taller para clientes locales -->
-        <div class="col-md-6">
-            <div class="card-style h-100 p-4">
-                <h3 class="text-center mb-4 subtitulo-comercializacion">Retiro en Taller</h3>
-                <p class="text-center mb-4">Si resides en Corrientes o alrededores, puedes coordinar el retiro directo en nuestro taller:</p>
-
-                <ul class="ps-3 mb-4">
-                    <li>Horario de atención: Lunes a Viernes de 8:00 a 12:00 y de 15:00 a 19:00</li>
-                    <li>Dirección: 9 de Julio 1449, Mantilla, Corrientes</li>
-                    <li>Se recomienda coordinar previamente para preparar tu pedido</li>
-                </ul>
-
-                <!-- Botón para coordinar retiro -->
-                <div class="text-center">
-                    <a href="<?= base_url('informacionContacto')?>" class="btn boton-comercializacion text-dark">Coordinar retiro</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Garantía y soporte postventa -->
-    <div class="row my-3 p-3 contenedor-seccion">
-        <div class="col-12">
-            <div class="card-style p-4 text-center">
-                <h3 class="mb-4 subtitulo-comercializacion">Garantía y Soporte</h3>
-                <p class="mb-4 mx-auto" style="max-width: 800px;">
-                    Todos nuestros productos cuentan con garantía de 1 año por defectos de fabricación.
-                    Para reclamos o consultas postventa, contamos con un equipo especializado que te acompañará durante todo el proceso.
-                </p>
-
-                <!-- Botón para ver términos de garantía -->
-                <a href="<?= base_url('terminosYCondiciones') ?>" class="btn boton-comercializacion text-dark">Ver términos de garantía completos</a>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
+</div>
+<?= $this->endSection() ?>

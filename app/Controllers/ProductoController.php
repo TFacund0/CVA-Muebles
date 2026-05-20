@@ -2,232 +2,221 @@
 
 namespace App\Controllers;
 
-use App\Models\Productos_model;
-use App\Models\Usuario_model;
-use App\Models\Categorias_model;
-use CodeIgniter\Controller;
+use App\Models\CategoriaModel;
 
 /**
- * Controlador para la gestión de productos
- * 
- * Permite:
- * - Listar productos (activos/eliminados)
- * - Crear nuevos productos
- * - Editar productos existentes  
- * - Eliminar/activar productos (soft delete)
+ * Controlador para gestión de productos refactorizado para usar Capa de Servicios.
  */
 class ProductoController extends BaseController {
 
-    /**
-     * Constructor - Inicializa helpers y sesión
-     */
+    protected $productoService;
+    protected $categoriaService;
+
     public function __construct() {
-        helper(['url', 'form']);
-        $session = session(); // Inicia la sesión
-    }    
+        helper(['form', 'url', 'text']);
+        $this->productoService = new \App\Services\ProductoService();
+        $this->categoriaService = new \App\Services\CategoriaService();
+    }
 
     /**
-     * Muestra el listado de productos
-     * @return View Vista de administración de productos
+     * Muestra el listado de productos para administración.
      */
     public function index() {
-        $perfil = session()->get('perfil_id');
 
-        if ($perfil != 1) {
-            return redirect()->to('/login');
-        }
 
-        $productoModel = new Productos_model();
-        $vista = $this->request->getVar('vista') ?? 'NO'; // 'NO' para activos, 'SI' para eliminados
-
-        $data = [
-            'productos' => $productoModel->where('eliminado', $vista)->findAll(),
-            'select' => $this->request->getVar('option') ?? 10,
-            'vista' => $vista
-        ];
-
-        return view('front/main', [
-            'title' => 'Crud productos',
-            'content' => view('back/producto/crud_productos', $data),
+        $resultado = $this->productoService->getProductosConStats();
+        
+        return view('back/products/crud_productos', [
+            'productos' => $resultado['productos'],
+            'counts'    => $resultado['counts'],
+            'categorias' => $this->categoriaService->getCategoriasConStats(),
+            'vista'     => $this->request->getVar('vista') ?? 'NO',
+            'title'     => 'Gestión de Productos'
         ]);
     }
 
     /**
-     * Muestra el formulario de alta de producto
-     * @return View Vista del formulario de creación
+     * Muestra el formulario de alta de producto.
      */
     public function create_alta_producto() {
-        $perfil = session()->get('perfil_id');
 
-        if ($perfil != 1) {
-            return redirect()->to('/login');
-        }
 
-        $categoriasModel = new Categorias_model();
-        $data['categorias'] = $categoriasModel->getCategorias();
-
-        return view('front/main', [
-            'title' => 'Alta Producto',
-            'content' => view('back/producto/alta_producto', $data)
+        return view('back/products/alta_producto', [
+            'categorias' => $this->categoriaService->getCategoriasConStats(),
+            'title' => 'Alta de Producto'
         ]);
     }
 
     /**
-     * Valida y procesa el formulario de alta de producto
-     * @return Redirect Redirección con mensaje de éxito/error
+     * Valida y crea un producto delegando al servicio.
      */
     public function formValidation() {
+
+        // Validación estricta de la imagen para prevenir subida de archivos maliciosos (RCE)
         $rules = [
-            'nombre_producto' => 'required|min_length[3]|max_length[100]',
-            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]',
-            'precio' => 'required|numeric',
-            'precio-vta' => 'required|numeric',
-            'stock' => 'required|numeric',
-            'stock-min' => 'required|numeric'
+            'image' => 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]'
         ];
-
-        $messages = [
-            'nombre_producto' => [
-                'required' => 'El nombre del producto es obligatorio',
-                'min_length' => 'La cantidad mínima de caracteres es 3',
-                'max_length' => 'La cantidad máxima es de 100 caracteres'
-            ],
-            'image' => [
-                'uploaded' => 'La imagen del producto es obligatoria',
-                'is_image' => 'El archivo debe ser una imagen válida',
-                'mime_in' => 'La imagen debe ser de tipo jpg, jpeg o png'
-            ],
-            'precio' => [
-                'required' => 'El precio del producto es obligatorio',
-                'numeric' => 'El valor debe ser únicamente numérico'
-            ],
-            'precio-vta' => [
-                'required' => 'El precio de venta es obligatorio',
-                'numeric' => 'El valor debe ser únicamente numérico'
-            ],
-            'stock' => [
-                'required' => 'El stock es obligatorio',
-                'numeric' => 'El valor debe ser únicamente numérico'
-            ],
-            'stock-min' => [
-                'required' => 'El stock mínimo es obligatorio',
-                'numeric' => 'El valor debe ser únicamente numérico'
-            ]
-        ];
-
-        if (!$this->validate($rules, $messages)) {
-            session()->setFlashData('fail', 'No se cumple con todos los requisitos de los campos');
-            return $this->create_alta_producto();
+        
+        if ($this->request->getFile('image')->isValid() && !$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('fail', 'El archivo subido no es una imagen válida o supera los 2MB.');
         }
 
-        $image = $this->request->getFile('image');
-        $nombre_imagen = $image->getRandomName();
-        $image->move(ROOTPATH . 'assets/uploads', $nombre_imagen);
-
-        $data = [
-            'nombre_prod' => $this->request->getVar('nombre_producto'),
-            'imagen' => $image->getName(),
+        $resultado = $this->productoService->crearProducto([
+            'nombre_prod'  => $this->request->getVar('nombre_producto'),
             'categoria_id' => $this->request->getVar('categoria_id'),
-            'precio' => $this->request->getVar('precio'),
-            'precio_vta' => $this->request->getVar('precio-vta'),
-            'stock' => $this->request->getVar('stock'),
-            'stock_min' => $this->request->getVar('stock-min')
-        ];
+            'precio'       => $this->request->getVar('precio'),
+            'precio_vta'   => $this->request->getVar('precio-vta'),
+            'stock'        => $this->request->getVar('stock'),
+            'stock_min'    => $this->request->getVar('stock-min'),
+            'descripcion'  => $this->request->getVar('descripcion'),
+            'eliminado'    => $this->request->getVar('eliminado') ?? 'NO'
+        ], $this->request->getFile('image'));
 
-        $productoModel = new Productos_model();
-        $productoModel->insert($data);
-
-        session()->setFlashData('success', 'El producto se ingresó con éxito');
-        return redirect()->to('/alta-producto');
+        if ($resultado['status'] === 'success') {
+            return redirect()->to('/alta-producto')->with('success', $resultado['message']);
+        } else {
+            return redirect()->back()->withInput()->with('fail', $resultado['message']);
+        }
     }
 
     /**
-     * Marca un producto como eliminado (soft delete)
-     * @param int $id ID del producto a eliminar
-     * @return Redirect Redirección al listado
-     */
-    public function delete_producto($id) {
-        $productoModel = new Productos_model();
-        $productoModel->update($id, ['eliminado' => 'SI']);
-
-        $vista = $this->request->getGet('vista') ?? 'NO';
-        return redirect()->to('/crud-productos?vista=' . $vista);
-    }
-
-    /**
-     * Reactiva un producto marcado como eliminado
-     * @param int $id ID del producto a activar
-     * @return Redirect Redirección al listado
-     */
-    public function activar_producto($id) {
-        $productoModel = new Productos_model();
-        $productoModel->update($id, ['eliminado' => 'NO']);
-
-        $vista = $this->request->getGet('vista') ?? 'SI';
-        return redirect()->to('/crud-productos?vista=' . $vista);
-    }
-
-    /**
-     * Muestra el formulario de edición de producto
-     * @param int $id ID del producto a editar
-     * @return View Vista del formulario de edición
+     * Muestra el formulario de edición de producto.
      */
     public function index_editar_producto($id) {
-        $perfil = session()->get('perfil_id');
 
-        if ($perfil != 1) {
-            return redirect()->to('/login');
-        }
 
-        $productoModel = new Productos_model();
-        $categoriasModel = new Categorias_model();
+        $producto = $this->productoService->getProductoConGaleria($id);
+        if (!$producto) return redirect()->to('/crud-productos')->with('fail', 'Producto no encontrado');
 
-        $data = [
-            'producto' => $productoModel->find($id),
-            'categorias' => $categoriasModel->getCategorias()
-        ];
-
-        return view('front/main', [
-            'title' => 'Editar Producto',
-            'content' => view('back/producto/editar_producto', $data)
+        return view('back/products/editar_producto', [
+            'producto'   => $producto,
+            'categorias' => $this->categoriaService->getCategoriasConStats(),
+            'title'      => 'Editar Producto'
         ]);
     }
 
     /**
-     * Procesa la actualización de un producto
-     * @param int $id ID del producto a modificar
-     * @return Redirect Redirección con mensaje de éxito
+     * Actualiza un producto delegando al servicio.
      */
     public function modificar_producto($id) {
-        $productoModel = new Productos_model();
-        $img = $this->request->getFile('imagen');
 
-        if ($img && $img->isValid()) {
-            $nombre_aleatorio = $img->getRandomName();
-            $img->move(ROOTPATH . 'assets/uploads', $nombre_aleatorio);
 
-            $data = [
-                'imagen' => $img->getName(),
-                'nombre_prod' => $this->request->getVar('nombre_producto'),
-                'categoria_id' => $this->request->getVar('categoria_id'),
-                'precio' => $this->request->getVar('precio'),
-                'precio_vta' => $this->request->getVar('precio-vta'),
-                'stock' => $this->request->getVar('stock'),
-                'stock_min' => $this->request->getVar('stock-min')
-            ];
-        } else {
-            $data = [
-                'nombre_prod' => $this->request->getVar('nombre_producto'),
-                'categoria_id' => $this->request->getVar('categoria_id'),
-                'precio' => $this->request->getVar('precio'),
-                'precio_vta' => $this->request->getVar('precio-vta'),
-                'stock' => $this->request->getVar('stock'),
-                'stock_min' => $this->request->getVar('stock-min')
-            ];
+        // Validación estricta de la imagen principal
+        $rulesMain = [
+            'imagen' => 'is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen,2048]'
+        ];
+        
+        if ($this->request->getFile('imagen')->isValid() && !$this->validate($rulesMain)) {
+            return redirect()->back()->with('fail', 'La imagen principal no es válida o supera los 2MB.');
         }
 
-        $productoModel->update($id, $data);
-        session()->setFlashdata('success', 'Modificación exitosa');
-        return redirect()->to('/crud-productos');
+        // Actualizar datos básicos e imagen principal
+        $resultado = $this->productoService->actualizarProducto($id, [
+            'nombre_prod'  => $this->request->getVar('nombre_producto'),
+            'categoria_id' => $this->request->getVar('categoria_id'),
+            'precio'       => $this->request->getVar('precio'),
+            'precio_vta'   => $this->request->getVar('precio-vta'),
+            'stock'        => $this->request->getVar('stock'),
+            'stock_min'    => $this->request->getVar('stock-min'),
+            'descripcion'  => $this->request->getVar('descripcion')
+        ], $this->request->getFile('imagen'));
+
+        // Procesar galería adicional si vienen archivos
+        $galeria = $this->request->getFileMultiple('fotos_galeria');
+        if ($galeria) {
+            $this->productoService->subirImagenesGaleria($id, $galeria);
+        }
+
+        if ($resultado['status'] === 'success') {
+            return redirect()->to('/crud-productos')->with('success', $resultado['message']);
+        } else {
+            return redirect()->back()->with('fail', $resultado['message']);
+        }
     }
+
+    /**
+     * Elimina un producto delegando al servicio.
+     */
+    public function delete_producto($id) {
+
+        $this->productoService->eliminar($id);
+        return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'NO'));
+    }
+
+    /**
+     * Reactiva un producto delegando al servicio.
+     */
+    public function activar_producto($id) {
+
+        $this->productoService->reactivar($id);
+        return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'SI'));
+    }
+
+    /**
+     * Muestra el detalle del producto para el cliente.
+     */
+    public function ver_detalle($id) {
+        $producto = $this->productoService->getProductoConGaleria($id);
+        if (!$producto || $producto['eliminado'] == 'SI' || $producto['categoria_activa'] == 0) {
+            return redirect()->to('/productos')->with('fail', 'Producto no disponible.');
+        }
+
+        return view('front/pages/detalle_producto', [
+            'producto' => $producto,
+            'title'    => $producto['nombre_prod']
+        ]);
+    }
+
+    /**
+     * Sube fotos a la galería de un producto.
+     */
+    public function subir_fotos_galeria($id) {
+
+
+        // Validación estricta de imágenes múltiples
+        $rulesGaleria = [
+            'fotos_galeria' => 'is_image[fotos_galeria]|mime_in[fotos_galeria,image/jpg,image/jpeg,image/png,image/webp]|max_size[fotos_galeria,2048]'
+        ];
+
+        // Solo validamos si efectivamente subieron algo
+        $files = $this->request->getFileMultiple('fotos_galeria');
+        if ($files && $files[0]->isValid()) {
+            if (!$this->validate($rulesGaleria)) {
+                return redirect()->back()->with('fail', 'Una o más imágenes de la galería no son válidas o superan los 2MB.');
+            }
+        }
+
+        if ($this->productoService->subirImagenesGaleria($id, $files)) {
+            return redirect()->back()->with('success', 'Galería actualizada.');
+        }
+        return redirect()->back()->with('fail', 'No se pudieron subir las imágenes.');
+    }
+
+    /**
+     * Elimina una foto de la galería.
+     */
+    public function eliminar_foto_galeria($id) {
+
+
+        if ($this->productoService->eliminarImagenGaleria($id)) {
+            return redirect()->back()->with('success', 'Imagen eliminada.');
+        }
+        return redirect()->back()->with('fail', 'No se pudo eliminar la imagen.');
+    }
+
+    /**
+     * Elimina permanentemente un producto delegando al servicio.
+     */
+    public function eliminar_permanente($id) {
+
+        
+        $resultado = $this->productoService->eliminarPermanente($id);
+        
+        if ($resultado['status'] === 'success') {
+            return redirect()->to('/crud-productos?vista=SI')->with('success', $resultado['message']);
+        } else {
+            return redirect()->to('/crud-productos?vista=SI')->with('fail', $resultado['message']);
+        }
+    }
+
 }

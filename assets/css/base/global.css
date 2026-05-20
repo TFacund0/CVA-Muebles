@@ -1,0 +1,197 @@
+/* 
+  =============================================
+  CVA MUEBLES - GLOBAL DESIGN SYSTEM
+  =============================================
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Lora:wght@400;700&display=swap');
+
+:root {
+    /* Color Palette - VIVID ARTISAN EDITION */
+    --cva-brown: #2D1B19;       /* Marrón más profundo y rico */
+    --cva-brown-light: #5D4037;
+    --cva-gold: #E5A00D;        /* Oro más vibrante y luminoso */
+    --cva-gold-light: #F1C40F;
+    --cva-vivid: #D35400;       /* Terracota/Óxido (Color de atracción) */
+    --cva-forest: #1E3D33;      /* Verde Bosque profundo (Contraste premium) */
+    --cva-parchment: #f8f5f0;
+    --cva-sand: #efede6;       /* Color arena para alternar secciones y dar descanso visual */
+    --cva-white: #FFFFFF;
+    --cva-text: #2D1B19;
+    --cva-text-muted: #6C757D;
+
+    /* Spacing System */
+    --space-xs: 0.5rem;
+    --space-sm: 1rem;
+    --space-md: 2rem;
+    --space-lg: 4rem;
+    --space-xl: 8rem;
+
+    /* Typography */
+    --font-main: 'Outfit', sans-serif;
+    --font-heading: 'Lora', serif;
+
+    /* Transitions */
+    --transition-base: all 0.3s ease;
+
+    /* Component Tokens */
+    --navbar-height: 80px;
+    --navbar-bg: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5));
+    --sidebar-bg: #fdfaf7;
+    --sidebar-header: #EAE0D5; /* Marrón muy claro / Café con leche */
+    --sidebar-header-text: var(--cva-brown);
+
+    /* Admin Tokens */
+    --admin-bg: #f8f9fa;
+    --admin-card-header: var(--cva-brown);
+    --admin-accent: var(--cva-gold);
+    --admin-table-hover: #fffbf5;
+}
+
+/* Base Reset & Typography */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--cva-sand) !important;
+    font-family: var(--font-main);
+    color: var(--cva-text);
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+
+}
+
+/* Utility class for Brand Color */
+.text-artisan {
+    color: var(--cva-brown) !important;
+}
+
+.text-gold {
+    color: var(--cva-gold) !important;
+}
+
+/* Global Utilities */
+.text-cva-brown {
+    color: var(--cva-brown);
+}
+
+.text-cva-gold {
+    color: var(--cva-gold);
+}
+
+.bg-cva-brown {
+    background-color: var(--cva-brown);
+}
+
+.bg-cva-parchment {
+    background-color: var(--cva-parchment);
+}
+
+/* Common Artisan Button */
+.btn-artisan {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition-base);
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.btn-artisan-primary {
+    background-color: var(--cva-gold);
+    color: var(--cva-white);
+    border-color: var(--cva-gold);
+    box-shadow: 0 4px 15px rgba(229, 160, 13, 0.2);
+}
+
+.btn-artisan-primary:hover {
+    background-color: var(--cva-brown);
+    color: var(--cva-white);
+    border-color: var(--cva-brown);
+    transform: translateY(-2px);
+}
+
+/* New Vivid Attraction Button */
+.btn-vivid {
+    background-color: var(--cva-vivid) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.8rem 2.5rem !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 20px rgba(211, 84, 0, 0.3);
+    transition: var(--transition-base);
+}
+
+.btn-vivid:hover {
+    background-color: #A04000 !important;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(211, 84, 0, 0.4);
+}
+
+/* New Gold Premium Button */
+.btn-gold {
+    background-color: var(--cva-gold) !important;
+    color: white !important;
+    border: 2px solid var(--cva-gold) !important;
+    padding: 0.8rem 2.5rem !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 20px rgba(229, 160, 13, 0.3);
+    transition: var(--transition-base);
+}
+
+.btn-gold:hover {
+    background-color: #C18300 !important;
+    border-color: #C18300 !important;
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(229, 160, 13, 0.4) !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-slide-down {
+    animation: slideDown 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+}

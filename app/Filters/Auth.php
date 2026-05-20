@@ -12,6 +12,9 @@ class Auth implements FilterInterface
     {
         // Si el usuario no está logueado
         if (!session()->get('logged_in')) {
+            if ($request->isAJAX()) {
+                return service('response')->setJSON(['status' => 'error', 'message' => 'Debes iniciar sesión para realizar esta acción.'])->setStatusCode(401);
+            }
             // Redirecciona a la página de login
             return redirect()->to('/login')
                 ->with('error', 'Por favor inicia sesión para acceder a esta página');

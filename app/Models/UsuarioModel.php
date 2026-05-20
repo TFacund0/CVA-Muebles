@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+use CodeIgniter\Model;
+
+class UsuarioModel extends Model 
+{
+    protected $table = 'usuarios';
+    protected $primaryKey = 'id_usuario';
+    protected $allowedFields = ['nombre', 'apellido', 'usuario', 'email', 'pass', 'imagen', 'perfil_id', 'baja'];
+    
+    protected $validationRules = [
+        'nombre'    => 'required|min_length[2]|max_length[50]',
+        'apellido'  => 'required|min_length[2]|max_length[50]',
+        'usuario'   => 'required|min_length[3]|max_length[20]|is_unique[usuarios.usuario,id_usuario,{id_usuario}]',
+        'email'     => 'required|valid_email|max_length[100]|is_unique[usuarios.email,id_usuario,{id_usuario}]',
+        'perfil_id' => 'required|numeric'
+    ];
+
+    public function getUsuariosAll() {
+        return $this->select('usuarios.*, perfiles.descripcion as perfil')
+                    ->join('perfiles', 'perfiles.id = usuarios.perfil_id')
+                    ->findAll();
+    }
+}

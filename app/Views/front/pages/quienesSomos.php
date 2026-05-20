@@ -1,93 +1,164 @@
-<!-- Sección de encabezado con título y subtítulo -->
-<header class="header-section">
-    <div class="container-fluid text-center p-5 fondo-header">
-        <h1>Quiénes Somos?</h1>
-        <p class="lead mt-5">Artesanía en madera con tradición y pasión</p>
-    </div>
-</header>
+<?= $this->extend('layout/main') ?>
 
-<!-- Sección principal del contenido -->
-<section class="container container-quienes-somos">
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/quienesSomos.css?v=6.1')?>">
+<?= $this->endSection() ?>
 
-    <!-- SECCIÓN: Nuestra Historia -->
-    <div class="row my-5 p-3 py-4 gap-3 d-flex justify-content-around contenedor-historia">
-        
-        <!-- Texto de la historia -->
-        <div class="col-lg-6 col-sm-12 texto-historia-section">
-            <h2 class="section-title">Nuestra Historia</h2>
-            <p class="mt-3">
-                Fundada en 2023 en el barrio Mantilla, Corrientes, CVA Muebles es un taller familiar donde la madera cobra vida.
-                Lo que empezó como un sueño de crear muebles con alma, hoy se materializa en piezas únicas, hechas a mano con dedicación y pasión. Aunque somos pequeños en tamaño, nos enorgullece ofrecer calidad, calidez y atención personalizada a cada cliente.
-                "Cada mueble que sale de nuestro taller lleva no solo madera, sino también el cuidado y el oficio de quienes lo hacemos posible."
-            </p>
-            <p>
-                Nos especializamos en crear piezas únicas donde cada veta de madera cuenta una historia. 
-                Nuestros diseños combinan técnicas tradicionales con un enfoque contemporáneo, resultando en muebles que son verdaderas obras de arte funcionales.
-            </p>
+<?= $this->section('content') ?>
+<div id="quienes-somos-wrapper">
+    <!-- Cabecera Premium (FONDO FIJO) -->
+    <header class="info-header">
+        <div class="container animate-fade-in">
+            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Tradición Familiar</span>
+            <h1 class="display-3 fw-bold font-lora">El Alma de CVA</h1>
+            <div class="divider-artisan mx-auto mb-4"></div>
+            <p class="lead">Más que muebles, creamos legados tallados en la nobleza de la madera correntina.</p>
         </div>
+    </header>
 
-        <!-- Imagen representativa de la historia -->
-        <div class="col-lg-5 col-sm-12 d-flex img-historia-section">
-            <img src="assets/img/texturas/carpienteria.jpg" 
-                alt="Taller CVA Muebles" 
-                class="img-fluid history-img">
+    <!-- BLOQUE 1: HISTORIA (BLANCO / SPLIT) -->
+    <section class="section-historia-full bg-white overflow-hidden">
+        <div class="row g-0 align-items-center">
+            <div class="col-lg-6 order-2 order-lg-1">
+                <div class="img-historia-full" style="background-image: url('<?= base_url('assets/img/ui/textures/carpienteria.jpg') ?>'); min-height: 700px; background-size: cover; background-position: center;"></div>
+            </div>
+            <div class="col-lg-6 p-5 p-xl-5 order-1 order-lg-2">
+                <div class="max-width-600 mx-auto">
+                    <span class="text-gold fw-bold text-uppercase small" style="letter-spacing: 2px;">Nuestros Inicios</span>
+                    <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2 mb-4">Legado y Tradición</h2>
+                    <p class="lead text-muted mb-4">
+                        CVA Muebles nace en el corazón de Mantilla, Corrientes, como un tributo al oficio artesano y la nobleza de la madera. Bajo la visión de <strong>César Víctor Acevedo</strong>, nuestro taller se ha convertido en un referente de la <em>Carpintería de Autor</em>.
+                    </p>
+                    <p class="text-muted mb-5">
+                        Lo que comenzó como una pasión familiar por transformar la materia prima, hoy es una realidad que combina técnicas tradicionales de ebanistería con un diseño contemporáneo. En CVA no fabricamos muebles en serie; creamos compañeros de vida.
+                    </p>
+                    <div class="artisan-quote-premium">
+                        <p class="fst-italic mb-0">
+                            "Nuestra misión es que cada mueble cuente una historia de calidad, calidez y herencia correntina."
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- SECCIÓN: Nuestra Filosofía -->
-    <div class="container-fluid text-center contenedor-filosofia p-3">
-        <h2 class="section-title">Nuestra Filosofía</h2>
-        <p class="lead">
-            "En cada pieza que creamos, ponemos el mismo cuidado que pondríamos en un mueble para nuestra propia casa"
-        </p>
-        <p>
-            Creemos en la sustentabilidad, por eso trabajamos con maderas de reforestación y aprovechamos cada centímetro del material. 
-            Nuestro proceso artesanal garantiza que cada pieza sea única, con ese pequeño detalle imperfecto que la hace especial.
-        </p>
-    </div>
+    <!-- BLOQUE 2: FILOSOFÍA (ARENA) -->
+    <section class="section-filosofia-full py-5" style="background-color: var(--cva-sand);">
+        <div class="container py-5 text-center">
+            <div class="row">
+                <div class="col-lg-9 mx-auto">
+                    <span class="text-vivid fw-bold text-uppercase small" style="letter-spacing: 2px;">Nuestra Esencia</span>
+                    <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2 mb-5">Compromiso Artesano</h2>
+                    <p class="display-6 font-lora italic text-muted mb-5" style="line-height: 1.4;">
+                        "En cada pieza que creamos, ponemos el mismo cuidado que pondríamos en un mueble para nuestra propia casa"
+                    </p>
+                    <div class="row g-4 mt-4">
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <i class="bi bi-tree fs-2 text-gold"></i>
+                                <h6 class="fw-bold mt-3">Sustentabilidad</h6>
+                                <p class="small text-muted">Maderas de reforestación y proceso residuo cero.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <i class="bi bi-hammer fs-2 text-gold"></i>
+                                <h6 class="fw-bold mt-3">Hecho a Mano</h6>
+                                <p class="small text-muted">Técnicas de ebanistería tradicional correntina.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="value-card">
+                                <i class="bi bi-award fs-2 text-gold"></i>
+                                <h6 class="fw-bold mt-3">Calidad Eterna</h6>
+                                <p class="small text-muted">Muebles diseñados para pasar de generación en generación.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- SECCIÓN: Nuestro Equipo -->
-    <div class="container-fluid my-5 contenedor-equipo">
-        <h2 class="section-title">Nuestro Equipo</h2>
-
-        <div class="row team-box mx-auto">
+<!-- BLOQUE 3: EQUIPO (VERDE BOSQUE DINÁMICO) -->
+    <section class="section-equipo-full py-5" style="background-color: var(--cva-forest); color: white;">
+        <div class="container py-5">
+            <div class="row mb-5 text-center">
+                <div class="col-lg-8 mx-auto">
+                    <span class="text-gold fw-bold text-uppercase small" style="letter-spacing: 2px;">El Factor Humano</span>
+                    <h2 class="display-4 fw-bold font-lora text-white mt-2">Manos Maestras</h2>
+                    <div class="divider-artisan mx-auto mb-4"></div>
+                </div>
+            </div>
             
-            <!-- Miembro 1 -->
-            <div class="col-md-4 col-sm-12">
-                <div class="card team-card">
-                    <img src="assets/img/team/viejo.jpg" class="card-img-top" alt="Carlos Vega">
-                    <div class="card-body">
-                        <h5>Acevedo Cesar</h5>
-                        <p class="position">Fundador y Maestro Carpintero</p>
-                        <p>Con más de 25 años de experiencia, Cesar es el alma master de nuestros diseños. Especialista en muebles rústicos y tallado artesanal.</p>
+            <div class="row g-4">
+                <!-- Miembro 1 -->
+                <div class="col-md-4">
+                    <div class="team-card-premium">
+                        <div class="team-img-wrapper">
+                            <img src="<?= base_url('assets/img/team/viejo.jpg') ?>" alt="Acevedo Cesar">
+                            <div class="team-overlay">
+                                <div class="social-links-team">
+                                    <a href="#"><i class="bi bi-instagram"></i></a>
+                                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-body text-center">
+                            <h5 class="fw-bold mb-1">Acevedo Cesar</h5>
+                            <p class="text-gold small fw-bold text-uppercase mb-3">Maestro Ebanista</p>
+                            <div class="team-bio-short">
+                                <p class="small opacity-75">Más de 25 años transformando la madera en arte. Especialista en tallado a mano.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Miembro 2 -->
-            <div class="col-md-4 col-sm-12">
-                <div class="card team-card">
-                    <img src="assets/img/team/diseñadora.jpg" class="card-img-top" alt="Valeria Acevedo">
-                    <div class="card-body">
-                        <h5>Valeria Acevedo</h5>
-                        <p class="position">Diseñadora y Proyectista</p>
-                        <p>Combina su formación en diseño industrial con técnicas tradicionales para crear piezas que son tendencia pero con raíces artesanales.</p>
+                <!-- Miembro 2 -->
+                <div class="col-md-4">
+                    <div class="team-card-premium">
+                        <div class="team-img-wrapper">
+                            <img src="<?= base_url('assets/img/team/diseñadora.jpg') ?>" alt="Valeria Acevedo">
+                            <div class="team-overlay">
+                                <div class="social-links-team">
+                                    <a href="#"><i class="bi bi-instagram"></i></a>
+                                    <a href="#"><i class="bi bi-behance"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-body text-center">
+                            <h5 class="fw-bold mb-1">Valeria Acevedo</h5>
+                            <p class="text-gold small fw-bold text-uppercase mb-3">Diseñadora Industrial</p>
+                            <div class="team-bio-short">
+                                <p class="small opacity-75">Fusiona lo contemporáneo con lo tradicional para crear piezas que son tendencia.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Miembro 3 -->
-            <div class="col-md-4 col-sm-12">
-                <div class="card team-card">
-                    <img src="assets/img/team/diseñador.jpg" class="card-img-top" alt="Andrés Rojas">
-                    <div class="card-body">
-                        <h5>Andrés Rojas</h5>
-                        <p class="position">Especialista en Acabados</p>
-                        <p>Maestro en el arte de los acabados, Andrés da a cada pieza su carácter único mediante técnicas de envejecido y tratamientos naturales.</p>
+                <!-- Miembro 3 -->
+                <div class="col-md-4">
+                    <div class="team-card-premium">
+                        <div class="team-img-wrapper">
+                            <img src="<?= base_url('assets/img/team/diseñador.jpg') ?>" alt="Andrés Rojas">
+                            <div class="team-overlay">
+                                <div class="social-links-team">
+                                    <a href="#"><i class="bi bi-instagram"></i></a>
+                                    <a href="#"><i class="bi bi-facebook"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="team-body text-center">
+                            <h5 class="fw-bold mb-1">Andrés Rojas</h5>
+                            <p class="text-gold small fw-bold text-uppercase mb-3">Maestro de Acabados</p>
+                            <div class="team-bio-short">
+                                <p class="small opacity-75">Dota a cada pieza de un carácter único con técnicas de envejecido natural.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-</section>
+            </div> <!-- Fin Row Equipo -->
+        </div> <!-- Fin Container Equipo -->
+    </section>
+</div>
+<?= $this->endSection() ?>

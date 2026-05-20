@@ -1,161 +1,117 @@
-    <!-- Encabezado  -->
-    <header class="terminos-encabezado py-5 text-white text-center">
-        <div class="container">
-            <h1 class="display-4">Términos y Usos</h1>
-            <p class="lead">Conoce nuestras políticas y condiciones</p>
+<?= $this->extend('layout/main') ?>
+
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/condiciones.css?v=2.0')?>">
+<?= $this->endSection() ?>
+
+<?= $this->section('content') ?>
+<div id="container-condiciones-wrapper">
+    <!-- Cabecera Premium (Sello del Sitio) -->
+    <header class="condiciones-header">
+        <div class="container animate-fade-in">
+            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Transparencia CVA</span>
+            <h1 class="display-3 fw-bold font-lora">Marco Legal</h1>
+            <div class="divider-artisan mx-auto mb-4"></div>
+            <p class="lead">Nuestros compromisos y tus derechos en un lenguaje claro y artesanal.</p>
         </div>
     </header>
 
-    <!-- Contenedor principal -->
-    <section class="container-fluid" id="terminos-contenido">
-        <div class="row my-3 p-3 terminos-fondo">
-            <div class="col-12">
-
-                <!-- Política de Privacidad -->
-                <div class="terminos-seccion bg-white p-4 mb-4">
-                    <h2 class="mb-4 border-bottom pb-2">Política de Privacidad</h2>
-                    <p>En CVA Muebles nos comprometemos a proteger la privacidad de nuestros clientes. Esta política explica cómo recopilamos, usamos y protegemos su información personal.</p>
-
-                    <h3 class="mt-4">Información que recopilamos</h3>
-                    <ul class="list-group list-group-flush mb-4">
-                        <li class="list-group-item bg-transparent">Nombre y datos de contacto</li>
-                        <li class="list-group-item bg-transparent">Información demográfica</li>
-                        <li class="list-group-item bg-transparent">Información para encuestas/ofertas</li>
-                    </ul>
-
-                    <h3 class="mt-4">Uso de la información</h3>
-                    <ul class="list-group list-group-flush mb-4">
-                        <li class="list-group-item bg-transparent">Mantenimiento de registros</li>
-                        <li class="list-group-item bg-transparent">Mejora de servicios</li>
-                        <li class="list-group-item bg-transparent">Correos promocionales</li>
-                    </ul>
-
-                    <div class="resumen-aviso p-3 my-3 bg-warning bg-opacity-10">
-                        <p class="mb-0"><strong>No compartimos su información personal</strong> sin su consentimiento o salvo requerimiento legal.</p>
-                    </div>
-                </div>
-
-                <!-- Términos de Venta -->
-                <div class="terminos-seccion bg-white p-4 mb-4">
-                    <h2 class="mb-4 border-bottom pb-2">Términos de Venta</h2>
-                    <p>Al realizar un pedido en CVA Muebles, usted acepta los siguientes términos:</p>
-
-                    <div class="row mt-4">
-                        <div class="col-md-4 mb-3">
-                            <div class="terminos-tarjeta h-100 p-3">
-                                <h4>Proceso de Compra</h4>
-                                <ul class="mt-3">
-                                    <li>Precios en pesos argentinos</li>
-                                    <li>Fabricación por encargo</li>
-                                    <li>50% de anticipo</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="terminos-tarjeta h-100 p-3">
-                                <h4>Envíos</h4>
-                                <ul class="mt-3">
-                                    <li>Costos según destino</li>
-                                    <li>Tiempos estimados</li>
-                                    <li>Verificación al recibir</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="terminos-tarjeta h-100 p-3">
-                                <h4>Devoluciones</h4>
-                                <ul class="mt-3">
-                                    <li>10 días para devoluciones</li>
-                                    <li>Producto en mismas condiciones</li>
-                                    <li>48h para reclamos por daños</li>
-                                </ul>
-                            </div>
+    <!-- CUERPO DEL DOCUMENTO (NUEVO PATRÓN: Sidebar + Documento) -->
+    <section class="section-legal-document py-5 bg-white">
+        <div class="container py-5">
+            <div class="row g-5">
+                <!-- Navegación Sticky (Izquierda) -->
+                <div class="col-lg-3 d-none d-lg-block">
+                    <div class="sticky-top" style="top: 100px;">
+                        <h5 class="fw-bold text-cva-brown mb-4 text-uppercase small" style="letter-spacing: 2px;">Contenido</h5>
+                        <nav id="legal-nav" class="nav flex-column border-start border-2 border-light ps-3">
+                            <a class="nav-link text-muted py-2 active" href="#privacidad">01. Privacidad</a>
+                            <a class="nav-link text-muted py-2" href="#venta">02. Términos de Venta</a>
+                            <a class="nav-link text-muted py-2" href="#garantia">03. Garantías</a>
+                            <a class="nav-link text-muted py-2" href="#sitio">04. Uso del Sitio</a>
+                        </nav>
+                        <div class="mt-5 p-4 rounded-4 bg-sand-light border-gold-subtle shadow-sm">
+                            <p class="small text-muted mb-0 italic">¿Tenés dudas legales? <br> <a href="mailto:info@cvamuebles.com" class="text-vivid fw-bold">Contactanos</a></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Garantías -->
-                <div class="terminos-seccion bg-white p-4 mb-4">
-                    <h2 class="mb-4 border-bottom pb-2">Garantías y Soporte</h2>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="terminos-tarjeta h-100 p-3 bg-success bg-opacity-10">
-                                <h4>Cobertura Incluida</h4>
-                                <ul class="mt-3">
-                                    <li>Defectos en materiales</li>
-                                    <li>Problemas estructurales</li>
-                                    <li>Fallos en ensamblaje</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="terminos-tarjeta h-100 p-3 bg-danger bg-opacity-10">
-                                <h4>No Cubierto</h4>
-                                <ul class="mt-3">
-                                    <li>Daños por uso inadecuado</li>
-                                    <li>Modificaciones</li>
-                                    <li>Desgaste normal</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="terminos-tarjeta p-3 mt-4 bg-info bg-opacity-10">
-                        <h4>Soporte Postventa</h4>
-                        <p>Asesoramiento gratuito por 3 meses. Contáctanos: <strong>soporte@cvamuebles.com</strong></p>
-                    </div>
-                </div>
-
-                <!-- Uso del Sitio -->
-                <div class="terminos-seccion bg-white p-4 mb-4">
-                    <h2 class="mb-4 border-bottom pb-2">Uso del Sitio Web</h2>
-                    <div class="accordion" id="acordeon-uso-sitio">
-                        <div class="accordion-item">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contenido-propiedad">
-                                    Propiedad Intelectual
-                                </button>
-                            </h3>
-                            <div id="contenido-propiedad" class="accordion-collapse collapse" data-bs-parent="#acordeon-uso-sitio">
-                                <div class="accordion-body">
-                                    Todos los contenidos del sitio son propiedad exclusiva de CVA Muebles.
+                <!-- Documento (Derecha) -->
+                <div class="col-lg-9">
+                    <div class="artisan-paper-document p-5 rounded-4 shadow-sm">
+                        <!-- 01. Privacidad -->
+                        <div id="privacidad" class="legal-section mb-5 pb-5 border-bottom">
+                            <span class="badge-legal-num">01</span>
+                            <h2 class="font-lora fw-bold text-cva-brown mt-3">Política de Privacidad</h2>
+                            <p class="lead text-muted mt-4">En CVA Muebles tratamos tu información con el mismo respeto que le damos a la madera nativa.</p>
+                            <div class="mt-4 text-muted">
+                                <p>Recopilamos datos mínimos necesarios para la entrega de tus productos y la mejora de nuestra atención. No compartimos tus datos con terceros sin tu consentimiento explícito.</p>
+                                <div class="bg-light p-4 rounded-4 border-start border-4 border-gold mt-4">
+                                    <p class="mb-0 small fw-bold">Dato Clave: Tu información está protegida bajo estándares de encriptación modernos.</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="accordion-item mt-2">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contenido-enlaces">
-                                    Enlaces a Terceros
-                                </button>
-                            </h3>
-                            <div id="contenido-enlaces" class="accordion-collapse collapse" data-bs-parent="#acordeon-uso-sitio">
-                                <div class="accordion-body">
-                                    No nos responsabilizamos por el contenido de sitios externos enlazados.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item mt-2">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contenido-cookies">
-                                    Cookies
-                                </button>
-                            </h3>
-                            <div id="contenido-cookies" class="accordion-collapse collapse" data-bs-parent="#acordeon-uso-sitio">
-                                <div class="accordion-body">
-                                    Usamos cookies para mejorar la experiencia del usuario.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="resumen-aviso p-3 mt-4 bg-primary bg-opacity-10">
-                        <p>Al utilizar nuestro sitio, usted acepta estos términos en su totalidad.</p>
-                    </div>
-                </div>
 
-                <!-- Navegación -->
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="#" class="btn btn-outline-dark">Volver arriba</a>
-                    <a href="<?= base_url('informacionContacto') ?>" class="btn btn-outline-dark">Contáctanos</a>
+                        <!-- 02. Términos de Venta -->
+                        <div id="venta" class="legal-section mb-5 pb-5 border-bottom">
+                            <span class="badge-legal-num">02</span>
+                            <h2 class="font-lora fw-bold text-cva-brown mt-3">Términos de Venta</h2>
+                            <div class="row g-4 mt-4">
+                                <div class="col-md-6">
+                                    <div class="legal-mini-card">
+                                        <h6>Fabricación</h6>
+                                        <p class="small text-muted">Iniciamos la producción artesanal una vez acreditado el 50% del presupuesto.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="legal-mini-card">
+                                        <h6>Envíos</h6>
+                                        <p class="small text-muted">La logística es coordinada según disponibilidad del taller y zona de entrega.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 03. Garantías -->
+                        <div id="garantia" class="legal-section mb-5 pb-5 border-bottom">
+                            <span class="badge-legal-num">03</span>
+                            <h2 class="font-lora fw-bold text-cva-brown mt-3">Garantías y Soporte</h2>
+                            <p class="mt-4 text-muted">Ofrecemos un compromiso de <strong>12 meses de garantía estructural</strong> en todos nuestros muebles.</p>
+                            <div class="alert alert-cva-info mt-4">
+                                <i class="bi bi-info-circle-fill me-2"></i> No cubrimos daños por humedad extrema, exposición directa al sol prolongada o uso indebido de productos químicos.
+                            </div>
+                        </div>
+
+                        <!-- 04. Uso del Sitio -->
+                        <div id="sitio" class="legal-section mb-5">
+                            <span class="badge-legal-num">04</span>
+                            <h2 class="font-lora fw-bold text-cva-brown mt-3">Uso del Sitio Web</h2>
+                            <p class="mt-4 text-muted">Todos los diseños y fotografías son propiedad intelectual de <strong>CVA Muebles</strong>. Queda prohibida su reproducción sin permiso.</p>
+                            
+                            <div class="accordion accordion-flush mt-4" id="legalAccordion">
+                                <div class="accordion-item border-bottom-0">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed px-0 bg-white shadow-none fw-bold text-cva-brown" type="button" data-bs-toggle="collapse" data-bs-target="#accPropiedad">
+                                            Propiedad Intelectual
+                                        </button>
+                                    </h2>
+                                    <div id="accPropiedad" class="accordion-collapse collapse" data-bs-parent="#legalAccordion">
+                                        <div class="accordion-body px-0 text-muted small">
+                                            Los planos de diseño y fotografías de catálogo son activos propios.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end mt-5 pt-5 border-top opacity-50">
+                            <img src="<?= base_url('assets/img/ui/logo-cva.png') ?>" alt="Sello CVA" style="height: 30px; filter: grayscale(1);">
+                            <p class="x-small mb-0 mt-2">Documento validado para 2026</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+</div>
+<?= $this->endSection() ?>

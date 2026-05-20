@@ -1,72 +1,142 @@
-<section id="productos" class="contenedor-productos text-center">
-    <div class="titulo-productos text-center">
-        <h2>Productos</h2>
-        <p>Elegí una categoría o mirá todo</p>
+<?= $this->extend('layout/main') ?>
+
+<?= $this->section('extra-css') ?>
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/productos.css?v=11.0') ?>">
+<?= $this->endSection() ?>
+
+<?= $this->section('content') ?>
+<section id="productos" class="contenedor-productos">
+    <!-- Cabecera Premium -->
+    <div class="header-productos text-center shadow-sm">
+        <div class="container">
+            <h2 class="text-uppercase display-4">Catálogo de Productos</h2>
+            <p>Descubrí piezas únicas diseñadas para durar toda la vida. Cada mueble cuenta una historia de tradición y madera seleccionada.</p>
+            <div class="divider-artisan"></div>
+        </div>
     </div>
 
-    <!-- Grid de productos -->
-    <div class="container-lg container-fluid-md p-4 my-4" id="catalogo-productos">
 
-        <!-- Filtro de categorías dinámico -->
-        <div class="categorias-scroll py-3 mb-4 filtro-categorias">
-            <div class="d-flex flex-nowrap overflow-auto gap-3 px-3">
-                <button type="button" class="btn btn-outline-warning filtro-categoria" data-categoria="todos">Todos</button>
-                <?php foreach ($categorias as $cat) { ?>
-                    <button type="button" class="btn btn-outline-warning filtro-categoria" data-categoria="<?= esc($cat['descripcion']) ?>">
+    <!-- Contenedor de muebles (Mi diseño artisan) -->
+    <div class="container-lg" id="catalogo-productos">
+
+        <!-- Pestañas de Filtro -->
+        <div class="filter-container mb-5 animate-fade-in">
+            <div class="filter-group d-flex">
+                <button type="button" class="btn filtro-categoria active" data-categoria="todos">Todos</button>
+                <?php
+                $descripciones_vistas = [];
+                foreach ($categorias as $cat):
+                    $desc = trim(mb_strtolower($cat['descripcion']));
+                    if (in_array($desc, $descripciones_vistas)) continue;
+                    $descripciones_vistas[] = $desc;
+                ?>
+                    <button type="button" class="btn filtro-categoria" data-categoria="<?= esc($cat['descripcion']) ?>">
                         <?= esc($cat['descripcion']) ?>
                     </button>
-                <?php } ?>
+                <?php endforeach; ?>
             </div>
         </div>
 
-        <div class="row" id="lista-productos">
-            <?php foreach ($producto as $row) { ?>
-                <div class="col-md-4 col-sm-6 mb-4" data-categorias="<?= esc($row['categoria']) ?>">
-                    <div class="card h-100 product-card">
-
-                        <img src="<?= base_url('assets/uploads/' . $row['imagen']) ?>" class="card-img-top h-100" alt="<?= esc($row['nombre_prod']) ?>">
-                        
-                        <div class="card-body">
-                            <h5 class="card-title"><?= esc($row['nombre_prod']) ?></h5>
-                            
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="fw-bold">Precio: $<?= esc($row['precio_vta']) ?></p>
-                                <p class="fw-bold">Stock: <?= esc($row['stock']) ?></p>
-                            </div>
-                        </div>
-
-                        <?php if (session()->get('logged_in')) { ?>
-
-                        <div class="card-footer">
-                            <form action="<?= base_url('carrito/add') ?>" method="post">
-                                <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
-                                <input type="hidden" name="id_producto" value="<?= esc($row['id_producto']) ?>">
-                                <input type="hidden" name="precio_vta" value="<?= esc($row['precio_vta']) ?>">
-                                <input type="hidden" name="nombre_prod" value="<?= esc($row['nombre_prod']) ?>">
-                                <input type="hidden" name="imagen" value="<?= esc($row['imagen']) ?>">
-                                <input type="submit" class="btn btn-secondary fuenteBotones" value="Agregar al Carrito" name="action">
-                            </form>
-                        </div>
-                        
-                        <?php }?>
-
-                    </div>
+        <div class="row g-3" id="lista-productos">
+            <?php foreach ($productos as $row) { ?>
+                <div class="col-lg-4 col-md-6 col-12 mb-4" data-categorias="<?= esc($row['categoria']) ?>">
+                    <?= view('components/product_card', ['producto' => $row, 'user_favs' => $user_favs ?? []]) ?>
                 </div>
             <?php } ?>
         </div>
+    </div>
 </section>
+<?= $this->endSection() ?>
 
-
+<?= $this->section('extra-js') ?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    let csrfToken = '<?= csrf_hash() ?>';
+    let favoriteQueue = Promise.resolve();
+
+    function toggleFav(event, id, btn) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        // Evitar múltiples clics en el mismo botón mientras está procesándose
+        if (btn.classList.contains('loading')) return;
+        btn.classList.add('loading');
+
+        const icon = btn.querySelector('i');
+        const wasActive = btn.classList.contains('active');
+
+        // Toggle visual optimista inmediato para una respuesta instantánea
+        btn.classList.toggle('active');
+        if (wasActive) {
+            icon.classList.remove('bi-heart-fill');
+            icon.classList.add('bi-heart');
+        } else {
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
+        }
+
+        // Encolar la petición de forma secuencial para garantizar consistencia del token CSRF
+        favoriteQueue = favoriteQueue.then(() => {
+            return fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Response error');
+                    return response.json();
+                })
+                .then(data => {
+                    btn.classList.remove('loading');
+                    
+                    if (data.csrf) csrfToken = data.csrf; // Actualizar token CSRF global para la siguiente petición
+
+                    if (data.status === 'error') {
+                        // Revertir cambio optimista si no está autenticado y mandar a login
+                        btn.classList.toggle('active', wasActive);
+                        if (wasActive) {
+                            icon.classList.remove('bi-heart');
+                            icon.classList.add('bi-heart-fill');
+                        } else {
+                            icon.classList.remove('bi-heart-fill');
+                            icon.classList.add('bi-heart');
+                        }
+                        window.location.href = '<?= base_url('login') ?>';
+                    }
+                })
+                .catch(err => {
+                    btn.classList.remove('loading');
+                    console.error('Error:', err);
+                    // Revertir cambio optimista ante un fallo de red o servidor
+                    btn.classList.toggle('active', wasActive);
+                    if (wasActive) {
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                    } else {
+                        icon.classList.remove('bi-heart-fill');
+                        icon.classList.add('bi-heart');
+                    }
+                });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
         const botones = document.querySelectorAll('.filtro-categoria');
-        const productos = document.querySelectorAll('#lista-productos .col-md-4');
+        const productos = document.querySelectorAll('#lista-productos > div');
 
         botones.forEach(btn => {
             btn.addEventListener('click', () => {
-                const categoria = btn.dataset.categoria.toLowerCase();
+                // Manejo de clase activa
+                botones.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
 
-                productos.forEach(prod => {
+                const categoria = btn.dataset.categoria.toLowerCase();
+                const items = document.querySelectorAll('#lista-productos > div');
+
+                items.forEach(prod => {
                     const catProd = prod.dataset.categorias.toLowerCase();
                     if (categoria === 'todos' || catProd === categoria) {
                         prod.style.display = 'block';
@@ -78,3 +148,4 @@
         });
     });
 </script>
+<?= $this->endSection() ?>

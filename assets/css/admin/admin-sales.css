@@ -1,0 +1,327 @@
+/* =============================================
+   CVA MUEBLES - ADMIN SALES (VENTAS)
+   Cubre: detalleVentas, estadisticas,
+          gestion_pedido_admin, nuevo_pedido,
+          ver_factura, vistaCompras
+   ============================================= */
+
+/* --- Utility colours --- */
+.bg-info-soft   { background: #e7f5ff; }
+.bg-success-soft{ background: #ebfbee; }
+.bg-warning-soft{ background: #fff9db; }
+.shadow-gold    { box-shadow: 0 20px 40px rgba(184,134,11,0.15); }
+
+/* === ESTADISTICAS === */
+.stats-timer {
+    display: inline-flex; align-items: center;
+    background: white; padding: 0.5rem 1.2rem;
+    border-radius: 50px; font-weight: 700; font-size: 0.8rem;
+    color: #5d4037;
+}
+.pulse-dot {
+    width: 8px; height: 8px; background: #28a745;
+    border-radius: 50%; margin-right: 10px;
+    animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+    0%   { box-shadow: 0 0 0 0   rgba(40,167,69,0.7); }
+    70%  { box-shadow: 0 0 0 10px rgba(40,167,69,0);   }
+    100% { box-shadow: 0 0 0 0   rgba(40,167,69,0);   }
+}
+.kpi-card-premium {
+    background: white; border-radius: 1.5rem;
+    box-shadow: var(--admin-card-shadow);
+    border-bottom: 4px solid transparent;
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.kpi-card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+.kpi-icon-container {
+    width: 65px; height: 65px; border-radius: 1.2rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+}
+.kpi-label { font-weight: 800; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px; color: #999; }
+.kpi-value { font-size: 2.8rem; font-weight: 800; line-height: 1; margin: 0.5rem 0; }
+.action-btn-v2 {
+    display: flex; align-items: center; gap: 1rem;
+    background: white; padding: 1.5rem; border-radius: 1.2rem;
+    border: 1px solid #eeebe6; text-decoration: none; color: inherit;
+    transition: all 0.3s ease;
+}
+.action-btn-v2:hover {
+    background: #fdfaf7; border-color: var(--cva-gold); transform: translateX(5px);
+}
+.action-icon {
+    width: 45px; height: 45px; background: #eeebe6;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; color: var(--cva-brown);
+}
+.action-btn-v2:hover .action-icon { background: var(--cva-gold); color: white; }
+
+/* === NUEVO PEDIDO PERSONALIZADO === */
+.admin-control {
+    width: 100%;
+    border: 2px solid #eeebe6;
+    border-radius: 1rem;
+    padding: 0.8rem 1.2rem;
+}
+.input-group .admin-control {
+    width: 1% !important;
+    flex: 1 1 auto !important;
+}
+
+/* === DETALLE VENTAS - Badges Estado === */
+.badge-estado {
+    padding: 0.45rem 1rem;
+    border-radius: 50px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+/* Priority control buttons */
+.btn-priority {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    border: 1px solid #eee;
+    background: white;
+    transition: all 0.2s ease;
+}
+.btn-priority:hover { background: var(--cva-gold); color: white; border-color: var(--cva-gold); }
+
+/* === GESTION PEDIDO ADMIN === */
+.gestion-timeline-item {
+    display: flex; gap: 1rem; padding-bottom: 1.5rem;
+    border-left: 2px solid #f0e6d6; margin-left: 1rem; padding-left: 1.5rem;
+    position: relative;
+}
+.gestion-timeline-item::before {
+    content: '';
+    position: absolute; left: -6px; top: 4px;
+    width: 10px; height: 10px;
+    border-radius: 50%; background: var(--cva-gold);
+    border: 2px solid white; box-shadow: 0 0 0 2px var(--cva-gold);
+}
+.payment-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #f0fff4; color: #2d8a4e;
+    border: 1px solid rgba(45,138,78,0.2);
+    padding: 0.4rem 0.8rem; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 800;
+}
+
+/* === VER FACTURA USUARIO === */
+.factura-header {
+    background: var(--cva-brown);
+    color: white;
+    padding: 2.5rem 3rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+}
+.factura-table th {
+    background: #fdfaf7;
+    color: var(--cva-brown);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.factura-total-row {
+    background: #fff9f0;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--cva-brown);
+}
+.status-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+/* === VISTA COMPRAS (cliente) === */
+.order-card {
+    border-radius: 1.5rem;
+    border: 1px solid #f0e6d6;
+    background: white;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+.order-card:hover { box-shadow: 0 15px 35px rgba(62,39,35,0.08); transform: translateY(-3px); }
+.order-card-header {
+    background: #fdfaf7;
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid #f0e6d6;
+    display: flex; align-items: center; justify-content: space-between;
+}
+
+/* === RESPONSIVE UTILITIES === */
+@media (max-width: 767.98px) {
+    .kpi-value { font-size: 2rem; }
+    .kpi-icon-container { width: 50px; height: 50px; font-size: 1.4rem; }
+    .kpi-body { padding: 1.5rem 1rem !important; }
+    .action-btn-v2 { padding: 1rem; }
+    .action-icon { width: 35px; height: 35px; font-size: 1rem; }
+    .action-text span { font-size: 0.9rem; }
+    .col-lg-5.text-lg-end { text-align: center !important; margin-top: 1rem; }
+    .btn-admin-outline { width: 100%; justify-content: center; }
+    .btn-admin-primary { width: 100%; padding: 1rem !important; font-size: 1.1rem !important; }
+    .display-6 { font-size: 1.8rem !important; }
+    .admin-card-body-v2 { padding: 1.5rem !important; }
+    .mb-5 { margin-bottom: 2.5rem !important; }
+    .input-group-text { padding: 0.5rem 0.75rem !important; }
+    .factura-header { padding: 1.5rem; }
+    .order-card { border-radius: 1rem; }
+}
+
+
+
+@media (min-width: 992px) {
+    /* Por defecto, permitir que las tablas se ajusten automáticamente en ventas */
+    .table-responsive-stack table {
+        table-layout: auto !important;
+        width: 100% !important;
+    }
+
+    /* Excepto para consultas, donde queremos preservar el table-layout: fixed para recortar mensajes */
+    .table-responsive-stack.table-layout-fixed table {
+        table-layout: fixed !important;
+    }
+
+    /* Soporte de scroll horizontal para evitar desbordes en pantallas estrechas de escritorio */
+    .table-responsive-stack {
+        overflow-x: auto !important;
+        max-width: 100% !important;
+    }
+    
+
+
+    /* Garantizar ancho mínimo global de la tabla de solicitudes en escritorio para evitar que se aplaste */
+    #panel-solicitudes table {
+        min-width: 880px !important;
+        table-layout: auto !important;
+    }
+
+    /* Ajustar celdas en la tabla de solicitudes pendientes para ganar espacio horizontal */
+    #panel-solicitudes table th,
+    #panel-solicitudes table td {
+        padding: 0.75rem 0.5rem !important;
+    }
+
+    /* Botones más compactos y legibles en la tabla de solicitudes pendientes en escritorio */
+    #panel-solicitudes table .btn-sm {
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.3px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Asegurar que el contenedor de los botones de acción no haga wrap y se centre correctamente */
+    #panel-solicitudes .col-solicitud-acciones > div {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+
+    /* Asignar anchos y mínimos robustos a cada columna usando clases específicas */
+    .col-solicitud-fecha {
+        width: 150px !important;
+        min-width: 150px !important;
+        white-space: nowrap !important;
+    }
+    .col-solicitud-cliente {
+        /* Se adapta automáticamente al espacio restante */
+    }
+    .col-solicitud-monto {
+        width: 140px !important;
+        min-width: 140px !important;
+        text-align: right !important;
+        white-space: nowrap !important;
+    }
+    .col-solicitud-acciones {
+        width: 350px !important;
+        min-width: 350px !important;
+        text-align: center !important;
+    }
+
+
+    /* Proporciones perfectas y anchos mínimos para la tabla de pedidos activos en desktop */
+    #panel-activos table th:nth-child(1),
+    #panel-activos table td:nth-child(1) {
+        width: 28% !important;
+        min-width: 180px !important;
+    }
+    #panel-activos table th:nth-child(2),
+    #panel-activos table td:nth-child(2) {
+        width: 6% !important;
+        min-width: 60px !important;
+    }
+    #panel-activos table th:nth-child(3),
+    #panel-activos table td:nth-child(3) {
+        width: 14% !important;
+        min-width: 110px !important;
+    }
+    #panel-activos table th:nth-child(4),
+    #panel-activos table td:nth-child(4) {
+        width: 16% !important;
+        min-width: 130px !important;
+    }
+    #panel-activos table th:nth-child(5),
+    #panel-activos table td:nth-child(5) {
+        width: 13% !important;
+        min-width: 110px !important;
+    }
+    #panel-activos table th:nth-child(6),
+    #panel-activos table td:nth-child(6) {
+        width: 11% !important;
+        min-width: 100px !important;
+    }
+    #panel-activos table th:nth-child(7),
+    #panel-activos table td:nth-child(7) {
+        width: 12% !important;
+        min-width: 100px !important;
+    }
+}
+
+/* Status Dots con Animación de Pulso */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+.status-dot-pulse-gold {
+    background-color: var(--cva-gold, #b8860b);
+    box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.7);
+    animation: pulse-gold-dot 1.5s infinite;
+}
+.status-dot-green {
+    background-color: #198754;
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4);
+}
+
+@keyframes pulse-gold-dot {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(184, 134, 11, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
+    }
+}
