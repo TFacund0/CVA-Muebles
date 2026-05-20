@@ -246,11 +246,17 @@
     font-size: 1.2rem;
 }
 
-/* Fix para evitar desbordamiento en tablas de administración */
+/* === CORRECCIÓN RESPONSIVA PARA TABLAS EN ESCRITORIO (MIN-WIDTH: 992PX) === */
 @media (min-width: 992px) {
+    /* Por defecto, permitir que las tablas se ajusten automáticamente en ventas */
+    .table-responsive-stack table {
+        table-layout: auto !important;
+        width: 100% !important;
+    }
+
+    /* Excepto para consultas, donde queremos preservar el table-layout: fixed para recortar mensajes */
     .table-responsive-stack.table-layout-fixed table {
         table-layout: fixed !important;
-        width: 100% !important;
     }
     
     .inquiry-row td {
@@ -277,11 +283,79 @@
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         display: block !important;
+        margin-bottom: 2px !important;
     }
 
     .message-cell .message-action {
         display: block !important;
         margin-top: 2px !important;
+    }
+
+    /* Proporciones perfectas y anchos mínimos para la tabla de solicitudes pendientes */
+    #panel-solicitudes table th:nth-child(1),
+    #panel-solicitudes table td:nth-child(1) {
+        width: 6% !important;
+        min-width: 65px !important;
+    }
+    #panel-solicitudes table th:nth-child(2),
+    #panel-solicitudes table td:nth-child(2) {
+        width: 16% !important;
+        min-width: 140px !important;
+    }
+    #panel-solicitudes table th:nth-child(3),
+    #panel-solicitudes table td:nth-child(3) {
+        width: 33% !important;
+        min-width: 200px !important;
+    }
+    #panel-solicitudes table th:nth-child(4),
+    #panel-solicitudes table td:nth-child(4) {
+        width: 15% !important;
+        min-width: 110px !important;
+        text-align: right !important;
+        padding-right: 20px !important;
+    }
+    #panel-solicitudes table th:nth-child(5),
+    #panel-solicitudes table td:nth-child(5) {
+        width: 30% !important;
+        min-width: 340px !important;
+        text-align: center !important;
+    }
+
+    /* Proporciones perfectas y anchos mínimos para la tabla de pedidos activos en desktop */
+    #panel-activos table th:nth-child(1),
+    #panel-activos table td:nth-child(1) {
+        width: 6% !important;
+        min-width: 60px !important;
+    }
+    #panel-activos table th:nth-child(2),
+    #panel-activos table td:nth-child(2) {
+        width: 14% !important;
+        min-width: 110px !important;
+    }
+    #panel-activos table th:nth-child(3),
+    #panel-activos table td:nth-child(3) {
+        width: 28% !important;
+        min-width: 180px !important;
+    }
+    #panel-activos table th:nth-child(4),
+    #panel-activos table td:nth-child(4) {
+        width: 16% !important;
+        min-width: 130px !important;
+    }
+    #panel-activos table th:nth-child(5),
+    #panel-activos table td:nth-child(5) {
+        width: 13% !important;
+        min-width: 110px !important;
+    }
+    #panel-activos table th:nth-child(6),
+    #panel-activos table td:nth-child(6) {
+        width: 11% !important;
+        min-width: 100px !important;
+    }
+    #panel-activos table th:nth-child(7),
+    #panel-activos table td:nth-child(7) {
+        width: 12% !important;
+        min-width: 100px !important;
     }
 }
 
