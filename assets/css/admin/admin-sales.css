@@ -317,18 +317,18 @@
     /* Proporciones perfectas y anchos mínimos para la tabla de pedidos activos en desktop */
     #panel-activos table th:nth-child(1),
     #panel-activos table td:nth-child(1) {
-        width: 6% !important;
-        min-width: 60px !important;
+        width: 28% !important;
+        min-width: 180px !important;
     }
     #panel-activos table th:nth-child(2),
     #panel-activos table td:nth-child(2) {
-        width: 14% !important;
-        min-width: 110px !important;
+        width: 6% !important;
+        min-width: 60px !important;
     }
     #panel-activos table th:nth-child(3),
     #panel-activos table td:nth-child(3) {
-        width: 28% !important;
-        min-width: 180px !important;
+        width: 14% !important;
+        min-width: 110px !important;
     }
     #panel-activos table th:nth-child(4),
     #panel-activos table td:nth-child(4) {
@@ -508,5 +508,100 @@
         justify-content: center !important;
         flex-wrap: wrap !important;
         gap: 0.5rem !important;
+    }
+
+    /* ==========================================
+       ESTILOS PREMIUM: CABECERAS DE TARJETAS EN MÓVIL
+       (Copiado y adaptado de crud_usuarios.php)
+       ========================================== */
+
+    /* Encabezado para Pedidos Activos (order-row) */
+    .order-row td[data-label="CLIENTE"] {
+        display: block !important;
+        background: #fdfaf5 !important;
+        margin: -1.25rem -1.25rem 1rem -1.25rem !important;
+        padding: 1.2rem 1.25rem !important;
+        border-bottom: 1px solid #f0e6d6 !important;
+    }
+    .order-row td[data-label="CLIENTE"]::before {
+        display: none !important;
+    }
+    .order-row .order-info-wrapper {
+        flex-direction: row !important;
+        text-align: left !important;
+        gap: 1.2rem !important;
+        padding: 0 !important;
+        justify-content: flex-start !important;
+    }
+    .order-row .avatar-premium {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 1.2rem !important;
+        margin: 0 !important;
+    }
+    .order-text-details .fw-bold {
+        font-size: 1.1rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    /* Encabezado para Solicitudes (solicitud-row) */
+    .solicitud-row td[data-label="CLIENTE"] {
+        display: block !important;
+        background: #fdfaf5 !important;
+        margin: -1.25rem -1.25rem 1rem -1.25rem !important;
+        padding: 1.2rem 1.25rem !important;
+        border-bottom: 1px solid #f0e6d6 !important;
+    }
+    .solicitud-row td[data-label="CLIENTE"]::before {
+        display: none !important;
+    }
+    .solicitud-row .order-info-wrapper {
+        flex-direction: row !important;
+        text-align: left !important;
+        gap: 1.2rem !important;
+        padding: 0 !important;
+        justify-content: flex-start !important;
+    }
+    .solicitud-row .avatar-premium {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 1.2rem !important;
+        margin: 0 !important;
+    }
+    .solicitud-row .order-text-details .fw-bold {
+        font-size: 1.1rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    /* Encabezado para Consultas (inquiry-row) */
+    .inquiry-row td[data-label="INTERESADO"] {
+        display: block !important;
+        background: #fdfaf5 !important;
+        margin: -1.25rem -1.25rem 1rem -1.25rem !important;
+        padding: 1.2rem 1.25rem !important;
+        border-bottom: 1px solid #f0e6d6 !important;
+    }
+    .inquiry-row td[data-label="INTERESADO"]::before {
+        display: none !important;
+    }
+    .inquiry-row .inquiry-info-wrapper {
+        flex-direction: row !important;
+        text-align: left !important;
+        gap: 1.2rem !important;
+        padding: 0 !important;
+        justify-content: flex-start !important;
+    }
+    .inquiry-row .avatar-premium {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 1.2rem !important;
+        margin: 0 !important;
+    }
+    .inquiry-text-details .fw-bold {
+        font-size: 1.1rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0.25rem !important;
     }
 }

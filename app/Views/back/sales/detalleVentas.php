@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=27.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=28.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -186,9 +186,9 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr>
-                            <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted">ID</th>
-                            <th class="py-3 text-uppercase x-small fw-bold text-muted">Fecha y Hora</th>
-                            <th class="py-3 text-uppercase x-small fw-bold text-muted">Cliente / Origen</th>
+                            <th class="ps-4 py-3 text-uppercase x-small fw-bold text-muted">Cliente / Origen</th>
+                            <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell">ID</th>
+                            <th class="py-3 text-uppercase x-small fw-bold text-muted d-none d-lg-table-cell">Fecha y Hora</th>
                             <th class="py-3 text-uppercase x-small fw-bold text-muted text-end">Total / Pagado</th>
                             <th class="py-3 text-uppercase x-small fw-bold text-muted text-center">Estado</th>
                             <th class="py-3 text-uppercase x-small fw-bold text-muted text-center">Prioridad</th>
@@ -200,14 +200,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                             <tr class="order-row"
                                 data-search="<?= $v['search_data'] ?>"
                                 data-estado="<?= $v['estado'] ?>">
-                                <td class="ps-4 d-none d-lg-table-cell" data-label="ID">
-                                    <span class="badge bg-light text-muted border">#<?= $v['id'] ?></span>
-                                </td>
-                                <td class="d-none d-lg-table-cell" data-label="FECHA">
-                                    <div class="fw-bold text-cva-brown"><?= date('d/m/Y', strtotime($v['fecha'])) ?></div>
-                                    <div class="x-small text-muted"><?= date('H:i', strtotime($v['fecha'])) ?> hs</div>
-                                </td>
-                                <td data-label="CLIENTE">
+                                <td class="ps-4" data-label="CLIENTE">
                                     <div class="d-flex align-items-center gap-3 py-1 order-info-wrapper">
                                         <div class="position-relative">
                                             <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
@@ -222,6 +215,13 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                                             </div>
                                         </div>
                                     </div>
+                                </td>
+                                <td class="d-none d-lg-table-cell" data-label="ID">
+                                    <span class="badge bg-light text-muted border">#<?= $v['id'] ?></span>
+                                </td>
+                                <td class="d-none d-lg-table-cell" data-label="FECHA">
+                                    <div class="fw-bold text-cva-brown"><?= date('d/m/Y', strtotime($v['fecha'])) ?></div>
+                                    <div class="x-small text-muted"><?= date('H:i', strtotime($v['fecha'])) ?> hs</div>
                                 </td>
                                 <td class="text-end" data-label="TOTAL / PAGADO">
                                     <div class="order-total-info">
