@@ -147,6 +147,27 @@ h6 {
     box-shadow: 0 8px 25px rgba(211, 84, 0, 0.4);
 }
 
+/* New Gold Premium Button */
+.btn-gold {
+    background-color: var(--cva-gold) !important;
+    color: white !important;
+    border: 2px solid var(--cva-gold) !important;
+    padding: 0.8rem 2.5rem !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 20px rgba(229, 160, 13, 0.3);
+    transition: var(--transition-base);
+}
+
+.btn-gold:hover {
+    background-color: #C18300 !important;
+    border-color: #C18300 !important;
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(229, 160, 13, 0.4) !important;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }

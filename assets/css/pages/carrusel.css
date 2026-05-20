@@ -154,7 +154,13 @@
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Controls */
+/* Controls & Click Zones Protection */
+#heroCarousel .carousel-control-prev,
+#heroCarousel .carousel-control-next {
+    width: 80px !important;
+    z-index: 15 !important;
+}
+
 .control-circle {
     width: 60px; height: 60px;
     background: rgba(255,255,255,0.1);
@@ -171,6 +177,16 @@
     background: var(--cva-gold);
     color: white;
     transform: scale(1.1);
+}
+
+/* Desktop Caption Positioning Protection (Prevent edge clutter) */
+@media (min-width: 992px) {
+    #heroCarousel .carousel-caption.justify-content-start {
+        padding-left: 8% !important;
+    }
+    #heroCarousel .carousel-caption.justify-content-end {
+        padding-right: 8% !important;
+    }
 }
 
 /* Responsive Hero */
