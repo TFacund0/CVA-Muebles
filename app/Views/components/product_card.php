@@ -43,7 +43,7 @@
         </div>
 
         <div class="cart-actions mt-auto">
-            <?php if (env('SHOPPING_CART_ENABLED')): ?>
+            <?php if ($env_cart_enabled): ?>
                 <?php if (session()->get('logged_in')): ?>
                     <?php if ($producto['stock'] > 0): ?>
                         <form action="<?= base_url('carrito/add') ?>" method="post">
@@ -58,7 +58,7 @@
                         </form>
                     <?php else: ?>
                         <?php
-                        $whatsapp_num = env('WHATSAPP_NUMBER') ?? "5493794098511";
+                        $whatsapp_num = $env_whatsapp;
                         $msg_stock = urlencode("Hola! Me interesa el mueble " . $producto['nombre_prod'] . " y me gustaría consultar para encargarlo.");
                         ?>
                         <a href="https://wa.me/<?= $whatsapp_num ?>?text=<?= $msg_stock ?>"
@@ -72,7 +72,7 @@
             <?php else: ?>
                 <?php if (session()->get('logged_in')): ?>
                     <?php
-                    $whatsapp_num = env('WHATSAPP_NUMBER') ?? "5493794098511";
+                    $whatsapp_num = $env_whatsapp;
                     $mensaje = urlencode("Hola! Estoy interesado en el producto: " . $producto['nombre_prod'] . " (ID: " . $producto['id_producto'] . "). Me podrías dar más información?");
                     $url_whatsapp = "https://wa.me/{$whatsapp_num}?text={$mensaje}";
                     ?>

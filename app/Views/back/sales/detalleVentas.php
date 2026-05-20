@@ -242,30 +242,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                                     </div>
                                 </td>
                                 <td class="text-center" data-label="ESTADO">
-                                    <?php
-                                    $badge_class = "bg-light text-muted border";
-                                    $icon = "bi-clock";
-                                    if ($v['estado'] == 'PENDIENTE') {
-                                        $badge_class = "bg-warning-soft text-warning border-warning";
-                                        $icon = "bi-hourglass-split";
-                                    }
-                                    if ($v['estado'] == 'EN_PROCESO') {
-                                        $badge_class = "bg-proceso-soft text-proceso border-proceso";
-                                        $icon = "bi-tools";
-                                    }
-                                    if ($v['estado'] == 'TERMINADO') {
-                                        $badge_class = "bg-success-soft text-success border-success";
-                                        $icon = "bi-check-all";
-                                    }
-                                    if ($v['estado'] == 'ENTREGADO') {
-                                        $badge_class = "bg-dark text-white";
-                                        $icon = "bi-truck";
-                                    }
-                                    ?>
-                                    <span class="badge px-3 py-2 rounded-pill x-small fw-bold <?= $badge_class ?>" style="min-width: 100px;">
-                                        <i class="bi <?= $icon ?> me-1"></i>
-                                        <?= strtoupper($v['estado']) ?>
-                                    </span>
+                                    <?= view('components/status_badge', ['estado' => $v['estado']]) ?>
                                 </td>
                                 <td class="text-center" data-label="PRIORIDAD">
                                     <div class="d-flex justify-content-center align-items-center gap-1">

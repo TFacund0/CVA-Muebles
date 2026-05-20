@@ -90,7 +90,7 @@
                 </div>
 
                 <div class="actions-area mt-auto">
-                    <?php if (env('SHOPPING_CART_ENABLED')): ?>
+                    <?php if ($env_cart_enabled): ?>
                         <?php if (session()->get('logged_in')): ?>
                             <?php if ($producto['stock'] > 0): ?>
                                 <form action="<?= base_url('carrito/add') ?>" method="post" class="mb-3">
@@ -104,7 +104,7 @@
                                     </button>
                                 </form>
                             <?php else: ?>
-                                <a href="https://wa.me/<?= env('WHATSAPP_NUMBER') ?>?text=Hola!%20Me%20interesa%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>%20y%20me%20gustaría%20consultar%20para%20encargarlo." 
+                                <a href="https://wa.me/<?= $env_whatsapp ?>?text=Hola!%20Me%20interesa%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>%20y%20me%20gustaría%20consultar%20para%20encargarlo." 
                                    target="_blank" class="btn btn-outline-brown w-100 py-3 mb-3 rounded-3 fs-5">
                                     <i class="bi bi-whatsapp me-2"></i> CONSULTAR FABRICACIÓN
                                 </a>
@@ -117,7 +117,7 @@
                     <?php else: ?>
                         <?php if (session()->get('logged_in')): ?>
                             <?php 
-                                $whatsapp_num = env('WHATSAPP_NUMBER') ?? "5493794098511";
+                                $whatsapp_num = $env_whatsapp;
                                 $mensaje = urlencode("Hola! Me interesa este mueble artesanal: " . $producto['nombre_prod'] . ". ¿Podrías darme más detalles?");
                                 $url_whatsapp = "https://wa.me/{$whatsapp_num}?text={$mensaje}";
                             ?>
@@ -132,7 +132,7 @@
                     <?php endif; ?>
 
                     <?php if (session()->get('logged_in')): ?>
-                        <a href="https://wa.me/<?= env('WHATSAPP_NUMBER') ?>?text=Hola!%20Me%20gustaría%20personalizar%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>" 
+                        <a href="https://wa.me/<?= $env_whatsapp ?>?text=Hola!%20Me%20gustaría%20personalizar%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>" 
                            class="btn btn-personalizar">
                             <i class="bi bi-pencil-square"></i> SOLICITAR MEDIDAS ESPECIALES
                         </a>

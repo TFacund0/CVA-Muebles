@@ -99,7 +99,7 @@
                                     <span class="price-tag-fav">$<?= number_format($fav['precio_vta'], 0, ',', '.') ?></span>
                                     <a href="<?= base_url('producto/detalle/' . $fav['producto_id']) ?>" class="btn btn-sm btn-outline-brown rounded-pill px-3 fw-bold">DETALLE</a>
                                 </div>
-                                <?php if (env('SHOPPING_CART_ENABLED')): ?>
+                                <?php if ($env_cart_enabled): ?>
                                     <?php if (session()->get('logged_in')): ?>
                                         <form action="<?= base_url('carrito/add') ?>" method="post" class="w-100">
                                             <?= csrf_field(); ?>

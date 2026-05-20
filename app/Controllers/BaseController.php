@@ -47,6 +47,9 @@ abstract class BaseController extends Controller
 
         // Preload any models, libraries, etc, here.
 
-        // E.g.: $this->session = service('session');
+        // Variables de entorno globales para todas las Vistas (Arquitectura Pura)
+        $renderer = \Config\Services::renderer();
+        $renderer->setVar('env_cart_enabled', env('SHOPPING_CART_ENABLED'));
+        $renderer->setVar('env_whatsapp', env('WHATSAPP_NUMBER') ?? '5493794098511');
     }
 }

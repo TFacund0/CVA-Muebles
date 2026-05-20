@@ -96,7 +96,7 @@
                                     </a>
                                     
                                     <?php 
-                                        $wa_num = "5493794098511";
+                                        $wa_num = $env_whatsapp;
                                         $msg = urlencode("Hola! Soy " . session()->get('nombre') . ", quería consultar sobre el estado de mi pedido #" . $venta['id']);
                                         $wa_url = "https://wa.me/{$wa_num}?text={$msg}";
                                     ?>

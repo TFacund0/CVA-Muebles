@@ -16,7 +16,7 @@ $active_consultas = (strpos(current_url(), 'consultas') !== false) ? 'active' : 
 
 // Carrito
 $cartCount = 0;
-if (env('SHOPPING_CART_ENABLED')) {
+if ($env_cart_enabled) {
   $cartCount = \Config\Services::cart()->totalItems();
 }
 ?>
@@ -30,7 +30,7 @@ if (env('SHOPPING_CART_ENABLED')) {
         <i class="bi bi-list fs-4"></i>
       </button>
 
-      <?php if (env('SHOPPING_CART_ENABLED') && $isLogged): ?>
+      <?php if ($env_cart_enabled && $isLogged): ?>
         <a href="<?= base_url('muestro') ?>" class="boton-icon-circle position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5"></i>
           <?php if ($cartCount > 0): ?>
@@ -64,7 +64,7 @@ if (env('SHOPPING_CART_ENABLED')) {
 
     <!-- [DERECHA] ICONOS USUARIO / AUTH -->
     <div class="d-flex align-items-center justify-content-end gap-2" style="flex: 1;">
-      <?php if (env('SHOPPING_CART_ENABLED') && $isLogged): ?>
+      <?php if ($env_cart_enabled && $isLogged): ?>
         <a href="<?= base_url('muestro') ?>" class="boton-icon-circle d-none d-lg-flex position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5"></i>
           <?php if ($cartCount > 0): ?>

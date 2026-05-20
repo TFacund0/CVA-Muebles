@@ -12,7 +12,7 @@
                     </li>
                     <li class="mb-2 d-flex align-items-center">
                         <i class="bi bi-whatsapp me-2 text-cva-gold"></i>
-                        <span><?= env('WHATSAPP_NUMBER') ?></span>
+                        <span><?= $env_whatsapp ?></span>
                     </li>
                 </ul>
             </div>
