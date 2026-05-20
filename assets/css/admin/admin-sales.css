@@ -5,19 +5,7 @@
           ver_factura, vistaCompras
    ============================================= */
 
-/* --- Shared dashboard icon --- */
-.dashboard-icon-main {
-    width: 60px; height: 60px;
-    background: #1a0f0d;
-    color: var(--cva-gold);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2rem;
-    border-radius: 1.2rem;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-/* --- Utility colours (shared) --- */
-.bg-gold-soft   { background: #fff9f0; }
+/* --- Utility colours --- */
 .bg-info-soft   { background: #e7f5ff; }
 .bg-success-soft{ background: #ebfbee; }
 .bg-warning-soft{ background: #fff9db; }
@@ -194,20 +182,7 @@
     .order-card { border-radius: 1rem; }
 }
 
-/* === LISTA CONSULTAS Y COMPARTIDOS === */
 
-.dashboard-icon-main {
-    width: 60px; height: 60px;
-    background: #1a0f0d;
-    color: var(--cva-gold);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2rem;
-    border-radius: 1.2rem;
-}
-
-.nav-item-admin-special i {
-    font-size: 1.2rem;
-}
 
 @media (min-width: 992px) {
     /* Por defecto, permitir que las tablas se ajusten automáticamente en ventas */
@@ -227,37 +202,7 @@
         max-width: 100% !important;
     }
     
-    .inquiry-row td {
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-    }
 
-    .inquiry-row .inquiry-info-wrapper,
-    .inquiry-row .message-cell {
-        overflow: hidden !important;
-    }
-
-    .inquiry-row .fw-bold {
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        white-space: nowrap !important;
-        display: block !important;
-    }
-
-    .message-cell .message-preview {
-        max-width: 100% !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        display: block !important;
-        margin-bottom: 2px !important;
-    }
-
-    .message-cell .message-action {
-        display: block !important;
-        margin-top: 2px !important;
-    }
 
     /* Garantizar ancho mínimo global de la tabla de solicitudes en escritorio para evitar que se aplaste */
     #panel-solicitudes table {
@@ -352,23 +297,6 @@
     }
 }
 
-.bg-gold-soft { background: #fff9f0; }
-.btn-action-premium {
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 12px;
-    background: white;
-    border: 1px solid #eee;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.btn-action-premium:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-.bg-warning-soft { background: #fff8eb; }
-.bg-info-soft { background: #f0f7ff; }
-.bg-success-soft { background: #f0fff4; }
-
 /* Status Dots con Animación de Pulso */
 .status-dot {
     width: 10px;
@@ -399,215 +327,5 @@
     100% {
         transform: scale(0.95);
         box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
-    }
-}
-
-
-/* === ESTILOS RESPONSIVE PREMIUM PARA TABLAS EN PILA (STOCKED CARDS) === */
-@media (max-width: 991.98px) {
-    /* Convertir la estructura de la tabla en bloques */
-    .table-responsive-stack table,
-    .table-responsive-stack thead,
-    .table-responsive-stack tbody,
-    .table-responsive-stack th,
-    .table-responsive-stack td,
-    .table-responsive-stack tr {
-        display: block !important;
-        width: 100% !important;
-    }
-
-    /* Ocultar el encabezado original de la tabla */
-    .table-responsive-stack thead {
-        display: none !important;
-    }
-
-    /* Convertir cada fila en una tarjeta premium e independiente */
-    .table-responsive-stack tr {
-        margin-bottom: 1.5rem !important;
-        background: #ffffff !important;
-        border: 1px solid #f0e6d6 !important;
-        border-radius: 1.25rem !important;
-        padding: 1.25rem !important;
-        box-shadow: 0 4px 15px rgba(62, 39, 35, 0.04) !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-
-    .table-responsive-stack tr:hover {
-        box-shadow: 0 8px 25px rgba(62, 39, 35, 0.08) !important;
-        transform: translateY(-2px);
-        border-color: var(--cva-gold, #b8860b) !important;
-    }
-
-    /* Formatear cada celda como una fila de clave-valor dentro de la tarjeta */
-    .table-responsive-stack td {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        padding: 0.85rem 0.5rem !important;
-        border-bottom: 1px solid rgba(240, 230, 214, 0.5) !important;
-        text-align: right !important;
-        background: transparent !important;
-    }
-
-    .table-responsive-stack td:last-child {
-        border-bottom: none !important;
-    }
-
-    /* Generar etiqueta a la izquierda a partir del atributo data-label */
-    .table-responsive-stack td::before {
-        content: attr(data-label);
-        font-weight: 800 !important;
-        text-transform: uppercase !important;
-        font-size: 0.7rem !important;
-        color: var(--cva-brown, #5c4033) !important;
-        text-align: left !important;
-        margin-right: 1.5rem !important;
-        letter-spacing: 0.8px !important;
-        flex-shrink: 0 !important;
-    }
-
-    /* Asegurar que las columnas originalmente ocultas (ID, FECHA) se muestren en mobile */
-    .table-responsive-stack .d-none.d-lg-table-cell {
-        display: flex !important;
-    }
-
-    /* Ajustes específicos de visualización interna */
-    .table-responsive-stack td > div,
-    .table-responsive-stack td > span,
-    .table-responsive-stack td > form {
-        text-align: right !important;
-    }
-
-    /* Alineaciones y espaciados para elementos complejos en mobile */
-    .table-responsive-stack .order-info-wrapper {
-        justify-content: flex-end;
-    }
-
-    /* Envoltura y apilado de botones de acciones/gestión en móvil */
-    .table-responsive-stack td[data-label="ACCIONES"],
-    .table-responsive-stack td[data-label="GESTIÓN"],
-    .table-responsive-stack td[data-label="GESTION"] {
-        flex-direction: column !important;
-        align-items: center !important;
-        padding: 1rem 0.5rem !important;
-    }
-    
-    .table-responsive-stack td[data-label="ACCIONES"]::before,
-    .table-responsive-stack td[data-label="GESTIÓN"]::before,
-    .table-responsive-stack td[data-label="GESTION"]::before {
-        margin-right: 0 !important;
-        margin-bottom: 0.5rem !important;
-        text-align: center !important;
-        width: 100% !important;
-    }
-    
-    .table-responsive-stack td[data-label="ACCIONES"] > div,
-    .table-responsive-stack td[data-label="GESTIÓN"] > div,
-    .table-responsive-stack td[data-label="GESTION"] > div {
-        width: 100% !important;
-        justify-content: center !important;
-        flex-wrap: wrap !important;
-        gap: 0.5rem !important;
-    }
-
-    /* ==========================================
-       ESTILOS PREMIUM: CABECERAS DE TARJETAS EN MÓVIL
-       (Copiado y adaptado de crud_usuarios.php)
-       ========================================== */
-
-    /* Encabezado para Pedidos Activos (order-row) */
-    .order-row td[data-label="CLIENTE"] {
-        display: block !important;
-        width: auto !important;
-        background: #fdfaf5 !important;
-        margin: -1.25rem -1.25rem 1rem -1.25rem !important;
-        padding: 1.2rem 1.25rem !important;
-        border-bottom: 1px solid #f0e6d6 !important;
-        border-radius: 1.15rem 1.15rem 0 0 !important;
-    }
-    .order-row td[data-label="CLIENTE"]::before {
-        display: none !important;
-    }
-    .order-row .order-info-wrapper {
-        flex-direction: row !important;
-        text-align: left !important;
-        gap: 1.2rem !important;
-        padding: 0 !important;
-        justify-content: flex-start !important;
-    }
-    .order-row .avatar-premium {
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 1.2rem !important;
-        margin: 0 !important;
-    }
-    .order-text-details .fw-bold {
-        font-size: 1.1rem !important;
-        line-height: 1.2 !important;
-        margin-bottom: 0.25rem !important;
-    }
-
-    /* Encabezado para Solicitudes (solicitud-row) */
-    .solicitud-row td[data-label="CLIENTE"] {
-        display: block !important;
-        width: auto !important;
-        background: #fdfaf5 !important;
-        margin: -1.25rem -1.25rem 1rem -1.25rem !important;
-        padding: 1.2rem 1.25rem !important;
-        border-bottom: 1px solid #f0e6d6 !important;
-        border-radius: 1.15rem 1.15rem 0 0 !important;
-    }
-    .solicitud-row td[data-label="CLIENTE"]::before {
-        display: none !important;
-    }
-    .solicitud-row .order-info-wrapper {
-        flex-direction: row !important;
-        text-align: left !important;
-        gap: 1.2rem !important;
-        padding: 0 !important;
-        justify-content: flex-start !important;
-    }
-    .solicitud-row .avatar-premium {
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 1.2rem !important;
-        margin: 0 !important;
-    }
-    .solicitud-row .order-text-details .fw-bold {
-        font-size: 1.1rem !important;
-        line-height: 1.2 !important;
-        margin-bottom: 0.25rem !important;
-    }
-
-    /* Encabezado para Consultas (inquiry-row) */
-    .inquiry-row td[data-label="INTERESADO"] {
-        display: block !important;
-        width: auto !important;
-        background: #fdfaf5 !important;
-        margin: -1.25rem -1.25rem 1rem -1.25rem !important;
-        padding: 1.2rem 1.25rem !important;
-        border-bottom: 1px solid #f0e6d6 !important;
-        border-radius: 1.15rem 1.15rem 0 0 !important;
-    }
-    .inquiry-row td[data-label="INTERESADO"]::before {
-        display: none !important;
-    }
-    .inquiry-row .inquiry-info-wrapper {
-        flex-direction: row !important;
-        text-align: left !important;
-        gap: 1.2rem !important;
-        padding: 0 !important;
-        justify-content: flex-start !important;
-    }
-    .inquiry-row .avatar-premium {
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 1.2rem !important;
-        margin: 0 !important;
-    }
-    .inquiry-text-details .fw-bold {
-        font-size: 1.1rem !important;
-        line-height: 1.2 !important;
-        margin-bottom: 0.25rem !important;
     }
 }
