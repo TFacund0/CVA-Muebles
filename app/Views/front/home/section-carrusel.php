@@ -24,7 +24,7 @@
                     <span class="badge bg-gold mb-3 px-3 py-2 rounded-pill text-uppercase" style="letter-spacing: 2px;">Mueblería de Autor</span>
                     <h1 class="display-2 fw-bold font-lora mb-3">La Esencia de la <br><span class="text-gold">Madera Noble</span></h1>
                     <p class="fs-5 mb-4 opacity-90 mx-auto" style="max-width: 600px;">Transformamos maderas seleccionadas en piezas únicas que respiran historia y elegancia.</p>
-                    <div class="d-flex gap-3 justify-content-center">
+                    <div class="d-flex gap-3 justify-content-center align-items-center">
                         <a href="<?= base_url('productos') ?>" class="btn btn-vivid rounded-pill px-5 py-3 fw-bold shadow-lg">VER CATÁLOGO</a>
                         <a href="<?= base_url('quienesSomos') ?>" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold">NUESTRO TALLER</a>
                     </div>

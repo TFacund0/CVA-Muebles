@@ -45,7 +45,7 @@
 .glass-caption.left-align { border-left: 5px solid var(--cva-gold); }
 .glass-caption.right-align { border-right: 5px solid var(--cva-vivid); }
 
-/* Animations */
+/* Animations - Dynamic Active Triggers */
 .zoom-animation {
     animation: slowZoom 20s infinite alternate linear;
 }
@@ -55,13 +55,104 @@
     to { transform: scale(1.1); }
 }
 
-.animate-up { animation: fadeInUp 1s ease-out; }
-.animate-left { animation: fadeInLeft 1s ease-out; }
-.animate-right { animation: fadeInRight 1s ease-out; }
+/* Inactive slides have opacity 0 so they fade in cleanly when they become active */
+.carousel-item:not(.active) .glass-caption {
+    opacity: 0;
+    pointer-events: none;
+}
 
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+.carousel-item.active .glass-caption.animate-up {
+    animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.carousel-item.active .glass-caption.animate-left {
+    animation: fadeInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.carousel-item.active .glass-caption.animate-right {
+    animation: fadeInRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Buttons Entrance Staggered Animation */
+@keyframes heroButtonEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carousel-item.active .glass-caption .btn {
+    animation: heroButtonEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+/* --- HERO BUTTON SYSTEM (CONSOLIDATED & SYMMETRICAL) --- */
+#heroCarousel .glass-caption .btn {
+    height: 54px !important;
+    padding: 0 2.5rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    border-radius: 50px !important;
+    vertical-align: middle !important;
+    font-size: 0.95rem !important;
+    margin: 0 !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    border-width: 2px !important;
+}
+
+/* Define .btn-gold Premium Style */
+.btn-gold {
+    background-color: var(--cva-gold) !important;
+    color: white !important;
+    border: 2px solid var(--cva-gold) !important;
+    box-shadow: 0 5px 20px rgba(229, 160, 13, 0.3) !important;
+}
+
+.btn-gold:hover {
+    background-color: var(--cva-brown) !important;
+    border-color: var(--cva-brown) !important;
+    color: white !important;
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(45, 27, 25, 0.4) !important;
+}
+
+/* Specific Hover Interactions for Hero Carousel Buttons */
+#heroCarousel .glass-caption .btn-vivid:hover {
+    background-color: #A04000 !important;
+    border-color: #A04000 !important;
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(211, 84, 0, 0.4) !important;
+}
+
+#heroCarousel .glass-caption .btn-outline-light:hover {
+    background-color: white !important;
+    color: var(--cva-brown) !important;
+    border-color: white !important;
+    transform: scale(1.05) translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2) !important;
+}
 
 /* Controls */
 .control-circle {
@@ -89,7 +180,12 @@
     .display-2 { font-size: 2.5rem !important; }
     .display-3 { font-size: 2.2rem !important; }
     .fs-5 { font-size: 1rem !important; }
-    .btn-vivid, .btn-outline-light, .btn-gold { padding: 0.8rem 1.5rem !important; font-size: 0.9rem !important; }
+    
+    #heroCarousel .glass-caption .btn {
+        height: 46px !important;
+        padding: 0 1.75rem !important;
+        font-size: 0.85rem !important;
+    }
     #heroCarousel .carousel-caption { padding: 0 !important; }
 }
 
