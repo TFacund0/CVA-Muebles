@@ -1,40 +1,4 @@
-/* Pestañas Segmentadas Premium */
-.custom-segmented-tabs {
-    border-color: #e0d5c5 !important;
-    background: #fdfaf7 !important;
-}
-
-.custom-segmented-tabs .nav-link {
-    color: var(--cva-brown, #5c4033) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none !important;
-    background: transparent;
-}
-
-.custom-segmented-tabs .nav-link.active {
-    background-color: var(--cva-brown, #5c4033) !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 15px rgba(92, 64, 51, 0.2);
-}
-
-.custom-segmented-tabs .nav-link.active .text-gold,
-.custom-segmented-tabs .nav-link.active .bi {
-    color: var(--cva-gold, #b8860b) !important;
-}
-
-.custom-segmented-tabs .nav-link:not(.active):hover {
-    background-color: rgba(92, 64, 51, 0.05);
-    color: var(--cva-brown, #5c4033);
-}
-
-.py-2-5 {
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
-}
-
-.bg-secondary-soft {
-    background-color: rgba(108, 117, 125, 0.1);
-}
+/* Estilos específicos de gestión de usuarios */
 
 .bg-danger-soft {
     background-color: rgba(220, 53, 69, 0.1);

@@ -1,11 +1,11 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=2.0') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
-    <li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">GESTIÓN DE CONSULTAS</li>
+<li class="breadcrumb-item active small fw-bold text-gold" aria-current="page">GESTIÓN DE CONSULTAS</li>
 <?= $this->endSection() ?>
 
 
@@ -19,11 +19,7 @@
             </div>
             <div>
                 <h1 class="display-6 display-md-5 fw-bold text-cva-brown mb-1 d-flex flex-wrap align-items-center gap-2">
-                    <span>Inbox</span>
-                    <span class="fs-4 text-muted fw-normal d-none d-md-inline">|</span>
-                    <span id="inquiry-active-badge" class="badge bg-gold text-brown fs-6 px-3 py-1 rounded-pill border border-gold shadow-sm">
-                        <i class="bi bi-envelope-open-fill me-1"></i> PENDIENTES
-                    </span>
+                    <span>Gestión de Consultas</span>
                 </h1>
                 <p class="text-muted mb-0 small"><i class="bi bi-envelope-paper text-gold me-1"></i> Gestión de mensajes y presupuestos.</p>
             </div>
@@ -88,22 +84,22 @@
         <div class="d-flex justify-content-center justify-content-md-start">
             <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="consultasTab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2" 
-                            id="pendientes-tab" 
-                            type="button" 
-                            role="tab" 
-                            aria-selected="true">
+                    <button class="nav-link active rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2"
+                        id="pendientes-tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="true">
                         <i class="bi bi-envelope-open text-gold"></i>
                         <span>Pendientes</span>
                         <span class="badge bg-gold text-brown rounded-pill x-small fw-bold px-2 py-1 shadow-sm"><?= $counts['activos'] ?></span>
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2" 
-                            id="contestados-tab" 
-                            type="button" 
-                            role="tab" 
-                            aria-selected="false">
+                    <button class="nav-link rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2"
+                        id="contestados-tab"
+                        type="button"
+                        role="tab"
+                        aria-selected="false">
                         <i class="bi bi-check2-all text-gold"></i>
                         <span>Contestados / Archivados</span>
                         <span class="badge bg-secondary-soft text-muted rounded-pill x-small fw-bold px-2 py-1"><?= $counts['total'] - $counts['activos'] ?></span>
@@ -130,9 +126,9 @@
                     <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 1rem 0 0 1rem;">
                         <i class="bi bi-search text-gold"></i>
                     </span>
-                    <input type="text" id="input-search" class="form-control border-start-0 border-2 py-2" 
-                           style="border-radius: 0 1rem 1rem 0;"
-                           placeholder="Buscar...">
+                    <input type="text" id="input-search" class="form-control border-start-0 border-2 py-2"
+                        style="border-radius: 0 1rem 1rem 0;"
+                        placeholder="Buscar...">
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-6">
@@ -176,9 +172,9 @@
                 </tr>
             </thead>
             <tbody id="inquiry-table-body">
-                <?php if(!empty($consultas)): ?>
+                <?php if (!empty($consultas)): ?>
                     <?php foreach ($consultas as $index => $consulta): ?>
-                        <tr class="inquiry-row" 
+                        <tr class="inquiry-row"
                             data-search="<?= $consulta['search_data'] ?>"
                             data-asunto="<?= esc($consulta['asunto']) ?>"
                             data-activo="<?= $consulta['activo'] ?>">
@@ -207,10 +203,10 @@
                                 <div class="x-small fw-bold text-muted text-end text-md-start"><i class="bi bi-phone me-1"></i> <?= esc($consulta['telefono']) ?></div>
                             </td>
                             <td class="d-none d-lg-table-cell" data-label="ASUNTO">
-                                <?php 
-                                    $asunto_class = "bg-light text-muted";
-                                    if(stripos($consulta['asunto'], 'presupuesto') !== false) $asunto_class = "bg-warning-soft text-warning border-warning";
-                                    if(stripos($consulta['asunto'], 'pedido') !== false) $asunto_class = "bg-info-soft text-info border-info";
+                                <?php
+                                $asunto_class = "bg-light text-muted";
+                                if (stripos($consulta['asunto'], 'presupuesto') !== false) $asunto_class = "bg-warning-soft text-warning border-warning";
+                                if (stripos($consulta['asunto'], 'pedido') !== false) $asunto_class = "bg-info-soft text-info border-info";
                                 ?>
                                 <span class="badge px-2 py-1 rounded-pill x-small fw-bold border <?= $asunto_class ?>">
                                     <?= esc($consulta['asunto']) ?>
@@ -226,15 +222,15 @@
                             </td>
                             <td class="pe-4 text-center" data-label="ACCIONES">
                                 <div class="d-flex justify-content-center gap-2">
-                                    <?php 
-                                        $num = preg_replace('/[^0-9]/', '', $consulta['telefono']);
-                                        $msg = urlencode("Hola " . $consulta['nombre'] . "! Soy César de CVA Muebles, respondo a tu consulta sobre: " . $consulta['asunto']);
-                                        $url_wa = "https://wa.me/" . (str_starts_with($num, '54') ? $num : "54" . $num) . "?text=" . $msg;
+                                    <?php
+                                    $num = preg_replace('/[^0-9]/', '', $consulta['telefono']);
+                                    $msg = urlencode("Hola " . $consulta['nombre'] . "! Soy César de CVA Muebles, respondo a tu consulta sobre: " . $consulta['asunto']);
+                                    $url_wa = "https://wa.me/" . (str_starts_with($num, '54') ? $num : "54" . $num) . "?text=" . $msg;
                                     ?>
                                     <a href="<?= $url_wa ?>" target="_blank" class="btn btn-action-premium text-success border-success border-opacity-25 shadow-sm" title="WhatsApp">
                                         <i class="bi bi-whatsapp"></i>
                                     </a>
-                                    
+
                                     <form action="<?= base_url('ventas/nuevo-personalizado') ?>" method="get" class="m-0">
                                         <input type="hidden" name="nombre" value="<?= esc($consulta['nombre'] . ' ' . $consulta['apellido']) ?>">
                                         <input type="hidden" name="detalle" value="<?= esc($consulta['asunto'] . ': ' . $consulta['descripcion']) ?>">
@@ -242,15 +238,15 @@
                                             <i class="bi bi-hammer"></i>
                                         </button>
                                     </form>
-                                    
+
                                     <?php if ($consulta['activo'] == 'SI'): ?>
-                                        <button type="button" onclick="submitAction('<?= base_url('consultas/eliminar/'.$consulta['id_consulta']) ?>?vista=SI', '¿Marcar como contestada/archivada esta consulta?')" 
-                                                class="btn btn-action-premium text-gold border-gold border-opacity-25 shadow-sm" title="Archivar/Contestado">
+                                        <button type="button" onclick="submitAction('<?= base_url('consultas/eliminar/' . $consulta['id_consulta']) ?>?vista=SI', '¿Marcar como contestada/archivada esta consulta?')"
+                                            class="btn btn-action-premium text-gold border-gold border-opacity-25 shadow-sm" title="Archivar/Contestado">
                                             <i class="bi bi-check2-circle"></i>
                                         </button>
                                     <?php else: ?>
-                                        <button type="button" onclick="mostrarModalEliminarConsulta('<?= $consulta['id_consulta'] ?>', '<?= esc($consulta['nombre'] . ' ' . $consulta['apellido']) ?>', '<?= esc($consulta['asunto']) ?>', '<?= date('d/m/Y', strtotime($consulta['fecha'])) ?>')" 
-                                                class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm" title="Eliminar Permanente">
+                                        <button type="button" onclick="mostrarModalEliminarConsulta('<?= $consulta['id_consulta'] ?>', '<?= esc($consulta['nombre'] . ' ' . $consulta['apellido']) ?>', '<?= esc($consulta['asunto']) ?>', '<?= date('d/m/Y', strtotime($consulta['fecha'])) ?>')"
+                                            class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm" title="Eliminar Permanente">
                                             <i class="bi bi-trash-fill"></i>
                                         </button>
                                     <?php endif; ?>
@@ -310,7 +306,7 @@
                         </td>
                     </tr>
                 <?php endif; ?>
-                
+
                 <!-- Fila de Sin Resultados JS -->
                 <tr id="no-results-row" style="display: none;">
                     <td colspan="6" class="text-center py-5">
@@ -408,9 +404,9 @@
                         <label for="confirm-delete-word" class="small fw-bold text-dark mb-2 d-block">
                             2. Para confirmar los riesgos, escribe la palabra <span class="text-danger fw-extrabold">ELIMINAR</span>:
                         </label>
-                        <input type="text" id="confirm-delete-word" class="form-control text-center fw-bold text-uppercase border-2" 
-                               style="letter-spacing: 2px; border-radius: 0.75rem;" 
-                               placeholder="Escribe ELIMINAR aquí" autocomplete="off">
+                        <input type="text" id="confirm-delete-word" class="form-control text-center fw-bold text-uppercase border-2"
+                            style="letter-spacing: 2px; border-radius: 0.75rem;"
+                            placeholder="Escribe ELIMINAR aquí" autocomplete="off">
                     </div>
                 </div>
                 <div class="modal-footer bg-light p-3 border-0 gap-2">
@@ -457,7 +453,7 @@
                 const searchData = row.getAttribute('data-search');
                 const asunto = row.getAttribute('data-asunto');
                 const activo = row.getAttribute('data-activo');
-                
+
                 const isCorrectView = (activo === currentView);
                 const matchesSearch = searchData.includes(searchTerm);
                 const matchesAsunto = (asuntoFilter === 'ALL' || asunto === asuntoFilter);
@@ -495,7 +491,7 @@
                     emptyViewRow.style.display = 'none';
                 }
             }
-            
+
             setTimeout(() => {
                 filterStatus.style.opacity = '0';
             }, 300);
@@ -503,7 +499,7 @@
 
         function switchView(view) {
             currentView = view;
-            
+
             const activeBadge = document.getElementById('inquiry-active-badge');
             const headerStatusBadge = document.getElementById('inquiry-header-status-badge');
 
@@ -512,7 +508,7 @@
                 pendientesTab.setAttribute('aria-selected', 'true');
                 contestadosTab.classList.remove('active');
                 contestadosTab.setAttribute('aria-selected', 'false');
-                
+
                 if (activeBadge) {
                     activeBadge.className = "badge bg-gold text-brown fs-6 px-3 py-1 rounded-pill border border-gold shadow-sm";
                     activeBadge.innerHTML = '<i class="bi bi-envelope-open-fill me-1"></i> PENDIENTES';
@@ -529,7 +525,7 @@
                 contestadosTab.setAttribute('aria-selected', 'true');
                 pendientesTab.classList.remove('active');
                 pendientesTab.setAttribute('aria-selected', 'false');
-                
+
                 if (activeBadge) {
                     activeBadge.className = "badge bg-brown text-gold fs-6 px-3 py-1 rounded-pill border border-gold shadow-sm";
                     activeBadge.innerHTML = '<i class="bi bi-check2-all me-1"></i> CONTESTADAS / ARCHIVADAS';
@@ -542,7 +538,7 @@
                     listTitle.innerHTML = '<span class="status-dot status-dot-green"></span> <i class="bi bi-check2-all me-1 text-gold"></i> Listado de Consultas Contestadas / Archivadas';
                 }
             }
-            
+
             filterInquiries();
         }
 
@@ -555,7 +551,7 @@
 
         inputSearch.addEventListener('input', filterInquiries);
         selectAsunto.addEventListener('change', filterInquiries);
-        
+
         btnReset.addEventListener('click', function() {
             inputSearch.value = '';
             selectAsunto.value = 'ALL';
@@ -577,12 +573,12 @@
             formDelete.action = "<?= base_url('consultas/eliminar-permanente') ?>/" + id + "?vista=NO";
             delName.textContent = nombre;
             delDetails.textContent = asunto + ' (' + fecha + ')';
-            
+
             // Resetear inputs del modal
             inputConfirmWord.value = '';
             btnSubmitDelete.disabled = true;
             radioReasons.forEach(radio => radio.checked = false);
-            
+
             modalDelete.show();
         };
 
@@ -592,9 +588,9 @@
             radioReasons.forEach(radio => {
                 if (radio.checked) reasonSelected = true;
             });
-            
+
             const textMatches = (inputConfirmWord.value.trim().toUpperCase() === 'ELIMINAR');
-            
+
             btnSubmitDelete.disabled = !(reasonSelected && textMatches);
         }
 
