@@ -191,11 +191,15 @@ class VentasController extends BaseController {
      * Registra un pago delegando al servicio.
      */
     public function registrar_pago() {
+        $monto = $this->request->getPost('monto');
 
+        if (!is_numeric($monto) || (float) $monto <= 0) {
+            return redirect()->back()->with('fail', 'El monto ingresado no es válido. Debe ser un número mayor a 0.');
+        }
 
         $this->ventasService->registrarPago(
             $this->request->getPost('venta_id'),
-            $this->request->getPost('monto'),
+            (float) $monto,
             $this->request->getPost('nota')
         );
 
@@ -206,12 +210,12 @@ class VentasController extends BaseController {
      * Actualiza las observaciones delegando al servicio.
      */
     public function guardar_observaciones() {
-
-
         $observaciones = $this->request->getPost('observaciones');
-        $img_ref_tag = $this->request->getPost('img_ref_tag');
-        
-        if ($img_ref_tag) {
+        $img_ref_tag   = $this->request->getPost('img_ref_tag');
+
+        // Seguridad: solo se permite el formato exacto [IMG_REF:nombre_de_archivo].
+        // Descarta cualquier otro contenido para prevenir XSS persistente.
+        if ($img_ref_tag && preg_match('/^\[IMG_REF:[a-zA-Z0-9_\-.]+\]$/', $img_ref_tag)) {
             $observaciones .= "\n" . $img_ref_tag;
         }
 
