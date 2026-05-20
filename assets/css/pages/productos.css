@@ -252,10 +252,11 @@
 
 @media (max-width: 991.98px) {
     .btn-fav-artisan {
-        width: 34px !important;
-        height: 34px !important;
-        top: 12px !important;
-        right: 12px !important;
+        width: 44px !important;
+        height: 44px !important;
+        top: 10px !important;
+        right: 10px !important;
+        z-index: 99 !important;
     }
     .btn-fav-artisan i {
         font-size: 1rem !important;

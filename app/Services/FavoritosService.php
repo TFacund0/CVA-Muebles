@@ -26,10 +26,7 @@ class FavoritosService
                                        ->first();
 
         if ($existe) {
-            $this->favoritosModel->where([
-                'usuario_id'  => $usuario_id,
-                'producto_id' => $producto_id
-            ])->delete();
+            $this->favoritosModel->delete($existe['id']);
             return ['status' => 'removed', 'message' => 'Eliminado de favoritos'];
         } else {
             $this->favoritosModel->insert([
