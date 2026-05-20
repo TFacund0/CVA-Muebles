@@ -27,7 +27,7 @@
 require __DIR__ . '/app/Config/Paths.php';
 
 // Path to the front controller
-define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR);
+define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 class preload
 {

@@ -50,6 +50,8 @@
 
 <?= $this->section('extra-js') ?>
 <script>
+    let csrfToken = '<?= csrf_hash() ?>';
+
     function toggleFav(event, id, btn) {
         if (event) {
             event.preventDefault();
@@ -60,11 +62,13 @@
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+                    'X-CSRF-TOKEN': csrfToken
                 }
             })
             .then(response => response.json())
             .then(data => {
+                if (data.csrf) csrfToken = data.csrf; // Refresh token
+
                 const icon = btn.querySelector('i');
                 if (data.status === 'added') {
                     btn.classList.add('active');
