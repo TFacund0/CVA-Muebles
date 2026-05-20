@@ -10,12 +10,14 @@ class VentasController extends BaseController {
     protected $ventasService;
     protected $usuarioService;
     protected $consultaService;
+    protected $galeriaService;
 
     public function __construct() {
         helper(['url', 'form']);
         $this->ventasService  = new \App\Services\VentasService();
         $this->usuarioService = new \App\Services\UsuarioService();
         $this->consultaService = new \App\Services\ConsultaService();
+        $this->galeriaService = new \App\Services\GaleriaService();
     }
 
     /**
@@ -131,9 +133,10 @@ class VentasController extends BaseController {
 
 
         return view('back/sales/estadisticas', [
-            'stats'           => $this->ventasService->getDashboardStats(),
-            'total_consultas' => $this->consultaService->countActivas(),
-            'title'           => 'Estadísticas del Taller'
+            'stats'                    => $this->ventasService->getDashboardStats(),
+            'total_consultas'          => $this->consultaService->countActivas(),
+            'total_galeria_pendientes' => $this->galeriaService->getPendientesCount(),
+            'title'                    => 'Estadísticas del Taller'
         ]);
     }
 

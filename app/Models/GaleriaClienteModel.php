@@ -18,6 +18,7 @@ class GaleriaClienteModel extends Model {
                     ->join('usuarios', 'usuarios.id_usuario = galeria_clientes.usuario_id')
                     ->where('activo', 'SI')
                     ->orderBy('fecha', 'DESC')
+                    ->orderBy('id', 'DESC')
                     ->findAll();
     }
 }

@@ -14,9 +14,15 @@ class GaleriaController extends BaseController {
     }
 
     public function index() {
+        $pendientesCount = 0;
+        if (session()->get('logged_in') && session()->get('perfil_id') == 1) {
+            $pendientesCount = $this->galeriaService->getPendientesCount();
+        }
+
         return view('front/pages/galeria_clientes', [
             'fotos' => $this->galeriaService->getAprobadas(),
-            'title' => 'CVA en tu Hogar - Galería de Clientes'
+            'title' => 'CVA en tu Hogar - Galería de Clientes',
+            'pendientesCount' => $pendientesCount
         ]);
     }
 

@@ -145,6 +145,7 @@ if ($env_cart_enabled) {
             <a href="<?= base_url('/ventas-list') ?>" class="list-group-item list-group-item-action"><i class="bi bi-receipt me-3 text-cva-gold"></i> Ventas/Pedidos</a>
             <a href="<?= base_url('/consultas') ?>" class="list-group-item list-group-item-action"><i class="bi bi-chat-dots me-3 text-cva-gold"></i> Consultas</a>
             <a href="<?= base_url('/crud-productos') ?>" class="list-group-item list-group-item-action"><i class="bi bi-box-seam me-3 text-cva-gold"></i> Productos</a>
+            <a href="<?= base_url('/admin/galeria') ?>" class="list-group-item list-group-item-action"><i class="bi bi-images me-3 text-cva-gold"></i> Moderar Galería</a>
           </div>
         <?php endif; ?>
         <p class="sidebar-section-label">MI CUENTA</p>
