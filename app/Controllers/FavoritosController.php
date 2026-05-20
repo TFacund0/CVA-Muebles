@@ -18,6 +18,7 @@ class FavoritosController extends BaseController {
      */
     public function toggleFavorito($id_producto) {
         $resultado = $this->favoritosService->toggle(session()->get('id_usuario'), $id_producto);
+        $resultado['csrf'] = csrf_hash();
         return $this->response->setJSON($resultado);
     }
 

@@ -51,6 +51,7 @@
 <?= $this->section('extra-js') ?>
 <script>
     let csrfToken = '<?= csrf_hash() ?>';
+    let favoriteQueue = Promise.resolve();
 
     function toggleFav(event, id, btn) {
         if (event) {
@@ -58,31 +59,68 @@
             event.stopPropagation();
         }
 
-        fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.csrf) csrfToken = data.csrf; // Refresh token
+        // Evitar múltiples clics en el mismo botón mientras está procesándose
+        if (btn.classList.contains('loading')) return;
+        btn.classList.add('loading');
 
-                const icon = btn.querySelector('i');
-                if (data.status === 'added') {
-                    btn.classList.add('active');
-                    icon.classList.remove('bi-heart');
-                    icon.classList.add('bi-heart-fill');
-                } else if (data.status === 'removed') {
-                    btn.classList.remove('active');
-                    icon.classList.remove('bi-heart-fill');
-                    icon.classList.add('bi-heart');
-                } else if (data.status === 'error') {
-                    window.location.href = '<?= base_url('login') ?>';
-                }
-            })
-            .catch(err => console.error('Error:', err));
+        const icon = btn.querySelector('i');
+        const wasActive = btn.classList.contains('active');
+
+        // Toggle visual optimista inmediato para una respuesta instantánea
+        btn.classList.toggle('active');
+        if (wasActive) {
+            icon.classList.remove('bi-heart-fill');
+            icon.classList.add('bi-heart');
+        } else {
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
+        }
+
+        // Encolar la petición de forma secuencial para garantizar consistencia del token CSRF
+        favoriteQueue = favoriteQueue.then(() => {
+            return fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Response error');
+                    return response.json();
+                })
+                .then(data => {
+                    btn.classList.remove('loading');
+                    
+                    if (data.csrf) csrfToken = data.csrf; // Actualizar token CSRF global para la siguiente petición
+
+                    if (data.status === 'error') {
+                        // Revertir cambio optimista si no está autenticado y mandar a login
+                        btn.classList.toggle('active', wasActive);
+                        if (wasActive) {
+                            icon.classList.remove('bi-heart');
+                            icon.classList.add('bi-heart-fill');
+                        } else {
+                            icon.classList.remove('bi-heart-fill');
+                            icon.classList.add('bi-heart');
+                        }
+                        window.location.href = '<?= base_url('login') ?>';
+                    }
+                })
+                .catch(err => {
+                    btn.classList.remove('loading');
+                    console.error('Error:', err);
+                    // Revertir cambio optimista ante un fallo de red o servidor
+                    btn.classList.toggle('active', wasActive);
+                    if (wasActive) {
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                    } else {
+                        icon.classList.remove('bi-heart-fill');
+                        icon.classList.add('bi-heart');
+                    }
+                });
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function() {

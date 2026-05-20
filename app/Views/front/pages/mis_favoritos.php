@@ -125,6 +125,8 @@
 </div>
 
 <script>
+    let csrfToken = '<?= csrf_hash() ?>';
+
     function toggleFav(event, id, btn) {
         event.preventDefault();
         event.stopPropagation();
@@ -134,11 +136,13 @@
                 method: 'POST',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+                    'X-CSRF-TOKEN': csrfToken
                 }
             })
             .then(response => response.json())
             .then(data => {
+                if (data.csrf) csrfToken = data.csrf; // Refresh token
+
                 if (data.status === 'removed') {
                     const item = btn.closest('.fav-item');
                     item.style.opacity = '0';
