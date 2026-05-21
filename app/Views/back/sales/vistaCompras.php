@@ -160,6 +160,9 @@
             </div>
         <?php endif; ?>
     </div>
-<script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>
 </div>
+<?= $this->endSection() ?>
+
+<?= $this->section('extra-js') ?>
+<script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>
