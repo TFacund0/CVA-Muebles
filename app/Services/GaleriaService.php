@@ -83,16 +83,45 @@ class GaleriaService
     public function subir($usuario_id, UploadedFile $img, $comentario)
     {
         if ($img->isValid() && !$img->hasMoved()) {
-            $newName = $img->getRandomName();
-            $img->move(FCPATH . 'assets/uploads/galeria', $newName);
+            try {
+                $tempName = $img->getRandomName();
+                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
+                
+                $img->move(FCPATH . 'assets/uploads/galeria', $tempName);
+                
+                $originalPath = FCPATH . 'assets/uploads/galeria/' . $tempName;
+                $destPath = FCPATH . 'assets/uploads/galeria/' . $nombre_imagen;
+                
+                $imageService = \Config\Services::image();
+                $imageService->withFile($originalPath);
+                
+                $width = $imageService->getWidth();
+                $height = $imageService->getHeight();
+                
+                if ($width > 1200 || $height > 1200) {
+                    $imageService->resize(1200, 1200, true, 'auto');
+                }
+                
+                $imageService->save($destPath, 80);
+                
+                if ($originalPath !== $destPath && file_exists($originalPath)) {
+                    @unlink($originalPath);
+                }
 
-            return $this->galeriaModel->insert([
-                'usuario_id' => $usuario_id,
-                'imagen'     => $newName,
-                'comentario' => $comentario,
-                'fecha'      => date('Y-m-d H:i:s'),
-                'activo'     => 'NO'
-            ]);
+                return $this->galeriaModel->insert([
+                    'usuario_id' => $usuario_id,
+                    'imagen'     => $nombre_imagen,
+                    'comentario' => $comentario,
+                    'fecha'      => date('Y-m-d H:i:s'),
+                    'activo'     => 'NO'
+                ]);
+            } catch (\Exception $e) {
+                if (isset($originalPath) && file_exists($originalPath)) {
+                    @unlink($originalPath);
+                }
+                log_message('error', 'Error al optimizar imagen en galería de cliente: ' . $e->getMessage());
+                return false;
+            }
         }
         return false;
     }

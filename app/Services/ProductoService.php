@@ -97,8 +97,30 @@ class ProductoService
     {
         try {
             if ($image && $image->isValid() && !$image->hasMoved()) {
-                $nombre_imagen = $image->getRandomName();
-                $image->move(FCPATH . 'assets/uploads', $nombre_imagen);
+                $tempName = $image->getRandomName();
+                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
+                
+                $image->move(FCPATH . 'assets/uploads', $tempName);
+                
+                $originalPath = FCPATH . 'assets/uploads/' . $tempName;
+                $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
+                
+                $imageService = \Config\Services::image();
+                $imageService->withFile($originalPath);
+                
+                $width = $imageService->getWidth();
+                $height = $imageService->getHeight();
+                
+                if ($width > 800 || $height > 800) {
+                    $imageService->resize(800, 800, true, 'auto');
+                }
+                
+                $imageService->save($destPath, 80);
+                
+                if ($originalPath !== $destPath && file_exists($originalPath)) {
+                    @unlink($originalPath);
+                }
+                
                 $data['imagen'] = $nombre_imagen;
             }
 
@@ -135,8 +157,30 @@ class ProductoService
                     }
                 }
 
-                $nombre_imagen = $image->getRandomName();
-                $image->move(FCPATH . 'assets/uploads', $nombre_imagen);
+                $tempName = $image->getRandomName();
+                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
+                
+                $image->move(FCPATH . 'assets/uploads', $tempName);
+                
+                $originalPath = FCPATH . 'assets/uploads/' . $tempName;
+                $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
+                
+                $imageService = \Config\Services::image();
+                $imageService->withFile($originalPath);
+                
+                $width = $imageService->getWidth();
+                $height = $imageService->getHeight();
+                
+                if ($width > 800 || $height > 800) {
+                    $imageService->resize(800, 800, true, 'auto');
+                }
+                
+                $imageService->save($destPath, 80);
+                
+                if ($originalPath !== $destPath && file_exists($originalPath)) {
+                    @unlink($originalPath);
+                }
+                
                 $data['imagen'] = $nombre_imagen;
             }
 
@@ -208,15 +252,43 @@ class ProductoService
         $count = 0;
         foreach ($files as $img) {
             if ($img->isValid() && !$img->hasMoved()) {
-                $newName = $img->getRandomName();
-                $img->move(FCPATH . 'assets/uploads', $newName);
-
-                $this->imagenModel->insert([
-                    'producto_id' => $producto_id,
-                    'imagen'      => $newName,
-                    'orden'       => 0
-                ]);
-                $count++;
+                $tempName = $img->getRandomName();
+                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
+                
+                $img->move(FCPATH . 'assets/uploads', $tempName);
+                
+                $originalPath = FCPATH . 'assets/uploads/' . $tempName;
+                $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
+                
+                try {
+                    $imageService = \Config\Services::image();
+                    $imageService->withFile($originalPath);
+                    
+                    $width = $imageService->getWidth();
+                    $height = $imageService->getHeight();
+                    
+                    if ($width > 800 || $height > 800) {
+                        $imageService->resize(800, 800, true, 'auto');
+                    }
+                    
+                    $imageService->save($destPath, 80);
+                    
+                    if ($originalPath !== $destPath && file_exists($originalPath)) {
+                        @unlink($originalPath);
+                    }
+                    
+                    $this->imagenModel->insert([
+                        'producto_id' => $producto_id,
+                        'imagen'      => $nombre_imagen,
+                        'orden'       => 0
+                    ]);
+                    $count++;
+                } catch (\Exception $e) {
+                    if (file_exists($originalPath)) {
+                        @unlink($originalPath);
+                    }
+                    log_message('error', 'Error optimizando imagen de galería: ' . $e->getMessage());
+                }
             }
         }
         return $count > 0;
