@@ -1,3 +1,18 @@
+<?php
+/**
+ * Vista de Error de Producción - CVA Muebles
+ *
+ * Esta vista se presenta a los usuarios finales en entornos de producción
+ * cuando ocurre una excepción o error interno de servidor no controlado (500).
+ * Está diseñada con una estética premium alineada con la marca CVA Muebles
+ * (colores corporativos marrón y oro, tipografía sofisticada, e iconos ilustrativos),
+ * ocultando detalles técnicos o trazas de debug sensibles para garantizar la seguridad y privacidad.
+ *
+ * Variables inyectadas por el manejador global de excepciones:
+ * @var string $title   Título descriptivo del error.
+ * @var string $message Mensaje explicativo amigable para el usuario.
+ */
+?>
 <!doctype html>
 <html lang="es">
 <head>
