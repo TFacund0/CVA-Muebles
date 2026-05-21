@@ -16,9 +16,6 @@ function initSalesAdmin() {
     const filterStatus = document.getElementById('filter-status');
     const btnReset = document.getElementById('btn-reset');
     
-    // Solo inicializar si estamos en la vista de administración (detalleVentas)
-    if (!inputSearch || !selectStatus || !rows.length) return;
-
     window.filterByStatus = function(status) {
         const tabEl = document.getElementById('activos-tab');
         if (tabEl) {
@@ -29,6 +26,9 @@ function initSalesAdmin() {
             selectStatus.dispatchEvent(new Event('change'));
         }
     };
+
+    // Solo inicializar el resto si estamos en la vista de administración con tabla (detalleVentas)
+    if (!inputSearch || !selectStatus) return;
 
     function filterOrders() {
         const searchTerm = inputSearch.value.toLowerCase();
