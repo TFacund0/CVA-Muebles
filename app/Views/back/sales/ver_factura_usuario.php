@@ -148,20 +148,6 @@
             </div>
         </div>
     </div>
-    <script>
-        function togglePreview(id, element) {
-            document.querySelectorAll('.product-preview-card').forEach(card => {
-                if(card.id !== id) card.classList.remove('active');
-            });
-            const card = document.getElementById(id);
-            card.classList.toggle('active');
-            document.addEventListener('click', function close(e) {
-                if (!card.contains(e.target) && !element.contains(e.target)) {
-                    card.classList.remove('active');
-                    document.removeEventListener('click', close);
-                }
-            });
-        }
-    </script>
+<script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>
 </div>
 <?= $this->endSection() ?>

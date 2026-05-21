@@ -28,10 +28,10 @@
                     
                     <?php if(!empty($producto['galeria'])): ?>
                         <!-- Flechas de navegación (Aseguramos que estén dentro del position-relative) -->
-                        <button class="gallery-arrow arrow-left" onclick="moveGallery(-1)" aria-label="Anterior">
+                        <button class="gallery-arrow arrow-left" aria-label="Anterior">
                             <i class="bi bi-chevron-left"></i>
                         </button>
-                        <button class="gallery-arrow arrow-right" onclick="moveGallery(1)" aria-label="Siguiente">
+                        <button class="gallery-arrow arrow-right" aria-label="Siguiente">
                             <i class="bi bi-chevron-right"></i>
                         </button>
                     <?php endif; ?>
@@ -40,11 +40,11 @@
                 <?php if(!empty($producto['galeria'])): ?>
                     <div class="product-gallery-thumbs d-flex gap-2 overflow-auto pb-2">
                         <!-- Imagen Principal como miniatura -->
-                        <div class="thumb-item active" onclick="changeMainImg('<?= base_url('assets/uploads/' . $producto['imagen']) ?>', this)">
+                        <div class="thumb-item active">
                             <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" alt="Principal">
                         </div>
                         <?php foreach($producto['galeria'] as $img): ?>
-                            <div class="thumb-item" onclick="changeMainImg('<?= base_url('assets/uploads/' . $img['imagen']) ?>', this)">
+                            <div class="thumb-item">
                                 <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" alt="Galería">
                             </div>
                         <?php endforeach; ?>
@@ -189,57 +189,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    // Lista de todas las imágenes (Principal + Galería)
-    const imagesList = [
-        '<?= base_url('assets/uploads/' . $producto['imagen']) ?>',
-        <?php if(!empty($producto['galeria'])): ?>
-            <?php foreach($producto['galeria'] as $img): ?>
-                '<?= base_url('assets/uploads/' . $img['imagen']) ?>',
-            <?php endforeach; ?>
-        <?php endif; ?>
-    ];
-    
-    let currentIndex = 0;
-
-    function changeMainImg(src, element) {
-        const mainImg = document.getElementById('main-product-img');
-        if (!mainImg) return;
-
-        currentIndex = imagesList.indexOf(src);
-        
-        // Transición suave
-        mainImg.style.opacity = '0.4';
-        mainImg.style.transform = 'scale(0.98)';
-        
-        setTimeout(() => {
-            mainImg.src = src;
-            mainImg.style.opacity = '1';
-            mainImg.style.transform = 'scale(1)';
-        }, 150);
-
-        // Actualizar miniaturas
-        document.querySelectorAll('.thumb-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        
-        const thumbs = document.querySelectorAll('.thumb-item');
-        if (element) {
-            element.classList.add('active');
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        } else if (thumbs[currentIndex]) {
-            thumbs[currentIndex].classList.add('active');
-            thumbs[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-    }
-
-    function moveGallery(step) {
-        currentIndex += step;
-        if (currentIndex >= imagesList.length) currentIndex = 0;
-        if (currentIndex < 0) currentIndex = imagesList.length - 1;
-        
-        changeMainImg(imagesList[currentIndex]);
-    }
-</script>
+<script src="<?= base_url('assets/js/pages/product-detail.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>
 

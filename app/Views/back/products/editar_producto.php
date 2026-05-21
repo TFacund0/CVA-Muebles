@@ -192,21 +192,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('main-preview');
-        const indicator = document.getElementById('new-badge-indicator');
-        
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.add('animate__animated', 'animate__pulse');
-                indicator.classList.remove('d-none');
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
+<script src="<?= base_url('assets/js/admin/products.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

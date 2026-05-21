@@ -166,12 +166,7 @@
     </div>
 </div>
 
-<script>
-    function prepararEdicion(id, descripcion) {
-        document.getElementById('descEditar').value = descripcion;
-        document.getElementById('formEditar').action = '<?= base_url('admin/categorias/editar/') ?>' + id;
-    }
-</script>
+<script src="<?= base_url('assets/js/admin/categories.js?v=1.0') ?>"></script>
 
 
 <?= $this->endSection() ?>

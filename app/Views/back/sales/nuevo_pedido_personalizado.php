@@ -159,12 +159,7 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('ref_img').addEventListener('change', function() {
-        const fileName = this.files[0] ? this.files[0].name : '';
-        document.getElementById('file-name').innerHTML = fileName ? '<i class="bi bi-file-earmark-check me-1"></i> Seleccionado: ' + fileName : '';
-    });
-</script>
+<script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>
 
 
 <?= $this->endSection() ?>

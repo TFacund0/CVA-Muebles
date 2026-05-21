@@ -14,7 +14,7 @@
 
 <?php if ($msg): ?>
     <div class="toast-container position-fixed bottom-0 end-0 p-4" style="z-index: 9999;">
-        <div id="liveToast" class="toast show border-0 rounded-4 shadow-lg animate-slide-up" role="alert" aria-live="assertive" aria-atomic="true" style="--toast-duration: <?= $duration ?>s;">
+        <div id="liveToast" class="toast show border-0 rounded-4 shadow-lg animate-slide-up" role="alert" aria-live="assertive" aria-atomic="true" style="--toast-duration: <?= $duration ?>s;" data-duration="<?= $duration * 1000 ?>">
             <div class="toast-header bg-white border-0 py-3 rounded-top-4">
                 <div class="d-flex align-items-center w-100">
                     <div class="rounded-circle bg-<?= $type ?> p-2 d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
@@ -33,15 +33,4 @@
             <div class="toast-progress-bar bg-<?= $type ?>" id="toast-progress"></div>
         </div>
     </div>
-
-
-    <script>
-        setTimeout(() => {
-            const toast = document.getElementById('liveToast');
-            if (toast) {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 500);
-            }
-        }, <?= $duration * 1000 ?>);
-    </script>
 <?php endif; ?>

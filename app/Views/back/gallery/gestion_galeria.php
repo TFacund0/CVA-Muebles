@@ -52,14 +52,14 @@
 
                         <div class="d-flex gap-2 align-items-center mt-auto w-100">
                             <?php if ($foto['activo'] == 'NO'): ?>
-                                <form action="<?= base_url('admin/galeria/aprobar/' . $foto['id']) ?>" method="post" class="flex-grow-1 m-0">
+                                <form action="<?= base_url('admin/galeria/aprobar/' . $foto['id']) ?>" method="post" class="flex-grow-1 m-0 d-flex align-items-center">
                                     <?= csrf_field() ?>
-                                    <button type="submit" class="btn btn-success btn-approve-gallery w-100">APROBAR</button>
+                                    <button type="submit" class="btn btn-success btn-approve-gallery w-100 m-0">APROBAR</button>
                                 </form>
                             <?php endif; ?>
-                            <form action="<?= base_url('admin/galeria/eliminar/' . $foto['id']) ?>" method="post" class="m-0" onsubmit="return confirm('¿Eliminar esta foto permanentemente?')">
+                            <form action="<?= base_url('admin/galeria/eliminar/' . $foto['id']) ?>" method="post" class="m-0 d-flex align-items-center" onsubmit="return confirm('¿Eliminar esta foto permanentemente?')">
                                 <?= csrf_field() ?>
-                                <button type="submit" class="btn btn-outline-danger rounded-circle p-2 btn-delete-gallery">
+                                <button type="submit" class="btn btn-outline-danger rounded-circle p-2 btn-delete-gallery m-0">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>

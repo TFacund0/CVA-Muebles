@@ -94,46 +94,14 @@
 
     <script src="<?= base_url('assets/vendor/bootstrap/bootstrap.bundle.min.js')?>" ></script>
     <script>
-        /**
-         * Función infalible para alternar el sidebar
-         */
-        function toggleSidebar(e) {
-            if(e) e.preventDefault();
-            console.log("Toggle Sidebar ejecutado");
-            const body = document.body;
-            body.classList.toggle('sidebar-visible');
-            
-            // Bloquear scroll cuando está abierto
-            if (body.classList.contains('sidebar-visible')) {
-                body.style.overflow = 'hidden';
-            } else {
-                body.style.overflow = '';
-            }
-        }
-
-        // También permitimos cerrar al hacer clic en el overlay o la X
-        document.addEventListener('DOMContentLoaded', function() {
-            const overlay = document.getElementById('sidebarOverlay');
-            const closeBtn = document.getElementById('sidebarClose');
-            
-            if(overlay) overlay.addEventListener('click', function() {
-                document.body.classList.remove('sidebar-visible');
-                document.body.style.overflow = '';
-            });
-            
-            if(closeBtn) closeBtn.addEventListener('click', function() {
-                document.body.classList.remove('sidebar-visible');
-                document.body.style.overflow = '';
-            });
-        });
-        function submitAction(url, message) {
-            if (confirm(message)) {
-                const form = document.getElementById('global-action-form');
-                form.action = url;
-                form.submit();
-            }
-        }
+        window.CVA = {
+            baseUrl: "<?= base_url() ?>",
+            csrfTokenName: "<?= csrf_token() ?>",
+            csrfHash: "<?= csrf_hash() ?>"
+        };
     </script>
+    <script src="<?= base_url('assets/js/core/main.js?v=1.0') ?>"></script>
+    <script src="<?= base_url('assets/js/core/admin-core.js?v=1.0') ?>"></script>
     
     <!-- Formulario Global para acciones POST Seguras -->
     <form id="global-action-form" method="POST" style="display: none;">

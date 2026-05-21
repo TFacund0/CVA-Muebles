@@ -80,7 +80,7 @@
                     <div class="fav-card">
                         <div class="fav-img-wrapper">
                             <img src="<?= base_url('assets/uploads/' . $fav['imagen']) ?>" alt="<?= $fav['nombre_prod'] ?>">
-                            <button onclick="toggleFav(event, <?= $fav['producto_id'] ?>, this)" class="remove-fav-btn shadow-sm" title="Quitar de favoritos">
+                            <button data-id="<?= $fav['producto_id'] ?>" class="remove-fav-btn shadow-sm" title="Quitar de favoritos">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </div>
@@ -124,104 +124,5 @@
     <?php endif; ?>
 </div>
 
-<script>
-    let csrfToken = '<?= csrf_hash() ?>';
-
-    function toggleFav(event, id, btn) {
-        event.preventDefault();
-        event.stopPropagation();
-        if (!confirm('¿Quitar este mueble de tus favoritos?')) return;
-
-        fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.csrf) csrfToken = data.csrf; // Refresh token
-
-                if (data.status === 'removed') {
-                    const item = btn.closest('.fav-item');
-                    item.style.opacity = '0';
-                    item.style.transform = 'scale(0.8)';
-                    setTimeout(() => {
-                        item.remove();
-                        if (document.querySelectorAll('.fav-item').length === 0) {
-                            location.reload();
-                        }
-                    }, 400);
-                }
-            })
-            .catch(err => console.error('Error:', err));
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('search-favs');
-        const clearBtn = document.getElementById('clear-search');
-        const filterBtns = document.querySelectorAll('.btn-filter-artisan');
-        const cards = document.querySelectorAll('.fav-item');
-        const noResults = document.getElementById('no-results-fav');
-
-        let currentSearch = '';
-        let currentFilter = 'todos';
-
-        function filterFavorites() {
-            let visibleCount = 0;
-
-            cards.forEach(card => {
-                const nombre = card.dataset.nombre.toLowerCase();
-                const category = card.dataset.categorias.toLowerCase();
-
-                const matchesSearch = nombre.includes(currentSearch);
-                const matchesFilter = currentFilter === 'todos' || category === currentFilter;
-
-                if (matchesSearch && matchesFilter) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            if (visibleCount === 0) {
-                noResults.classList.remove('d-none');
-            } else {
-                noResults.classList.add('d-none');
-            }
-        }
-
-        if (searchInput) {
-            searchInput.addEventListener('input', function() {
-                currentSearch = this.value.toLowerCase().trim();
-                if (currentSearch.length > 0) {
-                    clearBtn.classList.remove('d-none');
-                } else {
-                    clearBtn.classList.add('d-none');
-                }
-                filterFavorites();
-            });
-        }
-
-        if (clearBtn) {
-            clearBtn.addEventListener('click', function() {
-                searchInput.value = '';
-                currentSearch = '';
-                this.classList.add('d-none');
-                filterFavorites();
-            });
-        }
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                filterFavorites();
-            });
-        });
-    });
-</script>
+<script src="<?= base_url('assets/js/pages/favorites.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

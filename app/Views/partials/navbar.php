@@ -158,18 +158,3 @@ if ($env_cart_enabled) {
     </div>
   </div>
 </div>
-
-<script>
-  function adjustOffcanvasPosition() {
-    const offcanvas = document.getElementById('offcanvasNavbar');
-    if (window.innerWidth < 992) {
-      offcanvas.classList.remove('offcanvas-end');
-      offcanvas.classList.add('offcanvas-start');
-    } else {
-      offcanvas.classList.remove('offcanvas-start');
-      offcanvas.classList.add('offcanvas-end');
-    }
-  }
-  window.addEventListener('resize', adjustOffcanvasPosition);
-  window.addEventListener('DOMContentLoaded', adjustOffcanvasPosition);
-</script>

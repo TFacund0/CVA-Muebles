@@ -85,7 +85,7 @@
 <div class="row mb-4">
     <div class="col-12">
         <div class="d-flex justify-content-center justify-content-md-start">
-            <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="productosTab" role="tablist">
+            <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="productosTab" role="tablist" data-vista="<?= esc($vista) ?>">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2" 
                             id="activos-tab" 
@@ -259,106 +259,5 @@
 
 
 
-<script>
-    function submitAction(url, message) {
-        if (confirm(message)) {
-            const form = document.getElementById('global-action-form');
-            const separator = url.includes('?') ? '&' : '?';
-            const activosTab = document.getElementById('activos-tab');
-            const vista = (activosTab && activosTab.classList.contains('active')) ? 'NO' : 'SI';
-            form.action = url + separator + 'vista=' + vista;
-            form.submit();
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputSearch = document.getElementById('input-search');
-        const selectCategory = document.getElementById('select-category');
-        const activosTab = document.getElementById('activos-tab');
-        const archivadosTab = document.getElementById('archivados-tab');
-        const rows = document.querySelectorAll('.product-row');
-        const noResults = document.getElementById('no-results-row');
-        const emptyActive = document.getElementById('empty-active-row');
-        const emptyArchive = document.getElementById('empty-archive-row');
-        const filterStatus = document.getElementById('filter-status');
-        const btnReset = document.getElementById('btn-reset');
-
-        let currentView = '<?= esc($vista) ?>'; // 'NO' para Activos, 'SI' para Archivados
-
-        function filterProducts() {
-            const searchTerm = inputSearch.value.toLowerCase();
-            const categoryTerm = selectCategory.value;
-            let visibleCount = 0;
-            let totalInCurrentView = 0;
-
-            filterStatus.style.opacity = '1';
-
-            rows.forEach(row => {
-                const name = row.getAttribute('data-name');
-                const category = row.getAttribute('data-category');
-                const eliminado = row.getAttribute('data-eliminado');
-                
-                const isCorrectView = (eliminado === currentView);
-                const matchesSearch = name.includes(searchTerm);
-                const matchesCategory = (categoryTerm === 'all' || category === categoryTerm);
-
-                if (isCorrectView) {
-                    totalInCurrentView++;
-                    if (matchesSearch && matchesCategory) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Control de filas vacías
-            if (noResults) noResults.style.display = (visibleCount === 0 && totalInCurrentView > 0) ? '' : 'none';
-            if (emptyActive) emptyActive.style.display = (totalInCurrentView === 0 && currentView === 'NO') ? '' : 'none';
-            if (emptyArchive) emptyArchive.style.display = (totalInCurrentView === 0 && currentView === 'SI') ? '' : 'none';
-            
-            setTimeout(() => {
-                filterStatus.style.opacity = '0';
-            }, 200);
-        }
-
-        function switchTab(view) {
-            currentView = view;
-            if (currentView === 'NO') {
-                activosTab.classList.add('active');
-                activosTab.setAttribute('aria-selected', 'true');
-                archivadosTab.classList.remove('active');
-                archivadosTab.setAttribute('aria-selected', 'false');
-            } else {
-                archivadosTab.classList.add('active');
-                archivadosTab.setAttribute('aria-selected', 'true');
-                activosTab.classList.remove('active');
-                activosTab.setAttribute('aria-selected', 'false');
-            }
-            filterProducts();
-        }
-
-        if (activosTab) activosTab.addEventListener('click', () => switchTab('NO'));
-        if (archivadosTab) archivadosTab.addEventListener('click', () => switchTab('SI'));
-
-        inputSearch.addEventListener('input', filterProducts);
-        selectCategory.addEventListener('change', filterProducts);
-        
-        btnReset.addEventListener('click', function() {
-            inputSearch.value = '';
-            selectCategory.value = 'all';
-            filterProducts();
-        });
-
-        // Inicializar vista
-        switchTab(currentView);
-    });
-
-    function resetFilters() {
-        document.getElementById('btn-reset').click();
-    }
-</script>
+<script src="<?= base_url('assets/js/admin/products-list.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

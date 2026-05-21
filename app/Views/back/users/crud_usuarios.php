@@ -79,7 +79,7 @@
 <div class="row mb-4">
     <div class="col-12">
         <div class="d-flex justify-content-center justify-content-md-start">
-            <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="usuariosTab" role="tablist">
+            <ul class="nav nav-pills custom-segmented-tabs p-1 bg-light rounded-4 shadow-sm border" id="usuariosTab" role="tablist" data-vista="<?= esc($vista) ?>">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2"
                         id="activos-tab"
@@ -218,24 +218,24 @@
                                         <i class="bi bi-person-gear"></i>
                                     </a>
                                 <?php else: ?>
-                                    <button type="button" onclick="submitAction('<?= base_url('/editar-usuario/' . $u['id_usuario']) ?>', '¿Cambiar perfil de este usuario?')"
+                                    <button type="button" onclick="submitActionUsers('<?= base_url('/editar-usuario/' . $u['id_usuario']) ?>', '¿Cambiar perfil de este usuario?')"
                                         class="btn btn-action-premium text-primary border-primary border-opacity-25 shadow-sm"
                                         title="Cambiar Rango">
                                         <i class="bi bi-arrow-repeat"></i>
                                     </button>
 
                                     <div class="action-toggle-container d-flex gap-2">
-                                        <button type="button" onclick="submitAction('<?= base_url('/delete-usuario/' . $u['id_usuario']) ?>', '¿Confirmas suspender a este usuario?')"
+                                        <button type="button" onclick="submitActionUsers('<?= base_url('/delete-usuario/' . $u['id_usuario']) ?>', '¿Confirmas suspender a este usuario?')"
                                             class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm btn-archive <?= $u['baja'] == 'SI' ? 'd-none' : '' ?>"
                                             title="Suspender Usuario">
                                             <i class="bi bi-person-x-fill"></i>
                                         </button>
-                                        <button type="button" onclick="submitAction('<?= base_url('/activar-usuario/' . $u['id_usuario']) ?>', '¿Confirmas reactivar a este usuario?')"
+                                        <button type="button" onclick="submitActionUsers('<?= base_url('/activar-usuario/' . $u['id_usuario']) ?>', '¿Confirmas reactivar a este usuario?')"
                                             class="btn btn-action-premium text-success border-success border-opacity-25 shadow-sm btn-restore <?= $u['baja'] == 'NO' ? 'd-none' : '' ?>"
                                             title="Reactivar Usuario">
                                             <i class="bi bi-person-check-fill"></i>
                                         </button>
-                                        <button type="button" onclick="submitAction('<?= base_url('/eliminar-usuario-permanente/' . $u['id_usuario']) ?>', '¿Confirmas eliminar PERMANENTEMENTE a este usuario? Esta acción es irreversible y borrará todos sus accesos.')"
+                                        <button type="button" onclick="submitActionUsers('<?= base_url('/eliminar-usuario-permanente/' . $u['id_usuario']) ?>', '¿Confirmas eliminar PERMANENTEMENTE a este usuario? Esta acción es irreversible y borrará todos sus accesos.')"
                                             class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm btn-delete-permanent <?= $u['baja'] == 'NO' ? 'd-none' : '' ?>"
                                             title="Eliminar Permanente">
                                             <i class="bi bi-trash-fill"></i>
@@ -279,109 +279,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    function submitAction(url, message) {
-        if (confirm(message)) {
-            const form = document.getElementById('action-form');
-            const separator = url.includes('?') ? '&' : '?';
-            const activosTab = document.getElementById('activos-tab');
-            const vista = (activosTab && activosTab.classList.contains('active')) ? 'NO' : 'SI';
-            form.action = url + separator + 'vista=' + vista;
-            form.submit();
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputSearch = document.getElementById('input-search');
-        const selectPerfil = document.getElementById('select-perfil');
-        const activosTab = document.getElementById('activos-tab');
-        const suspendidosTab = document.getElementById('suspendidos-tab');
-        const rows = document.querySelectorAll('.user-row');
-        const noResults = document.getElementById('no-results-row');
-        const emptyActive = document.getElementById('empty-active-row');
-        const emptySuspended = document.getElementById('empty-suspended-row');
-        const filterStatus = document.getElementById('filter-status');
-        const btnReset = document.getElementById('btn-reset');
-
-        let currentView = '<?= esc($vista) ?>'; // 'NO' para Activos, 'SI' para Suspendidos
-
-        function filterUsers() {
-            const searchTerm = inputSearch.value.toLowerCase();
-            const perfilTerm = selectPerfil.value;
-            let visibleCount = 0;
-            let totalInCurrentView = 0;
-
-            filterStatus.style.opacity = '1';
-
-            rows.forEach(row => {
-                const searchData = row.getAttribute('data-search');
-                const baja = row.getAttribute('data-baja');
-                const perfil = row.getAttribute('data-perfil');
-
-                const isCorrectView = (baja === currentView);
-                const matchesSearch = searchData.includes(searchTerm);
-                const matchesPerfil = (perfilTerm === 'all' || perfil === perfilTerm);
-
-                if (isCorrectView) {
-                    totalInCurrentView++;
-                    if (matchesSearch && matchesPerfil) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Control de estados vacíos
-            noResults.style.display = (visibleCount === 0 && totalInCurrentView > 0) ? '' : 'none';
-            emptyActive.style.display = (totalInCurrentView === 0 && currentView === 'NO') ? '' : 'none';
-            emptySuspended.style.display = (totalInCurrentView === 0 && currentView === 'SI') ? '' : 'none';
-
-            setTimeout(() => {
-                filterStatus.style.opacity = '0';
-            }, 300);
-        }
-
-        function switchTab(view) {
-            currentView = view;
-
-            if (currentView === 'NO') {
-                activosTab.classList.add('active');
-                activosTab.setAttribute('aria-selected', 'true');
-                suspendidosTab.classList.remove('active');
-                suspendidosTab.setAttribute('aria-selected', 'false');
-            } else {
-                suspendidosTab.classList.add('active');
-                suspendidosTab.setAttribute('aria-selected', 'true');
-                activosTab.classList.remove('active');
-                activosTab.setAttribute('aria-selected', 'false');
-            }
-
-            filterUsers();
-        }
-
-        activosTab.addEventListener('click', function() {
-            switchTab('NO');
-        });
-
-        suspendidosTab.addEventListener('click', function() {
-            switchTab('SI');
-        });
-
-        inputSearch.addEventListener('input', filterUsers);
-        selectPerfil.addEventListener('change', filterUsers);
-
-        btnReset.addEventListener('click', function() {
-            inputSearch.value = '';
-            selectPerfil.value = 'all';
-            filterUsers();
-        });
-
-        // Inicializar vista
-        switchTab(currentView);
-    });
-</script>
+<script src="<?= base_url('assets/js/admin/users.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

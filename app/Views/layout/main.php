@@ -51,14 +51,14 @@
     <?= $this->renderSection('extra-js') ?>
 
     <script>
-        function submitAction(url, message) {
-            if (confirm(message)) {
-                const form = document.getElementById('global-action-form');
-                form.action = url;
-                form.submit();
-            }
-        }
+        window.CVA = {
+            baseUrl: "<?= base_url() ?>",
+            csrfTokenName: "<?= csrf_token() ?>",
+            csrfHash: "<?= csrf_hash() ?>"
+        };
     </script>
+    <script src="<?= base_url('assets/js/core/main.js?v=1.0') ?>"></script>
+    <script src="<?= base_url('assets/js/core/product-card.js?v=1.0') ?>"></script>
     <form id="global-action-form" method="POST" style="display: none;">
         <?= csrf_field() ?>
     </form>
