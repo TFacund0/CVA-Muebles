@@ -84,6 +84,26 @@ El proyecto cuenta con un esquema de protección integral contra vulnerabilidade
 
 ---
 
+## ⚡ Optimización de Rendimiento y Velocidad (WPO)
+
+La plataforma incorpora una suite integral de optimización de rendimiento en la web (Web Performance Optimization) a nivel de backend, frontend y base de datos:
+
+- **Procesamiento de Imágenes en Caliente (WebP Backend Transcoding)**:
+  - Todas las subidas de imágenes del catálogo (`ProductoService`) y de la galería social (`GaleriaService`) son interceptadas dinámicamente en caliente.
+  - Se realiza una redimensión proporcional inteligente (máximo **800px** para fichas y **1200px** para fotos de clientes) y se transcodifican nativamente al formato de última generación **WebP** con compresión de calidad balanceada al **80%**, reduciendo drásticamente el peso de transferencia sin perder fidelidad visual.
+- **Carga Perezosa Nativa (Lazy Loading)**:
+  - Implementación sistemática del atributo `loading="lazy"` en todas las vistas de grillas (`productos`, `section-catalogo`, `galeria_clientes`) y miniaturas de detalles de productos, posponiendo la descarga de imágenes fuera de la pantalla de visualización activa (viewport) y acelerando el renderizado inicial de la página.
+- **Arquitectura de Doble Capa de Caché (Dual-Layer Caching)**:
+  - **Caché de Páginas Completas (Page Caching)**: Reducción del TTFB (Time to First Byte) a milisegundos mediante almacenamiento en caché estática (600s) en controladores públicos para páginas informativas estáticas (`quienesSomos`, `comercializacion`, `terminosYCondiciones`, `beneficios`). Se excluyen de forma segura páginas dinámicas de sesión o formularios con validaciones CSRF activas.
+  - **Caché de Consultas SQL (Query Caching)**: Almacenamiento en caché por 1 hora de las estadísticas de productos por categorías en `CategoriaService` para mitigar el problema de consultas duplicadas N+1.
+  - **Coherencia e Invalidación Dinámica**: Purga atómica y automatizada del estado de la caché (`$cache->delete(...)`) en todas las operaciones de escritura/modificación de categorías y productos en los servicios de negocio, asegurando consistencia de datos en tiempo real.
+- **Indexación y Optimización de Base de Datos**:
+  - Script especializado `cva_indexes_optimization.sql` (disponible en la carpeta `scratch/`) que implementa índices (B-Tree e índices únicos) estratégicamente diseñados para acelerar las consultas más críticas, JOINs complejos y ordenamientos en las tablas `favoritos`, `productos`, `ventas_detalle`, `ventas_cabecera` y `consultas`.
+- **Drivers de Sesión RAM de Alto Rendimiento**:
+  - Configuración preparada y documentada en el archivo `.env` para migrar transparentemente la persistencia de sesiones del disco (`FileHandler`) a almacenamiento en memoria RAM activa de baja latencia utilizando **Redis** o **Memcached** en entornos de producción.
+
+---
+
 ## 🚀 Instalación y Configuración
 
 1.  **Clonar el repositorio**:
