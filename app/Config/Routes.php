@@ -103,8 +103,8 @@ $routes->get('/muestro','CarritoController::muestra', ['filter' => 'auth']);
 $routes->post('/carrito/add','CarritoController::add', ['filter' => 'auth']);
 $routes->post('/carrito_elimina/(:any)','CarritoController::remove/$1', ['filter' => 'auth']);
 $routes->post('/borrar','CarritoController::borrar_carrito', ['filter' => 'auth']);
-$routes->match(['get', 'post'], 'carrito_suma/(:any)', 'CarritoController::suma/$1', ['filter' => 'auth']);
-$routes->match(['get', 'post'], 'carrito_resta/(:any)', 'CarritoController::resta/$1', ['filter' => 'auth']);
+$routes->match(['GET', 'POST'], 'carrito_suma/(:any)', 'CarritoController::suma/$1', ['filter' => 'auth']);
+$routes->match(['GET', 'POST'], 'carrito_resta/(:any)', 'CarritoController::resta/$1', ['filter' => 'auth']);
 
 
 // -------------------- Gestión de Favoritos (Wishlist) --------------------
