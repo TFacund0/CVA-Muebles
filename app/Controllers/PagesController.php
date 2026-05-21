@@ -25,6 +25,7 @@ class PagesController extends BaseController
      */
     public function quienesSomos() 
     {
+        $this->cachePage(600);
         return view('front/pages/quienesSomos', ['title' => 'Quiénes Somos']);
     }
 
@@ -35,6 +36,7 @@ class PagesController extends BaseController
      */
     public function comercializacion() 
     {   
+        $this->cachePage(600);
         return view('front/pages/comercializacion', ['title' => 'Comercialización']);
     }
 
@@ -55,6 +57,7 @@ class PagesController extends BaseController
      */
     public function terminosYCondiciones() 
     {
+        $this->cachePage(600);
         return view('front/pages/terminosYCondiciones', ['title' => 'Términos y Condiciones']);
     }
 
@@ -65,6 +68,7 @@ class PagesController extends BaseController
      */
     public function beneficios() 
     {
+        $this->cachePage(600);
         return view('front/pages/beneficios', ['title' => 'Programa de Fidelidad']);
     }
 

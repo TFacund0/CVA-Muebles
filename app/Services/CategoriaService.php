@@ -48,6 +48,13 @@ class CategoriaService
      */
     public function getCategoriasConStats($soloActivas = false)
     {
+        $cache = \Config\Services::cache();
+        $cacheKey = 'categorias_stats_' . ($soloActivas ? 'activas' : 'todas');
+
+        if ($cached = $cache->get($cacheKey)) {
+            return $cached;
+        }
+
         if ($soloActivas) {
             $categorias = $this->categoriaModel->where('activo', 1)->findAll();
         } else {
@@ -60,6 +67,8 @@ class CategoriaService
                                                             ->where('eliminado', 'NO')
                                                             ->countAllResults();
         }
+
+        $cache->save($cacheKey, $categorias, 3600); // Guardar caché por 1 hora
 
         return $categorias;
     }
@@ -77,6 +86,11 @@ class CategoriaService
         if ($this->categoriaModel->insert($data) === false) {
             return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->categoriaModel->errors())];
         }
+
+        $cache = \Config\Services::cache();
+        $cache->delete('categorias_stats_activas');
+        $cache->delete('categorias_stats_todas');
+
         return ['status' => 'success', 'message' => 'Categoría creada con éxito.'];
     }
 
@@ -93,6 +107,11 @@ class CategoriaService
         if ($this->categoriaModel->update($id, $data) === false) {
             return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->categoriaModel->errors())];
         }
+
+        $cache = \Config\Services::cache();
+        $cache->delete('categorias_stats_activas');
+        $cache->delete('categorias_stats_todas');
+
         return ['status' => 'success', 'message' => 'Categoría actualizada con éxito.'];
     }
 
@@ -116,6 +135,11 @@ class CategoriaService
         }
 
         $this->categoriaModel->delete($id);
+
+        $cache = \Config\Services::cache();
+        $cache->delete('categorias_stats_activas');
+        $cache->delete('categorias_stats_todas');
+
         return ['status' => 'success', 'message' => 'Categoría eliminada correctamente.'];
     }
 
@@ -134,7 +158,15 @@ class CategoriaService
         }
 
         $nuevo_estado = ($cat['activo'] == 1) ? 0 : 1;
-        return $this->categoriaModel->update($id, ['activo' => $nuevo_estado]);
+        $result = $this->categoriaModel->update($id, ['activo' => $nuevo_estado]);
+
+        if ($result) {
+            $cache = \Config\Services::cache();
+            $cache->delete('categorias_stats_activas');
+            $cache->delete('categorias_stats_todas');
+        }
+
+        return $result;
     }
 
     /**

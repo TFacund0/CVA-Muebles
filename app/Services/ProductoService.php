@@ -127,6 +127,12 @@ class ProductoService
             if ($this->productoModel->insert($data) === false) {
                 return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->productoModel->errors())];
             }
+
+            // Invalida caché de estadísticas de categorías
+            $cache = \Config\Services::cache();
+            $cache->delete('categorias_stats_activas');
+            $cache->delete('categorias_stats_todas');
+
             return ['status' => 'success', 'message' => 'Producto creado con éxito.'];
 
         } catch (\Exception $e) {
@@ -187,6 +193,12 @@ class ProductoService
             if ($this->productoModel->update($id, $data) === false) {
                 return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->productoModel->errors())];
             }
+
+            // Invalida caché de estadísticas de categorías
+            $cache = \Config\Services::cache();
+            $cache->delete('categorias_stats_activas');
+            $cache->delete('categorias_stats_todas');
+
             return ['status' => 'success', 'message' => 'Producto actualizado con éxito.'];
 
         } catch (\Exception $e) {
@@ -203,7 +215,13 @@ class ProductoService
      */
     public function eliminar($id)
     {
-        return $this->productoModel->update($id, ['eliminado' => 'SI']);
+        $result = $this->productoModel->update($id, ['eliminado' => 'SI']);
+        if ($result) {
+            $cache = \Config\Services::cache();
+            $cache->delete('categorias_stats_activas');
+            $cache->delete('categorias_stats_todas');
+        }
+        return $result;
     }
 
     /**
@@ -215,7 +233,13 @@ class ProductoService
      */
     public function reactivar($id)
     {
-        return $this->productoModel->update($id, ['eliminado' => 'NO']);
+        $result = $this->productoModel->update($id, ['eliminado' => 'NO']);
+        if ($result) {
+            $cache = \Config\Services::cache();
+            $cache->delete('categorias_stats_activas');
+            $cache->delete('categorias_stats_todas');
+        }
+        return $result;
     }
 
     /**
@@ -371,6 +395,11 @@ class ProductoService
 
             // 5. Borrar físicamente el producto
             $this->productoModel->delete($id);
+
+            // Invalida caché de estadísticas de categorías
+            $cache = \Config\Services::cache();
+            $cache->delete('categorias_stats_activas');
+            $cache->delete('categorias_stats_todas');
 
             return [
                 'status'  => 'success',
