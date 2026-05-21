@@ -117,7 +117,11 @@
 
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="price-tag-fav">$<?= number_format($fav['precio_vta'], 0, ',', '.') ?></span>
+                                    <?php if ($env_cart_enabled): ?>
+                                        <span class="price-tag-fav">$<?= number_format($fav['precio_vta'], 0, ',', '.') ?></span>
+                                    <?php else: ?>
+                                        <span class="price-tag-fav text-muted" style="font-size: 0.8rem;">Consultar precio</span>
+                                    <?php endif; ?>
                                     <a href="<?= base_url('producto/detalle/' . $fav['producto_id']) ?>" class="btn btn-sm btn-outline-brown rounded-pill px-3 fw-bold">DETALLE</a>
                                 </div>
                                 <?php if ($env_cart_enabled): ?>
@@ -135,6 +139,15 @@
                                     <?php else: ?>
                                         <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-2.5 rounded-pill small fw-bold">Iniciá sesión para comprar</a>
                                     <?php endif; ?>
+                                <?php else: ?>
+                                    <?php
+                                    $whatsapp_num = $env_whatsapp;
+                                    $mensaje = urlencode("Hola! Estoy interesado en: " . $fav['nombre_prod'] . ". Me podrías dar más información y precio?");
+                                    $url_whatsapp = "https://wa.me/{$whatsapp_num}?text={$mensaje}";
+                                    ?>
+                                    <a href="<?= $url_whatsapp ?>" target="_blank" class="btn btn-whatsapp-artisan w-100 py-2.5 rounded-pill fw-bold">
+                                        <i class="bi bi-whatsapp me-2"></i> Consultar por WhatsApp
+                                    </a>
                                 <?php endif; ?>
                             </div>
                         </div>

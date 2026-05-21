@@ -40,6 +40,28 @@ class CarritoController extends BaseController
     }
 
     /**
+     * Verifica que el carrito de compras esté habilitado globalmente.
+     *
+     * Si la funcionalidad está deshabilitada (modo WhatsApp), retorna una respuesta
+     * de error apropiada según el tipo de petición (AJAX → JSON 403, normal → redirect).
+     *
+     * @return ResponseInterface|\CodeIgniter\HTTP\RedirectResponse|null Null si el carrito está habilitado.
+     */
+    private function cartGuard()
+    {
+        if (!env('SHOPPING_CART_ENABLED')) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'status' => 'error', 
+                    'message' => 'El carrito de compras no está habilitado en este momento.'
+                ])->setStatusCode(403);
+            }
+            return redirect()->to(base_url('productos'));
+        }
+        return null;
+    }
+
+    /**
      * Agrega un producto al carrito de compras.
      *
      * Obtiene los datos del formulario enviados por POST, procesa la agregación a través
@@ -49,6 +71,8 @@ class CarritoController extends BaseController
      */
     public function add()
     {
+        if ($guard = $this->cartGuard()) return $guard;
+
         $resultado = $this->carritoService->agregar($this->request->getPost());
         
         if ($resultado['status'] === 'error') {
@@ -66,6 +90,8 @@ class CarritoController extends BaseController
      */
     public function remove($rowid)
     {
+        if ($guard = $this->cartGuard()) return $guard;
+
         $this->carritoService->eliminar($rowid);
         return redirect()->back();
     }
@@ -77,6 +103,8 @@ class CarritoController extends BaseController
      */
     public function borrar_carrito()
     {
+        if ($guard = $this->cartGuard()) return $guard;
+
         $this->carritoService->vaciar();
         return redirect()->to(base_url("muestro"));
     }
@@ -90,6 +118,8 @@ class CarritoController extends BaseController
      */
     public function muestra()
     {
+        if ($guard = $this->cartGuard()) return $guard;
+
         return view('front/pages/carrito', [
             'cart'  => $this->carritoService->getContenido(),
             'title' => 'Carrito de Compras'
@@ -108,6 +138,8 @@ class CarritoController extends BaseController
      */
     public function suma($rowid)
     {
+        if ($guard = $this->cartGuard()) return $guard;
+
         $resultado = $this->carritoService->incrementar($rowid);
         
         if ($this->request->isAJAX()) {
@@ -139,6 +171,8 @@ class CarritoController extends BaseController
      */
     public function resta($rowid)
     {
+        if ($guard = $this->cartGuard()) return $guard;
+
         $this->carritoService->decrementar($rowid);
         
         if ($this->request->isAJAX()) {

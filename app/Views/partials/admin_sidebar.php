@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Barra Lateral de Navegación Administrativa (Admin Sidebar)
  *
@@ -33,9 +34,14 @@
 
         <!-- 2. OPERACIONES TALLER -->
         <div class="sidebar-group-label">Operaciones Taller</div>
+        <?php if (!$env_cart_enabled): ?>
+            <div class="sidebar-mode-badge">
+                <i class="bi bi-whatsapp"></i> Modo WhatsApp Activo
+            </div>
+        <?php endif; ?>
         <a href="<?= base_url('/ventas-list') ?>" class="nav-item-admin <?= (current_url() == base_url('/ventas-list')) ? 'active' : '' ?>">
             <i class="bi bi-tools"></i>
-            <span>Ventas</span>
+            <span><?= $env_cart_enabled ? 'Ventas' : 'Pedidos' ?></span>
             <?= view_cell('\App\Cells\AdminSidebarCell::renderSolicitadosBadge') ?>
         </a>
         <a href="<?= base_url('/consultas') ?>" class="nav-item-admin <?= (current_url() == base_url('/consultas')) ? 'active' : '' ?>">

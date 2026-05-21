@@ -84,6 +84,11 @@ class VentasController extends BaseController
      */
     public function registrar_venta()
     {
+        // Guard: bloquear checkout de carrito cuando el modo WhatsApp está activo
+        if (!env('SHOPPING_CART_ENABLED')) {
+            return redirect()->to(base_url('productos'))->with('error', 'El carrito de compras no está habilitado.');
+        }
+
         $items_seleccionados_ids = $this->request->getPost('selected_items');
         $observaciones = $this->request->getPost('observaciones');
         
@@ -136,13 +141,16 @@ class VentasController extends BaseController
             return redirect()->to('/productos')->with('error', 'No tienes permiso para ver este pedido.');
         }
 
-        $layout = $isAdmin ? 'layout/admin_layout' : 'layout/main';
-
-        return view('back/sales/ver_factura_usuario', array_merge($data, [
-            'title'   => $isAdmin ? 'Comprobante Pedido #' . $venta_id : 'Detalle de mi Pedido #' . $venta_id,
-            'layout'  => $layout,
-            'isAdmin' => $isAdmin
-        ]));
+        if ($isAdmin) {
+            return view('back/sales/ver_factura_admin', array_merge($data, [
+                'title' => 'Comprobante Pedido #' . $venta_id
+            ]));
+        } else {
+            return view('back/sales/ver_factura_usuario', array_merge($data, [
+                'title' => 'Detalle de mi Pedido #' . $venta_id,
+                'layout' => 'layout/main'
+            ]));
+        }
     }
 
     /**

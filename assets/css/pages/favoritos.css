@@ -162,3 +162,25 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* WhatsApp Button for Favs when Cart is OFF */
+.btn-whatsapp-artisan {
+    background-color: #2e7d32 !important;
+    color: white !important;
+    border-radius: 50px !important;
+    font-weight: 700 !important;
+    padding: 0.8rem 1.5rem !important;
+    transition: all 0.3s ease;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-whatsapp-artisan:hover {
+    background-color: #1b5e20 !important;
+    transform: scale(1.02);
+    color: white !important;
+}

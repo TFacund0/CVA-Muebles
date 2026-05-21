@@ -94,6 +94,23 @@
     letter-spacing: 1.5px;
 }
 
+/* Badge indicador del modo activo (WhatsApp/Carrito) en la sidebar */
+.sidebar-mode-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    margin: 0 1.5rem 8px;
+    background: rgba(37, 211, 102, 0.1);
+    border: 1px solid rgba(37, 211, 102, 0.25);
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #25d366;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
 .sidebar-nav::-webkit-scrollbar {
     width: 4px;
 }

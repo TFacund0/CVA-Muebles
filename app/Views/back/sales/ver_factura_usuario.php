@@ -1,3 +1,26 @@
+<?php
+/**
+ * Vista de Comprobante / Factura del Cliente (Client Invoice View)
+ *
+ * Pantalla orientada al usuario final que le permite ver el detalle de un pedido
+ * previamente realizado. Presenta un diseño minimalista, redondeado y amigable,
+ * integrando la opción de contactar por WhatsApp para saldar pagos pendientes.
+ *
+ * @var array $venta Datos cabecera del pedido (id, fecha, estado, total, observaciones).
+ * @var array $detalles Lista de productos adquiridos con información de cantidades y precios.
+ * @var array $pagos Historial de transacciones o pagos realizados para este pedido.
+ * @var float $total_pagado Sumatoria total de los pagos validados.
+ * @var float $saldo_pendiente Diferencia entre el costo total y el total pagado.
+ */
+?>
+<?= $this->extend('layout/main') ?>
+
+<?= $this->section('extra-css') ?>
+<link rel="stylesheet" href="<?= base_url('assets/css/admin/ver-factura.css?v=1.0')?>">
+<?= $this->endSection() ?>
+
+<?= $this->section('content') ?>
+<div class="container py-5">
     <div class="row g-4">
         <!-- Detalle del Pedido -->
         <div class="col-lg-8">
@@ -105,7 +128,7 @@
                             Ponte en contacto con nosotros por WhatsApp para coordinar los pagos restantes o cuotas.
                         </p>
                         <?php 
-                            $wa_num = "5493794098511";
+                            $wa_num = $env_whatsapp ?? "5493794098511";
                             $msg = urlencode("Hola! Soy " . session()->get('nombre') . ", quería consultar sobre los pagos de mi pedido #" . $venta['id']);
                             $wa_url = "https://wa.me/{$wa_num}?text={$msg}";
                         ?>

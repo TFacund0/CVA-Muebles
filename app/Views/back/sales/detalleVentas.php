@@ -69,6 +69,19 @@
 <!-- Mensajes modularizados -->
 <?= view('components/alert_message') ?>
 
+<?php if (!$env_cart_enabled): ?>
+<!-- Banner Modo WhatsApp -->
+<div class="alert border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center gap-3 p-3" style="background: linear-gradient(135deg, rgba(37,211,102,0.08), rgba(37,211,102,0.02)); border-left: 4px solid #25d366 !important;">
+    <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; min-width: 42px;">
+        <i class="bi bi-whatsapp text-success fs-5"></i>
+    </div>
+    <div>
+        <strong class="text-cva-brown">Modo WhatsApp activo</strong>
+        <p class="mb-0 small text-muted">Los clientes solicitan pedidos por WhatsApp. Usá <a href="<?= base_url('ventas/nuevo-personalizado') ?>" class="fw-bold text-success text-decoration-none">Nuevo Pedido</a> para registrar los pedidos recibidos.</p>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- KPIs de Ventas y Producción -->
 <div class="row g-3 g-md-4 mb-5">
     <div class="col-6 col-md-3">
@@ -128,7 +141,7 @@
 
 <?php
 $has_solicitados = !empty($solicitados);
-$active_tab = $has_solicitados ? 'solicitudes' : 'activos';
+$active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos';
 ?>
 
 <!-- Selector de Pestañas Premium (Segmented Tabs) -->
@@ -149,6 +162,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                         <span>Pedidos Activos</span>
                     </button>
                 </li>
+                <?php if ($env_cart_enabled): ?>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link <?= $active_tab === 'solicitudes' ? 'active' : '' ?> rounded-4 px-4 py-2-5 fw-bold text-uppercase x-small d-flex align-items-center gap-2 position-relative"
                         id="solicitudes-tab"
@@ -168,6 +182,7 @@ $active_tab = $has_solicitados ? 'solicitudes' : 'activos';
                         <?php endif; ?>
                     </button>
                 </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

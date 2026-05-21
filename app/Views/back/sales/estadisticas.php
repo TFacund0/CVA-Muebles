@@ -52,6 +52,19 @@
     </div>
 </div>
 
+<?php if (!$env_cart_enabled): ?>
+<!-- Banner Modo WhatsApp -->
+<div class="alert border-0 rounded-4 shadow-sm mb-4 d-flex align-items-center gap-3 p-3" style="background: linear-gradient(135deg, rgba(37,211,102,0.08), rgba(37,211,102,0.02)); border-left: 4px solid #25d366 !important;">
+    <div class="bg-white rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; min-width: 42px;">
+        <i class="bi bi-whatsapp text-success fs-5"></i>
+    </div>
+    <div>
+        <strong class="text-cva-brown">Modo WhatsApp activo</strong>
+        <p class="mb-0 small text-muted">Las estadísticas reflejan únicamente los pedidos registrados manualmente desde el panel.</p>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- Grid de KPIs Interactivos -->
 <div class="row g-4 mb-5">
     <?php 

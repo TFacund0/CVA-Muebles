@@ -14,7 +14,7 @@
  *                     - 'RECHAZADO' (Rojo/Pedido cancelado o presupuesto no aceptado)
  *                     - 'SOLICITADO' (Azul-Info/Presupuesto enviado bajo aprobación administrativa)
  */
-?>
+
 $estado = strtoupper($estado ?? 'PENDIENTE');
 
 $badge_class = "bg-light text-muted border";
@@ -24,7 +24,7 @@ if ($estado == 'PENDIENTE') {
     $badge_class = "bg-warning-soft text-warning border-warning";
     $icon = "bi-hourglass-split";
 } elseif ($estado == 'EN_PROCESO') {
-    $badge_class = "bg-proceso-soft text-proceso border-proceso";
+    $badge_class = "bg-primary bg-opacity-10 text-primary border border-primary";
     $icon = "bi-tools";
 } elseif ($estado == 'TERMINADO') {
     $badge_class = "bg-success-soft text-success border-success";
