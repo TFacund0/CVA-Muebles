@@ -51,11 +51,11 @@
             </div>
 
             <div class="collapse" id="collapseUpload">
-                <div class="upload-section p-4 p-md-5 mb-5 text-center shadow-lg border-artisan-gold mx-auto" style="max-width: 800px;">
+                <div class="upload-section p-4 p-md-5 mb-5 text-center shadow-lg border-artisan-gold mx-auto">
                     <h2 class="font-lora h3 fw-bold text-cva-brown mb-3">Compartí tu Legado</h2>
                     <p class="text-muted small mb-4">Contanos qué te parece tu mueble y unite a nuestra comunidad.</p>
                     
-                    <form action="<?= base_url('galeria/subir') ?>" method="post" enctype="multipart/form-data" class="mx-auto" style="max-width: 600px;">
+                    <form action="<?= base_url('galeria/subir') ?>" method="post" enctype="multipart/form-data" class="form-upload-photo mx-auto">
                         <?= csrf_field() ?>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-cva-brown">Seleccioná tu imagen</label>
@@ -70,7 +70,7 @@
             </div>
 
             <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success mt-4 rounded-pill border-0 text-center shadow-sm mx-auto" style="max-width: 600px;">
+                <div class="alert alert-success mt-4 rounded-pill border-0 text-center shadow-sm mx-auto alert-max-width">
                     <i class="bi bi-check-circle-fill me-2"></i> <?= session()->getFlashdata('success') ?>
                 </div>
             <?php endif; ?>
@@ -78,8 +78,8 @@
 
         <div class="masonry-gallery">
             <?php if (empty($fotos)): ?>
-                <div class="text-center py-5 w-100" style="grid-column: 1 / -1;">
-                    <i class="bi bi-camera text-muted opacity-25" style="font-size: 5rem;"></i>
+                <div class="gallery-empty-state text-center py-5 w-100">
+                    <i class="gallery-empty-icon bi bi-camera text-muted opacity-25"></i>
                     <h3 class="text-muted font-lora mt-3">Pronto veremos aquí las fotos de nuestros clientes</h3>
                 </div>
             <?php else: ?>

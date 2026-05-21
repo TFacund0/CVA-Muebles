@@ -31,15 +31,15 @@
 <div class="row g-4">
     <?php if (empty($fotos)): ?>
         <div class="col-12 text-center py-5">
-            <i class="bi bi-inbox text-muted opacity-25" style="font-size: 5rem;"></i>
+            <i class="admin-gallery-empty-icon bi bi-inbox text-muted opacity-25"></i>
             <h4 class="text-muted mt-3">No hay fotos pendientes de revisión</h4>
         </div>
     <?php else: ?>
         <?php foreach ($fotos as $foto): ?>
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden moderation-card">
-                    <div class="position-relative overflow-hidden" style="height: 250px;">
-                        <img src="<?= base_url('assets/uploads/galeria/' . $foto['imagen']) ?>" class="w-100 h-100" alt="Foto cliente" style="object-fit: cover;">
+                    <div class="position-relative overflow-hidden moderation-img-container">
+                        <img src="<?= base_url('assets/uploads/galeria/' . $foto['imagen']) ?>" class="w-100 h-100" alt="Foto cliente">
                         <?php if ($foto['activo'] == 'NO'): ?>
                             <span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark">PENDIENTE</span>
                         <?php else: ?>
@@ -59,7 +59,7 @@
                             <?php endif; ?>
                             <form action="<?= base_url('admin/galeria/eliminar/' . $foto['id']) ?>" method="post" class="m-0" onsubmit="return confirm('¿Eliminar esta foto permanentemente?')">
                                 <?= csrf_field() ?>
-                                <button type="submit" class="btn btn-outline-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; flex-shrink: 0; background: transparent;">
+                                <button type="submit" class="btn btn-outline-danger rounded-circle p-2 btn-delete-gallery">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
