@@ -65,11 +65,11 @@
                     <div class="product-gallery-thumbs d-flex gap-2 overflow-auto pb-2">
                         <!-- Imagen Principal como miniatura -->
                         <div class="thumb-item active">
-                            <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" alt="Principal">
+                            <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" alt="Principal" loading="lazy">
                         </div>
                         <?php foreach($producto['galeria'] as $img): ?>
                             <div class="thumb-item">
-                                <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" alt="Galería">
+                                <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" alt="Galería" loading="lazy">
                             </div>
                         <?php endforeach; ?>
                     </div>

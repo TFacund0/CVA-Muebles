@@ -32,7 +32,7 @@ $isLogged = $session->get('logged_in');
             <!-- Especialidad: Muebles de Sala -->
             <div class="col-lg-4 col-md-6">
                 <div class="catalogo-card-premium">
-                    <img src="<?= base_url('assets/img/content/hero/Muebles 22.jpeg') ?>" class="card-img-artisan" alt="Sala">
+                    <img src="<?= base_url('assets/img/content/hero/Muebles 22.jpeg') ?>" class="card-img-artisan" alt="Sala" loading="lazy">
                     <div class="card-overlay-modern">
                         <div class="category-line"></div>
                         <h3 class="fw-bold h2 mb-2 font-lora">Muebles de Sala</h3>
@@ -44,7 +44,7 @@ $isLogged = $session->get('logged_in');
             <!-- Especialidad: Dormitorios -->
             <div class="col-lg-4 col-md-6">
                 <div class="catalogo-card-premium">
-                    <img src="<?= base_url('assets/img/content/hero/Muebles 69.jpeg') ?>" class="card-img-artisan" alt="Dormitorios">
+                    <img src="<?= base_url('assets/img/content/hero/Muebles 69.jpeg') ?>" class="card-img-artisan" alt="Dormitorios" loading="lazy">
                     <div class="card-overlay-modern">
                         <div class="category-line"></div>
                         <h3 class="fw-bold h2 mb-2 font-lora">Dormitorios</h3>
@@ -56,7 +56,7 @@ $isLogged = $session->get('logged_in');
             <!-- Especialidad: Cocina -->
             <div class="col-lg-4 col-md-6">
                 <div class="catalogo-card-premium">
-                    <img src="<?= base_url('assets/img/content/products/Muebles 10.jpeg') ?>" class="card-img-artisan" alt="Cocina">
+                    <img src="<?= base_url('assets/img/content/products/Muebles 10.jpeg') ?>" class="card-img-artisan" alt="Cocina" loading="lazy">
                     <div class="card-overlay-modern">
                         <div class="category-line"></div>
                         <h3 class="fw-bold h2 mb-2 font-lora">Cocina</h3>
@@ -120,7 +120,7 @@ $isLogged = $session->get('logged_in');
                 <div class="swiper-slide p-3">
                     <div class="product-card-vivid h-100">
                         <div class="product-img-container">
-                            <img src="<?= base_url('assets/img/content/products/'.$p['img']) ?>" alt="<?= $p['tit'] ?>">
+                            <img src="<?= base_url('assets/img/content/products/'.$p['img']) ?>" alt="<?= $p['tit'] ?>" loading="lazy">
                             <div class="price-badge-artisan"><?= $p['price'] ?></div>
                         </div>
                         <div class="px-2">
