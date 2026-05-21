@@ -1,8 +1,13 @@
-<!-- 
-  =============================================
-  ARTISAN HERO - THE SOUL OF THE WORKSHOP
-  =============================================
--->
+<?php
+/**
+ * Sección de Carrusel Destacado (Hero Carousel Section)
+ *
+ * Muestra un carrusel dinámico en pantalla completa (Hero Banner) al inicio de la página pública.
+ * Promociona visualmente el taller de carpintería mediante tres diapositivas que destacan el oficio,
+ * la nobleza de las maderas y el diseño de autor, con llamadas a la acción directas hacia el catálogo,
+ * la historia del taller y el formulario de presupuestos.
+ */
+?>
 
 <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
     

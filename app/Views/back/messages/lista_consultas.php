@@ -1,3 +1,42 @@
+<?php
+/**
+ * Vista de Bandeja de Entrada y Gestión de Consultas (Admin Messages Dashboard)
+ *
+ * Muestra el centro de mensajería y presupuestos comerciales de la plataforma.
+ * Incorpora:
+ * 1. KPIs de Consultas: Resumen mensual, cantidad de solicitudes de presupuestos e histórico acumulado.
+ * 2. Segmentación de Estados: Pestañas segmentadas dinámicas para alternar entre "Pendientes" y "Contestados/Archivados".
+ * 3. Filtros Interactivos: Búsqueda en tiempo real (nombre, email, texto) y selector por tipo de Asunto.
+ * 4. Modales de Lectura Premium: Ventanas emergentes de ebanistería con detalles del interesado, fecha y accesos directos.
+ * 5. Acciones de Gestión Rápida:
+ *    - Enlace automatizado a WhatsApp: Abre chat directo con saludo preestablecido y validación de prefijo telefónico.
+ *    - Conversión a Pedido del Taller: Redirección enviando datos estructurados para iniciar un presupuesto personalizado.
+ *    - Control de Archivo: Marcar como leída o activar el modal de borrado.
+ * 6. Modal de Borrado Físico Premium: Modal con doble verificación (justificación de causa y escritura obligatoria de la palabra "ELIMINAR") para prevenir pérdida de memoria comercial.
+ *
+ * @var array $consultas Listado estructurado de consultas de `ConsultaModel`.
+ *                       Estructura de cada ítem:
+ *                       - 'id_consulta' (int): ID único.
+ *                       - 'nombre' (string): Nombre del emisor.
+ *                       - 'apellido' (string): Apellido del emisor.
+ *                       - 'email' (string): Correo electrónico de contacto.
+ *                       - 'telefono' (string): Número telefónico.
+ *                       - 'asunto' (string): Asunto (Consulta general, Presupuesto, Garantía, etc.).
+ *                       - 'descripcion' (string): Contenido completo de la duda.
+ *                       - 'fecha' (string): Fecha de creación en base de datos.
+ *                       - 'activo' (string): Estado de bandeja ('SI' = Pendiente, 'NO' = Archivada).
+ *                       - 'search_data' (string): Cadena optimizada para búsquedas.
+ * @var array $counts Métricas del panel de mensajería:
+ *                    - 'activos' (int): Consultas pendientes actuales.
+ *                    - 'total' (int): Mensajes históricos totales.
+ *                    - 'mensuales' (int): Mensajes ingresados este mes.
+ *                    - 'presupuestos' (int): Solicitudes de presupuestos recibidas.
+ * @var string $nombreMes Nombre completo del mes en curso para los reportes rápidos.
+ *
+ * Recursos Externos:
+ * - Scripts: `assets/js/admin/messages.js` (Búsqueda en vivo, control de vistas vacías, y habilitación del botón de borrado mediante palabra clave).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 

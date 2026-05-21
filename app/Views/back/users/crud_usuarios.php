@@ -1,3 +1,18 @@
+<?php
+/**
+ * Vista de Panel de Gestión de Usuarios (Admin Users Management Dashboard)
+ *
+ * Renderiza el listado interactivo y los controles administrativos para la gestión de usuarios registrados.
+ * Incorpora:
+ * - KPIs clave del sistema (total de registrados, administradores, cuentas activas y suspendidas).
+ * - Buscador en tiempo real y selector de perfiles (Admin / Cliente) para filtrado rápido.
+ * - Herramientas de cambio de rol, suspensión, reactivación y eliminación permanente.
+ *
+ * @var array  $usuarios Listado de perfiles cargados desde UsuarioModel (id_usuario, nombre, apellido, usuario, email, perfil_id, baja, imagen).
+ * @var array  $counts   Totales consolidados de cuentas (total, admins, activos, suspendidos).
+ * @var string $vista    Identificador de la pestaña activa ('activos' o 'suspendidos').
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

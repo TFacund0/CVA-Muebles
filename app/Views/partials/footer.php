@@ -1,3 +1,14 @@
+<?php
+/**
+ * Pie de Página de la Interfaz Pública (Public Footer)
+ *
+ * Renderiza la sección final del sitio web público de CVA Muebles.
+ * Incluye información de contacto del taller, enlaces a redes sociales,
+ * acceso a la reseña histórica y derechos de propiedad intelectual.
+ *
+ * @var string $env_whatsapp Número de contacto de WhatsApp de la empresa inyectado globalmente.
+ */
+?>
 <footer class="artisan-footer">
     <div class="container">
         <div class="row">

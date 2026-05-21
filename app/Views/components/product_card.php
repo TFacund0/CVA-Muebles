@@ -1,9 +1,24 @@
 <?php
-
 /**
- * Componente de Tarjeta de Producto
- * @param array $producto Datos del producto
- * @param bool $isFav Indica si es favorito (opcional)
+ * Componente Tarjeta de Producto (Product Card Component)
+ *
+ * Renderiza la ficha individual de un mueble en el catálogo público o sección de favoritos.
+ * Permite interactuar directamente agregando a favoritos (mediante JS/fetch), añadiendo
+ * al carrito de compras, o derivando la consulta directamente a WhatsApp según la
+ * disponibilidad de stock y habilitación del carrito.
+ *
+ * @var array $producto {
+ *     @var int|string $id_producto Identificador único del mueble.
+ *     @var string $nombre_prod Nombre comercial del mueble.
+ *     @var string $imagen Archivo físico de la imagen principal.
+ *     @var string|null $categoria Nombre de la categoría asociada (opcional).
+ *     @var string $descripcion Descripción corta o especificación constructiva.
+ *     @var float|int $precio_vta Precio de venta al público.
+ *     @var int $stock Stock físico disponible.
+ * }
+ * @var array|null $user_favs Listado de IDs de productos marcados como favoritos por el usuario actual.
+ * @var bool $env_cart_enabled Indica si la funcionalidad del carrito web está activa.
+ * @var string $env_whatsapp Número de WhatsApp del taller para derivación directa de consultas.
  */
 ?>
 <div class="product-card h-100 d-flex flex-column" data-aos="fade-up">

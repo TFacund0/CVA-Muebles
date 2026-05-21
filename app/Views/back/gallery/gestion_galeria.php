@@ -1,3 +1,25 @@
+<?php
+/**
+ * Vista de Moderación de Galería de Clientes (Admin Gallery Moderation Dashboard)
+ *
+ * Muestra el panel interactivo de aprobación y moderación para las fotografías enviadas por los compradores.
+ * Incorpora:
+ * 1. Grilla de Moderación: Tarjetas dinámicas que exponen la imagen enviada, nombre del cliente y su testimonio.
+ * 2. Gestión de Estados: Insignia visual indicando si la foto está "PENDIENTE" de aprobación o ya se encuentra "ACTIVA".
+ * 3. Acciones Seguras: Formulario para la aprobación directa de imágenes y formulario con confirmación nativa para la eliminación permanente.
+ *
+ * @var array $fotos Listado de registros de la galería de clientes (`GaleriaClienteModel`).
+ *                   Estructura de cada ítem:
+ *                   - 'id' (int): ID único del registro.
+ *                   - 'nombre' (string): Nombre del cliente que envió la reseña.
+ *                   - 'comentario' (string): Breve testimonio o comentario sobre el mueble.
+ *                   - 'imagen' (string): Nombre del archivo de imagen subido.
+ *                   - 'activo' (string): Estado de visibilidad ('SI' o 'NO').
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-gallery.css`
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('breadcrumbs') ?>

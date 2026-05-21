@@ -1,11 +1,3 @@
-<?= $this->extend('layout/main') ?>
-
-<?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/ver-factura.css?v=1.0')?>">
-<?= $this->endSection() ?>
-
-<?= $this->section('content') ?>
-<div class="container py-5">
     <div class="row g-4">
         <!-- Detalle del Pedido -->
         <div class="col-lg-8">

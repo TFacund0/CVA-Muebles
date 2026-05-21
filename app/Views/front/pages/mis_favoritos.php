@@ -1,3 +1,24 @@
+<?php
+/**
+ * Vista de Mis Favoritos (Customer Favorites Catalog Page)
+ *
+ * Renderiza el listado personalizado de muebles guardados por el cliente.
+ * Incorpora:
+ * 1. Barra de Búsqueda Dinámica: Filtrado instantáneo por coincidencia de texto en título.
+ * 2. Filtros de Categoría: Botones de categorías dinámicas obtenidas a partir de la lista de favoritos.
+ * 3. Botones de Compra/Acción: Eliminar de la lista de deseos o añadir de forma rápida al carrito de compras.
+ *
+ * @var array $favoritos Listado de productos marcados como favoritos por el cliente actual.
+ *                       Estructura de cada ítem:
+ *                       - 'producto_id' (int): ID único de la pieza.
+ *                       - 'nombre_prod' (string): Nombre comercial.
+ *                       - 'imagen' (string): Imagen principal.
+ *                       - 'categoria' (string|null): Categoría del mueble.
+ *                       - 'descripcion' (string): Breve reseña constructiva.
+ *                       - 'precio_vta' (float): Precio de venta.
+ * @var bool $env_cart_enabled Estado del módulo del carrito web.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

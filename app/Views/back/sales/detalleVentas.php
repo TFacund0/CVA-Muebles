@@ -1,3 +1,40 @@
+<?php
+/**
+ * Vista del Tablero de Gestión de Pedidos y Producción (Admin Orders & Sales Dashboard)
+ *
+ * Muestra el panel interactivo del taller para coordinar los pedidos de los clientes.
+ * Incorpora:
+ * 1. KPIs del Taller: Indicadores rápidos de pedidos mensuales, unidades en taller, pedidos pendientes y facturación acumulada.
+ * 2. Segmentación de Estados por Pestaña:
+ *    - Pedidos Activos (Aprobados): Listado de órdenes activas y su prioridad.
+ *    - Solicitudes Pendientes: Pedidos realizados por clientes vía web que aguardan aprobación comercial.
+ * 3. Filtros del Taller: Buscador dinámico y selector por estado de producción (Pendiente, En Proceso, Terminado, Entregado).
+ * 4. Control de Prioridad de Producción: Accesos dinámicos para subir/bajar prioridad y ordenar la cola de trabajo del taller.
+ * 5. Acciones Administrativas: Desvío a la configuración fina del pedido y descarga de comprobantes en PDF.
+ *
+ * @var array $ventas Listado de ventas/pedidos activos aprobados.
+ *                    Estructura esperada:
+ *                    - 'id' (int): ID de venta.
+ *                    - 'nombre' (string|null): Nombre del comprador.
+ *                    - 'apellido' (string|null): Apellido del comprador.
+ *                    - 'fecha' (string): Fecha de compra.
+ *                    - 'total_venta' (float): Total monetario.
+ *                    - 'total_pagado' (float): Sumatoria cobrada.
+ *                    - 'estado' (string): Estado actual ('PENDIENTE', 'EN_PROCESO', 'TERMINADO', 'ENTREGADO').
+ *                    - 'search_data' (string): Cadena optimizada para filtros.
+ * @var array $solicitados Listado de solicitudes de presupuestos/ventas pendientes de aprobación comercial.
+ * @var array $counts Métricas de producción y finanzas:
+ *                    - 'mensuales' (int): Pedidos recibidos este mes.
+ *                    - 'en_proceso' (int): Pedidos activos en el taller.
+ *                    - 'pendientes' (int): Pedidos pendientes de iniciar.
+ *                    - 'ingresos' (float): Total recaudado histórico.
+ * @var string $nombreMes Nombre legible del mes en curso.
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-sales.css`
+ * - Scripts: `assets/js/admin/sales.js` (Filtros de estado interactivos y comportamiento de pestañas).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

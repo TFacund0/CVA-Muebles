@@ -1,3 +1,17 @@
+<?php
+/**
+ * Vista de Catálogo General Público (Public General Catalog Page)
+ *
+ * Muestra la grilla interactiva completa de muebles activos en el catálogo de CVA Muebles.
+ * Incorpora:
+ * 1. Pestañas de Filtro: Generadas dinámicamente según las categorías activas en la base de datos.
+ * 2. Grilla de Fichas: Reutiliza el componente `components/product_card` inyectando datos de producto y favoritos.
+ *
+ * @var array $categorias Listado de categorías disponibles de `CategoriaModel`.
+ * @var array $productos Listado de productos para exposición de `ProductoModel`.
+ * @var array|null $user_favs Listado de IDs de favoritos del cliente logueado.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

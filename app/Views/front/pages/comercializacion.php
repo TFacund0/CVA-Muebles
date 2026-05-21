@@ -1,3 +1,14 @@
+<?php
+/**
+ * Vista de Comercialización y Logística (Public Commercialization Page)
+ *
+ * Expone las políticas comerciales formales de la carpintería CVA Muebles.
+ * Detalla:
+ * 1. Formas de pago aceptadas (Efectivo con descuento, tarjetas de crédito, transferencias bancarias).
+ * 2. Logística y traslados seguros de piezas pesadas, embalaje, tiempos de fabricación y envíos a Corrientes y el país.
+ * 3. Garantía estructural de 1 año y enlace hacia los términos y condiciones de compra.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

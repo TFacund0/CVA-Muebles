@@ -1,3 +1,32 @@
+<?php
+/**
+ * Vista de Edición de Producto (Admin Edit Product Form)
+ *
+ * Muestra el formulario avanzado premium para la modificación completa de una obra del catálogo.
+ * Se divide en:
+ * 1. Columna de Imagen Principal: Permite previsualizar en tiempo real el archivo cargado y reemplazarlo.
+ * 2. Formulario de Datos: Edición del nombre comercial, asignación de categoría dinámica y descripción.
+ * 3. Valores de Margen: Ajuste de costos del taller y precio de venta final al público.
+ * 4. Galería Adicional: Carga múltiple de fotografías secundarias para visualización de detalles,
+ *    con herramientas de eliminación asíncrona/directa.
+ *
+ * @var array $producto Ficha detallada del mueble cargado del catálogo.
+ *                      Estructura esperada:
+ *                      - 'id_producto' (int): ID único.
+ *                      - 'nombre_prod' (string): Nombre del producto.
+ *                      - 'categoria_id' (int): ID de categoría asociada.
+ *                      - 'precio' (float): Costo de producción.
+ *                      - 'precio_vta' (float): Precio de venta final.
+ *                      - 'imagen' (string): Nombre de la foto de portada.
+ *                      - 'descripcion' (string): Detalles constructivos.
+ *                      - 'galeria' (array): Listado de fotos secundarias con 'id' e 'imagen'.
+ * @var array $categorias Listado de categorías disponibles de `CategoriaModel` (id_categoria, descripcion).
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-products.css`
+ * - Scripts: `assets/js/admin/products.js` (Manejo de previsualizaciones y cálculos financieros).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

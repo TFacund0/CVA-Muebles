@@ -1,3 +1,24 @@
+<?php
+/**
+ * Layout de Administración - CVA Muebles
+ *
+ * Estructura HTML5 base para el panel de control, cola de trabajo del taller y ABMs (CRUDs).
+ * Incluye barra superior de contexto de usuario, notificaciones en tiempo real e interactividad.
+ *
+ * @var string|null $title Título del módulo o sección de administración actual.
+ *
+ * Datos de Sesión Requeridos (Inyectados dinámicamente por la sesión activa):
+ * - session()->get('nombre'): Nombre del administrador.
+ * - session()->get('apellido'): Apellido del administrador.
+ * - session()->get('imagen'): Nombre del archivo de avatar del administrador.
+ *
+ * Secciones del Layout:
+ * - 'extra-css': Hojas de estilo específicas del módulo administrativo (ej. tablas, estadísticas).
+ * - 'breadcrumbs': Mapeo de navegación jerárquica contextual en la topbar.
+ * - 'content': Contenido dinámico principal del panel/módulo de control.
+ * - 'extra-js': Scripts interactivos específicos del módulo administrativo.
+ */
+?>
 <!doctype html>
 <html lang="es">
 <head>

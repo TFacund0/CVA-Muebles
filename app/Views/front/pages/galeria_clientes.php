@@ -1,3 +1,18 @@
+<?php
+/**
+ * Vista de Galería Social de Clientes (Customer Public Gallery Page)
+ *
+ * Muestra una grilla estilo Masonry de fotos reales enviadas por los compradores
+ * mostrando sus muebles en sus respectivos hogares, junto a sus testimonios.
+ * Si el usuario está autenticado:
+ * - Puede desplegar un formulario interactivo para cargar su propia foto con reseña.
+ * - Si es Administrador, visualiza un panel de alerta indicando cuántas fotos están
+ *   pendientes de moderar y un enlace directo al ABM de moderación.
+ *
+ * @var array $fotos Listado de fotos aprobadas de `GaleriaClienteModel` para exposición pública.
+ * @var int $pendientesCount Cantidad de imágenes subidas por clientes esperando aprobación de administrador.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

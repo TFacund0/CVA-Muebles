@@ -1,3 +1,27 @@
+<?php
+/**
+ * Vista de Carga de Pedidos Manuales o Personalizados (Admin Add Custom Order Form)
+ *
+ * Muestra el formulario avanzado de administración interna para ingresar una orden de trabajo artesanal directa.
+ * Se utiliza para registrar ventas hechas de forma física, solicitudes de WhatsApp, o encargos especiales que no
+ * están preestablecidos en el catálogo público de la web.
+ * Incorpora:
+ * 1. Sección de Cliente: Búsqueda dinámica de usuarios registrados en el sistema, o ingreso de un nombre de referencia.
+ * 2. Sección de Obra: Caja de texto para especificaciones detalladas (medidas, tipo de madera) y cargador de bocetos/fotos de referencia.
+ * 3. Acuerdo Comercial: Entradas para la inversión total acordada y la seña inicial recibida.
+ *
+ * @var array $clientes Listado de usuarios registrados en el sistema para vincular a la orden (`UsuarioModel`).
+ *                      Estructura esperada:
+ *                      - 'id_usuario' (int): ID único del perfil.
+ *                      - 'nombre' (string): Nombre del cliente.
+ *                      - 'apellido' (string): Apellido del cliente.
+ *                      - 'usuario' (string): Nombre de usuario/teléfono.
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-sales.css`
+ * - Scripts: `assets/js/admin/sales.js` (Lógica de previsualización e interacciones de formularios).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

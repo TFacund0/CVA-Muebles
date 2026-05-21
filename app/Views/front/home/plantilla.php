@@ -1,3 +1,13 @@
+<?php
+/**
+ * Vista de Plantilla de Inicio (Home Plantilla)
+ *
+ * Página de bienvenida principal de la plataforma CVA Muebles.
+ * Se extiende de `layout/main` y orquesta la carga de las secciones destacadas de la home:
+ * - `section-carrusel.php` (Carrusel con llamado a la acción)
+ * - `section-catalogo.php` (Muestra destacada de categorías y obras destacadas)
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

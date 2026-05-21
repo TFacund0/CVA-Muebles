@@ -1,3 +1,15 @@
+<?php
+/**
+ * Barra Lateral de Navegación Administrativa (Admin Sidebar)
+ *
+ * Renderiza el menú lateral de control del panel del taller y administración.
+ * Determina dinámicamente el estado activo ('active') de cada opción de menú evaluando
+ * si la URL actual coincide con el enlace correspondiente mediante `current_url()`.
+ *
+ * Utiliza celdas de vista (View Cells) de CodeIgniter para renderizar contadores en tiempo real
+ * (ej. insignia de presupuestos/ventas solicitadas pendientes de aprobación).
+ */
+?>
 <aside class="admin-sidebar">
     <div class="sidebar-header">
         <div class="d-flex align-items-center justify-content-between w-100">

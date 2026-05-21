@@ -1,3 +1,24 @@
+<?php
+/**
+ * Vista de Registro de Usuarios (Registration Page)
+ *
+ * Ofrece un flujo visual premium de creación de cuentas para nuevos clientes de CVA Muebles.
+ * Se adapta dinámicamente si el usuario actual es un administrador autenticado, permitiendo
+ * registrar nuevos usuarios de forma directa sin requerir aceptación manual de términos.
+ *
+ * Características Estéticas y Funcionales:
+ * - Sección Lateral Informativa: Lista de beneficios exclusivos y enlace a la historia corporativa.
+ * - Formulario Inteligente: Entradas sanitizadas y formateadas con validaciones de servidor en tiempo real.
+ * - Protección CSRF: Integración directa mediante csrf_field() de CodeIgniter 4.
+ *
+ * Parámetros Inyectados y Servicios:
+ * @var \CodeIgniter\Validation\ValidationInterface $validation Instancia del validador para visualización de errores específicos por campo.
+ *
+ * Datos de Sesión Evaluados:
+ * - logged_in (bool|null): Indica si hay una sesión activa.
+ * - perfil_id (int|null): Identifica el rol del usuario actual (1 para Administrador).
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

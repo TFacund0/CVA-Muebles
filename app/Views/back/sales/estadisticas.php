@@ -1,3 +1,25 @@
+<?php
+/**
+ * Vista de Monitoreo de Producción y KPIs del Taller (Admin Statistics & Operations Board)
+ *
+ * Muestra el panel gerencial y operativo del taller de ebanistería CVA Muebles.
+ * Incorpora:
+ * 1. Tarjetas KPI Interactivas: Conteo dinámico de pedidos por estado estructural (Pendiente, En Taller, Terminado, Consultas).
+ * 2. Acciones Rápidas del Taller: Panel de accesos directos para tareas comunes (alta de obra, ventas manuales, bandeja de entrada, moderación).
+ * 3. Indicador de Rendimiento Histórico: Widget que calcula la eficiencia global de entregas y su porcentaje de éxito acumulado.
+ *
+ * @var array $stats Métricas de la cola de trabajo:
+ *                   - 'PENDIENTE' (int): Cantidad de pedidos por iniciar.
+ *                   - 'EN_PROCESO' (int): Pedidos activos en el taller.
+ *                   - 'TERMINADO' (int): Obras finalizadas listas para despacho.
+ *                   - 'ENTREGADO' (int): Pedidos entregados al cliente.
+ * @var int $total_consultas Total de consultas pendientes en la bandeja de entrada comercial.
+ * @var int $total_galeria_pendientes Total de fotos enviadas por compradores en espera de moderación.
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-sales.css`
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

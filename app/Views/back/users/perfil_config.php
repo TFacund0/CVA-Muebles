@@ -1,3 +1,24 @@
+<?php
+/**
+ * Vista de Configuración de Perfil (Profile Settings Page)
+ *
+ * Muestra el panel interactivo y la ficha de información personal del usuario en sesión.
+ * Permite:
+ * - Visualizar datos de cuenta (nombre, apellido, usuario, email y rol actual).
+ * - Habilitar y editar de forma interactiva la información de la cuenta.
+ * - Cargar y actualizar la imagen de avatar para el perfil del usuario.
+ * - Cambiar y actualizar la contraseña mediante un modal seguro y validado.
+ *
+ * Datos de Sesión Activos Utilizados:
+ * - id_usuario (int): Identificador único del usuario.
+ * - nombre (string): Nombre de pila del usuario.
+ * - apellido (string): Apellido de familia del usuario.
+ * - usuario (string): Username de acceso.
+ * - email (string): Correo electrónico asociado a la cuenta.
+ * - perfil_id (int): Rango del usuario (1 = Admin, 2 = Cliente).
+ * - imagen (string|null): Nombre del archivo de imagen de perfil en el servidor.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

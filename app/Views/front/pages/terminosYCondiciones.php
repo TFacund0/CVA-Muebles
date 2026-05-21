@@ -1,3 +1,19 @@
+<?php
+/**
+ * Vista de Marco Legal, Términos y Condiciones (Legal Terms & Conditions Page)
+ *
+ * Muestra el marco normativo de CVA Muebles que rige la relación comercial con el cliente.
+ * Se organiza mediante un sistema de navegación sticky e incluye:
+ * 1. Política de Privacidad: Confidencialidad y protección de datos bajo encriptación.
+ * 2. Términos de Venta: Lógica del taller artesanal (inicio de producción con seña del 50%).
+ * 3. Garantías estructurales: Términos del soporte postventa estructural de 12 meses.
+ * 4. Propiedad Intelectual: Reserva de derechos sobre diseños de ebanistería y material fotográfico.
+ *
+ * Secciones del Layout:
+ * - 'extra-css': Carga de estilos específicos `condiciones.css` para el papel artesanal y el sidebar.
+ * - 'content': Contenedor principal con diseño responsivo de dos columnas (menú sticky y documento).
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

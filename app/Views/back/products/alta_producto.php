@@ -1,3 +1,25 @@
+<?php
+/**
+ * Vista de Alta de Producto (Admin Add Product Form)
+ *
+ * Renderiza el formulario administrativo premium para registrar un nuevo mueble en el catálogo.
+ * Incorpora:
+ * 1. Sección de Información General: Nombre de la pieza, clasificación por categorías y especificaciones técnicas.
+ * 2. Sección de Costos y Utilidades: Entradas de costo del taller y precio de venta.
+ * 3. Widget de Rentabilidad Dinámica: Cálculo en tiempo real del margen y la utilidad neta.
+ * 4. Dropzone Premium: Previsualización interactiva de la imagen principal del producto.
+ *
+ * @var array $categorias Listado de categorías activas provenientes de `CategoriaModel` (id_categoria, descripcion).
+ *
+ * Mensajes de Sesión (Flashdata):
+ * - success (string|null): Mensaje de éxito al registrar la obra.
+ * - fail (string|null): Mensaje de alerta en caso de fallar las validaciones.
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-products.css`
+ * - Scripts: `assets/js/admin/products.js` (Cálculo del margen de ganancia y previsualización de archivos).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

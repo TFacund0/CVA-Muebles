@@ -1,3 +1,15 @@
+<?php
+/**
+ * Vista de Historial de Compras del Cliente (Client Purchase History Page)
+ *
+ * Muestra el historial completo de pedidos y compras realizadas por el cliente autenticado.
+ * Permite realizar búsquedas y filtrar los pedidos por estados dinámicos de producción en el taller
+ * (por aprobar, pendientes, en taller, entregados, rechazados), además de ordenar por fecha e inversión.
+ *
+ * @var array  $ventas       Listado de transacciones del usuario proveniente de VentasCabeceraModel (id, fecha, total_venta, estado, estado_aprobacion, etc.).
+ * @var string $env_whatsapp Teléfono de soporte de WhatsApp configurado en el sistema.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

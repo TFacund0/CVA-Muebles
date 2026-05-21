@@ -1,4 +1,13 @@
-﻿<?= $this->extend('layout/main') ?>
+<?php
+/**
+ * Vista de Beneficios y Compromisos (Public Benefits Page)
+ *
+ * Muestra las ventajas competitivas y compromisos de calidad de CVA Muebles.
+ * Expone pilares como maderas nobles seleccionadas, fabricación a mano (sin procesos
+ * industriales masivos) y atención directa y personalizada del carpintero titular.
+ */
+?>
+<?= $this->extend('layout/main') ?>
 
 <?= $this->section('content') ?>
 <section class="beneficios-page py-5">

@@ -1,3 +1,46 @@
+<?php
+/**
+ * Vista de Gestión de Producción y Finanzas del Pedido (Admin Order Management Dashboard)
+ *
+ * Muestra el panel maestro de control operativo y financiero de un pedido individual en el taller.
+ * Incorpora:
+ * 1. Stepper de Producción: Barra de progreso visual interactiva para cambiar el estado físico de la obra (Aceptado, En Proceso, Terminado, Entregado).
+ * 2. Cuaderno de Ebanistería (Notebook): Ficha de especificaciones técnicas donde el administrador anota detalles (maderas, terminaciones, planos).
+ * 3. Imagen de Referencia o Boceto: Expone de forma ampliable el archivo o bosquejo de diseño subido por el cliente.
+ * 4. Desglose de Artículos: Tabla con las piezas solicitadas, cantidades, precios unitarios e históricos.
+ * 5. Balanza Financiera: Tarjeta con el total cobrado y saldo pendiente.
+ * 6. Registrador de Cobros: Formulario con protección CSRF para la carga cronológica de pagos e historial.
+ *
+ * @var array $venta Cabecera estructurada de la orden/pedido comercial.
+ *                   Estructura esperada:
+ *                   - 'id' (int): ID de venta.
+ *                   - 'nombre' (string): Nombre del cliente.
+ *                   - 'apellido' (string): Apellido del cliente.
+ *                   - 'usuario' (string): Número telefónico (utilizado como identificador de sesión y contacto).
+ *                   - 'fecha' (string): Fecha de creación.
+ *                   - 'total_venta' (float): Total monetario facturado.
+ *                   - 'estado' (string): Estado actual ('PENDIENTE', 'ACEPTADO', 'EN_PROCESO', 'TERMINADO', 'ENTREGADO').
+ *                   - 'estado_aprobacion' (string): Estado de autorización ('SOLICITUD', 'APROBADO', etc.).
+ *                   - 'observaciones' (string|null): Nota administrativa / especificaciones técnicas del taller.
+ * @var array $detalles Desglose de artículos incluidos en la orden.
+ *                      Estructura esperada de cada fila:
+ *                      - 'producto_id' (int|null): ID del producto o NULL si es personalizado.
+ *                      - 'nombre_prod' (string): Nombre legible.
+ *                      - 'imagen' (string|null): Nombre del archivo de imagen.
+ *                      - 'cantidad' (int): Unidades solicitadas.
+ *                      - 'precio' (float): Precio unitario histórico.
+ * @var array $pagos Listado cronológico de cobros parciales realizados sobre la orden.
+ *                   Estructura esperada de cada ítem:
+ *                   - 'monto' (float): Importe cobrado.
+ *                   - 'nota' (string): Concepto (ej. Seña 50%).
+ *                   - 'fecha' (string): Fecha de recepción del cobro.
+ * @var float $total_pagado Sumatoria consolidada de los pagos cobrados.
+ * @var float $saldo_pendiente Saldo remanente de cobro calculado (total_venta - total_pagado).
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-sales.css`
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

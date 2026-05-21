@@ -1,3 +1,27 @@
+<?php
+/**
+ * Vista de Detalle y Ficha de Producto (Public Product Detail Page)
+ *
+ * Renderiza la ficha detallada e interactiva de un mueble individual en el catálogo público.
+ * Orquesta:
+ * 1. Galería de Fotos: Visualizador dinámico con miniaturas táctiles de imágenes alternativas.
+ * 2. Detalles Constructivos: Descripción detallada de las vetas, tipos de madera y acabados.
+ * 3. Botones de Compra/Consulta: Agregar al carro o solicitar presupuestos especiales por WhatsApp.
+ *
+ * @var array $producto {
+ *     @var int|string $id_producto Identificador del producto.
+ *     @var string $nombre_prod Nombre comercial.
+ *     @var string $imagen Nombre del archivo de imagen principal.
+ *     @var string $categoria Nombre de la categoría.
+ *     @var float|int $precio_vta Precio de venta.
+ *     @var int $stock Cantidad disponible.
+ *     @var string|null $descripcion Detalles constructivos.
+ *     @var array|null $galeria Listado de imágenes alternativas asociadas de `ProductoImagenModel`.
+ * }
+ * @var bool $env_cart_enabled Habilitación global del carrito web.
+ * @var string $env_whatsapp Número de WhatsApp del taller para derivaciones.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

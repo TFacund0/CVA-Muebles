@@ -1,3 +1,38 @@
+<?php
+/**
+ * Vista de Gestión de Inventario de Obras (Admin Product ABM/CRUD Table)
+ *
+ * Muestra el panel maestro de control del catálogo de muebles y sus respectivas especificaciones.
+ * Incorpora:
+ * 1. KPIs Rápidos: Tarjetas resumidas de total de diseños, diseños activos e industrias activas.
+ * 2. Segmentación de Estados: Pestañas interactivas para alternar entre catálogo "Activos" (Públicos) y "Archivados" (Borradores).
+ * 3. Filtros Avanzados en Tiempo Real: Buscador por texto libre y selector por categoría.
+ * 4. Listado Maestro Responsivo: Tabla detallada que expone la imagen del mueble, ID, descripción abreviada, precio e instructivos.
+ * 5. Acciones de Control: Accesos para edición, archivado, restauración o eliminación permanente de piezas del catálogo.
+ *
+ * @var array $productos Listado completo de muebles del catálogo (`ProductoModel`).
+ *                       Estructura de cada ítem:
+ *                       - 'id_producto' (int): ID único de la pieza.
+ *                       - 'nombre_prod' (string): Nombre comercial.
+ *                       - 'descripcion' (string|null): Reseña constructiva.
+ *                       - 'categoria' (string|null): Categoría de pertenencia.
+ *                       - 'precio_vta' (float): Precio de venta al público.
+ *                       - 'imagen' (string): Nombre del archivo de imagen.
+ *                       - 'eliminado' (string): Indicador de archivado ('SI' o 'NO').
+ * @var array $categorias Listado de categorías activas para el dropdown de filtros.
+ * @var string $vista Vista seleccionada por defecto ('activos' o 'archivados').
+ * @var array $counts Conteo consolidado de registros:
+ *                    - 'activos' (int): Cantidad de muebles públicos.
+ *                    - 'eliminados' (int): Cantidad de muebles archivados.
+ *
+ * Componentes Reutilizados:
+ * - `components/alert_message.php` para mensajes informativos sobre acciones de guardado o borrado.
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-products.css`
+ * - Scripts: `assets/js/admin/products-list.js` (Lógica de filtrado dinámico en tabla, pestañas segmentadas y confirmación).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

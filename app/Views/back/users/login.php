@@ -1,3 +1,17 @@
+<?php
+/**
+ * Vista de Inicio de Sesión (Login Page)
+ *
+ * Renderiza la interfaz premium de autenticación de la plataforma para clientes y administradores.
+ * Cuenta con una disposición dividida:
+ * - Sección Lateral de Branding: Mensaje identitario de la marca y estética de taller de CVA Muebles.
+ * - Formulario de Acceso: Entradas seguras protegidas por CSRF y redirección dinámica según el rol.
+ *
+ * Mensajes de Sesión (Flashdata):
+ * - error (string|null): Alertas en caso de credenciales inválidas o sesiones expiradas.
+ * - success (string|null): Confirmaciones al registrar cuentas o cerrar sesión con éxito.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

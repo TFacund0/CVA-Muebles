@@ -1,3 +1,23 @@
+<?php
+/**
+ * Vista del Carrito de Compras (Shopping Cart Page)
+ *
+ * Muestra el listado de productos seleccionados por el cliente autenticado.
+ * Permite ajustar cantidades (mediante peticiones AJAX en tiempo real), deseleccionar
+ * elementos específicos que se desean procesar en otra ocasión, y agregar especificaciones
+ * de carpintería personalizadas (madera, colores, dimensiones) antes de confirmar el pedido.
+ *
+ * @var array $cart Listado de ítems cargados en el carrito de compras CodeIgniter Cart.
+ *                  Estructura de cada ítem:
+ *                  - 'rowid' (string): Hash único de fila en el carrito.
+ *                  - 'id' (int): ID de producto.
+ *                  - 'name' (string): Nombre del mueble.
+ *                  - 'price' (float): Precio unitario.
+ *                  - 'qty' (int): Cantidad seleccionada.
+ *                  - 'imagen' (string): Archivo físico del mueble.
+ *                  - 'subtotal' (float): Subtotal acumulado de fila.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

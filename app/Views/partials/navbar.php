@@ -1,4 +1,20 @@
 <?php
+/**
+ * Barra de Navegación Principal Híbrida (Public & User Navbar)
+ *
+ * Renderiza el encabezado y menú de navegación adaptativo para escritorio y móviles.
+ * Utiliza un menú lateral (Offcanvas) para desplegar el perfil de usuario, enlaces de
+ * administración (si posee rol de Administrador) y accesos rápidos a compras/favoritos.
+ *
+ * @var bool $env_cart_enabled Variable de entorno global que indica si el carrito está habilitado.
+ *
+ * Datos de Sesión Requeridos:
+ * - session()->get('logged_in'): Estado de autenticación del usuario.
+ * - session()->get('nombre'): Nombre para mostrar en el perfil del offcanvas.
+ * - session()->get('imagen'): Avatar de perfil del usuario logueado.
+ * - session()->get('perfil_id'): Rol del usuario (1 = Administrador, 2 = Cliente).
+ */
+
 // Recibir datos de sesión
 $isLogged = session()->get('logged_in');
 $nombre = session()->get('nombre');

@@ -1,3 +1,14 @@
+<?php
+/**
+ * Vista Institucional "Quiénes Somos" (Public About Us Page)
+ *
+ * Muestra la reseña histórica, misión, visión y valores de la empresa CVA Muebles.
+ * Se divide en:
+ * 1. Legado Familiar: Reseña histórica sobre César Víctor Acevedo y el origen del taller en Mantilla.
+ * 2. Pilares de Marca: Tarjetas con valores corporativos (Hecho a Mano, Sustentabilidad y Durabilidad).
+ * 3. Manos Maestras (Equipo): Presentación con fotos y mini-biografías del Maestro Ebanista, Diseñadora y Maestro de Acabados.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

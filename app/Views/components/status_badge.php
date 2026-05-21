@@ -1,9 +1,20 @@
 <?php
 /**
- * Componente de Badge de Estado de Pedidos
- * @param string $estado El estado del pedido (ej. PENDIENTE, EN_PROCESO, TERMINADO, ENTREGADO, RECHAZADO, SOLICITADO)
+ * Componente de Insignias de Estado (Status Badge Component)
+ *
+ * Renderiza etiquetas visuales autogestionadas con Bootstrap para representar los diferentes
+ * estados de un pedido o venta dentro de la cola de trabajo del taller de CVA Muebles.
+ *
+ * @var string $estado El estado del pedido.
+ *                     Estados soportados:
+ *                     - 'PENDIENTE' (Amarillo/Espera de inicio de obra)
+ *                     - 'EN_PROCESO' (Marrón-Proceso/En fabricación en el taller)
+ *                     - 'TERMINADO' (Verde/Mueble finalizado listo para retirar/enviar)
+ *                     - 'ENTREGADO' (Negro/Mueble ya recibido por el comprador)
+ *                     - 'RECHAZADO' (Rojo/Pedido cancelado o presupuesto no aceptado)
+ *                     - 'SOLICITADO' (Azul-Info/Presupuesto enviado bajo aprobación administrativa)
  */
-
+?>
 $estado = strtoupper($estado ?? 'PENDIENTE');
 
 $badge_class = "bg-light text-muted border";

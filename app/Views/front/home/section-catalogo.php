@@ -1,6 +1,18 @@
 <?php
-    $session = session();
-    $isLogged = $session->get('logged_in');
+/**
+ * Sección de Catálogo y Especialidades Destacadas (Home Catalog & Specialties Section)
+ *
+ * Renderiza el bloque principal de contenido de la home, el cual se divide en:
+ * 1. Especialidades: Mapeo estético de categorías (Sala, Dormitorio, Cocina) con accesos de colección.
+ * 2. Manifiesto/Misión: Párrafo de marca sobre el diseño de autor y el proceso creativo en madera.
+ * 3. Galería Swiper: Carrusel interactivo y táctil de obras de autor destacadas (con enlace de detalles).
+ * 4. Sucursal y Taller: Detalle de ubicación física en Mantilla, Corrientes, horarios y mapa integrado (Google Maps Embed).
+ *
+ * Datos de Sesión Requeridos:
+ * - session()->get('logged_in'): Estado de autenticación del usuario.
+ */
+$session = session();
+$isLogged = $session->get('logged_in');
 ?>
 
 

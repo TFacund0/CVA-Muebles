@@ -1,3 +1,20 @@
+<?php
+/**
+ * Layout Principal Público - CVA Muebles
+ *
+ * Estructura HTML5 base para las vistas del catálogo y páginas públicas de la plataforma.
+ * Carga el sistema de diseño global, tipografías corporativas, Bootstrap e íconos.
+ *
+ * @var string|null $title Título específico de la página para SEO y pestaña del navegador.
+ * @var string|null $meta_description Descripción corta de la página para indexación en motores de búsqueda.
+ * @var string|null $content Contenido HTML inyectado de manera directa (opcional).
+ *
+ * Secciones del Layout:
+ * - 'extra-css': Hojas de estilo adicionales específicas de la página.
+ * - 'content': Contenido dinámico principal de la vista (si no se usa la variable $content).
+ * - 'extra-js': Scripts JavaScript adicionales específicos de la página.
+ */
+?>
 <!doctype html>
 <html lang="es">
 <head>

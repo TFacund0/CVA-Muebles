@@ -1,5 +1,17 @@
 <?php 
-    $session = session();
+/**
+ * Componente de Alertas Inline (Inline Alerts)
+ *
+ * Muestra alertas estáticas/inline utilizando clases de Bootstrap.
+ * Recupera mensajes flash temporales de la sesión activa para notificar al usuario
+ * sobre el éxito, error o advertencias en formularios o flujos transaccionales.
+ *
+ * Datos de Sesión Flash Esperados:
+ * - session()->getFlashdata('success'): Mensaje de éxito de la operación.
+ * - session()->getFlashdata('error'): Mensaje de error/excepción crítica.
+ * - session()->getFlashdata('fail'): Mensaje de advertencia o validación fallida.
+ */
+$session = session();
 ?>
 
 <?php if ($session->getFlashdata('success')): ?>

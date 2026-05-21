@@ -1,3 +1,17 @@
+<?php
+/**
+ * Vista de Información de Contacto e Institucional (Public Contact & Institutional Page)
+ *
+ * Renderiza la interfaz de comunicación de CVA Muebles.
+ * Compuesta por:
+ * 1. Tarjetas de Contacto: Canales directos de WhatsApp, Correo electrónico y Localización Google Maps.
+ * 2. Datos Fiscales/Legales: Razón social (CVA Muebles S.R.L.), CUIT y titular responsable para cumplimiento formal.
+ * 3. Formulario de Consultas: Formulario con protección CSRF, honeypot antispam, límite diario de mensajes y alertas flash.
+ * 4. Preguntas Frecuentes: Acordeón Bootstrap autogestionado con respuestas sobre tiempos de entrega, envíos, personalización y maderas nobles.
+ *
+ * @var string $env_whatsapp Número telefónico de WhatsApp de la empresa inyectado globalmente.
+ */
+?>
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>

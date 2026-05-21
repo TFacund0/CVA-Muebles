@@ -1,3 +1,28 @@
+<?php
+/**
+ * Vista de Gestión de Categorías (Admin Category ABM/CRUD Table)
+ *
+ * Muestra la tabla administrativa interactiva de categorías del catálogo.
+ * Incorpora:
+ * 1. Grilla Adaptativa: Listado con avatar abreviado de categoría, totales de productos vinculados, y estados visuales (Visible/Oculta).
+ * 2. Modales Dinámicos: Formularios pop-up para la creación e inicio de edición de categorías.
+ * 3. Botones de Acción Seguros: Acciones de Toggle (mostrar/ocultar) y Eliminación Física (solo permitida si no hay productos asociados).
+ *
+ * @var array $categorias Listado de categorías inyectadas por el controlador.
+ *                        Estructura de cada ítem:
+ *                        - 'id_categoria' (int): ID único.
+ *                        - 'descripcion' (string): Nombre legible.
+ *                        - 'total_productos' (int): Cantidad de productos asociados.
+ *                        - 'activo' (int): Estado de visibilidad (1 = Visible, 0 = Oculta).
+ *
+ * Componentes Reutilizados:
+ * - `components/alert_message.php` para renderizar avisos de confirmación y errores.
+ *
+ * Recursos Externos:
+ * - Estilos: `assets/css/admin/admin-products.css`
+ * - Scripts: `assets/js/admin/categories.js` (Lógica de confirmaciones SweetAlert o modal, y precarga de edición).
+ */
+?>
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>

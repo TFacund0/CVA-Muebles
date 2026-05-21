@@ -1,15 +1,28 @@
 <?php 
-    $session = session();
-    $msg = $session->getFlashdata('success') ?? $session->getFlashdata('error') ?? $session->getFlashdata('fail');
-    $type = $session->getFlashdata('success') ? 'success' : ($session->getFlashdata('error') ? 'danger' : 'warning');
-    $icon = $session->getFlashdata('success') ? 'bi-check-circle-fill' : ($session->getFlashdata('error') ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill');
-    
-    // Dynamic duration: Base 1s + 60ms per character, clamped between 4s and 12s
-    $duration = 4;
-    if ($msg) {
-        $char_count = mb_strlen($msg);
-        $duration = max(4, min(12, round(1 + ($char_count * 0.06))));
-    }
+/**
+ * Componente de Alertas Flotantes Autodescartables (Floating Toast Alerts)
+ *
+ * Muestra una notificación emergente tipo Toast en la esquina inferior derecha de la pantalla.
+ * El componente es inteligente y autodescartable; calcula de forma dinámica su tiempo de
+ * visualización basándose en la longitud en caracteres del mensaje (fórmula de lectura rápida)
+ * e implementa una barra de progreso CSS que se vacía gradualmente.
+ *
+ * Datos de Sesión Flash Esperados:
+ * - session()->getFlashdata('success'): Notificación de éxito.
+ * - session()->getFlashdata('error'): Notificación de error.
+ * - session()->getFlashdata('fail'): Notificación de advertencia.
+ */
+$session = session();
+$msg = $session->getFlashdata('success') ?? $session->getFlashdata('error') ?? $session->getFlashdata('fail');
+$type = $session->getFlashdata('success') ? 'success' : ($session->getFlashdata('error') ? 'danger' : 'warning');
+$icon = $session->getFlashdata('success') ? 'bi-check-circle-fill' : ($session->getFlashdata('error') ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill');
+
+// Dynamic duration: Base 1s + 60ms per character, clamped between 4s and 12s
+$duration = 4;
+if ($msg) {
+    $char_count = mb_strlen($msg);
+    $duration = max(4, min(12, round(1 + ($char_count * 0.06))));
+}
 ?>
 
 <?php if ($msg): ?>
