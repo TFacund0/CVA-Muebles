@@ -2,30 +2,67 @@
 
 namespace App\Controllers;
 
-/**
- * Controlador para gestión de ventas refactorizado para usar Capa de Servicios.
- */
-class VentasController extends BaseController {
+use App\Services\VentasService;
+use App\Services\UsuarioService;
+use App\Services\ConsultaService;
+use App\Services\GaleriaService;
+use App\Services\CarritoService;
+use CodeIgniter\HTTP\RedirectResponse;
 
+/**
+ * Class VentasController
+ *
+ * Controlador encargado de gestionar las operaciones de ventas, pedidos activos,
+ * fases de producción del taller, priorización de colas, comprobantes y reportes
+ * estadísticos de CVA Muebles. Coordina los flujos de negocio delegando en la capa de servicios.
+ *
+ * @package App\Controllers
+ */
+class VentasController extends BaseController
+{
+    /**
+     * @var VentasService Servicio encargado de procesar la lógica de negocio de ventas y pedidos.
+     */
     protected $ventasService;
+
+    /**
+     * @var UsuarioService Servicio encargado de la gestión y consulta de usuarios/clientes.
+     */
     protected $usuarioService;
+
+    /**
+     * @var ConsultaService Servicio para la administración y conteo de consultas.
+     */
     protected $consultaService;
+
+    /**
+     * @var GaleriaService Servicio para la gestión y validación de imágenes de la galería.
+     */
     protected $galeriaService;
 
-    public function __construct() {
+    /**
+     * Constructor del controlador.
+     *
+     * Carga los helpers necesarios de URL y formularios, e inicializa las instancias
+     * de los servicios requeridos por las operaciones de pedidos y taller.
+     */
+    public function __construct()
+    {
         helper(['url', 'form']);
-        $this->ventasService  = new \App\Services\VentasService();
-        $this->usuarioService = new \App\Services\UsuarioService();
-        $this->consultaService = new \App\Services\ConsultaService();
-        $this->galeriaService = new \App\Services\GaleriaService();
+        $this->ventasService   = new VentasService();
+        $this->usuarioService  = new UsuarioService();
+        $this->consultaService = new ConsultaService();
+        $this->galeriaService  = new GaleriaService();
     }
 
     /**
-     * Muestra el listado de ventas con estadísticas procesadas por el servicio.
+     * Muestra el panel administrativo de listado de ventas/pedidos con estadísticas
+     * procesadas por el taller para el mes actual.
+     *
+     * @return string Contenido HTML renderizado de la vista de administración de ventas.
      */
-    public function index_ventas() {
-
-
+    public function index_ventas()
+    {
         $resultado = $this->ventasService->getVentasConEstadisticas();
         
         $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -40,9 +77,13 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Procesa el registro de una nueva venta delegando al servicio.
+     * Procesa y registra la compra de uno o varios productos contenidos en el carrito del cliente,
+     * delegando la transacción al servicio de ventas y vaciando el carrito tras un registro exitoso.
+     *
+     * @return RedirectResponse Redirección a la lista de pedidos con mensaje flash de éxito o de error.
      */
-    public function registrar_venta() {
+    public function registrar_venta()
+    {
         $items_seleccionados_ids = $this->request->getPost('selected_items');
         $observaciones = $this->request->getPost('observaciones');
         
@@ -50,7 +91,7 @@ class VentasController extends BaseController {
             return redirect()->to('/muestro')->with('error', 'Debes seleccionar al menos un producto para generar el pedido.');
         }
 
-        $cartService = new \App\Services\CarritoService();
+        $cartService = new CarritoService();
         $carrito_completo = $cartService->getContenido();
         
         $items_a_procesar = [];
@@ -73,11 +114,20 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Muestra la factura de una venta específica.
+     * Permite visualizar el comprobante o factura de un pedido específico.
+     * Implementa validaciones de seguridad para garantizar que los clientes solo accedan a sus
+     * propios comprobantes, mientras que los administradores gozan de acceso global.
+     *
+     * @param int $venta_id Identificador único de la venta/pedido.
+     * 
+     * @return string|RedirectResponse Vista HTML del comprobante o redirección si no hay accesos o datos.
      */
-    public function ver_factura($venta_id) {
+    public function ver_factura($venta_id)
+    {
         $data = $this->ventasService->getGestionDetalle($venta_id);
-        if (!$data) return redirect()->to('/productos')->with('error', 'Pedido no encontrado.');
+        if (!$data) {
+            return redirect()->to('/productos')->with('error', 'Pedido no encontrado.');
+        }
 
         $isAdmin = session()->get('perfil_id') == 1;
 
@@ -89,16 +139,19 @@ class VentasController extends BaseController {
         $layout = $isAdmin ? 'layout/admin_layout' : 'layout/main';
 
         return view('back/sales/ver_factura_usuario', array_merge($data, [
-            'title' => $isAdmin ? 'Comprobante Pedido #' . $venta_id : 'Detalle de mi Pedido #' . $venta_id,
-            'layout' => $layout,
+            'title'   => $isAdmin ? 'Comprobante Pedido #' . $venta_id : 'Detalle de mi Pedido #' . $venta_id,
+            'layout'  => $layout,
             'isAdmin' => $isAdmin
         ]));
     }
 
     /**
-     * Muestra todas las facturas del usuario actual.
+     * Recupera y muestra el listado histórico de pedidos realizados por el usuario autenticado.
+     *
+     * @return string Contenido HTML de la vista de compras de usuario.
      */
-    public function ver_facturas_usuario() {
+    public function ver_facturas_usuario()
+    {
         $id_usuario = session()->get('id_usuario');
         $ventas = $this->ventasService->getVentasPorUsuario($id_usuario);
 
@@ -109,11 +162,14 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Actualiza el estado de una venta delegando al servicio.
+     * Actualiza el estado actual o fase de producción de un pedido específico.
+     *
+     * @param int $venta_id Identificador único del pedido a actualizar.
+     * 
+     * @return RedirectResponse Redirección al módulo de gestión con mensajes de estado.
      */
-    public function actualizar_estado($venta_id) {
-
-
+    public function actualizar_estado($venta_id)
+    {
         $nuevo_estado = $this->request->getPost('estado');
         $this->ventasService->actualizarEstado($venta_id, $nuevo_estado);
 
@@ -127,11 +183,13 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Muestra estadísticas agregadas del taller.
+     * Renderiza el dashboard analítico de estadísticas e indicadores de rendimiento
+     * del taller de muebles, incluyendo peticiones activas, tareas y galerías pendientes.
+     *
+     * @return string Contenido HTML renderizado del panel de estadísticas.
      */
-    public function estadisticas() {
-
-
+    public function estadisticas()
+    {
         return view('back/sales/estadisticas', [
             'stats'                    => $this->ventasService->getDashboardStats(),
             'total_consultas'          => $this->consultaService->countActivas(),
@@ -141,9 +199,13 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Muestra el formulario para registrar un pedido manual.
+     * Muestra el formulario administrativo para el registro manual de un pedido
+     * personalizado/a medida para un cliente específico.
+     *
+     * @return string Contenido HTML de la vista de registro de pedido personalizado.
      */
-    public function nuevo_pedido_personalizado() {
+    public function nuevo_pedido_personalizado()
+    {
         return view('back/sales/nuevo_pedido_personalizado', [
             'clientes' => $this->usuarioService->getClientesActivos(),
             'title'    => 'Nuevo Pedido Personalizado'
@@ -151,11 +213,14 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Procesa el registro de un pedido manual delegando al servicio.
+     * Procesa la creación y persistencia de un pedido personalizado para un cliente seleccionado.
+     * Realiza validaciones estrictas sobre el archivo de imagen de referencia subido para
+     * garantizar la seguridad del servidor antes de derivar el proceso a la capa de servicios.
+     *
+     * @return RedirectResponse Redirección con mensaje flash de éxito o de error.
      */
-    public function guardar_pedido_personalizado() {
-
-
+    public function guardar_pedido_personalizado()
+    {
         $file = $this->request->getFile('imagen_referencia');
 
         // Validación estricta de la imagen de referencia
@@ -178,22 +243,32 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Vista de gestión detallada para el administrador.
+     * Muestra la interfaz de administración para la gestión en tiempo real de las fases
+     * de fabricación, detalles de pago y notas de un pedido en curso.
+     *
+     * @param int $venta_id Identificador único del pedido.
+     * 
+     * @return string|RedirectResponse Contenido HTML de la vista de administración o redirección si no existe.
      */
-    public function ver_gestion_pedido($venta_id) {
-
-
+    public function ver_gestion_pedido($venta_id)
+    {
         $data = $this->ventasService->getGestionDetalle($venta_id);
-        if (!$data) return redirect()->to('/ventas-list')->with('error', 'Pedido no encontrado.');
+        if (!$data) {
+            return redirect()->to('/ventas-list')->with('error', 'Pedido no encontrado.');
+        }
 
         $data['title'] = 'Gestión de Pedido #' . $venta_id;
         return view('back/sales/gestion_pedido_admin', $data);
     }
 
     /**
-     * Registra un pago delegando al servicio.
+     * Registra un cobro parcial o pago total sobre un pedido activo.
+     * Valida que el monto ingresado cumpla con criterios de formato numérico mayor que cero.
+     *
+     * @return RedirectResponse Redirección de regreso con mensaje flash.
      */
-    public function registrar_pago() {
+    public function registrar_pago()
+    {
         $monto = $this->request->getPost('monto');
 
         if (!is_numeric($monto) || (float) $monto <= 0) {
@@ -210,9 +285,14 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Actualiza las observaciones delegando al servicio.
+     * Guarda modificaciones y observaciones sobre los detalles constructivos de un pedido.
+     * Sanitiza etiquetas de referencia a imágenes mediante expresiones regulares para
+     * evitar posibles inyecciones de código.
+     *
+     * @return RedirectResponse Redirección de regreso con mensaje flash de éxito.
      */
-    public function guardar_observaciones() {
+    public function guardar_observaciones()
+    {
         $observaciones = $this->request->getPost('observaciones');
         $img_ref_tag   = $this->request->getPost('img_ref_tag');
 
@@ -231,21 +311,27 @@ class VentasController extends BaseController {
     }
 
     /**
-     * Sube un pedido en el orden de prioridad del listado activo.
+     * Incrementa la prioridad de producción de un pedido, subiéndolo en la cola de trabajo del taller.
+     *
+     * @param int $venta_id Identificador único del pedido.
+     * 
+     * @return RedirectResponse Redirección de regreso con mensaje flash de éxito.
      */
-    public function subir_prioridad($venta_id) {
-
-
+    public function subir_prioridad($venta_id)
+    {
         $this->ventasService->subirPrioridad($venta_id);
         return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
     }
 
     /**
-     * Baja un pedido en el orden de prioridad del listado activo.
+     * Disminuye la prioridad de producción de un pedido, bajándolo en la cola de trabajo del taller.
+     *
+     * @param int $venta_id Identificador único del pedido.
+     * 
+     * @return RedirectResponse Redirección de regreso con mensaje flash de éxito.
      */
-    public function bajar_prioridad($venta_id) {
-
-
+    public function bajar_prioridad($venta_id)
+    {
         $this->ventasService->bajarPrioridad($venta_id);
         return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
     }

@@ -80,24 +80,16 @@ class Exceptions extends BaseConfig
      */
     public string $deprecationLogLevel = LogLevel::WARNING;
 
-    /*
-     * DEFINE THE HANDLERS USED
-     * --------------------------------------------------------------------------
-     * Given the HTTP status code, returns exception handler that
-     * should be used to deal with this error. By default, it will run CodeIgniter's
-     * default handler and display the error information in the expected format
-     * for CLI, HTTP, or AJAX requests, as determined by is_cli() and the expected
-     * response format.
+    /**
+     * Define el manejador de excepciones que se utilizará para procesar el error.
      *
-     * Custom handlers can be returned if you want to handle one or more specific
-     * error codes yourself like:
+     * Se ha sobreescrito este método para instanciar e inyectar nuestro
+     * GlobalExceptionHandler personalizado en lugar del manejador por defecto del framework.
      *
-     *      if (in_array($statusCode, [400, 404, 500])) {
-     *          return new \App\Libraries\MyExceptionHandler();
-     *      }
-     *      if ($exception instanceOf PageNotFoundException) {
-     *          return new \App\Libraries\MyExceptionHandler();
-     *      }
+     * @param int       $statusCode Código de estado HTTP correspondiente al error.
+     * @param Throwable $exception  El objeto de la excepción capturada.
+     * 
+     * @return ExceptionHandlerInterface Instancia del manejador que procesará la excepción.
      */
     public function handler(int $statusCode, Throwable $exception): ExceptionHandlerInterface
     {

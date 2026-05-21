@@ -6,30 +6,68 @@ use App\Models\VentasCabeceraModel;
 use App\Models\VentasDetalleModel;
 use App\Models\ProductoModel;
 use App\Models\VentasPagosModel;
-use CodeIgniter\Database\Exceptions\DatabaseException;
+use App\Models\UsuarioModel;
+use CodeIgniter\HTTP\Files\UploadedFile;
 
 /**
- * Servicio para manejar la lógica de negocio relacionada con las ventas.
+ * Class VentasService
+ *
+ * Servicio encargado de orquestar toda la lógica de negocio asociada a las ventas, transacciones
+ * comerciales y gestión del taller de fabricación de CVA Muebles. Administra la creación de pedidos
+ * mediante carrito o de manera manual (personalizados con imágenes de referencia), el flujo de
+ * estados de producción (PENDIENTE -> EN_PROCESO -> TERMINADO -> ENTREGADO), el registro de cobros y
+ * amortizaciones (señas/pagos parciales), la prioridad en colas de trabajo, y paneles analíticos.
+ *
+ * @package App\Services
  */
 class VentasService
 {
+    /**
+     * @var VentasCabeceraModel Modelo para la cabecera de las ventas y pedidos.
+     */
     protected $ventasModel;
+
+    /**
+     * @var VentasDetalleModel Modelo para el desglose e ítems incluidos en cada pedido.
+     */
     protected $detalleModel;
+
+    /**
+     * @var ProductoModel Modelo para el catálogo de productos y muebles.
+     */
     protected $productoModel;
+
+    /**
+     * @var VentasPagosModel Modelo para los cobros y pagos parciales asociados a los pedidos.
+     */
     protected $pagosModel;
+
+    /**
+     * @var \CodeIgniter\Database\BaseConnection Instancia de conexión a base de datos para controlar transacciones.
+     */
     protected $db;
 
+    /**
+     * Constructor del servicio.
+     *
+     * Inicializa las instancias de los modelos de base de datos requeridos y establece
+     * la conexión transaccional con la base de datos de CodeIgniter 4.
+     */
     public function __construct()
     {
-        $this->ventasModel = new VentasCabeceraModel();
-        $this->detalleModel = new VentasDetalleModel();
+        $this->ventasModel   = new VentasCabeceraModel();
+        $this->detalleModel  = new VentasDetalleModel();
         $this->productoModel = new ProductoModel();
-        $this->pagosModel = new VentasPagosModel();
-        $this->db = \Config\Database::connect();
+        $this->pagosModel    = new VentasPagosModel();
+        $this->db            = \Config\Database::connect();
     }
 
     /**
-     * Obtiene todas las ventas con estadísticas procesadas para el panel.
+     * Recupera el listado total de pedidos (separándolos en solicitudes de presupuesto y pedidos activos en el taller),
+     * computando métricas financieras consolidadas (ingresos reales acumulados por cobros) y operacionales de producción
+     * para el mes calendario en curso.
+     *
+     * @return array Estructura enriquecida con pedidos en taller ('ventas'), presupuestos ('solicitados') y métricas ('counts').
      */
     public function getVentasConEstadisticas()
     {
@@ -39,7 +77,7 @@ class VentasService
         $totalRecaudado = $this->pagosModel->selectSum('monto')->first();
         $recaudadoReal = (float) ($totalRecaudado['monto'] ?? 0);
 
-        // Fetch only non-rejected to save memory
+        // Recuperar únicamente los pedidos no rechazados para optimizar el rendimiento y memoria
         $ventas = $this->ventasModel->select('ventas_cabecera.id, ventas_cabecera.fecha, ventas_cabecera.usuario_id, ventas_cabecera.total_venta, ventas_cabecera.estado, ventas_cabecera.estado_aprobacion, ventas_cabecera.tipo_pedido, ventas_cabecera.observaciones, ventas_cabecera.prioridad, usuarios.nombre, usuarios.apellido, usuarios.email, usuarios.usuario')
                                     ->join('usuarios', 'usuarios.id_usuario = ventas_cabecera.usuario_id', 'left')
                                     ->where('ventas_cabecera.estado_aprobacion !=', 'RECHAZADO')
@@ -79,8 +117,14 @@ class VentasService
     }
 
     /**
-     * Procesa una venta completa: valida stock (opcional), crea registros y guarda mensaje.
-     * Nota: Ya no descuenta stock aquí, se hace al aprobar el pedido.
+     * Procesa transaccionalmente el registro de un nuevo pedido en el sistema a partir de
+     * los productos seleccionados en el carrito de compras.
+     *
+     * @param int|string $usuario_id Identificador único del cliente.
+     * @param array $items_seleccionados Detalle de ítems a adquirir (id, cantidad, precio).
+     * @param string $observaciones Notas complementarias asociadas a la entrega o diseño.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'venta_id' => int si es exitoso).
      */
     public function procesarVenta($usuario_id, $items_seleccionados, $observaciones = '')
     {
@@ -96,13 +140,13 @@ class VentasService
         $this->db->transStart();
         try {
             $venta_id = $this->ventasModel->insert([
-                'usuario_id'       => $usuario_id,
-                'fecha'            => date('Y-m-d H:i:s'),
-                'total_venta'      => $total,
-                'estado'           => 'PENDIENTE',
-                'estado_aprobacion'=> 'SOLICITUD',
-                'observaciones'    => $observaciones,
-                'tipo_pedido'      => 'CARRITO'
+                'usuario_id'         => $usuario_id,
+                'fecha'              => date('Y-m-d H:i:s'),
+                'total_venta'        => $total,
+                'estado'             => 'PENDIENTE',
+                'estado_aprobacion'  => 'SOLICITUD',
+                'observaciones'      => $observaciones,
+                'tipo_pedido'        => 'CARRITO'
             ]);
 
             if (!$venta_id) {
@@ -127,43 +171,56 @@ class VentasService
     }
 
     /**
-     * Obtiene el detalle completo de una venta para gestión administrativa.
+     * Recupera el detalle analítico consolidado de un pedido específico.
+     * Combina la cabecera de la venta, lista de muebles adquiridos, pagos amortizados y saldo pendiente de cobro.
+     *
+     * @param int|string $venta_id Identificador del pedido/venta.
+     * 
+     * @return array|null Estructura consolidada del pedido o null si el identificador es inexistente.
      */
     public function getGestionDetalle($venta_id)
     {
         $venta = $this->ventasModel->getVentas($venta_id)[0] ?? null;
-        if (!$venta) return null;
+        if (!$venta) {
+            return null;
+        }
 
         $detalles = $this->detalleModel->getDetalles($venta_id);
         $pagos = $this->pagosModel->getPagosPorVenta($venta_id);
         $total_pagado = $this->pagosModel->getTotalPagado($venta_id);
 
         return [
-            'venta' => $venta,
-            'detalles' => $detalles,
-            'pagos' => $pagos,
-            'total_pagado' => $total_pagado,
+            'venta'           => $venta,
+            'detalles'        => $detalles,
+            'pagos'           => $pagos,
+            'total_pagado'    => $total_pagado,
             'saldo_pendiente' => $venta['total_venta'] - $total_pagado
         ];
     }
 
     /**
-     * Actualiza el estado de una venta y gestiona el stock si es necesario.
+     * Actualiza el estado de aprobación administrativa o fase operacional de fabricación del taller.
+     *
+     * @param int|string $venta_id Identificador único del pedido.
+     * @param string $estado Nuevo estado (ACEPTADO, RECHAZADO, PENDIENTE, EN_PROCESO, TERMINADO, ENTREGADO).
+     * 
+     * @return bool True si la operación se procesó exitosamente; false en caso contrario.
      */
     public function actualizarEstado($venta_id, $estado)
     {
         $venta_actual = $this->ventasModel->find($venta_id);
-        if (!$venta_actual) return false;
+        if (!$venta_actual) {
+            return false;
+        }
 
         // --- FLUJO DE APROBACIÓN (SOLICITUD -> ACEPTADO/RECHAZADO) ---
         if ($estado == 'ACEPTADO' || $estado == 'RECHAZADO') {
             $this->db->transStart();
             try {
-                // Lógica de stock removida ya que se trabaja bajo pedido.
-
+                // Lógica de stock removida ya que se trabaja a medida y bajo demanda.
                 $this->ventasModel->update($venta_id, [
                     'estado_aprobacion' => $estado,
-                    'estado' => ($estado == 'ACEPTADO') ? 'PENDIENTE' : $venta_actual['estado']
+                    'estado'            => ($estado == 'ACEPTADO') ? 'PENDIENTE' : $venta_actual['estado']
                 ]);
 
                 $this->db->transComplete();
@@ -175,12 +232,17 @@ class VentasService
         }
 
         // --- FLUJO DE PRODUCCIÓN (PENDIENTE -> EN_PROCESO -> TERMINADO -> ENTREGADO) ---
-        // Aquí no se toca stock, solo actualizamos la fase del pedido.
         return $this->ventasModel->update($venta_id, ['estado' => $estado]);
     }
 
     /**
-     * Registra un pago para una venta.
+     * Registra un pago parcial (seña) o amortización total a cuenta de un pedido en el taller.
+     *
+     * @param int|string $venta_id Identificador de la venta vinculada.
+     * @param float $monto Importe del abono registrado.
+     * @param string $nota Detalle descriptivo o comprobante del cobro.
+     * 
+     * @return bool|int|string Retorna el resultado de la inserción en base de datos.
      */
     public function registrarPago($venta_id, $monto, $nota = '')
     {
@@ -192,7 +254,12 @@ class VentasService
     }
 
     /**
-     * Actualiza las observaciones de una venta.
+     * Modifica las especificaciones u observaciones constructivas escritas asociadas a un pedido.
+     *
+     * @param int|string $venta_id Identificador del pedido.
+     * @param string $observaciones Texto descriptivo de los detalles actualizados.
+     * 
+     * @return bool|int|string Retorna el resultado del update en base de datos.
      */
     public function actualizarObservaciones($venta_id, $observaciones)
     {
@@ -200,7 +267,10 @@ class VentasService
     }
 
     /**
-     * Obtiene estadísticas agregadas para el dashboard en una sola query.
+     * Recupera el volumen agregado de pedidos clasificados por su fase activa de producción
+     * (PENDIENTE, EN_PROCESO, TERMINADO, ENTREGADO) a través de una consulta única agrupada.
+     *
+     * @return array Histograma de cantidades por estado operacional de fabricación.
      */
     public function getDashboardStats()
     {
@@ -221,24 +291,33 @@ class VentasService
     }
 
     /**
-     * Registra un pedido personalizado.
+     * Procesa el alta transaccional de un pedido personalizado (mueble a medida) de forma manual
+     * por la administración, manejando opcionalmente imágenes físicas de referencia (ej: planos o croquis),
+     * vinculando un cliente genérico por defecto de ser requerido y asentando la seña inicial de cobro.
+     *
+     * @param array $data Atributos de pedido manual (cliente_id, total, seña, descripción constructiva).
+     * @param UploadedFile|null $file Imagen física de referencia cargada (croquis/diseño).
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'venta_id' => int si tiene éxito).
      */
-    public function registrarPedidoPersonalizado($data, $file = null)
+    public function registrarPedidoPersonalizado($data, UploadedFile $file = null)
     {
-        $usuarioModel = new \App\Models\UsuarioModel();
+        $usuarioModel = new UsuarioModel();
         
-        // Si viene un usuario_id, lo usamos. Si no, usamos el genérico.
+        // Si viene un usuario_id, lo usamos. Si no, usamos el genérico para WhatsApp
         $usuario_id = $data['usuario_id'] ?? null;
         
         if (empty($usuario_id)) {
             $usuario_gen = $usuarioModel->where('usuario', 'cliente_whatsapp')->first();
-            if (!$usuario_gen) return ['status' => 'error', 'message' => 'No se encontró el usuario genérico.'];
+            if (!$usuario_gen) {
+                return ['status' => 'error', 'message' => 'No se encontró el usuario genérico.'];
+            }
             $usuario_id = $usuario_gen['id_usuario'];
         }
 
         $this->db->transStart();
         try {
-            // Manejo de Imagen Opcional
+            // Manejo de Imagen Opcional de croquis o referencia constructiva
             $img_ref = "";
             if ($file && $file->isValid() && !$file->hasMoved()) {
                 $img_ref = $file->getRandomName();
@@ -251,13 +330,13 @@ class VentasService
             }
 
             $venta_id = $this->ventasModel->insert([
-                'usuario_id'       => $usuario_id,
-                'total_venta'      => $data['total_venta'],
-                'estado'           => 'PENDIENTE',
-                'estado_aprobacion'=> 'ACEPTADO',
-                'observaciones'    => $observaciones,
-                'fecha'            => date('Y-m-d H:i:s'),
-                'tipo_pedido'      => 'MANUAL'
+                'usuario_id'         => $usuario_id,
+                'total_venta'        => $data['total_venta'],
+                'estado'             => 'PENDIENTE',
+                'estado_aprobacion'  => 'ACEPTADO',
+                'observaciones'      => $observaciones,
+                'fecha'              => date('Y-m-d H:i:s'),
+                'tipo_pedido'        => 'MANUAL'
             ]);
             
             $this->detalleModel->insert([
@@ -275,14 +354,20 @@ class VentasService
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+
     /**
-     * Obtiene el historial de ventas de un usuario específico.
+     * Recupera el histórico de compras y pedidos completo de un usuario cliente,
+     * ordenado estrictamente en formato cronológico descendente (compras recientes primero).
+     *
+     * @param int|string $usuario_id Identificador del cliente.
+     * 
+     * @return array Colección histórica de transacciones enriquecidas con el detalle de muebles adquiridos.
      */
     public function getVentasPorUsuario($usuario_id)
     {
         $ventas = $this->ventasModel->getVentas(null, $usuario_id);
         
-        // Sort strictly by date DESC (most recent first) for customer view
+        // Ordenar estrictamente de forma cronológica descendente
         usort($ventas, function($a, $b) {
             return strtotime($b['fecha']) - strtotime($a['fecha']);
         });
@@ -294,13 +379,19 @@ class VentasService
     }
 
     /**
-     * Incrementa la prioridad del pedido para subirlo en el listado activo.
+     * Incrementa la prioridad constructiva de un pedido en la cola de producción activa
+     * de los artesanos en el taller.
+     * Intercambia la prioridad con el pedido inmediatamente superior.
+     *
+     * @param int|string $venta_id Identificador único del pedido.
+     * 
+     * @return void
      */
     public function subirPrioridad($venta_id)
     {
         $ventas_activas = $this->ventasModel->getVentasActivas();
 
-        // Encontrar la posición actual en la lista activa
+        // Encontrar la posición del pedido en la lista de prioridades activas
         $index = -1;
         for ($i = 0; $i < count($ventas_activas); $i++) {
             if ($ventas_activas[$i]['id'] == $venta_id) {
@@ -311,21 +402,21 @@ class VentasService
 
         if ($index > 0) {
             $item_current = $ventas_activas[$index];
-            $item_above = $ventas_activas[$index - 1];
+            $item_above   = $ventas_activas[$index - 1];
 
             $p_current = (int) ($item_current['prioridad'] ?? 0);
-            $p_above = (int) ($item_above['prioridad'] ?? 0);
+            $p_above   = (int) ($item_above['prioridad'] ?? 0);
 
             if ($p_current != $p_above) {
-                // Si las prioridades son distintas, las intercambiamos
+                // Intercambiar las prioridades para reordenar la cola
                 $this->ventasModel->update($item_current['id'], ['prioridad' => $p_above]);
                 $this->ventasModel->update($item_above['id'], ['prioridad' => $p_current]);
             } else {
-                // Si son iguales, al que sube (current) le damos la del de arriba + 1
+                // Si coinciden en prioridad, subimos el pedido actual una unidad arriba
                 $this->ventasModel->update($item_current['id'], ['prioridad' => $p_above + 1]);
             }
         } elseif ($index == 0 && !empty($ventas_activas)) {
-            // Ya está arriba de todo, pero incrementamos para asegurar
+            // Caso en el que el pedido ya encabeza la cola activa; se eleva preventivamente su puntuación
             $item_current = $ventas_activas[0];
             $p_current = (int) ($item_current['prioridad'] ?? 0);
             $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current + 1]);
@@ -333,13 +424,19 @@ class VentasService
     }
 
     /**
-     * Decrementa la prioridad del pedido para bajarlo en el listado activo.
+     * Disminuye la prioridad constructiva de un pedido en la cola de producción activa
+     * de los artesanos en el taller.
+     * Intercambia la prioridad con el pedido inmediatamente inferior.
+     *
+     * @param int|string $venta_id Identificador único del pedido.
+     * 
+     * @return void
      */
     public function bajarPrioridad($venta_id)
     {
         $ventas_activas = $this->ventasModel->getVentasActivas();
 
-        // Encontrar la posición actual en la lista activa
+        // Encontrar la posición del pedido en la lista de prioridades activas
         $index = -1;
         for ($i = 0; $i < count($ventas_activas); $i++) {
             if ($ventas_activas[$i]['id'] == $venta_id) {
@@ -350,21 +447,21 @@ class VentasService
 
         if ($index != -1 && $index < count($ventas_activas) - 1) {
             $item_current = $ventas_activas[$index];
-            $item_below = $ventas_activas[$index + 1];
+            $item_below   = $ventas_activas[$index + 1];
 
             $p_current = (int) ($item_current['prioridad'] ?? 0);
-            $p_below = (int) ($item_below['prioridad'] ?? 0);
+            $p_below   = (int) ($item_below['prioridad'] ?? 0);
 
             if ($p_current != $p_below) {
-                // Si las prioridades son distintas, las intercambiamos
+                // Intercambiar las prioridades para reordenar la cola
                 $this->ventasModel->update($item_current['id'], ['prioridad' => $p_below]);
                 $this->ventasModel->update($item_below['id'], ['prioridad' => $p_current]);
             } else {
-                // Si son iguales, al que sube (below) le damos la del de arriba (current) + 1
+                // Si coinciden en prioridad, bajamos el pedido inferior asignándole la del actual + 1
                 $this->ventasModel->update($item_below['id'], ['prioridad' => $p_current + 1]);
             }
         } elseif ($index == count($ventas_activas) - 1 && $index != -1) {
-            // Ya está en el fondo, pero decrementamos para asegurar
+            // Caso en el que el pedido ya está al final de la cola activa; se disminuye preventivamente
             $item_current = $ventas_activas[$index];
             $p_current = (int) ($item_current['prioridad'] ?? 0);
             $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current - 1]);

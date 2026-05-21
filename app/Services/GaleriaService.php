@@ -3,21 +3,39 @@
 namespace App\Services;
 
 use App\Models\GaleriaClienteModel;
+use CodeIgniter\HTTP\Files\UploadedFile;
 
 /**
- * Servicio para manejar la galería de fotos de clientes.
+ * Class GaleriaService
+ *
+ * Servicio encargado de la gestión de la galería de fotos subidas por los clientes.
+ * Provee la lógica de negocio para la subida de archivos físicos al servidor con nombres únicos,
+ * moderación y aprobación administrativa de imágenes, y borrado permanente de archivos del disco.
+ *
+ * @package App\Services
  */
 class GaleriaService
 {
+    /**
+     * @var GaleriaClienteModel Modelo para interactuar con la tabla de galería de clientes en la base de datos.
+     */
     protected $galeriaModel;
 
+    /**
+     * Constructor del servicio.
+     *
+     * Inicializa el modelo de acceso a datos para la galería de clientes.
+     */
     public function __construct()
     {
         $this->galeriaModel = new GaleriaClienteModel();
     }
 
     /**
-     * Obtiene fotos aprobadas para la vista pública.
+     * Recupera todas las fotos de la galería que han sido moderadas y aprobadas ('activo' => 'SI')
+     * para su exposición en el catálogo público de CVA Muebles.
+     *
+     * @return array Listado de fotos aprobadas con comentarios e información asociada.
      */
     public function getAprobadas()
     {
@@ -25,7 +43,11 @@ class GaleriaService
     }
 
     /**
-     * Obtiene todas las fotos con datos de usuario para el admin.
+     * Recupera todas las fotos registradas en el sistema (aprobadas y pendientes), enriquecidas
+     * con el nombre de usuario del cliente que las subió.
+     * Ordena las fotos priorizando las pendientes de aprobación ('activo' => 'NO') y luego las más recientes.
+     *
+     * @return array Listado detallado de todas las fotos de la galería de clientes.
      */
     public function getAllConUsuarios()
     {
@@ -37,7 +59,10 @@ class GaleriaService
     }
 
     /**
-     * Obtiene la cantidad de fotos pendientes de moderación.
+     * Obtiene el número total de fotos subidas por clientes que aún no han sido
+     * moderadas ni aprobadas para la exhibición pública.
+     *
+     * @return int Cantidad de fotos pendientes de aprobación.
      */
     public function getPendientesCount()
     {
@@ -45,9 +70,17 @@ class GaleriaService
     }
 
     /**
-     * Procesa la subida de una foto por parte de un cliente.
+     * Procesa de forma segura la carga física y el registro de una nueva imagen enviada por un cliente.
+     * Asigna un nombre aleatorio seguro, mueve la imagen a la carpeta física de subidas
+     * del taller y registra la relación en base de datos bajo un estado inactivo ('NO') por defecto.
+     *
+     * @param int|string $usuario_id Identificador único del usuario que sube la imagen.
+     * @param UploadedFile $img Instancia del archivo cargado a través del formulario.
+     * @param string $comentario Breve comentario descriptivo o de agradecimiento provisto por el usuario.
+     * 
+     * @return bool|int|string Retorna el identificador de inserción si es exitoso, o false en caso de fallo.
      */
-    public function subir($usuario_id, $img, $comentario)
+    public function subir($usuario_id, UploadedFile $img, $comentario)
     {
         if ($img->isValid() && !$img->hasMoved()) {
             $newName = $img->getRandomName();
@@ -65,7 +98,11 @@ class GaleriaService
     }
 
     /**
-     * Aprueba una foto.
+     * Aprueba la exhibición pública de una foto en el panel de testimonios del sitio web.
+     *
+     * @param int|string $id Identificador único de la foto en la galería.
+     * 
+     * @return bool|int|string Retorna el resultado del update de la base de datos.
      */
     public function aprobar($id)
     {
@@ -73,7 +110,12 @@ class GaleriaService
     }
 
     /**
-     * Elimina una foto.
+     * Procesa la eliminación física del archivo de imagen del almacenamiento del servidor
+     * y elimina su registro correspondiente de la base de datos.
+     *
+     * @param int|string $id Identificador único de la foto a eliminar.
+     * 
+     * @return bool True si se eliminó correctamente física y lógicamente; false si no existe la imagen.
      */
     public function eliminar($id)
     {

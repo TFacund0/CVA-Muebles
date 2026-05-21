@@ -12,32 +12,41 @@ use Psr\Log\LoggerInterface;
 /**
  * Class BaseController
  *
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- * Extend this class in any new controllers:
- *     class Home extends BaseController
+ * BaseController proporciona un espacio centralizado para inicializar componentes, precargar
+ * modelos, helpers y bibliotecas compartidas que son requeridos por todos los controladores
+ * de la aplicación CVA Muebles.
  *
- * For security be sure to declare any new methods as protected or private.
+ * Todos los controladores del sistema deben extender esta clase.
+ *
+ * @package App\Controllers
  */
 abstract class BaseController extends Controller
 {
     /**
-     * Instance of the main Request object.
+     * Instancia principal de la petición HTTP.
      *
      * @var CLIRequest|IncomingRequest
      */
     protected $request;
 
     /**
-     * An array of helpers to be loaded automatically upon
-     * class instantiation. These helpers will be available
-     * to all other controllers that extend BaseController.
+     * Helpers que se cargan automáticamente al instanciarse la clase.
+     * Estarán disponibles en todos los controladores que extiendan de BaseController.
      *
      * @var list<string>
      */
     protected $helpers = ['url', 'date', 'form'];
 
     /**
+     * Inicializador de controladores.
+     *
+     * Carga el constructor padre y establece variables globales compartidas con el renderizador
+     * de vistas (Arquitectura Pura) para toda la aplicación.
+     *
+     * @param RequestInterface  $request  Petición HTTP entrante.
+     * @param ResponseInterface $response Respuesta HTTP saliente.
+     * @param LoggerInterface   $logger   Librería de logs PSR-3.
+     * 
      * @return void
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)

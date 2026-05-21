@@ -5,19 +5,40 @@ namespace App\Services;
 use App\Models\FavoritoModel;
 
 /**
- * Servicio para manejar la lógica de favoritos.
+ * Class FavoritosService
+ *
+ * Servicio encargado de gestionar la lista de deseos ("Favoritos") de los usuarios,
+ * permitiendo alternar (toggle) de forma asíncrona o tradicional la asociación entre clientes
+ * y productos, y recuperar listados detallados o simplificados para la interfaz web.
+ *
+ * @package App\Services
  */
 class FavoritosService
 {
+    /**
+     * @var FavoritoModel Modelo para interactuar con la tabla de favoritos en la base de datos.
+     */
     protected $favoritosModel;
 
+    /**
+     * Constructor del servicio.
+     *
+     * Inicializa la instancia del modelo de acceso a datos para favoritos.
+     */
     public function __construct()
     {
         $this->favoritosModel = new FavoritoModel();
     }
 
     /**
-     * Alterna un producto como favorito para un usuario.
+     * Alterna la marca de favorito para un producto y usuario específicos.
+     * Si la relación ya existe, la elimina; de lo contrario, registra una nueva marca con
+     * la marca de tiempo actual del servidor.
+     *
+     * @param int|string $usuario_id Identificador único del usuario.
+     * @param int|string $producto_id Identificador único del producto.
+     * 
+     * @return array Resumen de la acción realizada ('status' => 'added'|'removed', 'message' => string).
      */
     public function toggle($usuario_id, $producto_id)
     {
@@ -39,7 +60,12 @@ class FavoritosService
     }
 
     /**
-     * Obtiene los IDs de productos favoritos de un usuario.
+     * Recupera de forma simplificada los identificadores de productos que un usuario
+     * específico ha marcado como favoritos. Útil para verificar estados en las vistas.
+     *
+     * @param int|string $usuario_id Identificador único del usuario.
+     * 
+     * @return array Lista de identificadores numéricos de productos marcados como favoritos.
      */
     public function getFavoritosIds($usuario_id)
     {
@@ -48,7 +74,12 @@ class FavoritosService
     }
 
     /**
-     * Obtiene los productos favoritos con sus detalles.
+     * Recupera el listado completo de productos marcados como favoritos por el usuario,
+     * incluyendo detalles descriptivos de los productos (nombre, precio, imágenes, etc.).
+     *
+     * @param int|string $usuario_id Identificador del usuario.
+     * 
+     * @return array Colección detallada de productos favoritos del usuario.
      */
     public function getFavoritosConDetalle($usuario_id)
     {

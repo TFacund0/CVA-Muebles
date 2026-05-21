@@ -6,13 +6,32 @@ use App\Models\CategoriaModel;
 use App\Models\ProductoModel;
 
 /**
- * Servicio para manejar la lógica de negocio de las categorías.
+ * Class CategoriaService
+ *
+ * Servicio encargado de la lógica de negocio para la gestión de categorías
+ * de productos de CVA Muebles, regulando el registro, actualización, baja
+ * física o lógica (toggle), estadísticas de uso y control de dependencias
+ * antes de la eliminación.
+ *
+ * @package App\Services
  */
 class CategoriaService
 {
+    /**
+     * @var CategoriaModel Modelo para interactuar con la tabla de categorías en la base de datos.
+     */
     protected $categoriaModel;
+
+    /**
+     * @var ProductoModel Modelo para interactuar con la tabla de productos y validar sus relaciones.
+     */
     protected $productoModel;
 
+    /**
+     * Constructor del servicio.
+     *
+     * Inicializa los modelos de acceso a datos para categorías y productos.
+     */
     public function __construct()
     {
         $this->categoriaModel = new CategoriaModel();
@@ -20,7 +39,12 @@ class CategoriaService
     }
 
     /**
-     * Obtiene todas las categorías con estadísticas de uso.
+     * Obtiene el listado de categorías, anexando estadísticas del total de productos asociados
+     * y productos activos para cada una.
+     *
+     * @param bool $soloActivas Indica si se deben retornar únicamente las categorías activas.
+     * 
+     * @return array Listado de categorías enriquecido con campos de estadísticas ('total_productos', 'productos_activos').
      */
     public function getCategoriasConStats($soloActivas = false)
     {
@@ -41,7 +65,11 @@ class CategoriaService
     }
 
     /**
-     * Crea una nueva categoría.
+     * Procesa el registro de una nueva categoría de producto en el sistema.
+     *
+     * @param array $data Atributos de la categoría a insertar.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function crear($data)
     {
@@ -53,7 +81,12 @@ class CategoriaService
     }
 
     /**
-     * Actualiza una categoría.
+     * Procesa la actualización de los atributos de una categoría existente.
+     *
+     * @param int|string $id Identificador único de la categoría.
+     * @param array $data Nuevos datos a actualizar.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function actualizar($id, $data)
     {
@@ -64,8 +97,12 @@ class CategoriaService
     }
 
     /**
-     * Elimina una categoría si no tiene productos asociados.
-     * Si los tiene, lanza una excepción o devuelve un error.
+     * Procesa la eliminación física de una categoría de la base de datos.
+     * Restringe la eliminación si existen productos asociados (activos o no) para resguardar la integridad referencial.
+     *
+     * @param int|string $id Identificador de la categoría.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function eliminar($id)
     {
@@ -83,19 +120,29 @@ class CategoriaService
     }
 
     /**
-     * Alterna el estado activo/inactivo.
+     * Alterna de forma lógica el estado activo/inactivo (activo = 1/0) de una categoría de producto.
+     *
+     * @param int|string $id Identificador único de la categoría.
+     * 
+     * @return bool|int|string Retorna el resultado del update o false si no se encuentra la categoría.
      */
     public function toggleEstado($id)
     {
         $cat = $this->categoriaModel->find($id);
-        if (!$cat) return false;
+        if (!$cat) {
+            return false;
+        }
 
         $nuevo_estado = ($cat['activo'] == 1) ? 0 : 1;
         return $this->categoriaModel->update($id, ['activo' => $nuevo_estado]);
     }
 
     /**
-     * Obtiene una categoría por ID.
+     * Obtiene los datos detallados de una categoría por su identificador.
+     *
+     * @param int|string $id Identificador de la categoría.
+     * 
+     * @return array|null Datos de la categoría o null si no existe.
      */
     public function getCategoria($id)
     {

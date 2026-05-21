@@ -2,26 +2,53 @@
 
 namespace App\Controllers;
 
-/**
- * Controlador para gestión de productos refactorizado para usar Capa de Servicios.
- */
-class ProductoController extends BaseController {
+use App\Services\CategoriaService;
+use App\Services\ProductoService;
+use CodeIgniter\HTTP\ResponseInterface;
 
+/**
+ * Class ProductoController
+ *
+ * Controlador encargado de la gestión de productos y sus respectivas galerías de imágenes en CVA Muebles.
+ * Administra el panel de control de productos, altas, modificaciones, bajas lógicas, reactivaciones,
+ * y visualización del detalle interactivo para el cliente final.
+ * Delega la lógica de negocio a la capa de servicios (`ProductoService` y `CategoriaService`).
+ *
+ * @package App\Controllers
+ */
+class ProductoController extends BaseController 
+{
+    /**
+     * @var ProductoService Servicio encargado de procesar la lógica de negocio de los productos.
+     */
     protected $productoService;
+
+    /**
+     * @var CategoriaService Servicio encargado de procesar la lógica de negocio de las categorías.
+     */
     protected $categoriaService;
 
-    public function __construct() {
+    /**
+     * Constructor del controlador.
+     *
+     * Inicializa los helpers obligatorios y los servicios requeridos.
+     */
+    public function __construct() 
+    {
         helper(['form', 'url', 'text']);
-        $this->productoService = new \App\Services\ProductoService();
-        $this->categoriaService = new \App\Services\CategoriaService();
+        $this->productoService = new ProductoService();
+        $this->categoriaService = new CategoriaService();
     }
 
     /**
-     * Muestra el listado de productos para administración.
+     * Muestra el panel administrativo (CRUD) de productos.
+     *
+     * Permite listar productos activos o inactivos de acuerdo al filtro 'vista'.
+     *
+     * @return string|ResponseInterface Contenido HTML de la vista CRUD de productos.
      */
-    public function index() {
-
-
+    public function index() 
+    {
         $resultado = $this->productoService->getProductosConStats();
         
         return view('back/products/crud_productos', [
@@ -34,11 +61,12 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Muestra el formulario de alta de producto.
+     * Muestra el formulario para dar de alta un nuevo producto.
+     *
+     * @return string|ResponseInterface Contenido HTML de la vista de alta.
      */
-    public function create_alta_producto() {
-
-
+    public function create_alta_producto() 
+    {
         return view('back/products/alta_producto', [
             'categorias' => $this->categoriaService->getCategoriasConStats(),
             'title' => 'Alta de Producto'
@@ -46,10 +74,14 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Valida y crea un producto delegando al servicio.
+     * Valida y procesa la creación de un nuevo producto en el catálogo.
+     *
+     * Valida estrictamente la imagen principal para mitigar riesgos de seguridad de ejecución de código (RCE).
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección a la vista de alta con mensajes de estado.
      */
-    public function formValidation() {
-
+    public function formValidation() 
+    {
         // Validación estricta de la imagen para prevenir subida de archivos maliciosos (RCE)
         $rules = [
             'image' => 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]'
@@ -78,13 +110,18 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Muestra el formulario de edición de producto.
+     * Muestra el formulario para la edición de un producto existente.
+     *
+     * @param int|string $id Identificador único del producto a editar.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse|string|ResponseInterface Vista de edición o redirección en caso de error.
      */
-    public function index_editar_producto($id) {
-
-
+    public function index_editar_producto($id) 
+    {
         $producto = $this->productoService->getProductoConGaleria($id);
-        if (!$producto) return redirect()->to('/crud-productos')->with('fail', 'Producto no encontrado');
+        if (!$producto) {
+            return redirect()->to('/crud-productos')->with('fail', 'Producto no encontrado');
+        }
 
         return view('back/products/editar_producto', [
             'producto'   => $producto,
@@ -94,11 +131,17 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Actualiza un producto delegando al servicio.
+     * Valida y procesa la modificación de un producto existente.
+     *
+     * Valida de manera estricta la imagen principal y las imágenes múltiples de la galería
+     * para evitar subidas de archivos maliciosos.
+     *
+     * @param int|string $id Identificador único del producto a modificar.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección al CRUD con mensajes del estado de la transacción.
      */
-    public function modificar_producto($id) {
-
-
+    public function modificar_producto($id) 
+    {
         // Validación estricta de la imagen principal
         $rulesMain = [
             'imagen' => 'is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen,2048]'
@@ -133,27 +176,42 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Elimina un producto delegando al servicio.
+     * Realiza la baja lógica (desactivación) de un producto en el sistema.
+     *
+     * @param int|string $id Identificador único del producto.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección al CRUD conservando la vista de filtro.
      */
-    public function delete_producto($id) {
-
+    public function delete_producto($id) 
+    {
         $this->productoService->eliminar($id);
         return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'NO'));
     }
 
     /**
-     * Reactiva un producto delegando al servicio.
+     * Reactiva o activa nuevamente un producto anteriormente dado de baja.
+     *
+     * @param int|string $id Identificador único del producto.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección al CRUD de productos.
      */
-    public function activar_producto($id) {
-
+    public function activar_producto($id) 
+    {
         $this->productoService->reactivar($id);
         return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'SI'));
     }
 
     /**
-     * Muestra el detalle del producto para el cliente.
+     * Muestra la pantalla detallada de un producto para los clientes en la tienda pública.
+     *
+     * Valida que el producto no esté eliminado y que su categoría asociada se encuentre activa.
+     *
+     * @param int|string $id Identificador único del producto.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse|string|ResponseInterface Vista detallada o redirección con advertencia.
      */
-    public function ver_detalle($id) {
+    public function ver_detalle($id) 
+    {
         $producto = $this->productoService->getProductoConGaleria($id);
         if (!$producto || $producto['eliminado'] == 'SI' || $producto['categoria_activa'] == 0) {
             return redirect()->to('/productos')->with('fail', 'Producto no disponible.');
@@ -166,11 +224,16 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Sube fotos a la galería de un producto.
+     * Sube múltiples imágenes secundarias a la galería de un producto en particular.
+     *
+     * Valida estrictamente las extensiones y el tamaño máximo del lote de archivos subidos.
+     *
+     * @param int|string $id Identificador único del producto al cual asociar las fotos.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección de vuelta con el mensaje final de estado.
      */
-    public function subir_fotos_galeria($id) {
-
-
+    public function subir_fotos_galeria($id) 
+    {
         // Validación estricta de imágenes múltiples
         $rulesGaleria = [
             'fotos_galeria' => 'is_image[fotos_galeria]|mime_in[fotos_galeria,image/jpg,image/jpeg,image/png,image/webp]|max_size[fotos_galeria,2048]'
@@ -191,11 +254,14 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Elimina una foto de la galería.
+     * Elimina físicamente una imagen secundaria de la galería del producto y su archivo en el disco.
+     *
+     * @param int|string $id Identificador único de la imagen en la galería.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección con estado de borrado.
      */
-    public function eliminar_foto_galeria($id) {
-
-
+    public function eliminar_foto_galeria($id) 
+    {
         if ($this->productoService->eliminarImagenGaleria($id)) {
             return redirect()->back()->with('success', 'Imagen eliminada.');
         }
@@ -203,11 +269,14 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Elimina permanentemente un producto delegando al servicio.
+     * Elimina permanentemente de la base de datos a un producto seleccionado.
+     *
+     * @param int|string $id Identificador único del producto a borrar definitivamente.
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse Redirección al CRUD con estado final.
      */
-    public function eliminar_permanente($id) {
-
-        
+    public function eliminar_permanente($id) 
+    {
         $resultado = $this->productoService->eliminarPermanente($id);
         
         if ($resultado['status'] === 'success') {
@@ -216,5 +285,4 @@ class ProductoController extends BaseController {
             return redirect()->to('/crud-productos?vista=SI')->with('fail', $resultado['message']);
         }
     }
-
 }

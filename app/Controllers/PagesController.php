@@ -2,38 +2,86 @@
 
 namespace App\Controllers;
 
+use App\Services\CategoriaService;
+use App\Services\FavoritosService;
+use App\Services\ProductoService;
+use CodeIgniter\HTTP\ResponseInterface;
+
 /**
- * Controlador para páginas informativas y catálogo público.
+ * Class PagesController
+ *
+ * Controlador encargado de gestionar las rutas públicas del sitio web, incluyendo páginas informativas
+ * (Quiénes Somos, Comercialización, Contacto, Términos y Condiciones, Programa de Fidelidad)
+ * y la renderización del Catálogo Público de Productos interactivo.
+ *
+ * @package App\Controllers
  */
 class PagesController extends BaseController
 {
-    public function quienesSomos() {
+    /**
+     * Muestra la interfaz informativa sobre la empresa "Quiénes Somos".
+     *
+     * @return string Contenido HTML de la vista correspondiente.
+     */
+    public function quienesSomos() 
+    {
         return view('front/pages/quienesSomos', ['title' => 'Quiénes Somos']);
     }
 
-    public function comercializacion() {   
+    /**
+     * Muestra la información sobre envíos, medios de pago y políticas de Comercialización.
+     *
+     * @return string Contenido HTML de la vista correspondiente.
+     */
+    public function comercializacion() 
+    {   
         return view('front/pages/comercializacion', ['title' => 'Comercialización']);
     }
 
-    public function informacionContacto() {
+    /**
+     * Muestra la información general de contacto, mapa y canales de atención de CVA Muebles.
+     *
+     * @return string Contenido HTML de la vista correspondiente.
+     */
+    public function informacionContacto() 
+    {
         return view('front/pages/informacionContacto', ['title' => 'Contacto']);
     }
 
-    public function terminosYCondiciones() {
+    /**
+     * Muestra los Términos y Condiciones Legales del uso del sitio y contratación de servicios.
+     *
+     * @return string Contenido HTML de la vista correspondiente.
+     */
+    public function terminosYCondiciones() 
+    {
         return view('front/pages/terminosYCondiciones', ['title' => 'Términos y Condiciones']);
     }
 
-    public function beneficios() {
+    /**
+     * Muestra información de los Beneficios y Programa de Fidelidad para clientes habituales.
+     *
+     * @return string Contenido HTML de la vista correspondiente.
+     */
+    public function beneficios() 
+    {
         return view('front/pages/beneficios', ['title' => 'Programa de Fidelidad']);
     }
 
     /**
-     * Muestra el catálogo de productos delegando al servicio.
+     * Muestra el catálogo de productos interactivo para el público general.
+     *
+     * Carga todos los productos en estado activo, las categorías activas que tienen
+     * productos asociados, y verifica qué productos tiene marcados como favoritos el
+     * usuario actual en caso de estar autenticado.
+     *
+     * @return string|ResponseInterface Contenido HTML de la vista del catálogo de productos.
      */
-    public function productos() {
-        $productoService  = new \App\Services\ProductoService();
-        $categoriaService = new \App\Services\CategoriaService();
-        $favoritosService = new \App\Services\FavoritosService();
+    public function productos() 
+    {
+        $productoService  = new ProductoService();
+        $categoriaService = new CategoriaService();
+        $favoritosService = new FavoritosService();
 
         return view('front/pages/productos', [
             'productos'  => $productoService->getProductosPublicos(),

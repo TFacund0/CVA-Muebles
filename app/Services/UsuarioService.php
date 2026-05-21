@@ -3,21 +3,43 @@
 namespace App\Services;
 
 use App\Models\UsuarioModel;
+use CodeIgniter\HTTP\Files\UploadedFile;
 
 /**
- * Servicio para manejar la lógica de negocio relacionada con los usuarios.
+ * Class UsuarioService
+ *
+ * Servicio encargado de la gestión integral de la lógica de negocio asociada a los usuarios y clientes
+ * de CVA Muebles. Provee métodos seguros de autenticación, hashes y verificación de contraseñas,
+ * registro y actualización de perfiles de usuario, subida de avatares/imágenes, asignación de roles,
+ * control de baja lógica (suspensión) y baja física permanente con control de dependencias comerciales.
+ *
+ * @package App\Services
  */
 class UsuarioService
 {
+    /**
+     * @var UsuarioModel Modelo principal de acceso a datos para los usuarios.
+     */
     protected $usuarioModel;
 
+    /**
+     * Constructor del servicio.
+     *
+     * Inicializa el modelo requerido para las operaciones de negocio sobre usuarios.
+     */
     public function __construct()
     {
         $this->usuarioModel = new UsuarioModel();
     }
 
     /**
-     * Autentica a un usuario.
+     * Procesa la autenticación (login) de un usuario mediante su email o nombre de usuario
+     * y contraseña. Valida el estado de suspensión temporal (baja) del perfil.
+     *
+     * @param string $login Email o nombre de usuario ingresado en el formulario.
+     * @param string $password Contraseña en texto plano para verificación.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string, 'data' => array si tiene éxito).
      */
     public function autenticar($login, $password)
     {
@@ -39,7 +61,7 @@ class UsuarioService
 
         return [
             'status' => 'success',
-            'data' => [
+            'data'   => [
                 'id_usuario' => $usuario['id_usuario'],
                 'nombre'     => $usuario['nombre'],
                 'apellido'   => $usuario['apellido'],
@@ -53,34 +75,47 @@ class UsuarioService
     }
 
     /**
-     * Obtiene el listado de usuarios con estadísticas procesadas para el panel.
+     * Recupera el listado total de usuarios del sistema y computa indicadores clave
+     * (totales, activos, administradores, suspendidos) para el panel de administración.
+     *
+     * @return array Estructura con la lista de usuarios ('usuarios') y métricas estadísticas ('counts').
      */
     public function getUsuariosConStats()
     {
         $usuarios = $this->usuarioModel->getUsuariosAll();
 
         $counts = [
-            'total' => count($usuarios),
-            'activos' => 0,
-            'admins' => 0,
+            'total'       => count($usuarios),
+            'activos'     => 0,
+            'admins'      => 0,
             'suspendidos' => 0
         ];
 
         foreach ($usuarios as $u) {
-            if ($u['baja'] == 'NO') $counts['activos']++;
-            else $counts['suspendidos']++;
+            if ($u['baja'] == 'NO') {
+                $counts['activos']++;
+            } else {
+                $counts['suspendidos']++;
+            }
             
-            if ($u['perfil_id'] == 1) $counts['admins']++;
+            if ($u['perfil_id'] == 1) {
+                $counts['admins']++;
+            }
         }
 
         return [
             'usuarios' => $usuarios,
-            'counts' => $counts
+            'counts'   => $counts
         ];
     }
 
     /**
-     * Registra un nuevo usuario.
+     * Procesa el registro e inserción de un nuevo usuario en la plataforma.
+     * Encripta la contraseña de forma segura mediante `password_hash` con el algoritmo predeterminado.
+     *
+     * @param array $data Datos de registro del usuario (nombre, apellido, email, usuario, password).
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function registrarUsuario($data)
     {
@@ -110,9 +145,16 @@ class UsuarioService
     }
 
     /**
-     * Actualiza el perfil de un usuario.
+     * Procesa la actualización del perfil de un usuario.
+     * Maneja el reemplazo seguro y borrado físico del avatar o imagen de perfil previa si se carga una nueva.
+     *
+     * @param int|string $userId Identificador único del usuario.
+     * @param array $data Nuevos campos textuales de perfil (usuario, nombre, apellido, email).
+     * @param UploadedFile|null $image Archivo físico de la nueva imagen de perfil (opcional).
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string, 'updated_data' => array si tiene éxito).
      */
-    public function actualizarPerfil($userId, $data, $image = null)
+    public function actualizarPerfil($userId, $data, UploadedFile $image = null)
     {
         try {
             $updateData = [
@@ -127,7 +169,9 @@ class UsuarioService
                 $user_actual = $this->usuarioModel->find($userId);
                 if ($user_actual && !empty($user_actual['imagen'])) {
                     $old_path = FCPATH . 'assets/uploads/perfil/' . $user_actual['imagen'];
-                    if (file_exists($old_path)) @unlink($old_path);
+                    if (file_exists($old_path)) {
+                        @unlink($old_path);
+                    }
                 }
 
                 $nombre_imagen = $image->getRandomName();
@@ -147,7 +191,14 @@ class UsuarioService
     }
 
     /**
-     * Cambia la contraseña de un usuario validando su contraseña actual.
+     * Permite a un usuario cambiar su contraseña validando rigurosamente su contraseña actual.
+     *
+     * @param int|string $userId Identificador del usuario.
+     * @param string $currentPassword Contraseña actual provista por el usuario.
+     * @param string $newPassword Nueva contraseña propuesta.
+     * @param string $confirmPassword Confirmación de la nueva contraseña.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function cambiarPassword($userId, $currentPassword, $newPassword, $confirmPassword)
     {
@@ -173,19 +224,29 @@ class UsuarioService
     }
 
     /**
-     * Cambia el rol de un usuario (Admin <-> Cliente).
+     * Alterna administrativamente el perfil o rol asignado a un usuario (Admin <-> Cliente/Usuario).
+     *
+     * @param int|string $id Identificador del usuario.
+     * 
+     * @return bool Retorna true si la actualización fue exitosa, false si el usuario no existe.
      */
     public function cambiarPerfil($id)
     {
         $usuario = $this->usuarioModel->find($id);
-        if (!$usuario) return false;
+        if (!$usuario) {
+            return false;
+        }
 
         $nuevo_perfil = ($usuario['perfil_id'] == 1) ? 2 : 1;
         return $this->usuarioModel->update($id, ['perfil_id' => $nuevo_perfil]);
     }
 
     /**
-     * Da de baja (soft delete) a un usuario.
+     * Realiza una baja lógica (suspensión temporal) sobre el perfil de un usuario marcando 'baja' => 'SI'.
+     *
+     * @param int|string $id Identificador del usuario.
+     * 
+     * @return bool|int|string Retorna el resultado de la actualización en base de datos.
      */
     public function darDeBaja($id)
     {
@@ -193,7 +254,11 @@ class UsuarioService
     }
 
     /**
-     * Reactiva a un usuario dado de baja.
+     * Reactiva la cuenta de un usuario previamente suspendido marcando 'baja' => 'NO'.
+     *
+     * @param int|string $id Identificador del usuario.
+     * 
+     * @return bool|int|string Retorna el resultado de la actualización en base de datos.
      */
     public function reactivar($id)
     {
@@ -201,7 +266,11 @@ class UsuarioService
     }
 
     /**
-     * Busca un usuario por ID.
+     * Recupera la información detallada de un usuario por su identificador único.
+     *
+     * @param int|string $id Identificador del usuario.
+     * 
+     * @return array|null Datos de usuario o null si no se encuentra.
      */
     public function getUsuario($id)
     {
@@ -209,7 +278,9 @@ class UsuarioService
     }
 
     /**
-     * Obtiene todos los clientes activos (perfil_id = 2, baja = NO).
+     * Recupera la lista de todos los clientes activos del sistema (no administradores y no suspendidos).
+     *
+     * @return array Listado de usuarios clientes activos.
      */
     public function getClientesActivos()
     {
@@ -220,7 +291,14 @@ class UsuarioService
     }
 
     /**
-     * Elimina permanentemente a un usuario si no tiene compras asociadas.
+     * Procesa la eliminación física permanente de un usuario de la base de datos.
+     * Restringe severamente el borrado si existen transacciones o facturas de compras históricas
+     * asociadas en el sistema para garantizar la integridad fiscal y referencial.
+     * Si no hay dependencias, elimina las marcas de favoritos antes de la eliminación final del usuario.
+     *
+     * @param int|string $id Identificador único del usuario.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function eliminarPermanente($id)
     {
@@ -230,7 +308,7 @@ class UsuarioService
         $compras = $db->table('ventas_cabecera')->where('usuario_id', $id)->countAllResults();
         if ($compras > 0) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'No se puede eliminar permanentemente este usuario porque tiene compras o pedidos asociados en el sistema. Puedes mantenerlo como Suspendido para resguardar el historial comercial.'
             ];
         }
@@ -243,12 +321,12 @@ class UsuarioService
             $this->usuarioModel->delete($id);
 
             return [
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'Usuario eliminado permanentemente del sistema.'
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Ocurrió un error al intentar eliminar el usuario: ' . $e->getMessage()
             ];
         }

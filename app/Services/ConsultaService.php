@@ -5,19 +5,36 @@ namespace App\Services;
 use App\Models\ConsultaModel;
 
 /**
- * Servicio para manejar la lógica de las consultas (mensajes de contacto).
+ * Class ConsultaService
+ *
+ * Servicio encargado de la gestión y procesamiento de la lógica de negocio asociada
+ * a las consultas de clientes (mensajes de contacto y solicitudes de presupuestos),
+ * proveyendo filtrado, estadísticas de actividad y operaciones de ciclo de vida (activo/inactivo/baja).
+ *
+ * @package App\Services
  */
 class ConsultaService
 {
+    /**
+     * @var ConsultaModel Modelo para interactuar con la tabla de consultas en la base de datos.
+     */
     protected $consultaModel;
 
+    /**
+     * Constructor del servicio.
+     *
+     * Inicializa la instancia del modelo de acceso a datos para las consultas.
+     */
     public function __construct()
     {
         $this->consultaModel = new ConsultaModel();
     }
 
     /**
-     * Obtiene todas las consultas con estadísticas procesadas.
+     * Recupera todas las consultas registradas en orden descendente por fecha de envío,
+     * calculando indicadores estadísticos (mensuales, activas, presupuestos) para el panel de administración.
+     *
+     * @return array Resumen conteniendo el listado de consultas ('consultas') y métricas ('counts').
      */
     public function getConsultasConStats()
     {
@@ -26,9 +43,9 @@ class ConsultaService
         $currentYear = date('Y');
 
         $counts = [
-            'total'     => count($consultas),
-            'mensuales' => 0,
-            'activos'   => 0,
+            'total'        => count($consultas),
+            'mensuales'    => 0,
+            'activos'      => 0,
             'presupuestos' => 0
         ];
 
@@ -38,7 +55,10 @@ class ConsultaService
                 $counts['mensuales']++;
             }
 
-            if ($c['activo'] == 'SI') $counts['activos']++;
+            if ($c['activo'] == 'SI') {
+                $counts['activos']++;
+            }
+            
             if (stripos($c['asunto'], 'presupuesto') !== false) {
                 $counts['presupuestos']++;
             }
@@ -53,7 +73,12 @@ class ConsultaService
     }
 
     /**
-     * Registra una nueva consulta.
+     * Procesa y registra un nuevo mensaje de consulta en el sistema.
+     * Inserta por defecto el estado activo 'SI' y la marca de tiempo actual del servidor.
+     *
+     * @param array $data Datos de la consulta remitidos por el usuario.
+     * 
+     * @return array Resumen de estado ('status' => 'success'|'error', 'message' => string).
      */
     public function registrar($data)
     {
@@ -68,7 +93,11 @@ class ConsultaService
     }
 
     /**
-     * Marca una consulta como inactiva.
+     * Realiza la baja lógica de una consulta marcándola como inactiva ('NO') en la base de datos.
+     *
+     * @param int|string $id Identificador de la consulta.
+     * 
+     * @return bool|int|string Retorna el resultado de la actualización de la consulta.
      */
     public function desactivar($id)
     {
@@ -76,7 +105,11 @@ class ConsultaService
     }
 
     /**
-     * Restaura una consulta a estado activo (Pendiente).
+     * Restaura una consulta desactivada a estado activo ('SI') o pendiente de atención.
+     *
+     * @param int|string $id Identificador de la consulta.
+     * 
+     * @return bool|int|string Retorna el resultado de la actualización de la consulta.
      */
     public function restaurar($id)
     {
@@ -84,7 +117,11 @@ class ConsultaService
     }
 
     /**
-     * Elimina físicamente una consulta de la base de datos.
+     * Procesa la eliminación física permanente de una consulta de la base de datos.
+     *
+     * @param int|string $id Identificador de la consulta.
+     * 
+     * @return bool|int|string Retorna el resultado de la operación de eliminación física.
      */
     public function eliminarPermanente($id)
     {
@@ -92,7 +129,9 @@ class ConsultaService
     }
 
     /**
-     * Cuenta las consultas activas (pendientes de responder).
+     * Cuenta el número total de consultas en estado activo ('SI') que aún requieren atención.
+     *
+     * @return int Cantidad de consultas activas/pendientes.
      */
     public function countActivas()
     {
