@@ -60,6 +60,7 @@ $routes->get('/ventas_lista', 'VentasController::ver_facturas_usuario', ['filter
 $routes->get('/factura/(:num)', 'VentasController::ver_factura/$1', ['filter' => 'auth']);
 $routes->post('/carrito_comprar', 'VentasController::registrar_venta', ['filter' => 'auth']);
 $routes->post('/ventas/actualizar_estado/(:num)', 'VentasController::actualizar_estado/$1', ['filter' => 'adminAuth']);
+$routes->get('/ventas/eliminar/(:num)', 'VentasController::eliminar_pedido/$1', ['filter' => 'adminAuth']);
 $routes->get('/admin-dashboard', 'VentasController::estadisticas', ['filter' => 'adminAuth']);
 $routes->get('/ventas/gestion/(:num)', 'VentasController::ver_gestion_pedido/$1', ['filter' => 'adminAuth']);
 $routes->post('/ventas/registrar_pago', 'VentasController::registrar_pago', ['filter' => 'adminAuth']);

@@ -482,4 +482,35 @@ class VentasService
             $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current - 1]);
         }
     }
+
+    /**
+     * Elimina permanentemente un pedido del sistema.
+     * Esta función está diseñada para limpiar pedidos de prueba.
+     * 
+     * @param int|string $venta_id Identificador del pedido.
+     * @return array Status
+     */
+    public function eliminarPedidoPermanente($venta_id)
+    {
+        $venta_actual = $this->ventasModel->find($venta_id);
+        if (!$venta_actual) {
+            return ["status" => "error", "message" => "Pedido no encontrado."];
+        }
+
+        $this->db->transStart();
+        try {
+            // Eliminar dependencias
+            $this->db->table('ventas_pagos')->where('venta_id', $venta_id)->delete();
+            $this->db->table('ventas_detalle')->where('venta_id', $venta_id)->delete();
+            
+            // Eliminar cabecera
+            $this->ventasModel->delete($venta_id);
+
+            $this->db->transComplete();
+            return ["status" => "success", "message" => "Pedido de prueba eliminado correctamente de la base de datos."];
+        } catch (\Exception $e) {
+            $this->db->transRollback();
+            return ["status" => "error", "message" => "Error al eliminar el pedido: " . $e->getMessage()];
+        }
+    }
 }

@@ -222,6 +222,7 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
                                 <option value="EN_PROCESO" <?= ($estado ?? '') === 'EN_PROCESO' ? 'selected' : '' ?>>🔵 EN PROCESO</option>
                                 <option value="TERMINADO" <?= ($estado ?? '') === 'TERMINADO' ? 'selected' : '' ?>>🟢 TERMINADO</option>
                                 <option value="ENTREGADO" <?= ($estado ?? '') === 'ENTREGADO' ? 'selected' : '' ?>>🔘 ENTREGADO</option>
+                                <option value="RECHAZADO" <?= ($estado ?? '') === 'RECHAZADO' ? 'selected' : '' ?>>🔴 RECHAZADOS (Archivo)</option>
                             </select>
                         </div>
                         <div class="col-lg-3 col-6">
@@ -252,7 +253,7 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
                         <?php foreach ($ventas as $v): ?>
                             <tr class="order-row"
                                 data-search="<?= $v['search_data'] ?>"
-                                data-estado="<?= $v['estado'] ?>">
+                                data-estado="<?= ($v['estado_aprobacion'] ?? '') === 'RECHAZADO' ? 'RECHAZADO' : $v['estado'] ?>">
                                 <td class="ps-4" data-label="CLIENTE">
                                     <div class="d-flex align-items-center gap-3 py-1 order-info-wrapper">
                                         <div class="position-relative">
@@ -326,6 +327,14 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
                                             title="Ver Comprobante">
                                             <i class="bi bi-file-earmark-pdf"></i>
                                         </a>
+                                        <?php if (($v['estado_aprobacion'] ?? '') === 'RECHAZADO'): ?>
+                                            <a href="<?= base_url('ventas/eliminar/' . $v['id']) ?>"
+                                                class="btn btn-action-premium text-white bg-danger border-danger shadow-sm"
+                                                onclick="return confirm('¿Estás seguro de eliminar este pedido permanentemente? Esta acción NO se puede deshacer y borrará pagos e historial. Úsalo solo para pedidos de prueba.')"
+                                                title="Eliminar de la Base de Datos">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
@@ -444,5 +453,5 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>
+<script src="<?= base_url('assets/js/admin/sales.js?v=1.1') ?>"></script>
 <?= $this->endSection() ?>

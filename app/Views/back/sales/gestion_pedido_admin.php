@@ -145,20 +145,30 @@
                         <div class="col-lg-6">
                             <p class="small text-muted mb-0">Cambia la etapa de producción:</p>
                         </div>
-                        <div class="col-lg-4 col-8">
+                        <div class="col-lg-3 col-6">
                             <select name="estado" class="form-select admin-control py-2 fw-bold text-uppercase x-small">
                                 <?php foreach($steps as $step): ?>
                                     <option value="<?= $step ?>" <?= $venta['estado'] == $step ? 'selected' : '' ?>><?= $step ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="col-lg-2 col-4">
-                            <button class="btn btn-admin-gold w-100 py-2" type="submit">
+                        <div class="col-lg-2 col-3">
+                            <button class="btn btn-admin-gold w-100 py-2" type="submit" title="Actualizar Estado">
                                 <i class="bi bi-check-lg"></i>
                             </button>
                         </div>
                     </div>
                 </form>
+                
+                <div class="mt-4 pt-4 border-top">
+                    <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" onsubmit="return confirm('¿Seguro que deseas cancelar/archivar este pedido? Se moverá a la lista de Rechazados y podrás eliminarlo permanentemente desde allí.')">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="estado" value="RECHAZADO">
+                        <button type="submit" class="btn btn-outline-danger w-100 py-2 rounded-3 fw-bold shadow-sm hover-scale" style="transition: all 0.3s ease; letter-spacing: 0.5px;">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> CANCELAR Y ARCHIVAR OBRA
+                        </button>
+                    </form>
+                </div>
             <?php endif; ?>
         </div>
 

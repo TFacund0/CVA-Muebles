@@ -90,7 +90,12 @@ function initSalesAdmin() {
             const estado = row.getAttribute('data-estado');
 
             const matchesSearch = searchData.includes(searchTerm);
-            const matchesStatus = (statusFilter === 'ALL' || estado === statusFilter);
+            let matchesStatus = false;
+            if (statusFilter === 'ALL') {
+                matchesStatus = (estado !== 'RECHAZADO');
+            } else {
+                matchesStatus = (estado === statusFilter);
+            }
 
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';

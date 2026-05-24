@@ -79,9 +79,12 @@ class VentasCabeceraModel extends Model
     public function getVentasFiltradas($search = null, $estado = null, $paginate = false, $perPage = 15)
     {
         $builder = $this->select('ventas_cabecera.id, ventas_cabecera.fecha, ventas_cabecera.usuario_id, ventas_cabecera.total_venta, ventas_cabecera.estado, ventas_cabecera.estado_aprobacion, ventas_cabecera.tipo_pedido, ventas_cabecera.observaciones, ventas_cabecera.prioridad, usuarios.nombre, usuarios.apellido, usuarios.email, usuarios.usuario')
-                        ->join('usuarios', 'usuarios.id_usuario = ventas_cabecera.usuario_id', 'left')
-                        ->where('ventas_cabecera.estado_aprobacion !=', 'RECHAZADO');
+                        ->join('usuarios', 'usuarios.id_usuario = ventas_cabecera.usuario_id', 'left');
         
+        if (!empty($estado) && strtoupper($estado) === 'RECHAZADO') {
+            $builder->where('ventas_cabecera.estado_aprobacion', 'RECHAZADO');
+        }
+
         if (!empty($search)) {
             $builder->groupStart()
                         ->like('ventas_cabecera.id', $search)

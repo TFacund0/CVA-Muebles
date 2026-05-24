@@ -368,4 +368,19 @@ class VentasController extends BaseController
         $this->ventasService->bajarPrioridad($venta_id);
         return redirect()->back()->with('success', 'Prioridad de pedido actualizada correctamente.');
     }
+
+    /**
+     * Elimina permanentemente un pedido.
+     * Solo para pruebas.
+     */
+    public function eliminar_pedido($venta_id)
+    {
+        $resultado = $this->ventasService->eliminarPedidoPermanente($venta_id);
+        
+        if ($resultado['status'] === 'success') {
+            return redirect()->to('/ventas-list')->with('success', $resultado['message']);
+        } else {
+            return redirect()->back()->with('error', $resultado['message']);
+        }
+    }
 }

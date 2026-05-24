@@ -106,6 +106,63 @@ class CloudinaryService
     }
 
     /**
+     * Elimina una imagen de la nube de Cloudinary vía API REST.
+     *
+     * @param string $publicId El identificador público de la imagen en Cloudinary.
+     * 
+     * @return array Estructura con status y message.
+     */
+    public function eliminarImagen($publicId)
+    {
+        try {
+            $timestamp = time();
+
+            // Parámetros a firmar (deben estar en orden alfabético)
+            $paramsToSign = [
+                'public_id' => $publicId,
+                'timestamp' => $timestamp
+            ];
+
+            // Crear la firma
+            $signatureString = http_build_query($paramsToSign) . $this->apiSecret;
+            $signatureString = urldecode($signatureString);
+            $signature = sha1($signatureString);
+
+            $postFields = [
+                'public_id' => $publicId,
+                'api_key'   => $this->apiKey,
+                'timestamp' => $timestamp,
+                'signature' => $signature
+            ];
+
+            $url = "https://api.cloudinary.com/v1_1/{$this->cloudName}/image/destroy";
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            $response = curl_exec($ch);
+            $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            $result = json_decode($response, true);
+
+            if ($httpcode >= 200 && $httpcode < 300 && isset($result['result']) && $result['result'] === 'ok') {
+                return ['status' => 'success'];
+            } else {
+                log_message('error', '[CloudinaryService::eliminarImagen] Error API: ' . $response);
+                return ['status' => 'error', 'message' => 'No se pudo eliminar la imagen de la nube.'];
+            }
+        } catch (Exception $e) {
+            log_message('error', '[CloudinaryService::eliminarImagen] Excepción: ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Excepción de red al eliminar imagen.'];
+        }
+    }
+
+    /**
      * Extrae el `public_id` de una URL completa de Cloudinary.
      */
     public function extractPublicIdFromUrl($url)
