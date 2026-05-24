@@ -33,9 +33,22 @@ class EmailService
         // Cargar y renderizar la plantilla HTML
         $htmlContent = view($viewPath, $viewData);
 
+        // Forzar la configuración correcta para Gmail SMTP
+        $config['protocol'] = env('email.protocol', 'smtp');
+        $config['SMTPHost'] = env('email.SMTPHost', 'smtp.gmail.com');
+        $config['SMTPUser'] = env('email.SMTPUser', '');
+        $config['SMTPPass'] = env('email.SMTPPass', '');
+        $config['SMTPPort'] = (int) env('email.SMTPPort', 465);
+        $config['SMTPCrypto'] = env('email.SMTPCrypto', 'ssl');
+        $config['mailType'] = env('email.mailType', 'html');
+        $config['charset']  = env('email.charset', 'utf-8');
+        $config['CRLF']     = "\r\n";
+        $config['newline']  = "\r\n";
+        
+        $this->email->initialize($config);
         $this->email->clear();
         
-        $fromEmail = env('email.fromEmail', env('email.SMTPUser', ''));
+        $fromEmail = env('email.fromEmail', $config['SMTPUser']);
         $fromName  = env('email.fromName', 'CVA Muebles');
         
         $this->email->setFrom($fromEmail, $fromName);

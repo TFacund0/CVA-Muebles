@@ -139,26 +139,68 @@
                 </div>
 
                 <!-- Formulario de cambio de estado -->
-                <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" class="mt-5 pt-4 border-top">
+                <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" class="mt-5 pt-4 border-top" id="form-estado">
                     <?= csrf_field() ?>
                     <div class="row align-items-center g-3">
-                        <div class="col-lg-6">
+                        <div class="col-md-5 col-12 mb-2 mb-md-0">
                             <p class="small text-muted mb-0">Cambia la etapa de producción:</p>
                         </div>
-                        <div class="col-lg-3 col-6">
-                            <select name="estado" class="form-select admin-control py-2 fw-bold text-uppercase x-small">
+                        <div class="col-md-4 col-6">
+                            <select name="estado" class="form-select admin-control py-2 fw-bold text-uppercase x-small h-100">
                                 <?php foreach($steps as $step): ?>
                                     <option value="<?= $step ?>" <?= $venta['estado'] == $step ? 'selected' : '' ?>><?= $step ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="col-lg-2 col-3">
-                            <button class="btn btn-admin-gold w-100 py-2" type="submit" title="Actualizar Estado">
-                                <i class="bi bi-check-lg"></i>
+                        <div class="col-md-3 col-6">
+                            <button class="btn btn-dark w-100 py-2 fw-bold text-gold update-state-btn shadow-sm h-100" type="submit" id="btn-estado">
+                                <span id="btn-estado-text" class="me-1">APLICAR</span>
+                                <i class="bi bi-arrow-right-circle-fill" id="btn-estado-icon"></i>
+                                <span class="spinner-border spinner-border-sm d-none" id="btn-estado-spinner" role="status" aria-hidden="true"></span>
                             </button>
                         </div>
                     </div>
                 </form>
+
+                <style>
+                    .update-state-btn {
+                        border-radius: 8px;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        border: 1px solid var(--cva-gold);
+                    }
+                    .update-state-btn:hover {
+                        background-color: var(--cva-gold);
+                        color: #000 !important;
+                        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3) !important;
+                        transform: translateY(-2px);
+                    }
+                    .update-state-btn:hover #btn-estado-icon {
+                        transform: translateX(4px) scale(1.1);
+                    }
+                    .update-state-btn:active {
+                        transform: scale(0.96);
+                    }
+                    #btn-estado-icon {
+                        transition: transform 0.3s ease;
+                        display: inline-block;
+                    }
+                </style>
+
+                <script>
+                    document.getElementById('form-estado').addEventListener('submit', function() {
+                        const btn = document.getElementById('btn-estado');
+                        const icon = document.getElementById('btn-estado-icon');
+                        const text = document.getElementById('btn-estado-text');
+                        const spinner = document.getElementById('btn-estado-spinner');
+                        
+                        btn.disabled = true;
+                        btn.style.transform = 'scale(0.98)';
+                        btn.classList.add('opacity-75');
+                        icon.classList.add('d-none');
+                        text.innerText = 'GUARDANDO...';
+                        spinner.classList.remove('d-none');
+                    });
+                </script>
                 
                 <div class="mt-4 pt-4 border-top">
                     <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" onsubmit="return confirm('¿Seguro que deseas cancelar/archivar este pedido? Se moverá a la lista de Rechazados y podrás eliminarlo permanentemente desde allí.')">
