@@ -114,46 +114,17 @@ class UsuarioService
             ];
         }
 
-        // 2. El usuario NO existe, lo registramos automáticamente
-        $randomPassword = bin2hex(random_bytes(10)); // Contraseña imposible de adivinar
-        
-        // Google devuelve 'name' y 'given_name', 'family_name'. Usaremos given_name y family_name si existen.
+        // 2. El usuario NO existe, requerimos que complete el registro
         $nombre = $profile['given_name'] ?? ($profile['name'] ?? 'Usuario');
         $apellido = $profile['family_name'] ?? '';
         
-        // Creamos un nombre de usuario basado en el email
-        $nickname = explode('@', $profile['email'])[0];
-
-        $userData = [
-            'nombre'    => $nombre,
-            'apellido'  => $apellido,
-            'usuario'   => $nickname,
-            'email'     => $profile['email'],
-            'pass'      => password_hash($randomPassword, PASSWORD_DEFAULT),
-            'perfil_id' => 2, // Perfil de cliente
-            'imagen'    => $profile['picture'] ?? null,
-            'baja'      => 'NO'
-        ];
-
-        $insertId = $this->usuarioModel->insert($userData);
-
-        if (!$insertId) {
-            return ['status' => 'error', 'message' => 'Hubo un error al crear tu cuenta desde Google.'];
-        }
-
-        // Lo logueamos inmediatamente
         return [
-            'status' => 'success',
-            'message'=> '¡Cuenta creada con éxito vía Google!',
-            'data'   => [
-                'id_usuario' => $insertId,
-                'nombre'     => $nombre,
-                'apellido'   => $apellido,
-                'email'      => $profile['email'],
-                'usuario'    => $nickname,
-                'perfil_id'  => 2,
-                'imagen'     => $userData['imagen'],
-                'logged_in'  => TRUE
+            'status'  => 'pending_registration',
+            'profile' => [
+                'nombre'   => $nombre,
+                'apellido' => $apellido,
+                'email'    => $profile['email'],
+                'imagen'   => $profile['picture'] ?? null
             ]
         ];
     }

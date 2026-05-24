@@ -276,8 +276,93 @@ class UsuarioController extends BaseController
         if ($resultado['status'] === 'success') {
             session()->set($resultado['data']);
             return redirect()->to('/')->with('success', $resultado['message']);
+        } else if ($resultado['status'] === 'pending_registration') {
+            session()->set('google_profile', $resultado['profile']);
+            return redirect()->to('/usuario/completar-registro-google');
         } else {
             return redirect()->to('/login')->with('fail', $resultado['message']);
+        }
+    }
+
+    /**
+     * Muestra la pantalla para completar el registro con los datos de Google.
+     */
+    public function completarRegistroGoogle()
+    {
+        $profile = session()->get('google_profile');
+        if (!$profile) {
+            return redirect()->to('/registro')->with('fail', 'La sesión de Google expiró. Por favor, intenta nuevamente.');
+        }
+
+        return view('back/users/registro_google', [
+            'title'   => 'Completar Registro',
+            'profile' => $profile
+        ]);
+    }
+
+    /**
+     * Finaliza el registro del usuario que viene de Google.
+     */
+    public function finalizarRegistroGoogle()
+    {
+        $profile = session()->get('google_profile');
+        if (!$profile) {
+            return redirect()->to('/registro')->with('fail', 'La sesión de Google expiró. Por favor, intenta nuevamente.');
+        }
+
+        // Recuperamos el username del form
+        $username = $this->request->getPost('user');
+
+        // Validamos que el username no exista y cumples reglas (min 4 chars)
+        $rules = [
+            'user'  => 'required|min_length[4]|is_unique[usuarios.usuario]'
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('fail', 'El nombre de usuario ya está en uso o es demasiado corto.');
+        }
+
+        // Creamos la data final para registrar (la password es irrelevante porque entró con google)
+        $randomPassword = bin2hex(random_bytes(10));
+        
+        $userData = [
+            'name'    => $profile['nombre'],
+            'surname' => $profile['apellido'],
+            'user'    => $username,
+            'email'   => $profile['email'],
+            'pass'    => $randomPassword
+        ];
+
+        $resultado = $this->usuarioService->registrarUsuario($userData);
+
+        if ($resultado['status'] === 'success') {
+            // Buscamos al usuario recién creado
+            $userModel = new \App\Models\UsuarioModel();
+            $newUser = $userModel->where('email', $profile['email'])->first();
+
+            // Si hay imagen de Google, se la asignamos directo a la base de datos
+            if (!empty($profile['imagen'])) {
+                $userModel->update($newUser['id_usuario'], ['imagen' => $profile['imagen']]);
+                $newUser['imagen'] = $profile['imagen'];
+            }
+
+            // Lo logueamos
+            $sessionData = [
+                'id_usuario' => $newUser['id_usuario'],
+                'nombre'     => $newUser['nombre'],
+                'apellido'   => $newUser['apellido'],
+                'email'      => $newUser['email'],
+                'usuario'    => $newUser['usuario'],
+                'perfil_id'  => $newUser['perfil_id'],
+                'imagen'     => $newUser['imagen'],
+                'logged_in'  => TRUE
+            ];
+            session()->set($sessionData);
+            session()->remove('google_profile'); // Limpiamos la sesión temporal
+
+            return redirect()->to('/')->with('success', '¡Cuenta creada y logueada con éxito!');
+        } else {
+            return redirect()->back()->with('fail', $resultado['message']);
         }
     }
 }
