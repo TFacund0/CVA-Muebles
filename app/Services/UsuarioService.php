@@ -298,7 +298,9 @@ class UsuarioService
     public function cambiarPerfil($id)
     {
         $usuario = $this->usuarioModel->find($id);
-        if (!$usuario) {
+        if (!$usuario) return false;
+
+        if ($usuario['usuario'] === 'cliente_whatsapp') {
             return false;
         }
 
@@ -315,6 +317,10 @@ class UsuarioService
      */
     public function darDeBaja($id)
     {
+        $usuario = $this->usuarioModel->find($id);
+        if ($usuario && $usuario['usuario'] === 'cliente_whatsapp') {
+            return false;
+        }
         return $this->usuarioModel->update($id, ['baja' => 'SI']);
     }
 
@@ -367,6 +373,14 @@ class UsuarioService
      */
     public function eliminarPermanente($id)
     {
+        $usuario = $this->usuarioModel->find($id);
+        if ($usuario && $usuario['usuario'] === 'cliente_whatsapp') {
+            return [
+                'status'  => 'error',
+                'message' => 'Seguridad del Sistema: Este usuario es genérico y vital para el sistema de facturación. No puede ser eliminado.'
+            ];
+        }
+
         $db = \Config\Database::connect();
         
         // 1. Verificar si tiene compras o pedidos asociados en ventas_cabecera

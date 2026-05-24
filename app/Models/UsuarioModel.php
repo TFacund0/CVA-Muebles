@@ -93,7 +93,8 @@ class UsuarioModel extends Model
     public function getUsuariosAllFiltrados($search = null, $perfil = null, $paginate = false, $perPage = 15)
     {
         $builder = $this->select('usuarios.*, perfiles.descripcion as perfil')
-                        ->join('perfiles', 'perfiles.id = usuarios.perfil_id');
+                        ->join('perfiles', 'perfiles.id = usuarios.perfil_id')
+                        ->where('usuarios.usuario !=', 'cliente_whatsapp');
         
         if (!empty($search)) {
             $builder->groupStart()
