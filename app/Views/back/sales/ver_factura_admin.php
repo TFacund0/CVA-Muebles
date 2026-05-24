@@ -188,33 +188,46 @@
 <script>
     function descargarPDF() {
         const btn = document.getElementById('btn-download-pdf');
-        const content = document.getElementById('factura-content');
         const originalText = btn.innerHTML;
         
         // Estado de carga
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>GENERANDO...';
         btn.disabled = true;
 
-        // Opciones de configuración del PDF
-        const opt = {
-            margin:       0.5,
-            filename:     'Comprobante_Admin_Pedido_<?= $venta['id'] ?>.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
+        // Cargar el HTML puro desde la nueva ruta
+        fetch('<?= base_url("ventas/comprobante_a4/" . $venta["id"]) ?>')
+            .then(response => response.text())
+            .then(html => {
+                // Crear contenedor temporal oculto
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.top = '-9999px';
+                document.body.appendChild(tempDiv);
 
-        // Generar y descargar
-        html2pdf().set(opt).from(content).save().then(() => {
-            // Restaurar botón
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }).catch(err => {
-            console.error('Error al generar PDF:', err);
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            alert('Ocurrió un error al generar el PDF. Por favor intenta de nuevo.');
-        });
+                // Opciones de configuración del PDF
+                const opt = {
+                    margin:       0,
+                    filename:     'Comprobante_Admin_Pedido_<?= $venta['id'] ?>.pdf',
+                    image:        { type: 'jpeg', quality: 1 },
+                    html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
+                    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+                };
+
+                // Generar y descargar
+                html2pdf().set(opt).from(tempDiv).save().then(() => {
+                    // Limpieza
+                    document.body.removeChild(tempDiv);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            })
+            .catch(err => {
+                console.error('Error al generar PDF:', err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert('Ocurrió un error al cargar la plantilla del comprobante. Por favor intenta de nuevo.');
+            });
     }
 </script>
 <script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>

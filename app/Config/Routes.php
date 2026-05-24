@@ -58,6 +58,7 @@ $routes->get('/ventas/subir/(:num)', 'VentasController::subir_prioridad/$1', ['f
 $routes->get('/ventas/bajar/(:num)', 'VentasController::bajar_prioridad/$1', ['filter' => 'adminAuth']);
 $routes->get('/ventas_lista', 'VentasController::ver_facturas_usuario', ['filter' => 'auth']);
 $routes->get('/factura/(:num)', 'VentasController::ver_factura/$1', ['filter' => 'auth']);
+$routes->get('/ventas/comprobante_a4/(:num)', 'VentasController::comprobante_a4/$1', ['filter' => 'auth']);
 $routes->post('/carrito_comprar', 'VentasController::registrar_venta', ['filter' => 'auth']);
 $routes->post('/ventas/actualizar_estado/(:num)', 'VentasController::actualizar_estado/$1', ['filter' => 'adminAuth']);
 $routes->get('/ventas/eliminar/(:num)', 'VentasController::eliminar_pedido/$1', ['filter' => 'adminAuth']);

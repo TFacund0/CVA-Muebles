@@ -192,6 +192,32 @@ class VentasController extends BaseController
     }
 
     /**
+     * Renderiza la plantilla HTML pura en formato A4 para la generación de PDFs.
+     * Esta ruta es consumida internamente por html2pdf o puede ser impresa nativamente.
+     *
+     * @param int $venta_id Identificador del pedido.
+     * @return string|RedirectResponse HTML del comprobante puro.
+     */
+    public function comprobante_a4($venta_id)
+    {
+        $data = $this->ventasService->getGestionDetalle($venta_id);
+
+        if (!$data) {
+            return redirect()->back()->with('error', 'El comprobante solicitado no existe o fue eliminado.');
+        }
+
+        $session_perfil = session()->get('perfil_id');
+        $session_id = session()->get('id_usuario');
+
+        // Solo admin (1) o el propio dueño (2)
+        if ($session_perfil != 1 && $data['venta']['usuario_id'] != $session_id) {
+            return redirect()->to(base_url('/'))->with('error', 'Acceso denegado al comprobante.');
+        }
+
+        return view('back/sales/factura_pdf_template', $data);
+    }
+
+    /**
      * Actualiza el estado actual o fase de producción de un pedido específico.
      *
      * @param int $venta_id Identificador único del pedido a actualizar.
