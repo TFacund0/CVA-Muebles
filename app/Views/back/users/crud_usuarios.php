@@ -251,7 +251,7 @@
                                             title="Reactivar Usuario">
                                             <i class="bi bi-person-check-fill"></i>
                                         </button>
-                                        <button type="button" onclick="submitActionUsers('<?= base_url('/eliminar-usuario-permanente/' . $u['id_usuario']) ?>', '¿Confirmas eliminar PERMANENTEMENTE a este usuario? Esta acción es irreversible y borrará todos sus accesos.')"
+                                        <button type="button" onclick="submitActionUsers('<?= base_url('/eliminar-usuario-permanente/' . $u['id_usuario']) ?>', '¿Confirmas eliminar PERMANENTEMENTE a este usuario? Esto borrará su perfil, foto de Cloudinary y favoritos.\\n\\nNOTA: El sistema bloqueará esta acción por seguridad si el usuario tiene facturas o pedidos de prueba asociados.')"
                                             class="btn btn-action-premium text-danger border-danger border-opacity-25 shadow-sm btn-delete-permanent <?= $u['baja'] == 'NO' ? 'd-none' : '' ?>"
                                             title="Eliminar Permanente">
                                             <i class="bi bi-trash-fill"></i>
