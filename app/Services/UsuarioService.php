@@ -327,6 +327,19 @@ class UsuarioService
             // 2. Eliminar favoritos en favoritos
             $db->table('favoritos')->where('usuario_id', $id)->delete();
 
+            // 2.5. Borrar avatar del usuario de Cloudinary (o físico)
+            $usuario = $this->usuarioModel->find($id);
+            if ($usuario && !empty($usuario['imagen'])) {
+                $cloudinaryService = new \App\Services\CloudinaryService();
+                $publicId = $cloudinaryService->extractPublicIdFromUrl($usuario['imagen']);
+                if ($publicId) {
+                    $cloudinaryService->eliminarImagen($publicId);
+                } else {
+                    $old_path = FCPATH . 'assets/uploads/perfil/' . $usuario['imagen'];
+                    if (file_exists($old_path)) @unlink($old_path);
+                }
+            }
+
             // 3. Eliminar de la tabla usuarios
             $this->usuarioModel->delete($id);
 

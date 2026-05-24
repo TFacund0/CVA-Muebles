@@ -324,12 +324,17 @@ class ProductoService
                 ];
             }
 
+            $cloudinaryService = new \App\Services\CloudinaryService();
+
             // 2. Eliminar todas las imágenes de la galería (física y lógicamente)
             $imagenesGaleria = $this->imagenModel->getImagenesPorProducto($id);
             foreach ($imagenesGaleria as $img) {
-                $imgPath = FCPATH . 'assets/uploads/' . $img['imagen'];
-                if (file_exists($imgPath)) {
-                    @unlink($imgPath);
+                $publicId = $cloudinaryService->extractPublicIdFromUrl($img['imagen']);
+                if ($publicId) {
+                    $cloudinaryService->eliminarImagen($publicId);
+                } else {
+                    $imgPath = FCPATH . 'assets/uploads/' . $img['imagen'];
+                    if (file_exists($imgPath)) @unlink($imgPath);
                 }
             }
             $db->table('producto_imagenes')->where('producto_id', $id)->delete();
@@ -339,9 +344,12 @@ class ProductoService
 
             // 4. Borrar la imagen principal del producto
             if (!empty($producto['imagen'])) {
-                $mainImgPath = FCPATH . 'assets/uploads/' . $producto['imagen'];
-                if (file_exists($mainImgPath)) {
-                    @unlink($mainImgPath);
+                $mainPublicId = $cloudinaryService->extractPublicIdFromUrl($producto['imagen']);
+                if ($mainPublicId) {
+                    $cloudinaryService->eliminarImagen($mainPublicId);
+                } else {
+                    $mainImgPath = FCPATH . 'assets/uploads/' . $producto['imagen'];
+                    if (file_exists($mainImgPath)) @unlink($mainImgPath);
                 }
             }
 
