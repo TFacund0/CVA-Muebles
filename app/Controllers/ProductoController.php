@@ -49,14 +49,29 @@ class ProductoController extends BaseController
      */
     public function index() 
     {
-        $resultado = $this->productoService->getProductosConStats();
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones AJAX simultáneas.
+        session_write_close();
+        
+        $search = $this->request->getVar('search');
+        $category = $this->request->getVar('category');
+        $filterMode = env('app.filterMode', 'client');
+        $vista = $this->request->getVar('vista') ?? 'NO';
+        
+        $searchFilter = ($filterMode === 'server') ? $search : null;
+        $categoryFilter = ($filterMode === 'server') ? $category : null;
+
+        $resultado = $this->productoService->getProductosConStats($searchFilter, $categoryFilter, $filterMode);
         
         return view('back/products/crud_productos', [
-            'productos' => $resultado['productos'],
-            'counts'    => $resultado['counts'],
+            'productos'  => $resultado['productos'],
+            'pager'      => $resultado['pager'],
+            'counts'     => $resultado['counts'],
             'categorias' => $this->categoriaService->getCategoriasConStats(),
-            'vista'     => $this->request->getVar('vista') ?? 'NO',
-            'title'     => 'Gestión de Productos'
+            'vista'      => $vista,
+            'search'     => $search,
+            'category'   => $category,
+            'filterMode' => $filterMode,
+            'title'      => 'Gestión de Productos'
         ]);
     }
 

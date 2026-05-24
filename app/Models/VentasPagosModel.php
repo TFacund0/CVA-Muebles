@@ -68,4 +68,31 @@ class VentasPagosModel extends Model
         $result = $this->selectSum('monto')->where('venta_id', $venta_id)->first();
         return (float) ($result['monto'] ?? 0);
     }
+
+    /**
+     * Calcula la suma acumulada de los importes cobrados para múltiples pedidos en una sola consulta.
+     * Soluciona el problema N+1 al procesar listados masivos.
+     *
+     * @param array $venta_ids Arreglo de identificadores de pedidos.
+     * 
+     * @return array Diccionario asociativo [venta_id => total_pagado].
+     */
+    public function getTotalesPagadosBatch(array $venta_ids)
+    {
+        if (empty($venta_ids)) {
+            return [];
+        }
+
+        $results = $this->select('venta_id, SUM(monto) as total_pagado')
+                        ->whereIn('venta_id', $venta_ids)
+                        ->groupBy('venta_id')
+                        ->findAll();
+
+        $totales = [];
+        foreach ($results as $row) {
+            $totales[$row['venta_id']] = (float) $row['total_pagado'];
+        }
+
+        return $totales;
+    }
 }

@@ -157,21 +157,22 @@
         </div>
     </div>
     <div class="p-4">
-        <form id="filter-form">
+        <form id="filter-form" data-filter-mode="<?= esc($filterMode ?? 'client') ?>">
+            <input type="hidden" name="vista" id="input-vista" value="<?= esc($vista) ?>">
             <div class="row g-3 align-items-end">
                 <div class="col-md-7 col-12">
                     <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
                     <div class="input-group shadow-sm rounded-3 overflow-hidden border">
                         <span class="input-group-text bg-white border-0"><i class="bi bi-search text-gold"></i></span>
-                        <input type="text" id="input-search" class="form-control border-0 py-2" placeholder="Buscar pieza...">
+                        <input type="text" id="input-search" name="search" value="<?= esc($search ?? '') ?>" class="form-control border-0 py-2" placeholder="Buscar pieza...">
                     </div>
                 </div>
                 <div class="col-md-4 col-6">
                     <label class="x-small fw-bold text-muted text-uppercase mb-2">Categoría</label>
-                    <select id="select-category" class="form-select border shadow-sm py-2 x-small fw-bold text-uppercase">
-                        <option value="all">Todas</option>
+                    <select id="select-category" name="category" class="form-select border shadow-sm py-2 x-small fw-bold text-uppercase">
+                        <option value="all" <?= ($category ?? 'all') === 'all' ? 'selected' : '' ?>>Todas</option>
                         <?php foreach ($categorias as $cat): ?>
-                            <option value="<?= esc($cat['descripcion']) ?>"><?= esc($cat['descripcion']) ?></option>
+                            <option value="<?= esc($cat['descripcion']) ?>" <?= ($category ?? '') === $cat['descripcion'] ? 'selected' : '' ?>><?= esc($cat['descripcion']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -186,7 +187,7 @@
 </div>
 
 <!-- Listado Maestro -->
-<div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5">
+<div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5" id="product-grid">
     <div class="table-responsive-stack">
         <table class="table table-hover align-middle mb-0" id="products-table">
             <thead class="bg-brown text-white">
@@ -255,8 +256,8 @@
                     <?php endforeach; ?>
                 <?php endif; ?>
                 
-                <!-- Fila de "No hay resultados" (JS la controla) -->
-                <tr id="no-results-row" style="display: none;">
+                <!-- Fila de "No hay resultados" (JS la controla en client mode, PHP en server mode) -->
+                <tr id="no-results-row" style="display: <?= empty($productos) ? '' : 'none' ?>;">
                     <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-search display-1 text-muted opacity-25"></i>
@@ -290,8 +291,13 @@
             </tbody>
         </table>
     </div>
+    
+    <?php if ($pager): ?>
+        <div class="card-footer bg-white border-top py-3" id="pagination-container">
+            <?= $pager->links('default', 'admin_pager') ?>
+        </div>
+    <?php endif; ?>
 </div>
-
 
 
 <script src="<?= base_url('assets/js/admin/products-list.js?v=1.0') ?>"></script>

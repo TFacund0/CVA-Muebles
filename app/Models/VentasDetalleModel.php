@@ -69,4 +69,35 @@ class VentasDetalleModel extends Model
 
         return $builder->findAll();
     }
+
+    /**
+     * Recupera el desglose de ítems para múltiples pedidos en una sola consulta.
+     * Soluciona el problema N+1 al evitar consultas iterativas a la base de datos.
+     *
+     * @param array $venta_ids Arreglo de identificadores de pedidos.
+     * 
+     * @return array Diccionario asociativo [venta_id => [array de ítems]].
+     */
+    public function getDetallesBatch(array $venta_ids)
+    {
+        if (empty($venta_ids)) {
+            return [];
+        }
+
+        $items = $this->select('ventas_detalle.id, ventas_detalle.venta_id, ventas_detalle.producto_id, ventas_detalle.cantidad, ventas_detalle.precio, productos.nombre_prod, productos.imagen, productos.descripcion')
+                      ->join('productos', 'productos.id_producto = ventas_detalle.producto_id', 'left')
+                      ->whereIn('ventas_detalle.venta_id', $venta_ids)
+                      ->findAll();
+
+        $detalles_agrupados = [];
+        foreach ($items as $item) {
+            $vid = $item['venta_id'];
+            if (!isset($detalles_agrupados[$vid])) {
+                $detalles_agrupados[$vid] = [];
+            }
+            $detalles_agrupados[$vid][] = $item;
+        }
+
+        return $detalles_agrupados;
+    }
 }

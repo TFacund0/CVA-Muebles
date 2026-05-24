@@ -159,40 +159,43 @@
         </div>
     </div>
     <div class="p-4">
-        <div class="row g-3 align-items-end">
-            <div class="col-lg-7 col-md-8 col-12">
-                <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 1rem 0 0 1rem;">
-                        <i class="bi bi-search text-gold"></i>
-                    </span>
-                    <input type="text" id="input-search" class="form-control border-start-0 border-2 py-2"
-                        style="border-radius: 0 1rem 1rem 0;"
-                        placeholder="Buscar...">
+        <form id="filter-form" data-filter-mode="<?= esc($filterMode ?? 'client') ?>">
+            <input type="hidden" name="vista" id="input-vista" value="<?= esc($vista ?? 'NO') ?>">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-7 col-md-8 col-12">
+                    <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 1rem 0 0 1rem;">
+                            <i class="bi bi-search text-gold"></i>
+                        </span>
+                        <input type="text" id="input-search" name="search" value="<?= esc($search ?? '') ?>" class="form-control border-start-0 border-2 py-2"
+                            style="border-radius: 0 1rem 1rem 0;"
+                            placeholder="Buscar...">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-6">
+                    <label class="x-small fw-bold text-muted text-uppercase mb-2">Asunto</label>
+                    <select id="select-asunto" name="asunto" class="form-select border-2 py-2 rounded-3 x-small fw-bold text-uppercase">
+                        <option value="ALL" <?= ($asunto ?? 'ALL') === 'ALL' ? 'selected' : '' ?>>TODOS</option>
+                        <option value="Consulta general" <?= ($asunto ?? '') === 'Consulta general' ? 'selected' : '' ?>>Gral.</option>
+                        <option value="Solicitud de presupuesto" <?= ($asunto ?? '') === 'Solicitud de presupuesto' ? 'selected' : '' ?>>Presup.</option>
+                        <option value="Estado de mi pedido" <?= ($asunto ?? '') === 'Estado de mi pedido' ? 'selected' : '' ?>>Pedido</option>
+                        <option value="Consulta sobre garantía" <?= ($asunto ?? '') === 'Consulta sobre garantía' ? 'selected' : '' ?>>Garantía</option>
+                        <option value="Otro" <?= ($asunto ?? '') === 'Otro' ? 'selected' : '' ?>>Otro</option>
+                    </select>
+                </div>
+                <div class="col-lg-1 col-6">
+                    <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm x-small fw-bold text-uppercase">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-6">
-                <label class="x-small fw-bold text-muted text-uppercase mb-2">Asunto</label>
-                <select id="select-asunto" class="form-select border-2 py-2 rounded-3 x-small fw-bold text-uppercase">
-                    <option value="ALL">TODOS</option>
-                    <option value="Consulta general">Gral.</option>
-                    <option value="Solicitud de presupuesto">Presup.</option>
-                    <option value="Estado de mi pedido">Pedido</option>
-                    <option value="Consulta sobre garantía">Garantía</option>
-                    <option value="Otro">Otro</option>
-                </select>
-            </div>
-            <div class="col-lg-1 col-6">
-                <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm x-small fw-bold text-uppercase">
-                    <i class="bi bi-arrow-counterclockwise"></i>
-                </button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
 <!-- Listado de Mensajes -->
-<div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5">
+<div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5" id="inquiry-table-container">
     <div class="bg-light p-3 border-bottom d-flex align-items-center justify-content-between" style="min-height: 52px;">
         <h6 class="mb-0 fw-bold text-cva-brown d-flex align-items-center gap-2" id="inquiry-list-title">
             <span class="status-dot status-dot-pulse-gold"></span>
@@ -284,47 +287,7 @@
                             </td>
                         </tr>
 
-                        <!-- MODAL DE LECTURA PREMIUM -->
-                        <div class="modal fade" id="modalConsulta<?= $index ?>" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content border-0 rounded-5 shadow-lg overflow-hidden">
-                                    <div class="modal-header bg-brown text-gold p-4">
-                                        <div>
-                                            <h5 class="modal-title fw-bold mb-1">Detalle del Mensaje</h5>
-                                            <span class="x-small opacity-75">ID: <?= $consulta['id_consulta'] ?></span>
-                                        </div>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body p-4 bg-light">
-                                        <div class="d-flex align-items-center gap-3 mb-4">
-                                            <div class="avatar-md bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 50px; height: 50px;">
-                                                <?= substr($consulta['nombre'], 0, 1) ?>
-                                            </div>
-                                            <div>
-                                                <h5 class="fw-bold text-cva-brown mb-0"><?= esc($consulta['nombre']) ?> <?= esc($consulta['apellido']) ?></h5>
-                                                <div class="x-small text-muted"><?= date('d M Y, H:i', strtotime($consulta['fecha'])) ?> hs</div>
-                                            </div>
-                                        </div>
-                                        <div class="p-4 bg-white border border-gold border-opacity-25 rounded-4 mb-4 shadow-sm">
-                                            <div class="x-small fw-bold text-gold text-uppercase mb-2 border-bottom pb-2">
-                                                <i class="bi bi-tag-fill me-1"></i> Asunto: <?= esc($consulta['asunto']) ?>
-                                            </div>
-                                            <p class="mb-0 text-dark lh-lg" style="font-size: 0.95rem;"><?= nl2br(esc($consulta['descripcion'])) ?></p>
-                                        </div>
-                                        <div class="d-flex gap-4 text-muted x-small justify-content-center py-2 bg-light rounded-3">
-                                            <div><i class="bi bi-envelope-fill text-gold me-1"></i> <?= esc($consulta['email']) ?></div>
-                                            <div><i class="bi bi-telephone-fill text-gold me-1"></i> <?= esc($consulta['telefono']) ?></div>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer bg-light p-3 border-0">
-                                        <button type="button" class="btn btn-outline-dark rounded-pill px-4 x-small fw-bold" data-bs-dismiss="modal">CERRAR</button>
-                                        <a href="<?= $url_wa ?>" target="_blank" class="btn btn-admin-primary rounded-pill px-4 x-small fw-bold">
-                                            <i class="bi bi-whatsapp me-2"></i> RESPONDER POR WHATSAPP
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr id="empty-row">
@@ -338,7 +301,7 @@
                 <?php endif; ?>
  
                 <!-- Fila de Sin Resultados JS -->
-                <tr id="no-results-row" style="display: none;">
+                <tr id="no-results-row" style="display: <?= empty($consultas) ? '' : 'none' ?>;">
                     <td colspan="5" class="text-center py-5">
                         <i class="bi bi-search display-4 text-muted opacity-25"></i>
                         <p class="text-muted mt-3">No hay consultas que coincidan con la búsqueda.</p>
@@ -357,6 +320,64 @@
             </tbody>
         </table>
     </div>
+
+    <?php if (isset($pager) && $pager): ?>
+        <div class="card-footer bg-white border-top py-3" id="pagination-container">
+            <?= $pager->links('default', 'admin_pager') ?>
+        </div>
+    <?php endif; ?>
+    <!-- MODALS RENDERED HERE, OUTSIDE THE TABLE -->
+    <?php if (!empty($consultas)): ?>
+        <?php foreach ($consultas as $index => $consulta): ?>
+            <?php
+            $num = preg_replace('/[^0-9]/', '', $consulta['telefono']);
+            $msg = urlencode("Hola " . $consulta['nombre'] . "! Soy César de CVA Muebles, respondo a tu consulta sobre: " . $consulta['asunto']);
+            $url_wa = "https://wa.me/" . (str_starts_with($num, '54') ? $num : "54" . $num) . "?text=" . $msg;
+            ?>
+            <!-- MODAL DE LECTURA PREMIUM -->
+            <div class="modal fade" id="modalConsulta<?= $index ?>" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 rounded-5 shadow-lg overflow-hidden">
+                        <div class="modal-header bg-brown text-gold p-4">
+                            <div>
+                                <h5 class="modal-title fw-bold mb-1">Detalle del Mensaje</h5>
+                                <span class="x-small opacity-75">ID: <?= $consulta['id_consulta'] ?></span>
+                            </div>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4 bg-light">
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="avatar-md bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm" style="width: 50px; height: 50px;">
+                                    <?= substr($consulta['nombre'], 0, 1) ?>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-cva-brown mb-0"><?= esc($consulta['nombre']) ?> <?= esc($consulta['apellido']) ?></h5>
+                                    <div class="x-small text-muted"><?= date('d M Y, H:i', strtotime($consulta['fecha'])) ?> hs</div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white border border-gold border-opacity-25 rounded-4 mb-4 shadow-sm">
+                                <div class="x-small fw-bold text-gold text-uppercase mb-2 border-bottom pb-2">
+                                    <i class="bi bi-tag-fill me-1"></i> Asunto: <?= esc($consulta['asunto']) ?>
+                                </div>
+                                <p class="mb-0 text-dark lh-lg" style="font-size: 0.95rem;"><?= nl2br(esc($consulta['descripcion'])) ?></p>
+                            </div>
+                            <div class="d-flex gap-4 text-muted x-small justify-content-center py-2 bg-light rounded-3">
+                                <div><i class="bi bi-envelope-fill text-gold me-1"></i> <?= esc($consulta['email']) ?></div>
+                                <div><i class="bi bi-telephone-fill text-gold me-1"></i> <?= esc($consulta['telefono']) ?></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light p-3 border-0">
+                            <button type="button" class="btn btn-outline-dark rounded-pill px-4 x-small fw-bold" data-bs-dismiss="modal">CERRAR</button>
+                            <a href="<?= $url_wa ?>" target="_blank" class="btn btn-admin-primary rounded-pill px-4 x-small fw-bold">
+                                <i class="bi bi-whatsapp me-2"></i> RESPONDER POR WHATSAPP
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
 </div>
 
 <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN PERMANENTE CON VALIDACIÓN (PREMIUM) -->

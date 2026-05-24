@@ -34,20 +34,35 @@
     <div class="container-lg" id="catalogo-productos">
 
         <!-- Pestañas de Filtro -->
-        <div class="filter-container mb-5 animate-fade-in">
+        <div class="filter-container mb-5 animate-fade-in" data-filter-mode="<?= esc($filterMode ?? 'client') ?>">
             <div class="filter-group d-flex">
-                <button type="button" class="btn filtro-categoria active" data-categoria="todos">Todos</button>
-                <?php
-                $descripciones_vistas = [];
-                foreach ($categorias as $cat):
-                    $desc = trim(mb_strtolower($cat['descripcion']));
-                    if (in_array($desc, $descripciones_vistas)) continue;
-                    $descripciones_vistas[] = $desc;
-                ?>
-                    <button type="button" class="btn filtro-categoria" data-categoria="<?= esc($cat['descripcion']) ?>">
-                        <?= esc($cat['descripcion']) ?>
-                    </button>
-                <?php endforeach; ?>
+                <?php if (($filterMode ?? 'client') === 'server'): ?>
+                    <a href="<?= base_url('productos') ?>?categoria=todos" class="btn filtro-categoria <?= strtolower($categoriaActiva ?? 'todos') === 'todos' ? 'active' : '' ?>">Todos</a>
+                    <?php
+                    $descripciones_vistas = [];
+                    foreach ($categorias as $cat):
+                        $desc = trim(mb_strtolower($cat['descripcion']));
+                        if (in_array($desc, $descripciones_vistas)) continue;
+                        $descripciones_vistas[] = $desc;
+                    ?>
+                        <a href="<?= base_url('productos') ?>?categoria=<?= urlencode(strtolower($cat['descripcion'])) ?>" class="btn filtro-categoria <?= strtolower($categoriaActiva ?? '') === $desc ? 'active' : '' ?>">
+                            <?= esc($cat['descripcion']) ?>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <button type="button" class="btn filtro-categoria active" data-categoria="todos">Todos</button>
+                    <?php
+                    $descripciones_vistas = [];
+                    foreach ($categorias as $cat):
+                        $desc = trim(mb_strtolower($cat['descripcion']));
+                        if (in_array($desc, $descripciones_vistas)) continue;
+                        $descripciones_vistas[] = $desc;
+                    ?>
+                        <button type="button" class="btn filtro-categoria" data-categoria="<?= esc($cat['descripcion']) ?>">
+                            <?= esc($cat['descripcion']) ?>
+                        </button>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
 

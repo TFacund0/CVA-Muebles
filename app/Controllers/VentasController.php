@@ -63,15 +63,29 @@ class VentasController extends BaseController
      */
     public function index_ventas()
     {
-        $resultado = $this->ventasService->getVentasConEstadisticas();
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones asíncronas.
+        session_write_close();
+        
+        $search = $this->request->getVar('search');
+        $estado = $this->request->getVar('estado');
+        $filterMode = env('app.filterMode', 'client');
+
+        $searchFilter = ($filterMode === 'server') ? $search : null;
+        $estadoFilter = ($filterMode === 'server') ? $estado : null;
+
+        $resultado = $this->ventasService->getVentasConEstadisticas($searchFilter, $estadoFilter, $filterMode);
         
         $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         
         return view('back/sales/detalleVentas', [
             'ventas'      => $resultado['ventas'],
             'solicitados' => $resultado['solicitados'],
+            'pager'       => $resultado['pager'],
             'counts'      => $resultado['counts'],
             'nombreMes'   => $meses[(int)date('m') - 1],
+            'search'      => $search,
+            'estado'      => $estado,
+            'filterMode'  => $filterMode,
             'title'       => 'Control de Pedidos'
         ]);
     }
@@ -153,19 +167,27 @@ class VentasController extends BaseController
         }
     }
 
-    /**
-     * Recupera y muestra el listado histórico de pedidos realizados por el usuario autenticado.
-     *
-     * @return string Contenido HTML de la vista de compras de usuario.
-     */
     public function ver_facturas_usuario()
     {
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones asíncronas.
+        session_write_close();
+        
         $id_usuario = session()->get('id_usuario');
-        $ventas = $this->ventasService->getVentasPorUsuario($id_usuario);
+        $filter = $this->request->getVar('filter') ?? 'todos';
+        $sort = $this->request->getVar('sort') ?? 'recent';
+        $filterMode = env('app.filterMode', 'client');
+
+        $filterParam = ($filterMode === 'server') ? $filter : null;
+        $sortParam = ($filterMode === 'server') ? $sort : null;
+
+        $ventas = $this->ventasService->getVentasPorUsuario($id_usuario, $filterParam, $sortParam);
 
         return view('back/sales/vistaCompras', [
-            'ventas' => $ventas,
-            'title'  => 'Todas mis Compras'
+            'ventas'     => $ventas,
+            'filter'     => $filter,
+            'sort'       => $sort,
+            'filterMode' => $filterMode,
+            'title'      => 'Todas mis Compras'
         ]);
     }
 
@@ -198,6 +220,9 @@ class VentasController extends BaseController
      */
     public function estadisticas()
     {
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones asíncronas.
+        session_write_close();
+        
         return view('back/sales/estadisticas', [
             'stats'                    => $this->ventasService->getDashboardStats(),
             'total_consultas'          => $this->consultaService->countActivas(),

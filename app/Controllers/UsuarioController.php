@@ -81,13 +81,28 @@ class UsuarioController extends BaseController
      */
     public function index() 
     {
-        $resultado = $this->usuarioService->getUsuariosConStats();
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones asíncronas.
+        session_write_close();
+        
+        $search = $this->request->getVar('search');
+        $perfil = $this->request->getVar('perfil');
+        $filterMode = env('app.filterMode', 'client');
+        $vista = $this->request->getVar('vista') ?? 'NO';
+        
+        $searchFilter = ($filterMode === 'server') ? $search : null;
+        $perfilFilter = ($filterMode === 'server') ? $perfil : null;
+
+        $resultado = $this->usuarioService->getUsuariosConStats($searchFilter, $perfilFilter, $filterMode);
         
         return view('back/users/crud_usuarios', [
-            'usuarios' => $resultado['usuarios'],
-            'counts'   => $resultado['counts'],
-            'vista'    => $this->request->getVar('vista') ?? 'NO',
-            'title'    => 'Gestión de Usuarios'
+            'usuarios'   => $resultado['usuarios'],
+            'pager'      => $resultado['pager'],
+            'counts'     => $resultado['counts'],
+            'vista'      => $vista,
+            'search'     => $search,
+            'perfil'     => $perfil,
+            'filterMode' => $filterMode,
+            'title'      => 'Gestión de Usuarios'
         ]);
     }
 

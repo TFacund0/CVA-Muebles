@@ -193,44 +193,46 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
     <div class="tab-pane fade <?= $active_tab === 'activos' ? 'show active' : '' ?>" id="panel-activos" role="tabpanel" aria-labelledby="activos-tab">
 
         <!-- FILTROS Y LISTADO PRINCIPAL -->
-        <div class="admin-card-v2 mb-4 border-0 shadow-sm overflow-hidden">
-            <div class="bg-light p-3 border-bottom d-flex align-items-center justify-content-between" style="min-height: 52px;">
-                <h6 class="mb-0 fw-bold text-cva-brown"><i class="bi bi-filter-right me-2 text-gold"></i> Filtros de Búsqueda (Pedidos Aprobados)</h6>
-                <div id="filter-status" class="x-small fw-bold text-success" style="opacity: 0; transition: opacity 0.2s ease;">
-                    <span class="spinner-grow spinner-grow-sm me-1"></span> ACTUALIZANDO...
+        <form id="filter-form" data-filter-mode="<?= esc($filterMode ?? 'client') ?>">
+            <div class="admin-card-v2 mb-4 border-0 shadow-sm overflow-hidden">
+                <div class="bg-light p-3 border-bottom d-flex align-items-center justify-content-between" style="min-height: 52px;">
+                    <h6 class="mb-0 fw-bold text-cva-brown"><i class="bi bi-filter-right me-2 text-gold"></i> Filtros de Búsqueda (Pedidos Aprobados)</h6>
+                    <div id="filter-status" class="x-small fw-bold text-success" style="opacity: 0; transition: opacity 0.2s ease;">
+                        <span class="spinner-grow spinner-grow-sm me-1"></span> ACTUALIZANDO...
+                    </div>
                 </div>
-            </div>
-            <div class="p-4">
-                <div class="row g-3 align-items-end">
-                    <div class="col-lg-6 col-md-12">
-                        <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 1rem 0 0 1rem;">
-                                <i class="bi bi-search text-gold"></i>
-                            </span>
-                            <input type="text" id="input-search" class="form-control border-start-0 border-2 py-2"
-                                style="border-radius: 0 1rem 1rem 0;"
-                                placeholder="ID, nombre o usuario...">
+                <div class="p-4">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-lg-6 col-md-12">
+                            <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 1rem 0 0 1rem;">
+                                    <i class="bi bi-search text-gold"></i>
+                                </span>
+                                <input type="text" id="input-search" name="search" value="<?= esc($search ?? '') ?>" class="form-control border-start-0 border-2 py-2"
+                                    style="border-radius: 0 1rem 1rem 0;"
+                                    placeholder="ID, nombre o usuario...">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <label class="x-small fw-bold text-muted text-uppercase mb-2">Estado</label>
+                            <select id="select-status" name="estado" class="form-select border-2 py-2 rounded-3 x-small fw-bold text-uppercase">
+                                <option value="ALL" <?= ($estado ?? 'ALL') === 'ALL' ? 'selected' : '' ?>>TODOS</option>
+                                <option value="PENDIENTE" <?= ($estado ?? '') === 'PENDIENTE' ? 'selected' : '' ?>>🟠 PENDIENTE</option>
+                                <option value="EN_PROCESO" <?= ($estado ?? '') === 'EN_PROCESO' ? 'selected' : '' ?>>🔵 EN PROCESO</option>
+                                <option value="TERMINADO" <?= ($estado ?? '') === 'TERMINADO' ? 'selected' : '' ?>>🟢 TERMINADO</option>
+                                <option value="ENTREGADO" <?= ($estado ?? '') === 'ENTREGADO' ? 'selected' : '' ?>>🔘 ENTREGADO</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm x-small fw-bold text-uppercase">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar
+                            </button>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-6">
-                        <label class="x-small fw-bold text-muted text-uppercase mb-2">Estado</label>
-                        <select id="select-status" class="form-select border-2 py-2 rounded-3 x-small fw-bold text-uppercase">
-                            <option value="ALL">TODOS</option>
-                            <option value="PENDIENTE">🟠 PENDIENTE</option>
-                            <option value="EN_PROCESO">🔵 EN PROCESO</option>
-                            <option value="TERMINADO">🟢 TERMINADO</option>
-                            <option value="ENTREGADO">🔘 ENTREGADO</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm x-small fw-bold text-uppercase">
-                            <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar
-                        </button>
-                    </div>
                 </div>
             </div>
-        </div>
+        </form>
 
         <!-- Tabla de Pedidos -->
         <div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5">
@@ -330,7 +332,7 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
                         <?php endforeach; ?>
 
                         <!-- Filas de Estados Vacíos -->
-                        <tr id="no-results-row" style="display: none;">
+                        <tr id="no-results-row" style="display: <?= empty($ventas) ? '' : 'none' ?>;">
                             <td colspan="6" class="text-center py-5">
                                 <i class="bi bi-search display-4 text-muted opacity-25"></i>
                                 <p class="text-muted mt-3">No hay pedidos que coincidan con la búsqueda.</p>
@@ -430,6 +432,13 @@ $active_tab = ($env_cart_enabled && $has_solicitados) ? 'solicitudes' : 'activos
     </div>
 </div>
 
+<?php if (isset($pager) && $pager): ?>
+    <div class="d-flex justify-content-center mt-4 mb-5" id="pagination-container">
+        <div class="bg-white p-3 rounded-4 shadow-sm border">
+            <?= $pager->links('default', 'admin_pager') ?>
+        </div>
+    </div>
+<?php endif; ?>
 
 
 <?= $this->endSection() ?>

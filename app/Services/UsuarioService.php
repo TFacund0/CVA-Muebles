@@ -80,31 +80,25 @@ class UsuarioService
      *
      * @return array Estructura con la lista de usuarios ('usuarios') y métricas estadísticas ('counts').
      */
-    public function getUsuariosConStats()
+    public function getUsuariosConStats($search = null, $perfil = null, $filterMode = 'client')
     {
-        $usuarios = $this->usuarioModel->getUsuariosAll();
-
-        $counts = [
-            'total'       => count($usuarios),
-            'activos'     => 0,
-            'admins'      => 0,
-            'suspendidos' => 0
-        ];
-
-        foreach ($usuarios as $u) {
-            if ($u['baja'] == 'NO') {
-                $counts['activos']++;
-            } else {
-                $counts['suspendidos']++;
-            }
-            
-            if ($u['perfil_id'] == 1) {
-                $counts['admins']++;
-            }
+        $counts = $this->usuarioModel->getEstadisticas();
+        
+        $isServerMode = ($filterMode === 'server');
+        
+        if ($search || ($perfil && strtolower($perfil) !== 'all') || $isServerMode) {
+            $resultado = $this->usuarioModel->getUsuariosAllFiltrados($search, $perfil, $isServerMode);
+            $usuarios = $resultado['data'];
+            $pager = $resultado['pager'];
+        } else {
+            $resultado = $this->usuarioModel->getUsuariosAllFiltrados();
+            $usuarios = $resultado['data'];
+            $pager = null;
         }
 
         return [
             'usuarios' => $usuarios,
+            'pager'    => $pager,
             'counts'   => $counts
         ];
     }
@@ -140,7 +134,8 @@ class UsuarioService
             return ['status' => 'success', 'message' => 'Usuario registrado con éxito.'];
 
         } catch (\Exception $e) {
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            log_message('error', '[UsuarioService::registrarUsuario] ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Ocurrió un error interno al registrar el usuario. Intente nuevamente.'];
         }
     }
 
@@ -186,7 +181,8 @@ class UsuarioService
             return ['status' => 'success', 'message' => 'Perfil actualizado correctamente.', 'updated_data' => $updateData];
 
         } catch (\Exception $e) {
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            log_message('error', '[UsuarioService::actualizarPerfil] ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Ocurrió un error interno al actualizar el perfil. Intente nuevamente.'];
         }
     }
 

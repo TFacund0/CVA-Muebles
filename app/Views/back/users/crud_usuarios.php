@@ -131,36 +131,39 @@
         </div>
     </div>
     <div class="p-4">
-        <div class="row g-3 align-items-end">
-            <div class="col-lg-7 col-md-8 col-12">
-                <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
-                <div class="input-group rounded-3 overflow-hidden border">
-                    <span class="input-group-text bg-white border-0">
-                        <i class="bi bi-search text-gold"></i>
-                    </span>
-                    <input type="text" id="input-search" class="form-control border-0 py-2"
-                        placeholder="Nombre, email o usuario...">
+        <form id="filter-form" data-filter-mode="<?= esc($filterMode ?? 'client') ?>">
+            <input type="hidden" name="vista" id="input-vista" value="<?= esc($vista) ?>">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-7 col-md-8 col-12">
+                    <label class="x-small fw-bold text-muted text-uppercase mb-2">Buscador en tiempo real</label>
+                    <div class="input-group rounded-3 overflow-hidden border">
+                        <span class="input-group-text bg-white border-0">
+                            <i class="bi bi-search text-gold"></i>
+                        </span>
+                        <input type="text" id="input-search" name="search" value="<?= esc($search ?? '') ?>" class="form-control border-0 py-2"
+                            placeholder="Nombre, email o usuario...">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-10">
+                    <label class="x-small fw-bold text-muted text-uppercase mb-2">Rango / Perfil</label>
+                    <select id="select-perfil" name="perfil" class="form-select border shadow-sm py-2 x-small fw-bold text-uppercase" style="border-radius: 10px; height: 42px;">
+                        <option value="all" <?= ($perfil ?? 'all') === 'all' ? 'selected' : '' ?>>Todos los Perfiles</option>
+                        <option value="ADMIN" <?= ($perfil ?? '') === 'ADMIN' ? 'selected' : '' ?>>Administradores</option>
+                        <option value="CLIENTE" <?= ($perfil ?? '') === 'CLIENTE' ? 'selected' : '' ?>>Clientes</option>
+                    </select>
+                </div>
+                <div class="col-lg-1 col-md-12 col-2 text-end">
+                    <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm" style="height: 42px;">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-10">
-                <label class="x-small fw-bold text-muted text-uppercase mb-2">Rango / Perfil</label>
-                <select id="select-perfil" class="form-select border shadow-sm py-2 x-small fw-bold text-uppercase" style="border-radius: 10px; height: 42px;">
-                    <option value="all">Todos los Perfiles</option>
-                    <option value="ADMIN">Administradores</option>
-                    <option value="CLIENTE">Clientes</option>
-                </select>
-            </div>
-            <div class="col-lg-1 col-md-12 col-2 text-end">
-                <button type="button" id="btn-reset" class="btn btn-light border py-2 w-100 rounded-3 shadow-sm" style="height: 42px;">
-                    <i class="bi bi-arrow-counterclockwise"></i>
-                </button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
 <!-- Tabla de Usuarios -->
-<div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5">
+<div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5" id="user-grid">
     <div class="table-responsive-stack">
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-light">
@@ -179,10 +182,8 @@
                     <tr class="user-row"
                         data-search="<?= strtolower(esc($u['nombre'] . ' ' . $u['apellido'] . ' ' . $u['email'] . ' ' . $u['usuario'])) ?>"
                         data-baja="<?= $u['baja'] ?>"
-                        data-perfil="<?= $u['perfil_id'] == 1 ? 'ADMIN' : 'CLIENTE' ?>">
-                        <td class="ps-4 d-none d-lg-table-cell" data-label="ID">
-                            <span class="badge bg-light text-muted border">#<?= $u['id_usuario'] ?></span>
-                        </td>
+                        data-perfil="<?= esc($u['perfil'] ?? '') ?>">
+                        <td class="ps-4 text-muted fw-bold" data-label="ID">#<?= $u['id_usuario'] ?></td>
                         <td data-label="IDENTIDAD">
                             <div class="d-flex align-items-center gap-3 py-1 user-info-wrapper">
                                 <div class="position-relative">
@@ -263,7 +264,7 @@
                 <?php endforeach; ?>
 
                 <!-- Filas de Estados Vacíos -->
-                <tr id="no-results-row" style="display: none;">
+                <tr id="no-results-row" style="display: <?= empty($usuarios) ? '' : 'none' ?>;">
                     <td colspan="5" class="text-center py-5">
                         <i class="bi bi-search display-4 text-muted opacity-25"></i>
                         <p class="text-muted mt-3">No hay usuarios que coincidan con los filtros.</p>
@@ -284,6 +285,12 @@
             </tbody>
         </table>
     </div>
+
+    <?php if (isset($pager) && $pager): ?>
+        <div class="card-footer bg-white border-top py-3" id="pagination-container">
+            <?= $pager->links('default', 'admin_pager') ?>
+        </div>
+    <?php endif; ?>
 </div>
 
 

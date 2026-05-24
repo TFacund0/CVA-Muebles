@@ -30,47 +30,50 @@
 
         <?php if (!empty($ventas)): ?>
             <!-- Buscador y Filtros Premium de Pedidos -->
-            <div class="row mb-5 g-3 align-items-center animate-fade-in">
-                <!-- Filtros (Izquierda) -->
-                <div class="col-lg-8 col-md-12">
-                    <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-filter-artisan active" data-filter="todos">
-                            <i class="bi bi-collection-fill me-1"></i> Todos
-                        </button>
-                        <button class="btn btn-filter-artisan" data-filter="solicitado">
-                            <i class="bi bi-clock-history me-1"></i> Por Aprobar
-                        </button>
-                        <button class="btn btn-filter-artisan" data-filter="pendiente">
-                            <i class="bi bi-hourglass-split me-1"></i> Pendientes
-                        </button>
-                        <button class="btn btn-filter-artisan" data-filter="en_proceso">
-                            <i class="bi bi-hammer me-1"></i> En Taller
-                        </button>
-                        <button class="btn btn-filter-artisan" data-filter="entregado">
-                            <i class="bi bi-truck me-1"></i> Entregados
-                        </button>
-                        <button class="btn btn-filter-artisan" data-filter="rechazado">
-                            <i class="bi bi-x-circle-fill me-1"></i> Rechazados
-                        </button>
+            <form id="user-filter-form" data-filter-mode="<?= esc($filterMode ?? 'client') ?>">
+                <input type="hidden" name="filter" id="user-filter-input" value="<?= esc($filter ?? 'todos') ?>">
+                <div class="row mb-5 g-3 align-items-center animate-fade-in">
+                    <!-- Filtros (Izquierda) -->
+                    <div class="col-lg-8 col-md-12">
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="button" class="btn btn-filter-artisan <?= ($filter ?? 'todos') === 'todos' ? 'active' : '' ?>" data-filter="todos">
+                                <i class="bi bi-collection-fill me-1"></i> Todos
+                            </button>
+                            <button type="button" class="btn btn-filter-artisan <?= ($filter ?? '') === 'solicitado' ? 'active' : '' ?>" data-filter="solicitado">
+                                <i class="bi bi-clock-history me-1"></i> Por Aprobar
+                            </button>
+                            <button type="button" class="btn btn-filter-artisan <?= ($filter ?? '') === 'pendiente' ? 'active' : '' ?>" data-filter="pendiente">
+                                <i class="bi bi-hourglass-split me-1"></i> Pendientes
+                            </button>
+                            <button type="button" class="btn btn-filter-artisan <?= ($filter ?? '') === 'en_proceso' ? 'active' : '' ?>" data-filter="en_proceso">
+                                <i class="bi bi-hammer me-1"></i> En Taller
+                            </button>
+                            <button type="button" class="btn btn-filter-artisan <?= ($filter ?? '') === 'entregado' ? 'active' : '' ?>" data-filter="entregado">
+                                <i class="bi bi-truck me-1"></i> Entregados
+                            </button>
+                            <button type="button" class="btn btn-filter-artisan <?= ($filter ?? '') === 'rechazado' ? 'active' : '' ?>" data-filter="rechazado">
+                                <i class="bi bi-x-circle-fill me-1"></i> Rechazados
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Ordenar por (Derecha) -->
-                <div class="col-lg-4 col-md-12 text-lg-end">
-                    <div class="d-inline-flex align-items-center gap-2 bg-white rounded-pill px-3 py-2 border shadow-sm" style="height: 48px;">
-                        <span class="small text-muted fw-bold text-nowrap"><i class="bi bi-sort-down text-gold me-1"></i> Ordenar:</span>
-                        <select id="sort-purchases" class="form-select border-0 bg-transparent py-0 px-2 fw-semibold text-cva-brown" style="box-shadow: none; font-size: 0.85rem; cursor: pointer; min-width: 150px;">
-                            <option value="recent">Más recientes</option>
-                            <option value="oldest">Más antiguos</option>
-                            <option value="high-price">Mayor inversión</option>
-                            <option value="low-price">Menor inversión</option>
-                        </select>
+                    <!-- Ordenar por (Derecha) -->
+                    <div class="col-lg-4 col-md-12 text-lg-end">
+                        <div class="d-inline-flex align-items-center gap-2 bg-white rounded-pill px-3 py-2 border shadow-sm" style="height: 48px;">
+                            <span class="small text-muted fw-bold text-nowrap"><i class="bi bi-sort-down text-gold me-1"></i> Ordenar:</span>
+                            <select id="sort-purchases" name="sort" class="form-select border-0 bg-transparent py-0 px-2 fw-semibold text-cva-brown" style="box-shadow: none; font-size: 0.85rem; cursor: pointer; min-width: 150px;">
+                                <option value="recent" <?= ($sort ?? 'recent') === 'recent' ? 'selected' : '' ?>>Más recientes</option>
+                                <option value="oldest" <?= ($sort ?? '') === 'oldest' ? 'selected' : '' ?>>Más antiguos</option>
+                                <option value="high-price" <?= ($sort ?? '') === 'high-price' ? 'selected' : '' ?>>Mayor inversión</option>
+                                <option value="low-price" <?= ($sort ?? '') === 'low-price' ? 'selected' : '' ?>>Menor inversión</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
 
             <!-- Estado Vacío Auxiliar para Filtros de Pedidos -->
-            <div id="no-results-purchases" class="text-center py-5 d-none animate-fade-in mb-5" style="background: rgba(255,255,255,0.5); border-radius: 2rem; border: 1px dashed rgba(184, 134, 11, 0.2); padding: 3rem !important;">
+            <div id="no-results-purchases" class="text-center py-5 <?= empty($ventas) ? '' : 'd-none' ?> animate-fade-in mb-5" style="background: rgba(255,255,255,0.5); border-radius: 2rem; border: 1px dashed rgba(184, 134, 11, 0.2); padding: 3rem !important;">
                 <div class="mb-4">
                     <i class="bi bi-funnel text-gold opacity-25" style="font-size: 4rem;"></i>
                 </div>

@@ -36,38 +36,29 @@ class ConsultaService
      *
      * @return array Resumen conteniendo el listado de consultas ('consultas') y métricas ('counts').
      */
-    public function getConsultasConStats()
+    public function getConsultasConStats($search = null, $asunto = null, $filterMode = 'client')
     {
-        $consultas = $this->consultaModel->orderBy('fecha', 'DESC')->findAll();
-        $currentMonth = date('m');
-        $currentYear = date('Y');
-
-        $counts = [
-            'total'        => count($consultas),
-            'mensuales'    => 0,
-            'activos'      => 0,
-            'presupuestos' => 0
-        ];
-
-        foreach ($consultas as &$c) {
-            $cDate = strtotime($c['fecha']);
-            if (date('m', $cDate) == $currentMonth && date('Y', $cDate) == $currentYear) {
-                $counts['mensuales']++;
-            }
-
-            if ($c['activo'] == 'SI') {
-                $counts['activos']++;
-            }
-            
-            if (stripos($c['asunto'], 'presupuesto') !== false) {
-                $counts['presupuestos']++;
-            }
-
-            $c['search_data'] = strtolower(esc($c['nombre'] . ' ' . $c['apellido'] . ' ' . $c['email'] . ' ' . $c['asunto']));
+        $counts = $this->consultaModel->getEstadisticas();
+        $isServerMode = ($filterMode === 'server');
+        
+        if ($search || ($asunto && strtoupper($asunto) !== 'ALL') || $isServerMode) {
+            $resultado = $this->consultaModel->getConsultasFiltradas($search, $asunto, $isServerMode);
+            $consultas = $resultado['data'];
+            $pager = $resultado['pager'];
+        } else {
+            $resultado = $this->consultaModel->getConsultasFiltradas();
+            $consultas = $resultado['data'];
+            $pager = null;
+        }
+        
+        // Apply search_data for client-side search compatibility
+        foreach ($consultas as &$cf) {
+            $cf['search_data'] = strtolower(esc($cf['nombre'] . ' ' . $cf['apellido'] . ' ' . $cf['email'] . ' ' . $cf['asunto']));
         }
 
         return [
             'consultas' => $consultas,
+            'pager'     => $pager,
             'counts'    => $counts
         ];
     }

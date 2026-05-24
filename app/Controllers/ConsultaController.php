@@ -43,14 +43,30 @@ class ConsultaController extends BaseController
      */
     public function index() 
     {    
-        $resultado = $this->consultaService->getConsultasConStats();
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones asíncronas.
+        session_write_close();
+        
+        $search = $this->request->getVar('search');
+        $asunto = $this->request->getVar('asunto');
+        $filterMode = env('app.filterMode', 'client');
+        $vista = $this->request->getVar('vista') ?? 'NO';
+
+        $searchFilter = ($filterMode === 'server') ? $search : null;
+        $asuntoFilter = ($filterMode === 'server') ? $asunto : null;
+
+        $resultado = $this->consultaService->getConsultasConStats($searchFilter, $asuntoFilter, $filterMode);
         $meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
         return view('back/messages/lista_consultas', [
-            'consultas' => $resultado['consultas'],
-            'counts'    => $resultado['counts'],
-            'nombreMes' => $meses[(int)date('m') - 1],
-            'title'     => 'Gestión de Consultas'
+            'consultas'  => $resultado['consultas'],
+            'pager'      => $resultado['pager'],
+            'counts'     => $resultado['counts'],
+            'nombreMes'  => $meses[(int)date('m') - 1],
+            'vista'      => $vista,
+            'search'     => $search,
+            'asunto'     => $asunto,
+            'filterMode' => $filterMode,
+            'title'      => 'Gestión de Consultas'
         ]);
     }
 

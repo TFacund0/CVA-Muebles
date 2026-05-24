@@ -65,18 +65,73 @@ class ProductoModel extends Model
     }
 
     /**
+     * Calcula las estadísticas generales de los productos directamente en la base de datos.
+     * Esto evita cargar todos los registros en memoria, mejorando dramáticamente el rendimiento.
+     *
+     * @return array Estadísticas de productos (total, activos, sin_stock, eliminados).
+     */
+    public function getEstadisticas()
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $row = $builder->select('
+            COUNT(*) as total,
+            SUM(CASE WHEN eliminado = "NO" THEN 1 ELSE 0 END) as activos,
+            SUM(CASE WHEN eliminado = "NO" AND stock <= 0 THEN 1 ELSE 0 END) as sin_stock,
+            SUM(CASE WHEN eliminado = "SI" THEN 1 ELSE 0 END) as eliminados
+        ')->get()->getRowArray();
+        
+        return [
+            'total'      => (int)($row['total'] ?? 0),
+            'activos'    => (int)($row['activos'] ?? 0),
+            'sin_stock'  => (int)($row['sin_stock'] ?? 0),
+            'eliminados' => (int)($row['eliminados'] ?? 0),
+        ];
+    }
+
+    public function getProductoAllFiltrados($search = null, $categoria = null, $paginate = false, $perPage = 15)
+    {
+        $builder = $this->select('productos.*, categorias.descripcion as categoria')
+                        ->join('categorias', 'categorias.id_categoria = productos.categoria_id');
+        
+        if (!empty($search)) {
+            $builder->like('productos.nombre_prod', $search);
+        }
+        if (!empty($categoria) && strtolower($categoria) !== 'all') {
+            $builder->where('categorias.descripcion', $categoria);
+        }
+
+        if ($paginate) {
+            return [
+                'data'  => $builder->paginate($perPage, 'productos'),
+                'pager' => $this->pager
+            ];
+        }
+
+        return [
+            'data'  => $builder->findAll(),
+            'pager' => null
+        ];
+    }
+
+    /**
      * Recupera la lista de productos destinados a la exposición pública (catálogo frontal).
      * Excluye productos marcados como archivados/eliminados lógicamente o asociados a categorías inactivas.
      *
      * @return array Listado de productos aptos para exposición.
      */
-    public function getProductosPublicos()
+    public function getProductosPublicos($categoria = null)
     {
-        return $this->select('productos.*, categorias.descripcion as categoria')
+        $builder = $this->select('productos.*, categorias.descripcion as categoria')
                     ->join('categorias', 'categorias.id_categoria = productos.categoria_id')
                     ->where('productos.eliminado', 'NO')
-                    ->where('categorias.activo', 1)
-                    ->findAll();
+                    ->where('categorias.activo', 1);
+                    
+        if (!empty($categoria) && strtolower($categoria) !== 'todos') {
+            $builder->where('categorias.descripcion', $categoria);
+        }
+
+        return $builder->findAll();
     }
 
     /**

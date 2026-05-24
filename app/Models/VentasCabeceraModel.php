@@ -76,6 +76,41 @@ class VentasCabeceraModel extends Model
                        ->findAll();
     }
 
+    public function getVentasFiltradas($search = null, $estado = null, $paginate = false, $perPage = 15)
+    {
+        $builder = $this->select('ventas_cabecera.id, ventas_cabecera.fecha, ventas_cabecera.usuario_id, ventas_cabecera.total_venta, ventas_cabecera.estado, ventas_cabecera.estado_aprobacion, ventas_cabecera.tipo_pedido, ventas_cabecera.observaciones, ventas_cabecera.prioridad, usuarios.nombre, usuarios.apellido, usuarios.email, usuarios.usuario')
+                        ->join('usuarios', 'usuarios.id_usuario = ventas_cabecera.usuario_id', 'left')
+                        ->where('ventas_cabecera.estado_aprobacion !=', 'RECHAZADO');
+        
+        if (!empty($search)) {
+            $builder->groupStart()
+                        ->like('ventas_cabecera.id', $search)
+                        ->orLike('usuarios.nombre', $search)
+                        ->orLike('usuarios.apellido', $search)
+                        ->orLike('usuarios.usuario', $search)
+                    ->groupEnd();
+        }
+
+        if (!empty($estado) && strtoupper($estado) !== 'ALL') {
+            $builder->where('ventas_cabecera.estado', $estado);
+        }
+
+        $builder->orderBy('ventas_cabecera.prioridad', 'DESC')
+                ->orderBy('ventas_cabecera.fecha', 'DESC');
+
+        if ($paginate) {
+            return [
+                'data'  => $builder->paginate($perPage, 'ventas'),
+                'pager' => $this->pager
+            ];
+        }
+
+        return [
+            'data'  => $builder->findAll(),
+            'pager' => null
+        ];
+    }
+
     /**
      * Recupera los pedidos actualmente en taller que no han sido rechazados y no están en estado
      * de solicitud de presupuesto. Se ordenan priorizando la puntuación en la cola de trabajo.
@@ -122,5 +157,43 @@ class VentasCabeceraModel extends Model
         return $this->where('estado_aprobacion !=', 'RECHAZADO')
                     ->where('estado', $estado)
                     ->countAllResults();
+    }
+
+    public function getVentasPorUsuarioFiltradas($usuario_id, $filter = null, $sort = null)
+    {
+        $builder = $this->select('ventas_cabecera.*')
+                        ->where('usuario_id', $usuario_id);
+
+        if ($filter) {
+            if ($filter === 'solicitado') {
+                $builder->where('estado_aprobacion', 'SOLICITUD');
+            } elseif ($filter === 'rechazado') {
+                $builder->where('estado_aprobacion', 'RECHAZADO');
+            } elseif ($filter === 'entregado') {
+                $builder->whereIn('estado', ['ENTREGADO', 'TERMINADO']);
+                $builder->where('estado_aprobacion !=', 'RECHAZADO');
+                $builder->where('estado_aprobacion !=', 'SOLICITUD');
+            } elseif ($filter !== 'todos') {
+                $builder->where('estado', strtoupper($filter));
+                $builder->where('estado_aprobacion !=', 'RECHAZADO');
+                $builder->where('estado_aprobacion !=', 'SOLICITUD');
+            }
+        }
+
+        if ($sort) {
+            if ($sort === 'recent') {
+                $builder->orderBy('fecha', 'DESC');
+            } elseif ($sort === 'oldest') {
+                $builder->orderBy('fecha', 'ASC');
+            } elseif ($sort === 'high-price') {
+                $builder->orderBy('total_venta', 'DESC');
+            } elseif ($sort === 'low-price') {
+                $builder->orderBy('total_venta', 'ASC');
+            }
+        } else {
+            $builder->orderBy('fecha', 'DESC');
+        }
+
+        return $builder->findAll();
     }
 }

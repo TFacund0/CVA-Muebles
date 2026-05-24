@@ -61,7 +61,64 @@ class UsuarioModel extends Model
     public function getUsuariosAll()
     {
         return $this->select('usuarios.*, perfiles.descripcion as perfil')
-                    ->join('perfiles', 'perfiles.id = usuarios.perfil_id')
+                    ->join('perfiles', 'perfiles.id_perfiles = usuarios.perfil_id')
                     ->findAll();
+    }
+
+    /**
+     * Calcula las estadísticas generales de los usuarios directamente en la base de datos.
+     * Esto evita cargar todos los registros en memoria, mejorando el rendimiento.
+     *
+     * @return array Estadísticas de usuarios (total, activos, admins, suspendidos).
+     */
+    public function getEstadisticas()
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $row = $builder->select('
+            COUNT(*) as total,
+            SUM(CASE WHEN baja = "NO" THEN 1 ELSE 0 END) as activos,
+            SUM(CASE WHEN perfil_id = 1 THEN 1 ELSE 0 END) as admins,
+            SUM(CASE WHEN baja = "SI" THEN 1 ELSE 0 END) as suspendidos
+        ')->get()->getRowArray();
+        
+        return [
+            'total'       => (int)($row['total'] ?? 0),
+            'activos'     => (int)($row['activos'] ?? 0),
+            'admins'      => (int)($row['admins'] ?? 0),
+            'suspendidos' => (int)($row['suspendidos'] ?? 0),
+        ];
+    }
+
+    public function getUsuariosAllFiltrados($search = null, $perfil = null, $paginate = false, $perPage = 15)
+    {
+        $builder = $this->select('usuarios.*, perfiles.descripcion as perfil')
+                        ->join('perfiles', 'perfiles.id_perfiles = usuarios.perfil_id');
+        
+        if (!empty($search)) {
+            $builder->groupStart()
+                        ->like('usuarios.nombre', $search)
+                        ->orLike('usuarios.apellido', $search)
+                        ->orLike('usuarios.email', $search)
+                        ->orLike('usuarios.usuario', $search)
+                    ->groupEnd();
+        }
+
+        if (!empty($perfil) && strtolower($perfil) !== 'all') {
+            $perfil_id = ($perfil === 'ADMIN') ? 1 : 2;
+            $builder->where('usuarios.perfil_id', $perfil_id);
+        }
+
+        if ($paginate) {
+            return [
+                'data'  => $builder->paginate($perPage, 'usuarios'),
+                'pager' => $this->pager
+            ];
+        }
+
+        return [
+            'data'  => $builder->findAll(),
+            'pager' => null
+        ];
     }
 }

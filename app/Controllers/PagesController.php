@@ -83,15 +83,27 @@ class PagesController extends BaseController
      */
     public function productos() 
     {
+        // Optimización de concurrencia: Libera la sesión tempranamente para evitar cuellos de botella en peticiones asíncronas.
+        session_write_close();
+        
         $productoService  = new ProductoService();
         $categoriaService = new CategoriaService();
         $favoritosService = new FavoritosService();
+        
+        $categoriaParam = $this->request->getGet('categoria');
+        $filterMode = env('app.filterMode', 'client');
+        
+        // Si el modo es servidor, usamos el parámetro para filtrar en BD. 
+        // Si es cliente, traemos todos para que JS filtre localmente.
+        $categoriaFiltro = ($filterMode === 'server') ? $categoriaParam : null;
 
         return view('front/pages/productos', [
-            'productos'  => $productoService->getProductosPublicos(),
+            'productos'  => $productoService->getProductosPublicos($categoriaFiltro),
             'categorias' => $categoriaService->getCategoriasConStats(true),
             'user_favs'  => session()->get('logged_in') ? $favoritosService->getFavoritosIds(session()->get('id_usuario')) : [],
-            'title'      => 'Nuestros Productos'
+            'title'      => 'Nuestros Productos',
+            'filterMode' => $filterMode,
+            'categoriaActiva' => $categoriaParam ?? 'todos'
         ]);
     }
 }

@@ -92,21 +92,9 @@ class GaleriaService
                 $originalPath = FCPATH . 'assets/uploads/galeria/' . $tempName;
                 $destPath = FCPATH . 'assets/uploads/galeria/' . $nombre_imagen;
                 
-                $imageService = \Config\Services::image();
-                $imageService->withFile($originalPath);
-                
-                $width = $imageService->getWidth();
-                $height = $imageService->getHeight();
-                
-                if ($width > 1200 || $height > 1200) {
-                    $imageService->resize(1200, 1200, true, 'auto');
-                }
-                
-                $imageService->save($destPath, 80);
-                
-                if ($originalPath !== $destPath && file_exists($originalPath)) {
-                    @unlink($originalPath);
-                }
+                // Procesamiento Asíncrono
+                helper('async');
+                run_async_command(sprintf('image:process "%s" "%s" 1200 1200 80', $originalPath, $destPath));
 
                 return $this->galeriaModel->insert([
                     'usuario_id' => $usuario_id,

@@ -45,30 +45,19 @@ class ProductoService
      *
      * @return array Estructura con la lista de productos ('productos') y métricas estadísticas ('counts').
      */
-    public function getProductosConStats()
+    public function getProductosConStats($search = null, $categoria = null, $filterMode = 'client')
     {
-        $productos = $this->productoModel->getProductoAll();
-
-        $counts = [
-            'total'      => count($productos),
-            'activos'    => 0,
-            'sin_stock'  => 0,
-            'eliminados' => 0
-        ];
-
-        foreach ($productos as $p) {
-            if ($p['eliminado'] == 'NO') {
-                $counts['activos']++;
-                if ($p['stock'] <= 0) {
-                    $counts['sin_stock']++;
-                }
-            } else {
-                $counts['eliminados']++;
-            }
-        }
+        // Obtener estadísticas directo desde la base de datos (O(1) memory)
+        $counts = $this->productoModel->getEstadisticas();
+        
+        $isServerMode = ($filterMode === 'server');
+        
+        // Obtener el listado de productos filtrados y paginados condicionalmente
+        $resultado = $this->productoModel->getProductoAllFiltrados($search, $categoria, $isServerMode);
 
         return [
-            'productos' => $productos,
+            'productos' => $resultado['data'],
+            'pager'     => $resultado['pager'],
             'counts'    => $counts
         ];
     }
@@ -79,9 +68,9 @@ class ProductoService
      *
      * @return array Listado de productos activos aptos para venta.
      */
-    public function getProductosPublicos()
+    public function getProductosPublicos($categoria = null)
     {
-        return $this->productoModel->getProductosPublicos();
+        return $this->productoModel->getProductosPublicos($categoria);
     }
 
     /**
@@ -105,21 +94,9 @@ class ProductoService
                 $originalPath = FCPATH . 'assets/uploads/' . $tempName;
                 $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
                 
-                $imageService = \Config\Services::image();
-                $imageService->withFile($originalPath);
-                
-                $width = $imageService->getWidth();
-                $height = $imageService->getHeight();
-                
-                if ($width > 800 || $height > 800) {
-                    $imageService->resize(800, 800, true, 'auto');
-                }
-                
-                $imageService->save($destPath, 80);
-                
-                if ($originalPath !== $destPath && file_exists($originalPath)) {
-                    @unlink($originalPath);
-                }
+                // Procesamiento Asíncrono
+                helper('async');
+                run_async_command(sprintf('image:process "%s" "%s" 800 800 80', $originalPath, $destPath));
                 
                 $data['imagen'] = $nombre_imagen;
             }
@@ -136,7 +113,8 @@ class ProductoService
             return ['status' => 'success', 'message' => 'Producto creado con éxito.'];
 
         } catch (\Exception $e) {
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            log_message('error', '[ProductoService::crearProducto] ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Ocurrió un error interno al crear el producto. Intente nuevamente.'];
         }
     }
 
@@ -171,21 +149,9 @@ class ProductoService
                 $originalPath = FCPATH . 'assets/uploads/' . $tempName;
                 $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
                 
-                $imageService = \Config\Services::image();
-                $imageService->withFile($originalPath);
-                
-                $width = $imageService->getWidth();
-                $height = $imageService->getHeight();
-                
-                if ($width > 800 || $height > 800) {
-                    $imageService->resize(800, 800, true, 'auto');
-                }
-                
-                $imageService->save($destPath, 80);
-                
-                if ($originalPath !== $destPath && file_exists($originalPath)) {
-                    @unlink($originalPath);
-                }
+                // Procesamiento Asíncrono
+                helper('async');
+                run_async_command(sprintf('image:process "%s" "%s" 800 800 80', $originalPath, $destPath));
                 
                 $data['imagen'] = $nombre_imagen;
             }
@@ -202,7 +168,8 @@ class ProductoService
             return ['status' => 'success', 'message' => 'Producto actualizado con éxito.'];
 
         } catch (\Exception $e) {
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            log_message('error', '[ProductoService::actualizarProducto] ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Ocurrió un error interno al actualizar el producto. Intente nuevamente.'];
         }
     }
 

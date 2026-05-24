@@ -69,7 +69,7 @@ class VentasService
      *
      * @return array Estructura enriquecida con pedidos en taller ('ventas'), presupuestos ('solicitados') y métricas ('counts').
      */
-    public function getVentasConEstadisticas()
+    public function getVentasConEstadisticas($search = null, $estado = null, $filterMode = 'client')
     {
         $currentMonth = date('m');
         $currentYear = date('Y');
@@ -77,16 +77,11 @@ class VentasService
         $totalRecaudado = $this->pagosModel->selectSum('monto')->first();
         $recaudadoReal = (float) ($totalRecaudado['monto'] ?? 0);
 
-        // Recuperar únicamente los pedidos no rechazados para optimizar el rendimiento y memoria
-        $ventas = $this->ventasModel->select('ventas_cabecera.id, ventas_cabecera.fecha, ventas_cabecera.usuario_id, ventas_cabecera.total_venta, ventas_cabecera.estado, ventas_cabecera.estado_aprobacion, ventas_cabecera.tipo_pedido, ventas_cabecera.observaciones, ventas_cabecera.prioridad, usuarios.nombre, usuarios.apellido, usuarios.email, usuarios.usuario')
-                                    ->join('usuarios', 'usuarios.id_usuario = ventas_cabecera.usuario_id', 'left')
-                                    ->where('ventas_cabecera.estado_aprobacion !=', 'RECHAZADO')
-                                    ->orderBy('ventas_cabecera.prioridad', 'DESC')
-                                    ->orderBy('ventas_cabecera.fecha', 'DESC')
-                                    ->findAll();
+        // Pedidos para métricas
+        $totalVentas = $this->ventasModel->where('estado_aprobacion !=', 'RECHAZADO')->countAllResults();
 
         $counts = [
-            'total'      => count($ventas),
+            'total'      => $totalVentas,
             'mensuales'  => $this->ventasModel->countMensuales($currentMonth, $currentYear),
             'pendientes' => $this->ventasModel->countEstado('PENDIENTE') + $this->ventasModel->countEstado('ACEPTADO'),
             'en_proceso' => $this->ventasModel->countEstado('EN_PROCESO'),
@@ -94,11 +89,28 @@ class VentasService
             'ingresos'   => $recaudadoReal
         ];
 
+        $isServerMode = ($filterMode === 'server');
+
+        // Obtener ventas filtradas si hay filtro, de lo contrario todas
+        if ($search || ($estado && strtoupper($estado) !== 'ALL') || $isServerMode) {
+            $resultado = $this->ventasModel->getVentasFiltradas($search, $estado, $isServerMode);
+            $ventas = $resultado['data'];
+            $pager = $resultado['pager'];
+        } else {
+            $resultado = $this->ventasModel->getVentasFiltradas();
+            $ventas = $resultado['data'];
+            $pager = null;
+        }
+
         $ventas_procesadas = [];
         $solicitados = [];
 
+        // Solución Problema N+1: Cargar todos los totales pagados en 1 sola consulta
+        $venta_ids = array_column($ventas, 'id');
+        $totales_pagados = $this->pagosModel->getTotalesPagadosBatch($venta_ids);
+
         foreach ($ventas as &$venta) {
-            $venta['total_pagado'] = $this->pagosModel->getTotalPagado($venta['id']);
+            $venta['total_pagado'] = $totales_pagados[$venta['id']] ?? 0.0;
             $nombre_completo = ($venta['nombre'] ?? '') . ' ' . ($venta['apellido'] ?? '');
             $venta['search_data'] = strtolower(esc($venta['id'] . ' ' . $nombre_completo . ' ' . ($venta['usuario'] ?? '')));
 
@@ -109,9 +121,15 @@ class VentasService
             }
         }
 
+        // Si hay un filtro aplicado, asegúrate de que aún enviamos los "solicitados" si el filtro no los excluyó explícitamente, o obtenlos por separado si se requieren siempre.
+        // Dado que $solicitados es solo los que están en SOLICITUD, y $estado puede filtrar eso,
+        // vamos a obtener $solicitados sin aplicar filtros de búsqueda para no esconderlos si el usuario busca algo, a menos que se quiera filtrar ambos.
+        // Asumo que si se filtra, se filtran ambos (pedidos activos y solicitudes) que coincidan con la búsqueda.
+
         return [
             'ventas'      => $ventas_procesadas,
             'solicitados' => $solicitados,
+            'pager'       => $pager,
             'counts'      => $counts
         ];
     }
@@ -166,7 +184,8 @@ class VentasService
             return ['status' => 'success', 'total' => $total, 'venta_id' => $venta_id];
         } catch (\Exception $e) {
             $this->db->transRollback();
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            log_message('error', '[VentasService::procesarVenta] ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Ocurrió un error interno al procesar su solicitud. Intente nuevamente.'];
         }
     }
 
@@ -351,29 +370,21 @@ class VentasService
             return ['status' => 'success', 'venta_id' => $venta_id];
         } catch (\Exception $e) {
             $this->db->transRollback();
-            return ['status' => 'error', 'message' => $e->getMessage()];
+            log_message('error', '[VentasService::registrarPago] ' . $e->getMessage());
+            return ['status' => 'error', 'message' => 'Ocurrió un error interno al procesar el pago. Intente nuevamente.'];
         }
     }
 
-    /**
-     * Recupera el histórico de compras y pedidos completo de un usuario cliente,
-     * ordenado estrictamente en formato cronológico descendente (compras recientes primero).
-     *
-     * @param int|string $usuario_id Identificador del cliente.
-     * 
-     * @return array Colección histórica de transacciones enriquecidas con el detalle de muebles adquiridos.
-     */
-    public function getVentasPorUsuario($usuario_id)
+    public function getVentasPorUsuario($usuario_id, $filter = null, $sort = null)
     {
-        $ventas = $this->ventasModel->getVentas(null, $usuario_id);
+        $ventas = $this->ventasModel->getVentasPorUsuarioFiltradas($usuario_id, $filter, $sort);
         
-        // Ordenar estrictamente de forma cronológica descendente
-        usort($ventas, function($a, $b) {
-            return strtotime($b['fecha']) - strtotime($a['fecha']);
-        });
+        // Solución Problema N+1: Cargar todos los ítems en 1 sola consulta
+        $venta_ids = array_column($ventas, 'id');
+        $detalles_agrupados = $this->detalleModel->getDetallesBatch($venta_ids);
 
         foreach ($ventas as &$v) {
-            $v['items'] = $this->detalleModel->getDetalles($v['id']);
+            $v['items'] = $detalles_agrupados[$v['id']] ?? [];
         }
         return $ventas;
     }

@@ -48,4 +48,61 @@ class ConsultaModel extends Model
         'email'       => 'required|valid_email',
         'descripcion' => 'required|min_length[10]'
     ];
+
+    /**
+     * Calcula las estadísticas generales de las consultas directamente en la base de datos.
+     *
+     * @return array Estadísticas de consultas (total, mensuales, activos, presupuestos).
+     */
+    public function getEstadisticas()
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
+        $row = $builder->select("
+            COUNT(*) as total,
+            SUM(CASE WHEN MONTH(fecha) = {$currentMonth} AND YEAR(fecha) = {$currentYear} THEN 1 ELSE 0 END) as mensuales,
+            SUM(CASE WHEN activo = 'SI' THEN 1 ELSE 0 END) as activos,
+            SUM(CASE WHEN asunto LIKE '%presupuesto%' THEN 1 ELSE 0 END) as presupuestos
+        ")->get()->getRowArray();
+        
+        return [
+            'total'        => (int)($row['total'] ?? 0),
+            'mensuales'    => (int)($row['mensuales'] ?? 0),
+            'activos'      => (int)($row['activos'] ?? 0),
+            'presupuestos' => (int)($row['presupuestos'] ?? 0),
+        ];
+    }
+
+    public function getConsultasFiltradas($search = null, $asunto = null, $paginate = false, $perPage = 15)
+    {
+        $builder = $this->orderBy('fecha', 'DESC');
+
+        if (!empty($search)) {
+            $builder->groupStart()
+                        ->like('nombre', $search)
+                        ->orLike('apellido', $search)
+                        ->orLike('email', $search)
+                        ->orLike('asunto', $search)
+                    ->groupEnd();
+        }
+
+        if (!empty($asunto) && strtoupper($asunto) !== 'ALL') {
+            $builder->where('asunto', $asunto);
+        }
+
+        if ($paginate) {
+            return [
+                'data'  => $builder->paginate($perPage, 'consultas'),
+                'pager' => $this->pager
+            ];
+        }
+
+        return [
+            'data'  => $builder->findAll(),
+            'pager' => null
+        ];
+    }
 }
