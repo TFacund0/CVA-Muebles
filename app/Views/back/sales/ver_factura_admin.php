@@ -52,13 +52,13 @@
         <a href="<?= base_url('ventas/gestion/' . $venta['id']) ?>" class="btn btn-admin-primary rounded-pill px-4 py-2 shadow-gold justify-content-center" style="transition: all 0.3s ease;">
             <i class="bi bi-sliders2 me-2"></i> GESTIONAR PEDIDO
         </a>
-        <button onclick="window.print()" class="btn text-cva-brown bg-light border-gold border-opacity-50 border-2 rounded-pill px-4 py-2 justify-content-center shadow-sm" style="transition: all 0.3s ease;" onmouseover="this.classList.replace('bg-light', 'bg-gold-light'); this.classList.replace('text-cva-brown', 'text-gold-dark'); this.style.transform='translateY(-2px)'" onmouseout="this.classList.replace('bg-gold-light', 'bg-light'); this.classList.replace('text-gold-dark', 'text-cva-brown'); this.style.transform='translateY(0)'">
+        <button onclick="descargarPDF()" id="btn-download-pdf" class="btn text-cva-brown bg-light border-gold border-opacity-50 border-2 rounded-pill px-4 py-2 justify-content-center shadow-sm" style="transition: all 0.3s ease;" onmouseover="this.classList.replace('bg-light', 'bg-gold-light'); this.classList.replace('text-cva-brown', 'text-gold-dark'); this.style.transform='translateY(-2px)'" onmouseout="this.classList.replace('bg-gold-light', 'bg-light'); this.classList.replace('text-gold-dark', 'text-cva-brown'); this.style.transform='translateY(0)'">
             <i class="bi bi-file-earmark-pdf-fill me-2 text-danger"></i> GENERAR PDF
         </button>
     </div>
 </div>
 
-<div class="row g-4">
+<div class="row g-4" id="factura-content">
     <!-- Detalle del Pedido -->
     <div class="col-lg-8">
         <div class="admin-card-v2 p-4 p-md-5 h-100">
@@ -182,5 +182,40 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
+<!-- Librería para generar PDFs desde el Frontend -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+    function descargarPDF() {
+        const btn = document.getElementById('btn-download-pdf');
+        const content = document.getElementById('factura-content');
+        const originalText = btn.innerHTML;
+        
+        // Estado de carga
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>GENERANDO...';
+        btn.disabled = true;
+
+        // Opciones de configuración del PDF
+        const opt = {
+            margin:       0.5,
+            filename:     'Comprobante_Admin_Pedido_<?= $venta['id'] ?>.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Generar y descargar
+        html2pdf().set(opt).from(content).save().then(() => {
+            // Restaurar botón
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }).catch(err => {
+            console.error('Error al generar PDF:', err);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            alert('Ocurrió un error al generar el PDF. Por favor intenta de nuevo.');
+        });
+    }
+</script>
 <script src="<?= base_url('assets/js/admin/sales.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>
