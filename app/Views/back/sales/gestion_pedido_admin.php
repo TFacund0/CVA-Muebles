@@ -195,8 +195,8 @@
                     <div class="mb-4 text-center p-3 border rounded-4 bg-light">
                         <span class="admin-label mb-2 d-block">Imagen de Referencia / Boceto</span>
                         <div class="product-img-zoom-container rounded-3 overflow-hidden shadow-sm d-inline-block" style="max-width: 100%;">
-                            <a href="<?= base_url('assets/uploads/referencias/' . $img_ref) ?>" target="_blank">
-                                <img src="<?= base_url('assets/uploads/referencias/' . $img_ref) ?>" 
+                            <a href="<?= (strpos($img_ref, 'http') === 0) ? $img_ref : base_url('assets/uploads/referencias/' . $img_ref) ?>" target="_blank">
+                                <img src="<?= (strpos($img_ref, 'http') === 0) ? $img_ref : base_url('assets/uploads/referencias/' . $img_ref) ?>" 
                                      class="img-fluid transition-all" style="max-height: 400px;" alt="Referencia">
                             </a>
                         </div>
@@ -247,7 +247,7 @@
                             <td class="ps-4 py-3" data-label="IMAGEN">
                                 <?php if (!empty($det['imagen'])): ?>
                                     <div class="product-img-zoom-container rounded-3 border overflow-hidden shadow-sm" style="width: 70px; height: 70px;">
-                                        <img src="<?= base_url('assets/uploads/' . $det['imagen']) ?>" 
+                                        <img src="<?= (strpos($det['imagen'], 'http') === 0) ? $det['imagen'] : base_url('assets/uploads/' . $det['imagen']) ?>" 
                                              class="img-fluid h-100 w-100 object-fit-cover transition-all" 
                                              alt="<?= esc($det['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?>">
                                     </div>

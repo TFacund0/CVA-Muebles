@@ -121,7 +121,7 @@ if ($env_cart_enabled) {
       <div class="user-profile-card p-4 text-center">
         <div class="avatar-wrapper mx-auto mb-3" style="width: 80px; height: 80px;">
           <div class="avatar-bg shadow-sm">
-            <?php if (!empty($imagen)): ?><img src="<?= base_url('assets/uploads/perfil/' . $imagen) ?>" alt="Perfil"><?php else: ?><i class="bi bi-person-fill text-secondary" style="font-size: 3rem;"></i><?php endif; ?>
+            <?php if (!empty($imagen)): ?><img src="<?= (strpos($imagen, 'http') === 0) ? $imagen : base_url('assets/uploads/perfil/' . $imagen) ?>" alt="Perfil"><?php else: ?><i class="bi bi-person-fill text-secondary" style="font-size: 3rem;"></i><?php endif; ?>
           </div>
         </div>
         <h5 class="mb-1 fw-bold"><?= esc($nombre) ?></h5>

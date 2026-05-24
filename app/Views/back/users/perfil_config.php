@@ -48,7 +48,7 @@
         <aside class="profile-sidebar-summary">
             <div class="avatar-circle-v3">
                 <?php if (!empty($image)): ?>
-                    <img src="<?= base_url('assets/uploads/perfil/' . $image) ?>" alt="Perfil" id="previewImg">
+                    <img src="<?= (strpos($image, 'http') === 0) ? $image : base_url('assets/uploads/perfil/' . $image) ?>" alt="Perfil" id="previewImg">
                 <?php else: ?>
                     <div class="avatar-placeholder-v3">
                         <i class="bi bi-person-fill"></i>

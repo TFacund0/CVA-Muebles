@@ -86,19 +86,15 @@ class ProductoService
     {
         try {
             if ($image && $image->isValid() && !$image->hasMoved()) {
-                $tempName = $image->getRandomName();
-                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
-                
-                $image->move(FCPATH . 'assets/uploads', $tempName);
-                
-                $originalPath = FCPATH . 'assets/uploads/' . $tempName;
-                $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
-                
-                // Procesamiento Asíncrono
-                helper('async');
-                run_async_command(sprintf('image:process "%s" "%s" 800 800 80', $originalPath, $destPath));
-                
-                $data['imagen'] = $nombre_imagen;
+                $cloudinaryService = new \App\Services\CloudinaryService();
+                $tmpPath = $image->getTempName();
+                $resultadoCloud = $cloudinaryService->subirImagen($tmpPath, 'cva_muebles/productos');
+
+                if ($resultadoCloud['status'] === 'success') {
+                    $data['imagen'] = $resultadoCloud['url'];
+                } else {
+                    return ['status' => 'error', 'message' => $resultadoCloud['message']];
+                }
             }
 
             if ($this->productoModel->insert($data) === false) {
@@ -132,28 +128,31 @@ class ProductoService
     {
         try {
             if ($image && $image->isValid() && !$image->hasMoved()) {
-                // Borrar imagen anterior si existe
                 $producto_actual = $this->productoModel->find($id);
+                $cloudinaryService = new \App\Services\CloudinaryService();
+
+                // Borrar imagen anterior en la nube si existe
                 if ($producto_actual && !empty($producto_actual['imagen'])) {
-                    $old_path = FCPATH . 'assets/uploads/' . $producto_actual['imagen'];
-                    if (file_exists($old_path)) {
-                        @unlink($old_path);
+                    $publicId = $cloudinaryService->extractPublicIdFromUrl($producto_actual['imagen']);
+                    if ($publicId) {
+                        $cloudinaryService->eliminarImagen($publicId);
+                    } else {
+                        // Borrado físico por retrocompatibilidad
+                        $old_path = FCPATH . 'assets/uploads/' . $producto_actual['imagen'];
+                        if (file_exists($old_path)) @unlink($old_path);
+                        $old_webp = FCPATH . 'assets/uploads/' . pathinfo($producto_actual['imagen'], PATHINFO_FILENAME) . '.webp';
+                        if (file_exists($old_webp)) @unlink($old_webp);
                     }
                 }
 
-                $tempName = $image->getRandomName();
-                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
-                
-                $image->move(FCPATH . 'assets/uploads', $tempName);
-                
-                $originalPath = FCPATH . 'assets/uploads/' . $tempName;
-                $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
-                
-                // Procesamiento Asíncrono
-                helper('async');
-                run_async_command(sprintf('image:process "%s" "%s" 800 800 80', $originalPath, $destPath));
-                
-                $data['imagen'] = $nombre_imagen;
+                $tmpPath = $image->getTempName();
+                $resultadoCloud = $cloudinaryService->subirImagen($tmpPath, 'cva_muebles/productos');
+
+                if ($resultadoCloud['status'] === 'success') {
+                    $data['imagen'] = $resultadoCloud['url'];
+                } else {
+                    return ['status' => 'error', 'message' => $resultadoCloud['message']];
+                }
             }
 
             if ($this->productoModel->update($id, $data) === false) {
@@ -240,49 +239,25 @@ class ProductoService
             return false;
         }
 
+        $cloudinaryService = new \App\Services\CloudinaryService();
         $count = 0;
+        
         foreach ($files as $img) {
             if ($img->isValid() && !$img->hasMoved()) {
-                $tempName = $img->getRandomName();
-                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
-                
-                $img->move(FCPATH . 'assets/uploads', $tempName);
-                
-                $originalPath = FCPATH . 'assets/uploads/' . $tempName;
-                $destPath = FCPATH . 'assets/uploads/' . $nombre_imagen;
-                
-                try {
-                    $imageService = \Config\Services::image();
-                    $imageService->withFile($originalPath);
-                    
-                    $width = $imageService->getWidth();
-                    $height = $imageService->getHeight();
-                    
-                    if ($width > 800 || $height > 800) {
-                        $imageService->resize(800, 800, true, 'auto');
-                    }
-                    
-                    $imageService->save($destPath, 80);
-                    
-                    if ($originalPath !== $destPath && file_exists($originalPath)) {
-                        @unlink($originalPath);
-                    }
-                    
+                $tmpPath = $img->getTempName();
+                $resultadoCloud = $cloudinaryService->subirImagen($tmpPath, 'cva_muebles/galeria');
+
+                if ($resultadoCloud['status'] === 'success') {
                     $this->imagenModel->insert([
                         'producto_id' => $producto_id,
-                        'imagen'      => $nombre_imagen,
+                        'imagen'      => $resultadoCloud['url'],
                         'orden'       => 0
                     ]);
                     $count++;
-                } catch (\Exception $e) {
-                    if (file_exists($originalPath)) {
-                        @unlink($originalPath);
-                    }
-                    log_message('error', 'Error optimizando imagen de galería: ' . $e->getMessage());
                 }
             }
         }
-        return $count > 0;
+        return ($count > 0);
     }
 
     /**
@@ -293,17 +268,27 @@ class ProductoService
      * 
      * @return bool True si la imagen secundaria fue eliminada correcta física y lógicamente; false si no existe.
      */
-    public function eliminarImagenGaleria($id)
+    public function eliminarFotoGaleria($foto_id)
     {
-        $img = $this->imagenModel->find($id);
-        if ($img) {
-            $path = FCPATH . 'assets/uploads/' . $img['imagen'];
-            if (file_exists($path)) {
-                @unlink($path);
-            }
-            return $this->imagenModel->delete($id);
+        $foto = $this->imagenModel->find($foto_id);
+        if (!$foto) {
+            return false;
         }
-        return false;
+
+        $cloudinaryService = new \App\Services\CloudinaryService();
+        $publicId = $cloudinaryService->extractPublicIdFromUrl($foto['imagen']);
+        
+        if ($publicId) {
+            $cloudinaryService->eliminarImagen($publicId);
+        } else {
+            // Retrocompatibilidad
+            $path = FCPATH . 'assets/uploads/' . $foto['imagen'];
+            if (file_exists($path)) @unlink($path);
+            $path_webp = FCPATH . 'assets/uploads/' . pathinfo($foto['imagen'], PATHINFO_FILENAME) . '.webp';
+            if (file_exists($path_webp)) @unlink($path_webp);
+        }
+
+        return $this->imagenModel->delete($foto_id);
     }
 
     /**

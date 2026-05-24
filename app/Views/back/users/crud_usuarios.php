@@ -189,7 +189,7 @@
                                 <div class="position-relative">
                                     <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
                                         <?php if (!empty($u['imagen'])): ?>
-                                            <img src="<?= base_url('assets/uploads/perfil/' . $u['imagen']) ?>" class="rounded-circle w-100 h-100" style="object-fit: cover;">
+                                            <img src="<?= (strpos($u['imagen'], 'http') === 0) ? $u['imagen'] : base_url('assets/uploads/perfil/' . $u['imagen']) ?>" class="rounded-circle w-100 h-100" style="object-fit: cover;">
                                         <?php else: ?>
                                             <?= substr($u['nombre'], 0, 1) ?><?= substr($u['apellido'], 0, 1) ?>
                                         <?php endif; ?>

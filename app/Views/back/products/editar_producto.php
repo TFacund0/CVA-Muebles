@@ -78,7 +78,7 @@
                 </div>
                 <div class="p-4">
                     <div class="product-preview-container mb-4 position-relative bg-light rounded-4 border overflow-hidden" style="height: 350px;">
-                        <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" 
+                        <img src="<?= (strpos($producto['imagen'], 'http') === 0) ? $producto['imagen'] : base_url('assets/uploads/' . $producto['imagen']) ?>" 
                              class="img-fluid w-100 h-100" 
                              style="object-fit: contain;" 
                              id="main-preview">
@@ -175,7 +175,7 @@
                             <?php foreach($producto['galeria'] as $img): ?>
                                 <div class="col-4 col-md-3 col-lg-2">
                                     <div class="gallery-item-admin rounded-3 overflow-hidden shadow-sm position-relative border">
-                                        <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" class="img-fluid w-100" style="height: 100px; object-fit: cover;">
+                                        <img src="<?= (strpos($img['imagen'], 'http') === 0) ? $img['imagen'] : base_url('assets/uploads/' . $img['imagen']) ?>" class="img-fluid w-100" style="height: 100px; object-fit: cover;">
                                         <div class="gallery-actions position-absolute top-0 end-0 p-1">
                                             <a href="<?= base_url('/admin/productos/eliminar-foto/' . $img['id']) ?>" 
                                                class="btn btn-danger btn-sm rounded-circle p-1" 

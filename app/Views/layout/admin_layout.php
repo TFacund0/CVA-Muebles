@@ -81,7 +81,7 @@
                                 ?>
                                 <div class="avatar-circle-wrapper" style="width: 50px; height: 50px;">
                                     <?php if ($imagen_user): ?>
-                                        <img src="<?= base_url('assets/uploads/perfil/' . $imagen_user) ?>" 
+                                        <img src="<?= (strpos($imagen_user, 'http') === 0) ? $imagen_user : base_url('assets/uploads/perfil/' . $imagen_user) ?>" 
                                              class="avatar-circle shadow-sm border border-gold" 
                                              style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" 
                                              alt="Perfil"

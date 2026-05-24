@@ -160,18 +160,32 @@ class UsuarioService
             ];
 
             if ($image && $image->isValid() && !$image->hasMoved()) {
-                // Borrar imagen anterior si existe
                 $user_actual = $this->usuarioModel->find($userId);
+                
+                $cloudinaryService = new \App\Services\CloudinaryService();
+
+                // Borrar imagen anterior en la nube si existe
                 if ($user_actual && !empty($user_actual['imagen'])) {
-                    $old_path = FCPATH . 'assets/uploads/perfil/' . $user_actual['imagen'];
-                    if (file_exists($old_path)) {
-                        @unlink($old_path);
+                    $publicId = $cloudinaryService->extractPublicIdFromUrl($user_actual['imagen']);
+                    if ($publicId) {
+                        $cloudinaryService->eliminarImagen($publicId);
+                    } else {
+                        // Borrar física si era una imagen vieja en local (retrocompatibilidad)
+                        $old_path = FCPATH . 'assets/uploads/perfil/' . $user_actual['imagen'];
+                        if (file_exists($old_path)) @unlink($old_path);
                     }
                 }
 
-                $nombre_imagen = $image->getRandomName();
-                $image->move(FCPATH . 'assets/uploads/perfil', $nombre_imagen);
-                $updateData['imagen'] = $nombre_imagen;
+                // Subir a la nube
+                $tmpPath = $image->getTempName();
+                $resultadoCloud = $cloudinaryService->subirImagen($tmpPath, 'cva_muebles/avatares');
+
+                if ($resultadoCloud['status'] === 'success') {
+                    // Guardamos la URL de la nube en la base de datos
+                    $updateData['imagen'] = $resultadoCloud['url'];
+                } else {
+                    return ['status' => 'error', 'message' => $resultadoCloud['message']];
+                }
             }
 
             if ($this->usuarioModel->update($userId, $updateData) === false) {

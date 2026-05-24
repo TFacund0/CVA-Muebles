@@ -103,7 +103,7 @@
                                         <div id="preview-<?= $item['id'] ?>" class="product-preview-card position-absolute z-3 shadow-lg border-gold border-opacity-25" style="width: 320px; left: calc(100% + 20px); top: -40px;">
                                             <div class="text-center mb-3">
                                                 <?php if(!empty($item['imagen'])): ?>
-                                                    <img src="<?= base_url('assets/uploads/productos/' . $item['imagen']) ?>" class="preview-img mb-3 rounded shadow-sm" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px;" alt="<?= esc($item['nombre_prod'] ?? 'Mueble a Medida') ?>">
+                                                    <img src="<?= (strpos($item['imagen'], 'http') === 0) ? $item['imagen'] : base_url('assets/uploads/' . $item['imagen']) ?>" class="preview-img mb-3 rounded shadow-sm" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px;" alt="<?= esc($item['nombre_prod'] ?? 'Mueble a Medida') ?>">
                                                 <?php else: ?>
                                                     <div class="preview-img bg-light d-flex align-items-center justify-content-center mx-auto mb-3 rounded shadow-sm" style="width: 100%; height: 180px; border-radius: 8px;">
                                                         <i class="bi bi-hammer text-muted display-6"></i>

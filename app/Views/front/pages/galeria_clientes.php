@@ -100,7 +100,7 @@
             <?php else: ?>
                 <?php foreach ($fotos as $foto): ?>
                     <div class="gallery-item">
-                        <img src="<?= base_url('assets/uploads/galeria/' . $foto['imagen']) ?>" alt="CVA en hogar" loading="lazy">
+                        <img src="<?= (strpos($foto['imagen'], 'http') === 0) ? $foto['imagen'] : base_url('assets/uploads/galeria/' . $foto['imagen']) ?>" alt="CVA en hogar" loading="lazy">
                         <div class="gallery-info">
                             <span class="gallery-author">En el hogar de <?= esc($foto['nombre']) ?></span>
                             <p class="text-muted small mt-2 mb-0">"<?= esc($foto['comentario']) ?>"</p>

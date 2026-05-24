@@ -208,7 +208,7 @@
                             <td class="ps-4" data-label="PIEZA">
                                 <div class="d-flex align-items-center gap-3 py-3 product-info-wrapper">
                                     <div class="flex-shrink-0 position-relative product-img-container">
-                                        <img src="<?= base_url('assets/uploads/' . $p['imagen']) ?>" 
+                                        <img src="<?= (strpos($p['imagen'], 'http') === 0) ? $p['imagen'] : base_url('assets/uploads/' . $p['imagen']) ?>" 
                                              class="rounded-3 shadow-sm border p-1 bg-white transition-transform" style="width: 80px; height: 80px; object-fit: cover;">
                                         <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-md-none" style="transform: translate(-20%, -20%); font-size: 0.7rem; border: 1px solid var(--cva-gold); z-index: 1;">#<?= $p['id_producto'] ?></span>
                                     </div>

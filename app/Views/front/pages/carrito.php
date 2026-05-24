@@ -65,7 +65,7 @@
                                     <span class="x-small text-muted mt-2 fw-bold" style="font-size: 0.6rem;">PEDIR</span>
                                 </div>
                                 <div class="cart-img-wrapper">
-                                    <img src="<?= base_url('assets/uploads/' . $item['imagen']) ?>" alt="<?= esc($item['name']) ?>">
+                                    <img src="<?= (strpos($item['imagen'], 'http') === 0) ? $item['imagen'] : base_url('assets/uploads/' . $item['imagen']) ?>" alt="<?= esc($item['name']) ?>">
                                 </div>
 
                                 <div class="flex-grow-1">

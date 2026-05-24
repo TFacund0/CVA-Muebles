@@ -69,7 +69,7 @@
                                             <div id="preview-<?= $item['id'] ?>" class="product-preview-card position-absolute z-3" style="width: 320px; left: calc(100% + 20px); top: -40px;">
                                                 <div class="text-center mb-3">
                                                     <?php if(!empty($item['imagen'])): ?>
-                                                        <img src="<?= base_url('assets/uploads/' . $item['imagen']) ?>" class="preview-img mb-3" alt="<?= esc($item['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?>">
+                                                        <img src="<?= (strpos($item['imagen'], 'http') === 0) ? $item['imagen'] : base_url('assets/uploads/' . $item['imagen']) ?>" class="preview-img mb-3" alt="<?= esc($item['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?>">
                                                     <?php else: ?>
                                                         <div class="preview-img bg-light d-flex align-items-center justify-content-center mx-auto mb-3">
                                                             <i class="bi bi-hammer text-muted display-6"></i>

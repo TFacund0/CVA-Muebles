@@ -277,8 +277,8 @@ class ProductoController extends BaseController
      */
     public function eliminar_foto_galeria($id) 
     {
-        if ($this->productoService->eliminarImagenGaleria($id)) {
-            return redirect()->back()->with('success', 'Imagen eliminada.');
+        if ($this->productoService->eliminarFotoGaleria($id)) {
+            return redirect()->back()->with('success', 'Imagen eliminada de la nube.');
         }
         return redirect()->back()->with('fail', 'No se pudo eliminar la imagen.');
     }

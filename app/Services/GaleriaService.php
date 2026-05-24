@@ -83,31 +83,20 @@ class GaleriaService
     public function subir($usuario_id, UploadedFile $img, $comentario)
     {
         if ($img->isValid() && !$img->hasMoved()) {
-            try {
-                $tempName = $img->getRandomName();
-                $nombre_imagen = pathinfo($tempName, PATHINFO_FILENAME) . '.webp';
-                
-                $img->move(FCPATH . 'assets/uploads/galeria', $tempName);
-                
-                $originalPath = FCPATH . 'assets/uploads/galeria/' . $tempName;
-                $destPath = FCPATH . 'assets/uploads/galeria/' . $nombre_imagen;
-                
-                // Procesamiento Asíncrono
-                helper('async');
-                run_async_command(sprintf('image:process "%s" "%s" 1200 1200 80', $originalPath, $destPath));
+            $cloudinaryService = new \App\Services\CloudinaryService();
+            $tmpPath = $img->getTempName();
+            $resultadoCloud = $cloudinaryService->subirImagen($tmpPath, 'cva_muebles/galeria');
 
+            if ($resultadoCloud['status'] === 'success') {
                 return $this->galeriaModel->insert([
                     'usuario_id' => $usuario_id,
-                    'imagen'     => $nombre_imagen,
+                    'imagen'     => $resultadoCloud['url'],
                     'comentario' => $comentario,
                     'fecha'      => date('Y-m-d H:i:s'),
                     'activo'     => 'NO'
                 ]);
-            } catch (\Exception $e) {
-                if (isset($originalPath) && file_exists($originalPath)) {
-                    @unlink($originalPath);
-                }
-                log_message('error', 'Error al optimizar imagen en galería de cliente: ' . $e->getMessage());
+            } else {
+                log_message('error', 'Error al subir imagen en galería de cliente: ' . $resultadoCloud['message']);
                 return false;
             }
         }
@@ -138,9 +127,16 @@ class GaleriaService
     {
         $foto = $this->galeriaModel->find($id);
         if ($foto) {
-            $path = FCPATH . 'assets/uploads/galeria/' . $foto['imagen'];
-            if (file_exists($path)) {
-                @unlink($path);
+            $cloudinaryService = new \App\Services\CloudinaryService();
+            $publicId = $cloudinaryService->extractPublicIdFromUrl($foto['imagen']);
+            if ($publicId) {
+                $cloudinaryService->eliminarImagen($publicId);
+            } else {
+                // Retrocompatibilidad local
+                $path = FCPATH . 'assets/uploads/galeria/' . $foto['imagen'];
+                if (file_exists($path)) {
+                    @unlink($path);
+                }
             }
             return $this->galeriaModel->delete($id);
         }

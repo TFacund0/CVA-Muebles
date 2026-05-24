@@ -45,7 +45,7 @@
             <!-- Columna de Imagen -->
             <div class="col-lg-6 image-column">
                 <div class="image-container main-image-box shadow-sm rounded-4 overflow-hidden mb-3 position-relative">
-                    <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" 
+                    <img src="<?= (strpos($producto['imagen'], 'http') === 0) ? $producto['imagen'] : base_url('assets/uploads/' . $producto['imagen']) ?>" 
                          class="img-fluid main-img" 
                          id="main-product-img"
                          alt="<?= esc($producto['nombre_prod']) ?>">
@@ -65,11 +65,11 @@
                     <div class="product-gallery-thumbs d-flex gap-2 overflow-auto pb-2">
                         <!-- Imagen Principal como miniatura -->
                         <div class="thumb-item active">
-                            <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" alt="Principal" loading="lazy">
+                            <img src="<?= (strpos($producto['imagen'], 'http') === 0) ? $producto['imagen'] : base_url('assets/uploads/' . $producto['imagen']) ?>" alt="Principal" loading="lazy">
                         </div>
                         <?php foreach($producto['galeria'] as $img): ?>
                             <div class="thumb-item">
-                                <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" alt="Galería" loading="lazy">
+                                <img src="<?= (strpos($img['imagen'], 'http') === 0) ? $img['imagen'] : base_url('assets/uploads/' . $img['imagen']) ?>" alt="Galería" loading="lazy">
                             </div>
                         <?php endforeach; ?>
                     </div>

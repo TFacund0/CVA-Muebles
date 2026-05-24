@@ -23,7 +23,7 @@
 ?>
 <div class="product-card h-100 d-flex flex-column" data-aos="fade-up">
     <div class="img-wrapper position-relative">
-        <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>"
+        <img src="<?= (strpos($producto['imagen'], 'http') === 0) ? $producto['imagen'] : base_url('assets/uploads/' . $producto['imagen']) ?>"
             class="card-img-top img-fluid"
             alt="<?= esc($producto['nombre_prod']) ?>"
             loading="lazy">

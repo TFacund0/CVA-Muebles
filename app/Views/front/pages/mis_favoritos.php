@@ -100,7 +100,7 @@
                 <div class="col-lg-4 col-md-6 fav-item" data-categorias="<?= esc($cat_lower) ?>" data-nombre="<?= esc($nombre_lower) ?>">
                     <div class="fav-card">
                         <div class="fav-img-wrapper">
-                            <img src="<?= base_url('assets/uploads/' . $fav['imagen']) ?>" alt="<?= $fav['nombre_prod'] ?>">
+                            <img src="<?= (strpos($fav['imagen'], 'http') === 0) ? $fav['imagen'] : base_url('assets/uploads/' . $fav['imagen']) ?>" alt="<?= $fav['nombre_prod'] ?>">
                             <button data-id="<?= $fav['producto_id'] ?>" class="remove-fav-btn shadow-sm" title="Quitar de favoritos">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>

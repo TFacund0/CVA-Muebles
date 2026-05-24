@@ -339,8 +339,12 @@ class VentasService
             // Manejo de Imagen Opcional de croquis o referencia constructiva
             $img_ref = "";
             if ($file && $file->isValid() && !$file->hasMoved()) {
-                $img_ref = $file->getRandomName();
-                $file->move(FCPATH . 'assets/uploads/referencias/', $img_ref);
+                $cloudinaryService = new \App\Services\CloudinaryService();
+                $tmpPath = $file->getTempName();
+                $resultadoCloud = $cloudinaryService->subirImagen($tmpPath, 'cva_muebles/referencias');
+                if ($resultadoCloud['status'] === 'success') {
+                    $img_ref = $resultadoCloud['url'];
+                }
             }
 
             $observaciones = "CLIENTE: " . $data['nombre_cliente'] . "\n" . $data['detalles_obra'];
