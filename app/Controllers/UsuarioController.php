@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\UsuarioService;
+use App\Services\GoogleAuthService;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
@@ -235,6 +236,48 @@ class UsuarioController extends BaseController
             return redirect()->to('/crud-usuarios?vista=SI')->with('success', $resultado['message']);
         } else {
             return redirect()->to('/crud-usuarios?vista=SI')->with('fail', $resultado['message']);
+        }
+    }
+
+    /**
+     * Redirige al usuario a la página de autenticación de Google.
+     */
+    public function loginGoogle()
+    {
+        $googleAuth = new GoogleAuthService();
+        return redirect()->to($googleAuth->getLoginUrl());
+    }
+
+    /**
+     * Maneja la redirección (callback) desde Google después de la autenticación.
+     */
+    public function callbackGoogle()
+    {
+        $code = $this->request->getGet('code');
+        if (!$code) {
+            return redirect()->to('/login')->with('fail', 'La autenticación con Google fue cancelada.');
+        }
+
+        $googleAuth = new GoogleAuthService();
+        $accessToken = $googleAuth->authenticate($code);
+
+        if (!$accessToken) {
+            return redirect()->to('/login')->with('fail', 'Error al obtener el token de Google. Verifica tus credenciales.');
+        }
+
+        $profile = $googleAuth->getUserProfile($accessToken);
+
+        if (!$profile || empty($profile['email'])) {
+            return redirect()->to('/login')->with('fail', 'No se pudo leer el perfil o el email de tu cuenta de Google.');
+        }
+
+        $resultado = $this->usuarioService->loginOrRegisterGoogle($profile);
+
+        if ($resultado['status'] === 'success') {
+            session()->set($resultado['data']);
+            return redirect()->to('/')->with('success', $resultado['message']);
+        } else {
+            return redirect()->to('/login')->with('fail', $resultado['message']);
         }
     }
 }

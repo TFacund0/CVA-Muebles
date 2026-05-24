@@ -75,6 +75,90 @@ class UsuarioService
     }
 
     /**
+     * Procesa la autenticación o registro automático desde Google OAuth.
+     *
+     * @param array $profile Datos del perfil obtenidos de la API de Google (email, name, picture, etc).
+     * @return array Resumen de estado de la operación.
+     */
+    public function loginOrRegisterGoogle($profile)
+    {
+        // 1. Buscar si el email ya existe
+        $usuario = $this->usuarioModel->where('email', $profile['email'])->first();
+
+        if ($usuario) {
+            // El usuario existe. Verificamos que no esté dado de baja.
+            if ($usuario['baja'] == 'SI') {
+                return ['status' => 'error', 'message' => 'Tu cuenta ha sido suspendida por el administrador.'];
+            }
+
+            // Actualizamos la foto de perfil si Google trajo una y el usuario no tenía (o la actualizamos siempre)
+            if (!empty($profile['picture']) && empty($usuario['imagen'])) {
+                $this->usuarioModel->update($usuario['id_usuario'], ['imagen' => $profile['picture']]);
+                $usuario['imagen'] = $profile['picture'];
+            }
+
+            // Lo logueamos
+            return [
+                'status' => 'success',
+                'message'=> '¡Bienvenido nuevamente!',
+                'data'   => [
+                    'id_usuario' => $usuario['id_usuario'],
+                    'nombre'     => $usuario['nombre'],
+                    'apellido'   => $usuario['apellido'],
+                    'email'      => $usuario['email'],
+                    'usuario'    => $usuario['usuario'],
+                    'perfil_id'  => $usuario['perfil_id'],
+                    'imagen'     => $usuario['imagen'],
+                    'logged_in'  => TRUE
+                ]
+            ];
+        }
+
+        // 2. El usuario NO existe, lo registramos automáticamente
+        $randomPassword = bin2hex(random_bytes(10)); // Contraseña imposible de adivinar
+        
+        // Google devuelve 'name' y 'given_name', 'family_name'. Usaremos given_name y family_name si existen.
+        $nombre = $profile['given_name'] ?? ($profile['name'] ?? 'Usuario');
+        $apellido = $profile['family_name'] ?? '';
+        
+        // Creamos un nombre de usuario basado en el email
+        $nickname = explode('@', $profile['email'])[0];
+
+        $userData = [
+            'nombre'    => $nombre,
+            'apellido'  => $apellido,
+            'usuario'   => $nickname,
+            'email'     => $profile['email'],
+            'pass'      => password_hash($randomPassword, PASSWORD_DEFAULT),
+            'perfil_id' => 2, // Perfil de cliente
+            'imagen'    => $profile['picture'] ?? null,
+            'baja'      => 'NO'
+        ];
+
+        $insertId = $this->usuarioModel->insert($userData);
+
+        if (!$insertId) {
+            return ['status' => 'error', 'message' => 'Hubo un error al crear tu cuenta desde Google.'];
+        }
+
+        // Lo logueamos inmediatamente
+        return [
+            'status' => 'success',
+            'message'=> '¡Cuenta creada con éxito vía Google!',
+            'data'   => [
+                'id_usuario' => $insertId,
+                'nombre'     => $nombre,
+                'apellido'   => $apellido,
+                'email'      => $profile['email'],
+                'usuario'    => $nickname,
+                'perfil_id'  => 2,
+                'imagen'     => $userData['imagen'],
+                'logged_in'  => TRUE
+            ]
+        ];
+    }
+
+    /**
      * Recupera el listado total de usuarios del sistema y computa indicadores clave
      * (totales, activos, administradores, suspendidos) para el panel de administración.
      *

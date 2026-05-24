@@ -37,6 +37,10 @@ $routes->get('/login', 'LoginController::create');
 $routes->post('/enviar-login', 'LoginController::auth');
 $routes->get('/logout', 'LoginController::logout');
 
+// -------------------- Google OAuth 2.0 --------------------
+$routes->get('/usuario/login-google', 'UsuarioController::loginGoogle');
+$routes->get('/usuario/google-callback', 'UsuarioController::callbackGoogle');
+
 // -------------------- Consultas públicas --------------------
 $routes->post('/enviar-consulta', 'ConsultaController::cargarConsulta');
 
