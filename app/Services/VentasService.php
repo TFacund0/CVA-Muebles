@@ -181,6 +181,27 @@ class VentasService
             }
 
             $this->db->transComplete();
+
+            try {
+                $usuarioService = new \App\Services\UsuarioService();
+                $usuario = $usuarioService->getUsuario($usuario_id);
+                if ($usuario && !empty($usuario['email'])) {
+                    $emailService = new \App\Services\EmailService();
+                    $articulosFormatted = [];
+                    foreach ($items_seleccionados as $item) {
+                        $articulosFormatted[] = [
+                            'nombre'   => $item['name'],
+                            'cantidad' => $item['qty'],
+                            'subtotal' => $item['price'] * $item['qty']
+                        ];
+                    }
+                    $nombreCompleto = $usuario['nombre'] . ' ' . $usuario['apellido'];
+                    $emailService->enviarConfirmacionPedido($usuario['email'], $nombreCompleto, $venta_id, $total, $articulosFormatted);
+                }
+            } catch (\Exception $emailEx) {
+                log_message('error', '[VentasService::procesarVenta] Error al enviar email: ' . $emailEx->getMessage());
+            }
+
             return ['status' => 'success', 'total' => $total, 'venta_id' => $venta_id];
         } catch (\Exception $e) {
             $this->db->transRollback();
@@ -243,6 +264,22 @@ class VentasService
                 ]);
 
                 $this->db->transComplete();
+
+                // Notificar Aceptación o Rechazo
+                try {
+                    $usuarioService = new \App\Services\UsuarioService();
+                    $usuario = $usuarioService->getUsuario($venta_actual['usuario_id']);
+                    if ($usuario && !empty($usuario['email'])) {
+                        $emailService = new \App\Services\EmailService();
+                        $nombreCompleto = $usuario['nombre'] . ' ' . $usuario['apellido'];
+                        // Si es aceptado, el estado del pedido pasa a PENDIENTE
+                        $estadoEmail = ($estado == 'ACEPTADO') ? 'PENDIENTE' : 'RECHAZADO';
+                        $emailService->enviarActualizacionEstado($usuario['email'], $nombreCompleto, $venta_id, $estadoEmail);
+                    }
+                } catch (\Exception $emailEx) {
+                    log_message('error', '[VentasService::actualizarEstado] Error al enviar email de aprobacion: ' . $emailEx->getMessage());
+                }
+
                 return true;
             } catch (\Exception $e) {
                 $this->db->transRollback();
@@ -251,7 +288,23 @@ class VentasService
         }
 
         // --- FLUJO DE PRODUCCIÓN (PENDIENTE -> EN_PROCESO -> TERMINADO -> ENTREGADO) ---
-        return $this->ventasModel->update($venta_id, ['estado' => $estado]);
+        $resultado = $this->ventasModel->update($venta_id, ['estado' => $estado]);
+        
+        if ($resultado) {
+            try {
+                $usuarioService = new \App\Services\UsuarioService();
+                $usuario = $usuarioService->getUsuario($venta_actual['usuario_id']);
+                if ($usuario && !empty($usuario['email'])) {
+                    $emailService = new \App\Services\EmailService();
+                    $nombreCompleto = $usuario['nombre'] . ' ' . $usuario['apellido'];
+                    $emailService->enviarActualizacionEstado($usuario['email'], $nombreCompleto, $venta_id, $estado);
+                }
+            } catch (\Exception $emailEx) {
+                log_message('error', '[VentasService::actualizarEstado] Error al enviar email de estado: ' . $emailEx->getMessage());
+            }
+        }
+        
+        return $resultado;
     }
 
     /**

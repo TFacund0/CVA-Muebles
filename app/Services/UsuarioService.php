@@ -186,6 +186,15 @@ class UsuarioService
             if ($this->usuarioModel->insert($userData) === false) {
                 return ['status' => 'error', 'message' => 'Errores: ' . implode(', ', $this->usuarioModel->errors())];
             }
+
+            // Enviar correo de bienvenida (de forma asíncrona o ignorar errores si falla para no trabar el registro)
+            try {
+                $emailService = new \App\Services\EmailService();
+                $emailService->enviarBienvenida($data['email'], $data['name']);
+            } catch (\Exception $emailEx) {
+                log_message('error', '[UsuarioService::registrarUsuario] Error al enviar email de bienvenida: ' . $emailEx->getMessage());
+            }
+
             return ['status' => 'success', 'message' => 'Usuario registrado con éxito.'];
 
         } catch (\Exception $e) {
