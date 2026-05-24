@@ -192,26 +192,17 @@
         fetch('<?= base_url("ventas/comprobante_a4/" . $venta["id"]) ?>')
             .then(response => response.text())
             .then(html => {
-                // Crear contenedor temporal oculto
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                tempDiv.style.position = 'absolute';
-                tempDiv.style.top = '-9999px';
-                document.body.appendChild(tempDiv);
-
-                // Opciones de configuración del PDF para hoja A4 sin márgenes (la plantilla ya tiene padding)
+                // Opciones de configuración del PDF
                 const opt = {
                     margin:       0,
                     filename:     'Comprobante_CVA_Pedido_<?= $venta['id'] ?>.pdf',
                     image:        { type: 'jpeg', quality: 1 },
-                    html2canvas:  { scale: 2, useCORS: true, windowWidth: 800 },
+                    html2canvas:  { scale: 2, useCORS: true },
                     jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
                 };
 
-                // Generar y descargar
-                html2pdf().set(opt).from(tempDiv).save().then(() => {
-                    // Limpieza
-                    document.body.removeChild(tempDiv);
+                // Generar y descargar pasando el HTML directamente (el motor crea su propio iframe seguro)
+                html2pdf().set(opt).from(html).save().then(() => {
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                 });

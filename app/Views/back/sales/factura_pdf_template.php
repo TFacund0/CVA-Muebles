@@ -10,8 +10,15 @@
             font-family: 'Montserrat', sans-serif;
             color: #333;
             margin: 0;
-            padding: 40px;
+            padding: 0;
             background-color: #ffffff;
+        }
+
+        .a4-container {
+            width: 794px; /* Exacto ancho A4 a 96DPI */
+            padding: 40px;
+            box-sizing: border-box;
+            margin: 0 auto;
         }
 
         .header {
@@ -170,7 +177,7 @@
     </style>
 </head>
 <body>
-
+<div class="a4-container">
     <div class="header">
         <div class="header-left">
             <h1>CVA MUEBLES</h1>
@@ -187,12 +194,12 @@
     <div class="details-section">
         <div class="details-box">
             <h3>Facturar a:</h3>
-            <p><?= esc($usuario['nombre'] . ' ' . $usuario['apellido']) ?></p>
-            <p style="font-weight: normal; color: #666;"><?= esc($usuario['email']) ?></p>
+            <p><?= esc(($venta['nombre'] ?? '') . ' ' . ($venta['apellido'] ?? '')) ?></p>
+            <p style="font-weight: normal; color: #666;"><?= esc($venta['email'] ?? 'Sin correo') ?></p>
         </div>
         <div class="details-box" style="text-align: right;">
             <h3>Estado del Pedido:</h3>
-            <p style="color: #D4AF37; font-size: 16px;"><?= esc($venta['estado']) ?></p>
+            <p style="color: #D4AF37; font-size: 16px;"><?= esc($venta['estado'] ?? '') ?></p>
         </div>
     </div>
 
@@ -250,6 +257,6 @@
         <p>Este comprobante es de uso interno e informativo. Los trabajos a medida requieren confirmación del taller.</p>
         <p style="font-weight: bold; margin-top: 5px;">¡Gracias por confiar en CVA Muebles!</p>
     </div>
-
+</div>
 </body>
 </html>
