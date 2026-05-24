@@ -153,8 +153,9 @@
 
                     <div class="col-md-12">
                         <div class="artisan-input-group">
-                            <label>Email</label>
+                            <label>Email <span class="text-danger">*</span></label>
                             <input type="email" class="artisan-control" name="email" value="<?= old('email') ?>" placeholder="correo@ejemplo.com" required>
+                            <small class="text-cva-brown" style="font-size:0.75rem;"><i class="bi bi-info-circle-fill me-1"></i> Asegúrate de usar un correo real. Aquí te enviaremos las facturas y el seguimiento de tus pedidos.</small>
                             <?php if ($validation->getError('email')): ?>
                                 <div class="text-danger x-small mt-1 fw-bold"><?= $validation->getError('email') ?></div>
                             <?php endif; ?>
