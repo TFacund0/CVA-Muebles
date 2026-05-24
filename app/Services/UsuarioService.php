@@ -56,7 +56,7 @@ class UsuarioService
         }
 
         if (!password_verify($password, $usuario['pass'])) {
-            return ['status' => 'error', 'message' => 'Contraseña Incorrecta'];
+            return ['status' => 'error', 'message' => 'Contraseña Incorrecta. (Si creaste tu cuenta con Google, haz clic en el botón de Google abajo)'];
         }
 
         return [
