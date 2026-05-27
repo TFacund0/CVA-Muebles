@@ -1,4 +1,4 @@
-# 🪵 CVA Muebles - Carpintería de Autor & Showroom Manager
+# CVA Muebles - Carpintería de Autor & Showroom Manager
 
 [<img src="https://img.shields.io/badge/Demo_Disponible-blue?style=for-the-badge&logo=web" />](#-instalación-y-configuración)
 [![PHP Version](https://img.shields.io/badge/PHP-8.1%2B-777bb4?style=for-the-badge&logo=php)](https://www.php.net/)
@@ -7,7 +7,7 @@
 [![Design](https://img.shields.io/badge/Design-100%25--Responsive-blueviolet?style=for-the-badge&logo=css3)](https://caniuse.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🌟 Descripción General
+## Descripción General
 
 Este proyecto es una **Plataforma Web Híbrida (E-Commerce y Showroom)** diseñada a medida para la gestión estratégica y exhibición del taller de carpintería artesanal de **César Víctor Acevedo**. Fue desarrollado con un enfoque en alto rendimiento, diseño premium y buenas prácticas de ingeniería de software.
 
@@ -20,7 +20,7 @@ El sistema permite gestionar todo el ciclo operativo del taller, desde la exhibi
 
 ---
 
-## 🛠️ Arquitectura y Tecnologías
+## Arquitectura y Tecnologías
 
 El sistema sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)**, potenciado con la introducción de una **Capa de Servicios (Service Layer)** para maximizar la mantenibilidad, escalabilidad y testabilidad:
 
@@ -39,11 +39,11 @@ El sistema sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)**, poten
 
 ---
 
-## 📋 Módulos del Sistema
+## Módulos del Sistema
 
 El sistema ofrece un **Modo Dual** gestionado por variables de entorno y está dividido en dos grandes ecosistemas:
 
-### 1. 🛋️ Catálogo y Showroom (Frontend / Cliente)
+### 1. Catálogo y Showroom (Frontend / Cliente)
 
 - **Modo Híbrido**: El administrador puede alternar dinámicamente entre un e-commerce completamente funcional (con checkout) o un catálogo de exhibición (_Showroom Mode_), donde los botones de compra se transforman en enlaces directos y parametrizados a WhatsApp.
 - **Experiencia Responsiva**: Menús colapsables táctiles, cuadrículas fluidas para catálogos y animaciones de zoom inmersivas en productos de alta resolución.
@@ -55,7 +55,7 @@ El sistema ofrece un **Modo Dual** gestionado por variables de entorno y está d
   <img src="https://via.placeholder.com/400x200.png?text=Modo+Carrito" width="45%" alt="Carrito de Compras" />
 </p>
 
-### 2. 🛠️ Panel Administrativo (Backend / Gestor)
+### 2. Panel Administrativo (Backend / Gestor)
 
 - **Dashboard Estadístico**: Monitoreo en tiempo real de métricas de facturación, pedidos pendientes e inventario crítico.
 - **Algoritmo de Prioridad Atómica**: Sistema de arrastre (drag-and-drop) para organizar el orden de fabricación en el taller de forma atómica en la base de datos.
@@ -70,7 +70,7 @@ El sistema ofrece un **Modo Dual** gestionado por variables de entorno y está d
 
 ---
 
-## 🔒 Auditoría y Seguridad
+## Auditoría y Seguridad
 
 El proyecto cuenta con un esquema de protección integral contra vulnerabilidades, mitigando riesgos basándose en el estándar **OWASP Top 10**:
 
@@ -84,7 +84,7 @@ El proyecto cuenta con un esquema de protección integral contra vulnerabilidade
 
 ---
 
-## 🚀 Instalación y Configuración
+## Instalación y Configuración
 
 1.  **Clonar el repositorio**:
     ```bash
@@ -112,7 +112,7 @@ El proyecto cuenta con un esquema de protección integral contra vulnerabilidade
 
 ---
 
-## 💡 Aprendizajes y Evolución
+## Aprendizajes y Evolución
 
 El desarrollo de este sistema representa la aplicación de buenas prácticas de ingeniería de software en entornos PHP modernos:
 
@@ -125,7 +125,7 @@ El desarrollo de este sistema representa la aplicación de buenas prácticas de 
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
