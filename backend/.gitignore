@@ -1,0 +1,12 @@
+writable/*
+!writable/.gitkeep
+
+# Sesiones PHP escritas por error fuera de writable/session/ (contienen datos de usuario, nunca versionar).
+null/
+/assets/css/*.rar
+.env
+phpunit.xml
+.phpunit.result.cache
+vendor/
+public/assets/uploads/*
+!public/assets/uploads/.gitkeep

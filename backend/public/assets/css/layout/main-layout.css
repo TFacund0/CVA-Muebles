@@ -1,0 +1,324 @@
+/* 
+  =============================================
+  CVA MUEBLES - LAYOUT COMPONENTS (NAVBAR & FOOTER)
+  =============================================
+*/
+
+/* --- NAVBAR PRINCIPAL --- */
+nav.navbar.artisan-main-nav {
+    background-image: var(--navbar-bg), url('../../img/ui/textures/madera.jpg') !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-bottom: 3px solid var(--cva-gold);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    padding: 0 !important;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    transition: var(--transition-base);
+    z-index: 1030 !important;
+}
+
+@media (max-width: 991.98px) {
+    nav.navbar.artisan-main-nav {
+        min-height: 80px;
+    }
+}
+
+/* Botones de Iconos Circulares (Premium) */
+.boton-icon-circle {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    text-decoration: none;
+    color: white !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.boton-icon-circle:hover {
+    background: var(--cva-gold);
+    border-color: var(--cva-gold);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 20px rgba(229, 160, 13, 0.3);
+}
+
+.boton-icon-circle i {
+    line-height: 0;
+}
+
+.boton-icon-circle .icono-svg {
+    filter: brightness(0) invert(1);
+    width: 22px;
+}
+
+.logo-img-nav {
+    width: 50px !important;
+    transition: transform 0.3s ease;
+}
+
+.artisan-main-nav .titulo-logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--cva-white);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+/* Enlaces de Navegación */
+.artisan-main-nav .nav-link-custom {
+    background: transparent;
+    border: none;
+    color: var(--cva-white);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 25px 15px;
+    position: relative;
+    text-decoration: none;
+    transition: var(--transition-base);
+    display: inline-block;
+}
+
+.artisan-main-nav .nav-link-custom:hover,
+.artisan-main-nav .nav-link-custom.active {
+    color: var(--cva-gold-light);
+}
+
+.artisan-main-nav .nav-link-custom::after {
+    content: '';
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--cva-gold);
+    transition: var(--transition-base);
+    transform: translateX(-50%);
+}
+
+.artisan-main-nav .nav-link-custom:hover::after,
+.artisan-main-nav .nav-link-custom.active::after {
+    width: 70%;
+}
+
+/* --- AUTH PILL (GUEST LOGIN) --- */
+.auth-pill-artisan {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 50px !important;
+    padding: 6px 18px !important;
+    display: none !important; /* Forzamos la ocultación total en móvil */
+    align-items: center !important;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+@media (min-width: 992px) {
+    .auth-pill-artisan {
+        display: flex !important; /* Solo visible en desktop con alta prioridad */
+    }
+}
+
+.auth-pill-artisan:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: var(--cva-gold) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.auth-pill-link {
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    transition: all 0.3s ease !important;
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+
+.auth-pill-link:hover {
+    color: var(--cva-gold) !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-pill-divider {
+    width: 1px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 0 12px;
+}
+
+/* Sidebar Specific */
+.menu-lateral {
+    width: 350px !important; /* Base para móvil */
+    background-color: var(--sidebar-bg);
+}
+
+@media (min-width: 992px) {
+    .menu-lateral {
+        width: 450px !important; /* Más ancho en PC para que no se vea "chico" */
+    }
+}
+
+.menu-lateral .offcanvas-header {
+    background-color: var(--cva-parchment);
+    border-bottom: 2px solid var(--cva-gold);
+}
+
+.avatar-bg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: white;
+    border: 2px solid var(--cva-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 14px;
+    height: 14px;
+    background-color: #4CAF50;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.active-sidebar {
+    background-color: var(--cva-gold) !important;
+    color: white !important;
+    border-left: 4px solid var(--cva-brown);
+}
+
+.active-sidebar i {
+    color: white !important;
+}
+
+.sidebar-section-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--cva-brown-light);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    padding-left: 5px;
+    opacity: 0.7;
+}
+
+.list-group-item-action {
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    transition: all 0.2s ease;
+    border: none !important;
+    color: var(--cva-brown);
+}
+
+.list-group-item-action i {
+    font-size: 1.1rem;
+    color: var(--cva-gold);
+}
+
+.list-group-item-action:hover {
+    background-color: var(--cva-sand);
+    padding-left: 25px;
+}
+
+/* Auth Pill for Sidebar Mobile */
+.auth-section-mobile {
+    background: linear-gradient(135deg, #fdfaf7 0%, #f4eee8 100%);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 30px 20px !important;
+}
+
+.btn-brown-solid {
+    background-color: var(--cva-brown) !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(45, 27, 25, 0.2);
+}
+
+.btn-brown-solid:active {
+    transform: scale(0.98);
+}
+
+.btn-outline-brown {
+    background-color: transparent !important;
+    color: var(--cva-brown) !important;
+    border: 2px solid var(--cva-brown) !important;
+    padding: 10px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-brown:hover {
+    background-color: var(--cva-brown) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(45, 27, 25, 0.15);
+    text-decoration: none !important;
+}
+
+.btn-outline-brown:active {
+    background-color: rgba(45, 27, 25, 0.05) !important;
+    transform: scale(0.98);
+}
+
+/* FOOTER */
+footer.artisan-footer {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('../../img/ui/textures/madera.jpg') !important;
+    background-size: cover;
+    background-position: center;
+    color: var(--cva-white);
+    padding: var(--space-lg) 0 var(--space-sm);
+    border-top: 4px solid var(--cva-gold);
+}
+
+
+.artisan-footer .footer-title {
+    color: var(--cva-gold);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.artisan-footer .footer-link {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+.artisan-footer .footer-link:hover {
+    color: var(--cva-gold);
+    padding-left: 5px;
+}

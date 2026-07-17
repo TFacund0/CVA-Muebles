@@ -1,0 +1,111 @@
+/* 1. FONDO GENERAL */
+#container-condiciones-wrapper {
+    background-color: #f1ede6; /* Fondo un poco más oscuro para que el papel blanco resalte más */
+    padding-bottom: 0 !important;
+    margin-top: -30px;
+}
+
+/* 2. CABECERA (MADERA EBONY - MÁS SERIA) */
+.condiciones-header {
+    background-image: linear-gradient(rgba(10, 5, 2, 0.85), rgba(10, 5, 2, 0.7)),
+                      url('../../img/ui/textures/madera_legal.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    padding: 240px 0 160px;
+    color: white;
+    text-align: center;
+}
+
+.condiciones-header h1 {
+    font-family: 'Lora', serif;
+    font-size: 5.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+/* 3. LAYOUT DE DOCUMENTO (MÁS CONTRASTE) */
+/* NAVEGACIÓN STICKY (RECUADRO MÁS VISIBLE) */
+.sticky-top {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 2rem;
+    border: 2px solid var(--cva-gold); /* Borde dorado para que se vea sí o sí */
+    box-shadow: 0 20px 50px rgba(62, 39, 35, 0.1);
+}
+
+#legal-nav .nav-link {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cva-brown) !important;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+#legal-nav .nav-link:last-child {
+    border-bottom: none;
+}
+
+#legal-nav .nav-link:hover,
+#legal-nav .nav-link.active {
+    color: var(--cva-gold) !important;
+    padding-left: 10px;
+}
+
+/* CARDS INTERNAS (MUCHO MÁS VISIBLES) */
+.legal-mini-card {
+    background: var(--cva-sand); /* Arena sólido */
+    padding: 2.5rem;
+    border-radius: 1.5rem;
+    border: 3px solid var(--cva-gold); /* Borde dorado grueso */
+    height: 100%;
+    box-shadow: 0 15px 30px rgba(184, 134, 11, 0.1);
+}
+
+.legal-mini-card h6 {
+    color: var(--cva-brown);
+    font-weight: 900;
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.artisan-paper-document {
+    background-color: #fff;
+    border: 3px solid var(--cva-brown); /* Borde marrón para enmarcar el papel */
+    padding: 7rem !important;
+    position: relative;
+    box-shadow: 0 50px 150px rgba(0, 0, 0, 0.15);
+}
+
+.legal-section h2 {
+    border-left: 5px solid var(--cva-gold); /* Línea lateral para destacar títulos */
+    padding-left: 25px;
+    margin-left: -25px;
+}
+
+.badge-legal-num {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--cva-gold);
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+}
+
+/* 4. RESPONSIVE */
+@media (max-width: 991.98px) {
+    .artisan-paper-document {
+        padding: 3rem 2rem !important;
+    }
+    .condiciones-header h1 {
+        font-size: 3.5rem;
+    }
+    .condiciones-header {
+        padding: 150px 0 100px;
+    }
+}

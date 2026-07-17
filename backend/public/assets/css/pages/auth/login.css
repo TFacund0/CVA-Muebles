@@ -1,0 +1,29 @@
+/* Estilos generales del cuerpo de la página de login */
+.login-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5dc; 
+}
+
+/* Contenedor principal del formulario de login */
+.login-container {
+    background-image: url('../../../../img/texturas/madera-claritaa.jpg');
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-color: #807c717c!important;
+
+    max-width: 1000px !important;
+    margin: 0 auto; 
+    padding: 20px; 
+    box-shadow: 0 0 10px rgb(0, 0, 0); 
+    border: 1px solid black;
+}
+
+/* Estilos del formulario de login */
+.login-form {
+    border: 1px solid rgb(0, 0, 0); 
+    padding: 15px; 
+    border-radius: 15px;
+    color: rgb(255, 255, 255);
+    background-color: #000000a0!important;
+}

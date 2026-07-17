@@ -1,0 +1,62 @@
+/* ----------- ESTILO GENERAL DEL FOOTER ----------- */
+
+/* Fondo del footer con textura de madera */
+footer {
+    background-image: url('../../img/texturas/madera.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: rgb(7, 0, 0);
+    
+    box-shadow: -2px 0px 6px black;
+}
+
+/* ----------- ICONOS REDES SOCIALES ----------- */
+
+/* Transición suave al pasar el mouse sobre los íconos */
+.social-icons a {
+    transition: transform 0.3s;
+}
+
+/* Efecto de movimiento y transparencia al pasar el mouse */
+.social-icons a:hover {
+    transform: translateY(-3px);
+    opacity: 0.8;
+}
+
+/* Contenedor oscuro translúcido para los íconos */
+footer .container {
+    background-color: rgba(0, 0, 0, 0.336);
+    padding: 5px;
+    border-radius: 8px;
+}
+
+/* ----------- COLORES PERSONALIZADOS PARA CADA RED ----------- */
+
+/* Color del ícono de Facebook */
+.social-link.facebook .icon {
+    color: #1877F2;
+}
+
+/* Color del ícono de Twitter */
+.social-link.twitter .icon {
+    color: #000000;
+}
+
+/* Estilo degradado del ícono de Instagram */
+.social-link.instagram .icon {
+    background: radial-gradient(circle at 30% 107%, 
+        #fdf497 0%, #fdf497 5%, 
+        #fd5949 45%, #d6249f 60%, 
+        #285AEB 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Transición de transformación y color para todos los íconos */
+.social-link .icon {
+    transition: transform 0.3s, color 0.3s;
+}
+
+

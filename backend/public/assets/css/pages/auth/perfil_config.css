@@ -1,0 +1,70 @@
+/* Contenedor principal de la configuración del perfil */
+#contenedor-config-perfil {
+    border-radius: 15px; 
+    box-shadow: 0 0 10px black;
+    border: 1px solid black; 
+    overflow: hidden; 
+    background-color: rgb(239, 239, 239) !important; 
+}
+
+/* Bloque que contiene el título del perfil */
+.bloque-titulo-perfil {
+    background: linear-gradient(to left, rgb(166, 166, 166), rgb(248, 248, 248));
+    border-radius: 30px; 
+    border: 1px solid black; 
+}
+
+/* Bloque que contiene la información detallada del perfil */
+.bloque-info-perfil {
+    border: 1px solid black;
+    border-radius: 15px; 
+}
+
+/* Imagen del perfil */
+.img-perfil {
+    width: 150px;         
+    height: 130px;        
+    object-fit: center;   
+    border-radius: 50%;   
+    border: 1px solid #000000; 
+    box-shadow: 0 0 5px black; 
+}
+
+/* Efecto hover en la imagen del perfil para aumentar la sombra */
+.img-perfil:hover {
+    box-shadow: 0 0 8px black;
+}
+
+/* Formulario que contiene los datos del perfil */
+.form-datos-perfil {
+    border: 1px solid black;
+}
+
+/* Inputs dentro del formulario del perfil */
+.form-perfil input {
+    width: 100%; 
+}
+
+/* Título dentro del formulario del perfil */
+.form-title-perfil {
+    font-weight: bold; 
+    text-align: center; 
+    border-bottom: 1px solid black; 
+}
+
+/* Labels en la información del perfil */
+.info-perfil label {
+    font-weight: bold;
+    color: rgb(98, 98, 98); 
+}
+
+/* Ajusta para pantallas pequeñas */
+@media (max-width: 796px) {
+    .info-usuario .nombre-info-usuario {
+        font-size: 15px !important;
+    }
+    
+    .info-usuario .email-info-usuario {
+        font-size: 10px !important;
+    }
+}
