@@ -34,8 +34,64 @@ El sistema sigue el patrón de diseño **MVC (Modelo-Vista-Controlador)**, poten
 - **Lenguaje**: PHP 8.1+
 - **Framework Backend**: CodeIgniter 4
 - **Base de Datos**: MySQL
-- **Frontend**: HTML5, CSS3, JavaScript (Fetch/AJAX), Bootstrap 5
+- **Vistas embebidas (legacy)**: HTML5, CSS3, JavaScript (Fetch/AJAX), Bootstrap 5
+- **Frontend desacoplado (nuevo)**: Next.js 16 (App Router) + TypeScript + Tailwind, en `/frontend`
 - **Patrones de Diseño**: MVC, Service Layer Pattern
+
+---
+
+## 📁 Backend vs Frontend: dónde está cada cosa
+
+Este repositorio contiene **dos proyectos independientes**, cada uno con su propio gestor de dependencias y ciclo de vida, comunicados solo por HTTP:
+
+| | Ubicación | Stack | Rol |
+|---|---|---|---|
+| **Backend** | [`/backend`](backend) (`app/`, `public/`, `composer.json`) | CodeIgniter 4 / PHP | Vistas embebidas legacy + API REST (`/api/v1/*`) |
+| **Frontend nuevo** | [`/frontend`](frontend) | Next.js / TypeScript | Consume `/api/v1/*` vía `frontend/src/lib/api.ts`. Proyecto Node aislado, no importa código PHP. |
+
+```
+CVA-Muebles/
+├── backend/         ← proyecto CodeIgniter 4 completo (antes vivía en la raíz)
+│   ├── app/
+│   │   ├── Controllers/          (vistas legacy: HTML + sesión + CSRF)
+│   │   ├── Controllers/Api/       (API REST pública/cliente: JSON + JWT)
+│   │   ├── Controllers/Api/Admin/ (API REST del panel admin: JSON + JWT + rol admin)
+│   │   ├── Models/, Services/      (lógica de negocio y datos — compartida por ambas capas de transporte)
+│   │   ├── Database/Migrations/    (historial de esquema versionado)
+│   │   ├── Database/Scripts/       (SQL/scripts de mantenimiento puntuales, fuera de migraciones)
+│   │   ├── ThirdParty/             (paquetes vendoreados a mano, ej. Cart/, convención propia de CI4)
+│   │   └── Views/                  (vistas embebidas del sitio legacy)
+│   ├── public/       (document root del backend)
+│   ├── system/
+│   ├── composer.json
+│   └── spark
+├── frontend/         ← proyecto Next.js
+│   ├── src/
+│   │   ├── app/            (rutas — App Router)
+│   │   │   ├── (public)/     (route group: páginas informativas/estáticas — no afecta la URL)
+│   │   │   ├── (shop)/       (route group: catálogo, carrito, favoritos, pedidos, perfil, galería)
+│   │   │   ├── (auth)/       (route group: login)
+│   │   │   ├── admin/        (panel administrativo, prefijo real de URL /admin/*)
+│   │   │   └── api/          (Route Handlers: proxies hacia la API PHP, JWT nunca expuesto al cliente)
+│   │   ├── components/
+│   │   │   ├── layout/       (Navbar, Footer)
+│   │   │   ├── product/      (tarjetas de producto, favoritos, agregar al carrito)
+│   │   │   ├── forms/        (formularios de perfil/contraseña/contacto)
+│   │   │   ├── shared/       (piezas de UI genéricas, ej. export a PDF)
+│   │   │   └── admin/        (componentes exclusivos del panel admin)
+│   │   ├── context/         (estado global de cliente, ej. carrito)
+│   │   ├── lib/              (clientes HTTP tipados hacia la API: api.ts, auth.ts, admin.ts, adminClient.ts)
+│   │   └── types/            (ambient types para paquetes sin tipos, ej. html2pdf.js)
+│   └── package.json
+└── README.md
+```
+
+Dentro del backend, la API vive separada de los controladores clásicos para no mezclar responsabilidades:
+
+- `backend/app/Controllers/*Controller.php` → controllers legacy, devuelven vistas HTML (sesión + CSRF).
+- `backend/app/Controllers/Api/*Controller.php` → controllers de la API REST pública/cliente, devuelven JSON (JWT vía `backend/app/Filters/JwtAuth.php`, sin CSRF).
+- `backend/app/Controllers/Api/Admin/*Controller.php` → controllers de la API REST del panel admin, mismo JWT pero exigiendo rol admin (`jwtAuth:admin`).
+- Los tres reutilizan los **mismos** `Models`/`Services` (`backend/app/Models`, `backend/app/Services`) — la lógica de negocio no se duplica entre capas de transporte.
 
 ---
 
@@ -61,6 +117,11 @@ El sistema ofrece un **Modo Dual** gestionado por variables de entorno y está d
 - **Algoritmo de Prioridad Atómica**: Sistema de arrastre (drag-and-drop) para organizar el orden de fabricación en el taller de forma atómica en la base de datos.
 - **Gestión de Pedidos Personalizados**: Interfaz para el registro de ventas de muebles a medida, con notas detalladas que escapan al catálogo estándar.
 - **Moderación de Interacciones**: Control total sobre la aprobación y publicación de fotografías de clientes.
+
+### 3. ✉️ Automatización y Facturación (Novedad)
+
+- **Motor de Notificaciones SMTP**: Sistema integrado de envío de correos electrónicos transaccionales. Los clientes reciben notificaciones instantáneas de bienvenida, confirmación de pedidos y actualizaciones de estado en tiempo real (ej. "En Producción", "Terminado") con plantillas HTML corporativas.
+- **Renderizado Frontend de PDFs**: Motor de generación de Comprobantes en formato A4 implementado estrictamente en el cliente (`html2pdf.js`), eliminando la sobrecarga de procesamiento en el servidor. Exporta facturas limpias, vectoriales y adaptadas para impresión profesional, sin dependencias complejas como `Composer/Dompdf`.
 
 <p align="center">
   <!-- Reemplazar con screenshots reales -->
@@ -98,7 +159,7 @@ La plataforma incorpora una suite integral de optimización de rendimiento en la
   - **Caché de Consultas SQL (Query Caching)**: Almacenamiento en caché por 1 hora de las estadísticas de productos por categorías en `CategoriaService` para mitigar el problema de consultas duplicadas N+1.
   - **Coherencia e Invalidación Dinámica**: Purga atómica y automatizada del estado de la caché (`$cache->delete(...)`) en todas las operaciones de escritura/modificación de categorías y productos en los servicios de negocio, asegurando consistencia de datos en tiempo real.
 - **Indexación y Optimización de Base de Datos**:
-  - Script especializado `cva_indexes_optimization.sql` (disponible en la carpeta `scratch/`) que implementa índices (B-Tree e índices únicos) estratégicamente diseñados para acelerar las consultas más críticas, JOINs complejos y ordenamientos en las tablas `favoritos`, `productos`, `ventas_detalle`, `ventas_cabecera` y `consultas`.
+  - Script especializado `cva_indexes_optimization.sql` (disponible en `backend/app/Database/Scripts/`) que implementa índices (B-Tree e índices únicos) estratégicamente diseñados para acelerar las consultas más críticas, JOINs complejos y ordenamientos en las tablas `favoritos`, `productos`, `ventas_detalle`, `ventas_cabecera` y `consultas`.
 - **Drivers de Sesión RAM de Alto Rendimiento**:
   - Configuración preparada y documentada en el archivo `.env` para migrar transparentemente la persistencia de sesiones del disco (`FileHandler`) a almacenamiento en memoria RAM activa de baja latencia utilizando **Redis** o **Memcached** en entornos de producción.
 
@@ -109,10 +170,11 @@ La plataforma incorpora una suite integral de optimización de rendimiento en la
 1.  **Clonar el repositorio**:
     ```bash
     git clone https://github.com/TFacund0/Proyecto-CVA-Muebles.git
-    cd Proyecto-CVA-Muebles
+    cd Proyecto-CVA-Muebles/backend
     ```
+    A partir de acá, todos los comandos de esta sección (`composer`, `php spark`) se ejecutan dentro de `backend/`. Para el frontend, ver el paso 6.
 2.  **Configurar el Entorno Local (`.env`)**:
-    Renombra el archivo `.env.example` a `.env` (o edita el `.env` existente) y define los parámetros del sistema:
+    Renombra el archivo `.env.example` a `.env` (o edita el `.env` existente, ambos dentro de `backend/`) y define los parámetros del sistema:
 
     ```env
     CI_ENVIRONMENT = development
@@ -124,11 +186,37 @@ La plataforma incorpora una suite integral de optimización de rendimiento en la
 
 3.  **Base de Datos**:
     - Crea una base de datos MySQL local llamada `arce_acevedo` (con cotejamiento `utf8mb4_general_ci`).
-    - Importa el archivo `arce_acevedo.sql` localizado en la raíz del proyecto.
-    - Actualiza las credenciales de base de datos en `app/Config/Database.php` o preferentemente en `.env`.
+    - Importa el archivo `backend/cva_muebles.sql`.
+    - Actualiza las credenciales de base de datos en `backend/app/Config/Database.php` o preferentemente en `backend/.env`.
 4.  **Credenciales de Demostración**:
     - **Administrador**: Email: `admin@cvamuebles.com` (o `admin`) | Contraseña: `admin123`
     - **Cliente**: Email: `cliente@gmail.com` (o `cliente`) | Contraseña: `cliente123`
+5.  **Migraciones**: `php spark migrate` (aplica los ajustes de esquema descritos en `app/Database/Migrations/`: columnas monetarias `DECIMAL`, `created_at/updated_at` y `deleted_at` estándar).
+6.  **Frontend Next.js** (opcional, consume la API):
+    ```bash
+    cd ../frontend   # desde backend/, o directamente cd frontend desde la raíz del repo
+    cp .env.local.example .env.local   # ajustar NEXT_PUBLIC_API_URL
+    npm install
+    npm run dev
+    ```
+
+---
+
+## 🔌 API REST (`/api/v1`)
+
+Capa de API JSON, pensada para ser consumida por el frontend Next.js (u otros clientes: apps móviles, integraciones). Autenticación **stateless** vía JWT (`Authorization: Bearer <token>`), independiente de las sesiones de cookie que usan las vistas embebidas.
+
+| Método | Ruta | Auth | Descripción |
+|---|---|---|---|
+| POST | `/api/v1/auth/login` | — | Login, devuelve `access_token` + `refresh_token` |
+| POST | `/api/v1/auth/register` | — | Registro de cliente |
+| POST | `/api/v1/auth/refresh` | — | Renueva el access token |
+| GET | `/api/v1/auth/me` | JWT | Datos del usuario autenticado |
+| GET | `/api/v1/productos` | — | Catálogo público (filtro opcional `?categoria=`) |
+| GET | `/api/v1/productos/{id}` | — | Detalle de producto |
+| GET | `/api/v1/categorias` | — | Categorías activas |
+
+Alcance actual: catálogo público + autenticación. Ventas, carrito y panel administrativo aún se gestionan solo vía las vistas embebidas legacy — quedan pendientes de exponerse como API en una siguiente etapa.
 
 ---
 

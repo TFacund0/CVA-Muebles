@@ -1,9 +1,7 @@
-writable/*
-!writable/.gitkeep
-/assets/css/*.rar
-.env
-phpunit.xml
-.phpunit.result.cache
-vendor/
-public/assets/uploads/*
-!public/assets/uploads/.gitkeep
+# Cada subproyecto (backend/, frontend/) mantiene su propio .gitignore.
+# Este archivo solo cubre archivos de entorno/editor comunes a todo el repo.
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
