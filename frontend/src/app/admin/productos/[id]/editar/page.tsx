@@ -1,8 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 import ProductoForm from "@/components/admin/ProductoForm";
 import GaleriaProductoAdmin from "@/components/admin/GaleriaProductoAdmin";
-import { getCategorias, getProducto } from "@/lib/api";
-import { adminFetch, type AdminProductoStats } from "@/lib/admin";
+import { getCategorias } from "@/lib/api";
+import { adminFetch, type AdminProducto } from "@/lib/admin";
+import type { ImagenGaleria } from "@/lib/api";
+
+type AdminProductoConGaleria = AdminProducto & { galeria?: ImagenGaleria[] };
 
 export default async function EditarProductoPage({
   params,
@@ -11,21 +14,19 @@ export default async function EditarProductoPage({
 }) {
   const { id } = await params;
 
-  // El endpoint público /productos/{id} oculta los archivados; para edición admin
-  // se busca en el listado admin completo, que sí incluye archivados.
-  const [categorias, listado, productoConGaleria] = await Promise.all([
-    getCategorias(),
-    adminFetch<AdminProductoStats>("/productos"),
-    getProducto(id).catch(() => null),
-  ]);
-
-  if (listado === null) {
-    redirect("/login");
+  let producto: AdminProductoConGaleria | null;
+  let categorias;
+  try {
+    [categorias, producto] = await Promise.all([
+      getCategorias(),
+      adminFetch<AdminProductoConGaleria>(`/productos/${id}`),
+    ]);
+  } catch {
+    notFound();
   }
 
-  const producto = listado.productos.find((p) => p.id_producto === Number(id));
-  if (!producto) {
-    notFound();
+  if (producto === null) {
+    redirect("/login");
   }
 
   return (
@@ -36,7 +37,7 @@ export default async function EditarProductoPage({
       <hr className="my-8 max-w-lg" />
 
       <h2 className="mb-4 text-xl font-semibold">Galería de fotos secundarias</h2>
-      <GaleriaProductoAdmin productoId={producto.id_producto} galeria={productoConGaleria?.galeria ?? []} />
+      <GaleriaProductoAdmin productoId={producto.id_producto} galeria={producto.galeria ?? []} />
     </div>
   );
 }

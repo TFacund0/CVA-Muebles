@@ -40,4 +40,25 @@ abstract class BaseApiController extends ResourceController
     {
         return $this->request->getJSON(true) ?? $this->request->getPost() ?? [];
     }
+
+    /**
+     * Metadata de paginación lista para JSON, a partir del Pager que deja seteado
+     * un Model después de llamar a paginate($perPage, $group). El número de página
+     * actual lo lee CI4 automáticamente del query string (?page_<group>=N).
+     *
+     * @param \CodeIgniter\Pager\Pager|null $pager
+     */
+    protected function pagerMeta($pager, string $group): array
+    {
+        if (!$pager) {
+            return ['page' => 1, 'per_page' => 0, 'total' => 0, 'page_count' => 1];
+        }
+
+        return [
+            'page'       => $pager->getCurrentPage($group),
+            'per_page'   => $pager->getPerPage($group),
+            'total'      => $pager->getTotal($group),
+            'page_count' => $pager->getPageCount($group),
+        ];
+    }
 }

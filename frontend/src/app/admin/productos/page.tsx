@@ -1,9 +1,22 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { adminFetch, type AdminProductoStats } from "@/lib/admin";
 import ProductosTable from "@/components/admin/ProductosTable";
+import SearchBox from "@/components/admin/SearchBox";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminProductosPage() {
-  const data = await adminFetch<AdminProductoStats>("/productos");
+export default async function AdminProductosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; page_productos?: string }>;
+}) {
+  const { search, page_productos } = await searchParams;
+
+  const query = new URLSearchParams();
+  if (search) query.set("search", search);
+  if (page_productos) query.set("page_productos", page_productos);
+
+  const data = await adminFetch<AdminProductoStats>(`/productos${query.toString() ? `?${query}` : ""}`);
 
   return (
     <div>
@@ -24,7 +37,13 @@ export default async function AdminProductosPage() {
             <span>Sin stock: {data.counts.sin_stock}</span>
             <span>Archivados: {data.counts.eliminados}</span>
           </div>
+          <Suspense fallback={null}>
+            <SearchBox placeholder="Buscar por nombre..." pageParam="page_productos" />
+          </Suspense>
           <ProductosTable productos={data.productos} />
+          <Suspense fallback={null}>
+            <Pagination pager={data.pager} pageParam="page_productos" />
+          </Suspense>
         </>
       )}
     </div>

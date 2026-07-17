@@ -1,9 +1,22 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { adminFetch, type AdminVentasResumen } from "@/lib/admin";
 import PedidosTable from "@/components/admin/PedidosTable";
+import SearchBox from "@/components/admin/SearchBox";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminPedidosPage() {
-  const data = await adminFetch<AdminVentasResumen>("/ventas");
+export default async function AdminPedidosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; page_ventas?: string }>;
+}) {
+  const { search, page_ventas } = await searchParams;
+
+  const query = new URLSearchParams();
+  if (search) query.set("search", search);
+  if (page_ventas) query.set("page_ventas", page_ventas);
+
+  const data = await adminFetch<AdminVentasResumen>(`/ventas${query.toString() ? `?${query}` : ""}`);
 
   return (
     <div>
@@ -35,7 +48,13 @@ export default async function AdminPedidosPage() {
           )}
 
           <h2 className="mb-2 font-semibold">Pedidos en taller</h2>
+          <Suspense fallback={null}>
+            <SearchBox placeholder="Buscar por cliente o N° de pedido..." pageParam="page_ventas" />
+          </Suspense>
           <PedidosTable pedidos={data.ventas} showPrioridad />
+          <Suspense fallback={null}>
+            <Pagination pager={data.pager} pageParam="page_ventas" />
+          </Suspense>
         </>
       )}
     </div>

@@ -1,8 +1,21 @@
+import { Suspense } from "react";
 import { adminFetch, type AdminUsuarioStats } from "@/lib/admin";
 import UsuariosTable from "@/components/admin/UsuariosTable";
+import SearchBox from "@/components/admin/SearchBox";
+import Pagination from "@/components/admin/Pagination";
 
-export default async function AdminUsuariosPage() {
-  const data = await adminFetch<AdminUsuarioStats>("/usuarios");
+export default async function AdminUsuariosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; page_usuarios?: string }>;
+}) {
+  const { search, page_usuarios } = await searchParams;
+
+  const query = new URLSearchParams();
+  if (search) query.set("search", search);
+  if (page_usuarios) query.set("page_usuarios", page_usuarios);
+
+  const data = await adminFetch<AdminUsuarioStats>(`/usuarios${query.toString() ? `?${query}` : ""}`);
 
   return (
     <div>
@@ -18,7 +31,13 @@ export default async function AdminUsuariosPage() {
             <span>Admins: {data.counts.admins}</span>
             <span>Suspendidos: {data.counts.suspendidos}</span>
           </div>
+          <Suspense fallback={null}>
+            <SearchBox placeholder="Buscar por nombre, usuario o email..." pageParam="page_usuarios" />
+          </Suspense>
           <UsuariosTable usuarios={data.usuarios} />
+          <Suspense fallback={null}>
+            <Pagination pager={data.pager} pageParam="page_usuarios" />
+          </Suspense>
         </>
       )}
     </div>

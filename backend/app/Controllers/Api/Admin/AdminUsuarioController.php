@@ -19,7 +19,13 @@ class AdminUsuarioController extends BaseApiController
         $search = $this->request->getGet('search');
         $perfil = $this->request->getGet('perfil');
 
-        return $this->ok($this->usuarioService->getUsuariosConStats($search, $perfil));
+        $resultado = $this->usuarioService->getUsuariosConStats($search, $perfil, 'server');
+
+        return $this->ok([
+            'usuarios' => $resultado['usuarios'],
+            'counts'   => $resultado['counts'],
+            'pager'    => $this->pagerMeta($resultado['pager'], 'usuarios'),
+        ]);
     }
 
     public function estado($id = null)

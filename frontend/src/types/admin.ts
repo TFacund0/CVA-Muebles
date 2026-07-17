@@ -1,5 +1,12 @@
 import type { Producto } from "@/types/catalogo";
 
+export interface Pager {
+  page: number;
+  per_page: number;
+  total: number;
+  page_count: number;
+}
+
 export interface AdminProducto extends Producto {
   stock_min: number;
   eliminado: "SI" | "NO";
@@ -8,6 +15,7 @@ export interface AdminProducto extends Producto {
 export interface AdminProductoStats {
   productos: AdminProducto[];
   counts: { total: number; activos: number; sin_stock: number; eliminados: number };
+  pager: Pager;
 }
 
 export interface AdminCategoria {
@@ -32,6 +40,7 @@ export interface AdminUsuario {
 export interface AdminUsuarioStats {
   usuarios: AdminUsuario[];
   counts: { total: number; activos: number; admins: number; suspendidos: number };
+  pager: Pager;
 }
 
 export interface AdminVenta {
@@ -60,6 +69,7 @@ export interface AdminVentasResumen {
     terminados: number;
     ingresos: number;
   };
+  pager: Pager;
 }
 
 export interface AdminDashboard {
@@ -93,4 +103,5 @@ export interface AdminConsulta {
 export interface AdminConsultasResumen {
   consultas: AdminConsulta[];
   counts: Record<string, number>;
+  pager: Pager;
 }

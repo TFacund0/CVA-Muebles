@@ -166,6 +166,7 @@ $routes->group('api/v1', ['namespace' => 'App\Controllers\Api', 'filter' => 'cor
         $routes->get('dashboard', 'AdminVentaController::dashboard');
 
         $routes->get('productos', 'AdminProductoController::index');
+        $routes->get('productos/(:num)', 'AdminProductoController::show/$1');
         $routes->post('productos', 'AdminProductoController::store');
         $routes->post('productos/(:num)', 'AdminProductoController::update/$1');
         $routes->post('productos/(:num)/estado', 'AdminProductoController::estado/$1');

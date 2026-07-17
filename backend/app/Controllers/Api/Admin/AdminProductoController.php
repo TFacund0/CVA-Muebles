@@ -19,7 +19,28 @@ class AdminProductoController extends BaseApiController
         $search = $this->request->getGet('search');
         $categoria = $this->request->getGet('categoria');
 
-        return $this->ok($this->productoService->getProductosConStats($search, $categoria));
+        // Paginado server-side: la página actual la lee CI4 del query string
+        // (?page_productos=N), no hace falta parsearla acá.
+        $resultado = $this->productoService->getProductosConStats($search, $categoria, 'server');
+
+        return $this->ok([
+            'productos' => $resultado['productos'],
+            'counts'    => $resultado['counts'],
+            'pager'     => $this->pagerMeta($resultado['pager'], 'productos'),
+        ]);
+    }
+
+    public function show($id = null)
+    {
+        // A diferencia del endpoint público (ProductoController::show), este no
+        // oculta productos archivados — el admin necesita poder editarlos.
+        $producto = $this->productoService->getProductoConGaleria($id);
+
+        if (!$producto) {
+            return $this->fail('Producto no encontrado.', 404);
+        }
+
+        return $this->ok($producto);
     }
 
     public function store()

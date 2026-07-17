@@ -1,23 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { adminMutate, adminMutateJson } from "@/lib/adminClient";
 import { useAdminAction } from "@/lib/useAdminAction";
 import type { AdminUsuario } from "@/lib/admin";
 
 export default function UsuariosTable({ usuarios }: { usuarios: AdminUsuario[] }) {
   const { error, run } = useAdminAction();
-  const [search, setSearch] = useState("");
-
-  const filtrados = useMemo(() => {
-    const q = search.toLowerCase();
-    return usuarios.filter(
-      (u) =>
-        `${u.nombre} ${u.apellido}`.toLowerCase().includes(q) ||
-        u.email.toLowerCase().includes(q) ||
-        u.usuario.toLowerCase().includes(q)
-    );
-  }, [usuarios, search]);
 
   function handleEstado(id: number, accion: "baja" | "activar") {
     run(() => adminMutateJson(`/usuarios/${id}/estado`, "POST", { accion }));
@@ -34,14 +22,6 @@ export default function UsuariosTable({ usuarios }: { usuarios: AdminUsuario[] }
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Buscar por nombre, usuario o email..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mb-4 w-full max-w-sm rounded border px-3 py-2"
-      />
-
       {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
 
       <div className="overflow-x-auto">
@@ -57,7 +37,7 @@ export default function UsuariosTable({ usuarios }: { usuarios: AdminUsuario[] }
             </tr>
           </thead>
           <tbody>
-            {filtrados.map((u) => (
+            {usuarios.map((u) => (
               <tr key={u.id_usuario} className="border-b">
                 <td className="py-2">
                   {u.nombre} {u.apellido}
@@ -87,6 +67,13 @@ export default function UsuariosTable({ usuarios }: { usuarios: AdminUsuario[] }
                 </td>
               </tr>
             ))}
+            {usuarios.length === 0 && (
+              <tr>
+                <td colSpan={6} className="py-6 text-center text-zinc-400">
+                  No se encontraron usuarios.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

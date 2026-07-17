@@ -1,21 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import { adminMutate, adminMutateJson } from "@/lib/adminClient";
 import { useAdminAction } from "@/lib/useAdminAction";
 import type { AdminProducto } from "@/lib/admin";
 
 export default function ProductosTable({ productos }: { productos: AdminProducto[] }) {
   const { error, run } = useAdminAction();
-  const [search, setSearch] = useState("");
-
-  const filtrados = useMemo(() => {
-    const q = search.toLowerCase();
-    return productos.filter(
-      (p) => p.nombre_prod.toLowerCase().includes(q) || p.categoria.toLowerCase().includes(q)
-    );
-  }, [productos, search]);
 
   function handleEstado(id: number, accion: "eliminar" | "reactivar") {
     run(() => adminMutateJson(`/productos/${id}/estado`, "POST", { accion }));
@@ -28,14 +19,6 @@ export default function ProductosTable({ productos }: { productos: AdminProducto
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Buscar por nombre o categoría..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="mb-4 w-full max-w-sm rounded border px-3 py-2"
-      />
-
       {error && <p className="mb-3 text-sm text-red-600">{error}</p>}
 
       <div className="overflow-x-auto">
@@ -51,7 +34,7 @@ export default function ProductosTable({ productos }: { productos: AdminProducto
             </tr>
           </thead>
           <tbody>
-            {filtrados.map((p) => (
+            {productos.map((p) => (
               <tr key={p.id_producto} className="border-b">
                 <td className="py-2">{p.nombre_prod}</td>
                 <td className="py-2">{p.categoria}</td>
@@ -79,6 +62,13 @@ export default function ProductosTable({ productos }: { productos: AdminProducto
                 </td>
               </tr>
             ))}
+            {productos.length === 0 && (
+              <tr>
+                <td colSpan={6} className="py-6 text-center text-zinc-400">
+                  No se encontraron productos.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

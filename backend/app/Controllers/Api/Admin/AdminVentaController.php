@@ -25,7 +25,14 @@ class AdminVentaController extends BaseApiController
         $search = $this->request->getGet('search');
         $estado = $this->request->getGet('estado');
 
-        return $this->ok($this->ventasService->getVentasConEstadisticas($search, $estado));
+        $resultado = $this->ventasService->getVentasConEstadisticas($search, $estado, 'server');
+
+        return $this->ok([
+            'ventas'      => $resultado['ventas'],
+            'solicitados' => $resultado['solicitados'],
+            'counts'      => $resultado['counts'],
+            'pager'       => $this->pagerMeta($resultado['pager'], 'ventas'),
+        ]);
     }
 
     public function dashboard()

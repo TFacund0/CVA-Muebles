@@ -19,7 +19,13 @@ class AdminConsultaController extends BaseApiController
         $search = $this->request->getGet('search');
         $asunto = $this->request->getGet('asunto');
 
-        return $this->ok($this->consultaService->getConsultasConStats($search, $asunto));
+        $resultado = $this->consultaService->getConsultasConStats($search, $asunto, 'server');
+
+        return $this->ok([
+            'consultas' => $resultado['consultas'],
+            'counts'    => $resultado['counts'],
+            'pager'     => $this->pagerMeta($resultado['pager'], 'consultas'),
+        ]);
     }
 
     public function eliminar($id = null)
