@@ -15,4 +15,11 @@ class ConsultaModel extends Model {
         'email'       => 'required|valid_email',
         'descripcion' => 'required|min_length[10]'
     ];
+
+    /**
+     * Todas las consultas ordenadas de la más reciente a la más antigua.
+     */
+    public function getAllOrdenadas(): array {
+        return $this->orderBy('fecha', 'DESC')->findAll();
+    }
 }

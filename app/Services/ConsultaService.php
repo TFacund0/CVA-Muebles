@@ -11,9 +11,9 @@ class ConsultaService
 {
     protected $consultaModel;
 
-    public function __construct()
+    public function __construct(?ConsultaModel $consultaModel = null)
     {
-        $this->consultaModel = new ConsultaModel();
+        $this->consultaModel = $consultaModel ?? new ConsultaModel();
     }
 
     /**
@@ -21,7 +21,7 @@ class ConsultaService
      */
     public function getConsultasConStats()
     {
-        $consultas = $this->consultaModel->orderBy('fecha', 'DESC')->findAll();
+        $consultas = $this->consultaModel->getAllOrdenadas();
         $currentMonth = date('m');
         $currentYear = date('Y');
 

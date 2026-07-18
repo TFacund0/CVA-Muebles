@@ -47,4 +47,17 @@ class ProductoModel extends Model
         return $query->getRowArray();
     }
 
+    /**
+     * Cuenta los productos activos (no archivados) de una categoría.
+     */
+    public function countByCategoria($categoriaId): int {
+        return $this->where('categoria_id', $categoriaId)->countAllResults();
+    }
+
+    /**
+     * Cuenta todos los productos de una categoría, incluidos los archivados.
+     */
+    public function countByCategoriaConArchivados($categoriaId): int {
+        return $this->where('categoria_id', $categoriaId)->withDeleted()->countAllResults();
+    }
 }

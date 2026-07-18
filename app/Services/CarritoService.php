@@ -12,10 +12,10 @@ class CarritoService
     protected $cart;
     protected $productoModel;
 
-    public function __construct()
+    public function __construct($cart = null, ?ProductoModel $productoModel = null)
     {
-        $this->cart = \Config\Services::cart();
-        $this->productoModel = new ProductoModel();
+        $this->cart = $cart ?? \Config\Services::cart();
+        $this->productoModel = $productoModel ?? new ProductoModel();
     }
 
     /**

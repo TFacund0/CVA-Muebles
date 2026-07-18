@@ -11,9 +11,9 @@ class GaleriaService
 {
     protected $galeriaModel;
 
-    public function __construct()
+    public function __construct(?GaleriaClienteModel $galeriaModel = null)
     {
-        $this->galeriaModel = new GaleriaClienteModel();
+        $this->galeriaModel = $galeriaModel ?? new GaleriaClienteModel();
     }
 
     /**

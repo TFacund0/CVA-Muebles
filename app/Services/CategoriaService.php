@@ -13,10 +13,10 @@ class CategoriaService
     protected $categoriaModel;
     protected $productoModel;
 
-    public function __construct()
+    public function __construct(?CategoriaModel $categoriaModel = null, ?ProductoModel $productoModel = null)
     {
-        $this->categoriaModel = new CategoriaModel();
-        $this->productoModel = new ProductoModel();
+        $this->categoriaModel = $categoriaModel ?? new CategoriaModel();
+        $this->productoModel = $productoModel ?? new ProductoModel();
     }
 
     /**
@@ -31,11 +31,8 @@ class CategoriaService
         }
         
         foreach ($categorias as &$cat) {
-            $cat['total_productos'] = $this->productoModel->where('categoria_id', $cat['id_categoria'])
-                                                            ->withDeleted()
-                                                            ->countAllResults();
-            $cat['productos_activos'] = $this->productoModel->where('categoria_id', $cat['id_categoria'])
-                                                            ->countAllResults();
+            $cat['total_productos'] = $this->productoModel->countByCategoriaConArchivados($cat['id_categoria']);
+            $cat['productos_activos'] = $this->productoModel->countByCategoria($cat['id_categoria']);
         }
 
         return $categorias;
@@ -70,7 +67,7 @@ class CategoriaService
      */
     public function eliminar($id)
     {
-        $total = $this->productoModel->where('categoria_id', $id)->countAllResults();
+        $total = $this->productoModel->countByCategoriaConArchivados($id);
         
         if ($total > 0) {
             return [

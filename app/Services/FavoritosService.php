@@ -11,9 +11,9 @@ class FavoritosService
 {
     protected $favoritosModel;
 
-    public function __construct()
+    public function __construct(?FavoritoModel $favoritosModel = null)
     {
-        $this->favoritosModel = new FavoritoModel();
+        $this->favoritosModel = $favoritosModel ?? new FavoritoModel();
     }
 
     /**
@@ -21,9 +21,7 @@ class FavoritosService
      */
     public function toggle($usuario_id, $producto_id)
     {
-        $existe = $this->favoritosModel->where('usuario_id', $usuario_id)
-                                       ->where('producto_id', $producto_id)
-                                       ->first();
+        $existe = $this->favoritosModel->findFavorito($usuario_id, $producto_id);
 
         if ($existe) {
             $this->favoritosModel->delete($existe['id']);
@@ -43,7 +41,7 @@ class FavoritosService
      */
     public function getFavoritosIds($usuario_id)
     {
-        $favs = $this->favoritosModel->where('usuario_id', $usuario_id)->findAll();
+        $favs = $this->favoritosModel->findByUsuario($usuario_id);
         return array_column($favs, 'producto_id');
     }
 
