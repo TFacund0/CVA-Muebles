@@ -49,13 +49,13 @@ class AdminVentaController extends BaseApiController
         $body = $this->getBody();
 
         if (empty($body['estado'])) {
-            return $this->fail('El campo estado es obligatorio.', 422);
+            return $this->failJson('El campo estado es obligatorio.', 422);
         }
 
         $resultado = $this->ventasService->actualizarEstado($id, $body['estado']);
 
         if (!$resultado) {
-            return $this->fail('No se pudo actualizar el estado del pedido.', 422);
+            return $this->failJson('No se pudo actualizar el estado del pedido.', 422);
         }
 
         return $this->ok(null);
@@ -67,13 +67,13 @@ class AdminVentaController extends BaseApiController
         $monto = (float) ($body['monto'] ?? 0);
 
         if ($monto <= 0) {
-            return $this->fail('El monto debe ser mayor a 0.', 422);
+            return $this->failJson('El monto debe ser mayor a 0.', 422);
         }
 
         $resultado = $this->ventasService->registrarPago($id, $monto, $body['nota'] ?? '');
 
         if (!$resultado) {
-            return $this->fail('No se pudo registrar el pago.', 422);
+            return $this->failJson('No se pudo registrar el pago.', 422);
         }
 
         return $this->ok(null, 201);
@@ -86,7 +86,7 @@ class AdminVentaController extends BaseApiController
         $resultado = $this->ventasService->actualizarObservaciones($id, $body['observaciones'] ?? '');
 
         if (!$resultado) {
-            return $this->fail('No se pudieron guardar las observaciones.', 422);
+            return $this->failJson('No se pudieron guardar las observaciones.', 422);
         }
 
         return $this->ok(null);
@@ -110,7 +110,7 @@ class AdminVentaController extends BaseApiController
         $resultado = $this->ventasService->eliminarPedidoPermanente($id);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);
@@ -123,7 +123,7 @@ class AdminVentaController extends BaseApiController
         ]);
 
         if (empty($data['nombre_cliente']) || empty($data['detalles_obra']) || empty($data['total_venta'])) {
-            return $this->fail('Nombre del cliente, detalles y total son obligatorios.', 422);
+            return $this->failJson('Nombre del cliente, detalles y total son obligatorios.', 422);
         }
 
         $data['monto_sena'] = (float) ($data['monto_sena'] ?? 0);
@@ -134,7 +134,7 @@ class AdminVentaController extends BaseApiController
         $resultado = $this->ventasService->registrarPedidoPersonalizado($data, $imagenValida);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok($resultado, 201);

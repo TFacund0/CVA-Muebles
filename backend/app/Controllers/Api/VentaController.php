@@ -29,14 +29,14 @@ class VentaController extends BaseApiController
         $detalle = $this->ventasService->getGestionDetalle($id);
 
         if (!$detalle) {
-            return $this->fail('Pedido no encontrado.', 404);
+            return $this->failJson('Pedido no encontrado.', 404);
         }
 
         $esPropietario = (int) $detalle['venta']['usuario_id'] === (int) $usuario['id_usuario'];
         $esAdmin       = (int) $usuario['perfil_id'] === 1;
 
         if (!$esPropietario && !$esAdmin) {
-            return $this->fail('No tenés permiso para ver este pedido.', 403);
+            return $this->failJson('No tenés permiso para ver este pedido.', 403);
         }
 
         return $this->ok($detalle);
@@ -45,7 +45,7 @@ class VentaController extends BaseApiController
     public function store()
     {
         if (!env('SHOPPING_CART_ENABLED')) {
-            return $this->fail('El carrito de compras no está habilitado.', 403);
+            return $this->failJson('El carrito de compras no está habilitado.', 403);
         }
 
         $usuario = ApiAuthContext::user();
@@ -53,7 +53,7 @@ class VentaController extends BaseApiController
 
         $items = $body['items'] ?? [];
         if (empty($items)) {
-            return $this->fail('Debés incluir al menos un producto.', 422);
+            return $this->failJson('Debés incluir al menos un producto.', 422);
         }
 
         // Nunca confiamos en un precio mandado por el cliente: se busca el precio de venta actual en la BD.
@@ -61,12 +61,12 @@ class VentaController extends BaseApiController
         foreach ($items as $item) {
             $producto = $this->productoModel->find($item['producto_id'] ?? null);
             if (!$producto) {
-                return $this->fail("Producto {$item['producto_id']} no encontrado.", 422);
+                return $this->failJson("Producto {$item['producto_id']} no encontrado.", 422);
             }
 
             $cantidad = (int) ($item['cantidad'] ?? 0);
             if ($cantidad < 1) {
-                return $this->fail('La cantidad debe ser al menos 1.', 422);
+                return $this->failJson('La cantidad debe ser al menos 1.', 422);
             }
 
             $itemsAProcesar[] = [
@@ -84,7 +84,7 @@ class VentaController extends BaseApiController
         );
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok($resultado, 201);

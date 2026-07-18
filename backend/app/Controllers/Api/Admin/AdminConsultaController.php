@@ -33,7 +33,7 @@ class AdminConsultaController extends BaseApiController
         $resultado = $this->consultaService->desactivar($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo archivar la consulta.', 422);
+            return $this->failJson('No se pudo archivar la consulta.', 422);
         }
 
         return $this->ok(null);
@@ -44,7 +44,7 @@ class AdminConsultaController extends BaseApiController
         $resultado = $this->consultaService->restaurar($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo restaurar la consulta.', 422);
+            return $this->failJson('No se pudo restaurar la consulta.', 422);
         }
 
         return $this->ok(null);
@@ -55,7 +55,7 @@ class AdminConsultaController extends BaseApiController
         $resultado = $this->consultaService->eliminarPermanente($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo eliminar la consulta.', 422);
+            return $this->failJson('No se pudo eliminar la consulta.', 422);
         }
 
         return $this->ok(null);

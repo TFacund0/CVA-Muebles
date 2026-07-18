@@ -26,7 +26,7 @@ class AdminCategoriaController extends BaseApiController
         $resultado = $this->categoriaService->crear(['descripcion' => $body['descripcion'] ?? null]);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null, 201);
@@ -39,7 +39,7 @@ class AdminCategoriaController extends BaseApiController
         $resultado = $this->categoriaService->actualizar($id, ['descripcion' => $body['descripcion'] ?? null]);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);
@@ -50,7 +50,7 @@ class AdminCategoriaController extends BaseApiController
         $resultado = $this->categoriaService->eliminar($id);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);
@@ -61,7 +61,7 @@ class AdminCategoriaController extends BaseApiController
         $resultado = $this->categoriaService->toggleEstado($id);
 
         if (!$resultado) {
-            return $this->fail('Categoría no encontrada.', 404);
+            return $this->failJson('Categoría no encontrada.', 404);
         }
 
         return $this->ok(null);

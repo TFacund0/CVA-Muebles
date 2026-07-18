@@ -24,7 +24,7 @@ class AuthController extends BaseApiController
 
         // Límite de 5 intentos por minuto por IP (mismo criterio que LoginController::auth legacy).
         if ($throttler->check('api_login_' . md5($this->request->getIPAddress()), 5, MINUTE) === false) {
-            return $this->fail('Demasiados intentos. Por favor, espera un minuto.', 429);
+            return $this->failJson('Demasiados intentos. Por favor, espera un minuto.', 429);
         }
 
         $body     = $this->getBody();
@@ -32,12 +32,12 @@ class AuthController extends BaseApiController
         $password = $body['password'] ?? null;
 
         if (empty($login) || empty($password)) {
-            return $this->fail('Login y contraseña son obligatorios.', 422);
+            return $this->failJson('Login y contraseña son obligatorios.', 422);
         }
 
         $resultado = $this->usuarioService->autenticar($login, $password);
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 401);
+            return $this->failJson($resultado['message'], 401);
         }
 
         return $this->ok(JwtIssuer::issue($resultado['data']));
@@ -56,12 +56,12 @@ class AuthController extends BaseApiController
         ];
 
         if (in_array(null, $data, true)) {
-            return $this->fail('Todos los campos (name, surname, user, email, pass) son obligatorios.', 422);
+            return $this->failJson('Todos los campos (name, surname, user, email, pass) son obligatorios.', 422);
         }
 
         $resultado = $this->usuarioService->registrarUsuario($data);
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         // Autenticamos automáticamente tras el registro exitoso.
@@ -77,7 +77,7 @@ class AuthController extends BaseApiController
     {
         $refreshToken = $this->getBody()['refresh_token'] ?? null;
         if (empty($refreshToken)) {
-            return $this->fail('refresh_token es obligatorio.', 422);
+            return $this->failJson('refresh_token es obligatorio.', 422);
         }
 
         $config = config(JwtConfig::class);
@@ -85,16 +85,16 @@ class AuthController extends BaseApiController
         try {
             $payload = Jwt::decode($refreshToken, $config->secret);
         } catch (RuntimeException) {
-            return $this->fail('Refresh token inválido o expirado.', 401);
+            return $this->failJson('Refresh token inválido o expirado.', 401);
         }
 
         if (($payload['type'] ?? null) !== 'refresh') {
-            return $this->fail('El token provisto no es un refresh token.', 401);
+            return $this->failJson('El token provisto no es un refresh token.', 401);
         }
 
         $usuario = $this->usuarioService->getUsuario($payload['id_usuario']);
         if (!$usuario || $usuario['baja'] === 'SI') {
-            return $this->fail('Usuario no encontrado o suspendido.', 401);
+            return $this->failJson('Usuario no encontrado o suspendido.', 401);
         }
 
         return $this->ok(JwtIssuer::issue([
@@ -112,7 +112,7 @@ class AuthController extends BaseApiController
     {
         $user = ApiAuthContext::user();
         if (!$user) {
-            return $this->fail('No autenticado.', 401);
+            return $this->failJson('No autenticado.', 401);
         }
 
         return $this->ok($user);

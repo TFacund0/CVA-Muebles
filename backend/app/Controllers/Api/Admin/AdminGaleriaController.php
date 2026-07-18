@@ -24,7 +24,7 @@ class AdminGaleriaController extends BaseApiController
         $resultado = $this->galeriaService->aprobar($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo aprobar la foto.', 422);
+            return $this->failJson('No se pudo aprobar la foto.', 422);
         }
 
         return $this->ok(null);
@@ -35,7 +35,7 @@ class AdminGaleriaController extends BaseApiController
         $resultado = $this->galeriaService->eliminar($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo eliminar la foto.', 422);
+            return $this->failJson('No se pudo eliminar la foto.', 422);
         }
 
         return $this->ok(null);

@@ -35,7 +35,7 @@ class GaleriaController extends BaseApiController
         ];
 
         if (!$this->validate($rules)) {
-            return $this->fail($this->validator->getError('imagen') ?? 'Error en la validación.', 422);
+            return $this->failJson($this->validator->getError('imagen') ?? 'Error en la validación.', 422);
         }
 
         $usuario = ApiAuthContext::user();
@@ -48,7 +48,7 @@ class GaleriaController extends BaseApiController
         );
 
         if (!$resultado) {
-            return $this->fail('Hubo un problema al subir la imagen.', 500);
+            return $this->failJson('Hubo un problema al subir la imagen.', 500);
         }
 
         return $this->ok(null, 201);

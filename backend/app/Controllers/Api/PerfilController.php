@@ -32,7 +32,7 @@ class PerfilController extends BaseApiController
         $resultado = $this->usuarioService->actualizarPerfil($usuario['id_usuario'], $data, $imagenValida);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok($resultado['updated_data']);
@@ -51,7 +51,7 @@ class PerfilController extends BaseApiController
         );
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);

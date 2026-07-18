@@ -27,7 +27,7 @@ class ProductoController extends BaseApiController
         $producto = $this->productoModel->getProducto($id);
 
         if (!$producto || $producto['eliminado'] === 'SI') {
-            return $this->fail('Producto no encontrado.', 404);
+            return $this->failJson('Producto no encontrado.', 404);
         }
 
         $producto['galeria'] = $this->productoImagenModel->getImagenesPorProducto($id);

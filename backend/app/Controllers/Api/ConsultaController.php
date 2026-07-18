@@ -17,14 +17,14 @@ class ConsultaController extends BaseApiController
     {
         $throttler = \Config\Services::throttler();
         if ($throttler->check(md5($this->request->getIPAddress()), 3, 86400) === false) {
-            return $this->fail('Límite de 3 consultas por día alcanzado.', 429);
+            return $this->failJson('Límite de 3 consultas por día alcanzado.', 429);
         }
 
         $body = $this->getBody();
 
         // Honeypot: campo oculto que un humano nunca completa.
         if (!empty($body['middle_name'])) {
-            return $this->fail('Detectamos actividad inusual. Por favor intenta más tarde.', 422);
+            return $this->failJson('Detectamos actividad inusual. Por favor intenta más tarde.', 422);
         }
 
         $data = [
@@ -39,7 +39,7 @@ class ConsultaController extends BaseApiController
         $resultado = $this->consultaService->registrar($data);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null, 201);

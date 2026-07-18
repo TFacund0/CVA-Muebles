@@ -21,7 +21,7 @@ abstract class BaseApiController extends ResourceController
         ]);
     }
 
-    protected function fail(string $message, int $code = 400, $data = null)
+    protected function failJson(string $message, int $code = 400, $data = null)
     {
         return $this->response->setStatusCode($code)->setJSON([
             'status'  => 'error',

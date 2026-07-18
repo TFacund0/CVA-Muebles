@@ -38,7 +38,7 @@ class AdminUsuarioController extends BaseApiController
             : $this->usuarioService->darDeBaja($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo actualizar el estado del usuario.', 422);
+            return $this->failJson('No se pudo actualizar el estado del usuario.', 422);
         }
 
         return $this->ok(null);
@@ -49,7 +49,7 @@ class AdminUsuarioController extends BaseApiController
         $resultado = $this->usuarioService->cambiarPerfil($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo cambiar el perfil del usuario.', 422);
+            return $this->failJson('No se pudo cambiar el perfil del usuario.', 422);
         }
 
         return $this->ok(null);
@@ -60,7 +60,7 @@ class AdminUsuarioController extends BaseApiController
         $resultado = $this->usuarioService->eliminarPermanente($id);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);

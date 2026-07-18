@@ -37,7 +37,7 @@ class AdminProductoController extends BaseApiController
         $producto = $this->productoService->getProductoConGaleria($id);
 
         if (!$producto) {
-            return $this->fail('Producto no encontrado.', 404);
+            return $this->failJson('Producto no encontrado.', 404);
         }
 
         return $this->ok($producto);
@@ -60,7 +60,7 @@ class AdminProductoController extends BaseApiController
         $resultado = $this->productoService->crearProducto($data, $imagenValida);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null, 201);
@@ -78,7 +78,7 @@ class AdminProductoController extends BaseApiController
         $resultado = $this->productoService->actualizarProducto($id, $data, $imagenValida);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);
@@ -94,7 +94,7 @@ class AdminProductoController extends BaseApiController
             : $this->productoService->eliminar($id);
 
         if (!$resultado) {
-            return $this->fail('No se pudo actualizar el estado del producto.', 422);
+            return $this->failJson('No se pudo actualizar el estado del producto.', 422);
         }
 
         return $this->ok(null);
@@ -105,7 +105,7 @@ class AdminProductoController extends BaseApiController
         $resultado = $this->productoService->eliminarPermanente($id);
 
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         return $this->ok(null);
@@ -116,13 +116,13 @@ class AdminProductoController extends BaseApiController
         $files = $this->request->getFileMultiple('imagenes') ?? [];
 
         if (empty($files)) {
-            return $this->fail('Debés incluir al menos una imagen.', 422);
+            return $this->failJson('Debés incluir al menos una imagen.', 422);
         }
 
         $resultado = $this->productoService->subirImagenesGaleria($id, $files);
 
         if (!$resultado) {
-            return $this->fail('No se pudo subir la galería.', 422);
+            return $this->failJson('No se pudo subir la galería.', 422);
         }
 
         return $this->ok(null, 201);
@@ -133,7 +133,7 @@ class AdminProductoController extends BaseApiController
         $resultado = $this->productoService->eliminarFotoGaleria($fotoId);
 
         if (!$resultado) {
-            return $this->fail('Foto no encontrada.', 404);
+            return $this->failJson('Foto no encontrada.', 404);
         }
 
         return $this->ok(null);

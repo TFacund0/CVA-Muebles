@@ -112,17 +112,17 @@ class GoogleAuthController extends BaseApiController
         $username     = $body['user'] ?? null;
 
         if (empty($pendingToken) || empty($username)) {
-            return $this->fail('Token y nombre de usuario son obligatorios.', 422);
+            return $this->failJson('Token y nombre de usuario son obligatorios.', 422);
         }
 
         $profile = \Config\Services::cache()->get('google_pending_' . $pendingToken);
         if (!$profile) {
-            return $this->fail('La sesión de Google expiró. Por favor, intentá nuevamente.', 401);
+            return $this->failJson('La sesión de Google expiró. Por favor, intentá nuevamente.', 401);
         }
 
         $rules = ['user' => 'required|min_length[4]|is_unique[usuarios.usuario]'];
         if (!$this->validateData($body, $rules)) {
-            return $this->fail('El nombre de usuario ya está en uso o es demasiado corto.', 422);
+            return $this->failJson('El nombre de usuario ya está en uso o es demasiado corto.', 422);
         }
 
         $userData = [
@@ -135,7 +135,7 @@ class GoogleAuthController extends BaseApiController
 
         $resultado = $this->usuarioService->registrarUsuario($userData);
         if ($resultado['status'] !== 'success') {
-            return $this->fail($resultado['message'], 422);
+            return $this->failJson($resultado['message'], 422);
         }
 
         $usuarioModel = new UsuarioModel();
