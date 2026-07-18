@@ -13,10 +13,10 @@ class ProductoService
     protected $productoModel;
     protected $imagenModel;
 
-    public function __construct()
+    public function __construct(?ProductoModel $productoModel = null, ?ProductoImagenModel $imagenModel = null)
     {
-        $this->productoModel = new ProductoModel();
-        $this->imagenModel = new ProductoImagenModel();
+        $this->productoModel = $productoModel ?? new ProductoModel();
+        $this->imagenModel = $imagenModel ?? new ProductoImagenModel();
     }
 
     /**
@@ -120,7 +120,13 @@ class ProductoService
      */
     public function reactivar($id)
     {
-        return $this->productoModel->update($id, ['deleted_at' => null]);
+        // deleted_at no está en $allowedFields (es un campo protegido, gestionado
+        // por el soft-delete de CI4), así que Model::update() lo descartaría.
+        // Se restaura vía una query directa a la tabla (bypass del Model).
+        return \Config\Database::connect()
+            ->table('productos')
+            ->where('id_producto', $id)
+            ->update(['deleted_at' => null]);
     }
 
     /**

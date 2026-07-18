@@ -11,9 +11,9 @@ class UsuarioService
 {
     protected $usuarioModel;
 
-    public function __construct()
+    public function __construct(?UsuarioModel $usuarioModel = null)
     {
-        $this->usuarioModel = new UsuarioModel();
+        $this->usuarioModel = $usuarioModel ?? new UsuarioModel();
     }
 
     /**
@@ -21,10 +21,7 @@ class UsuarioService
      */
     public function autenticar($login, $password)
     {
-        $usuario = $this->usuarioModel->withDeleted()
-                                      ->where('email', $login)
-                                      ->orWhere('usuario', $login)
-                                      ->first();
+        $usuario = $this->usuarioModel->findByEmailOUsuario($login);
 
         if (!$usuario) {
             return ['status' => 'error', 'message' => 'Email o nombre de usuario incorrectos'];
@@ -197,7 +194,10 @@ class UsuarioService
      */
     public function reactivar($id)
     {
-        return $this->usuarioModel->update($id, ['deleted_at' => null]);
+        // deleted_at no está en $allowedFields (es un campo protegido, gestionado
+        // por el soft-delete de CI4), así que Model::update() lo descartaría.
+        // Se restaura vía el query builder directo.
+        return $this->usuarioModel->builder()->where('id_usuario', $id)->update(['deleted_at' => null]);
     }
 
     /**

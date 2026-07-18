@@ -9,3 +9,4 @@ writable/uploads/*
 phpunit.xml
 .phpunit.result.cache
 vendor/
+build/

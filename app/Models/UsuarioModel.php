@@ -25,4 +25,16 @@ class UsuarioModel extends Model
                     ->withDeleted()
                     ->findAll();
     }
+
+    /**
+     * Busca un usuario por email o nombre de usuario (incluye dados de baja,
+     * para que UsuarioService::autenticar() pueda distinguir ese caso del de
+     * "no existe").
+     */
+    public function findByEmailOUsuario(string $login): ?array {
+        return $this->withDeleted()
+                    ->where('email', $login)
+                    ->orWhere('usuario', $login)
+                    ->first();
+    }
 }
