@@ -19,13 +19,18 @@ class VentasService
     protected $pagosModel;
     protected $db;
 
-    public function __construct()
-    {
-        $this->ventasModel = new VentasCabeceraModel();
-        $this->detalleModel = new VentasDetalleModel();
-        $this->productoModel = new ProductoModel();
-        $this->pagosModel = new VentasPagosModel();
-        $this->db = \Config\Database::connect();
+    public function __construct(
+        ?VentasCabeceraModel $ventasModel = null,
+        ?VentasDetalleModel $detalleModel = null,
+        ?ProductoModel $productoModel = null,
+        ?VentasPagosModel $pagosModel = null,
+        $db = null
+    ) {
+        $this->ventasModel = $ventasModel ?? new VentasCabeceraModel();
+        $this->detalleModel = $detalleModel ?? new VentasDetalleModel();
+        $this->productoModel = $productoModel ?? new ProductoModel();
+        $this->pagosModel = $pagosModel ?? new VentasPagosModel();
+        $this->db = $db ?? \Config\Database::connect();
     }
 
     /**
