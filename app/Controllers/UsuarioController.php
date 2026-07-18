@@ -21,7 +21,7 @@ class UsuarioController extends BaseController {
      */
     public function index_registrar() {    
         if (session()->get('logged_in') && session()->get('perfil_id') != 1) return redirect()->to('/');
-        return view('back/users/registro', ['title' => 'Registro']);
+        return view('front/pages/registro', ['title' => 'Registro']);
     }
 
     /**

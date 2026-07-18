@@ -18,7 +18,7 @@ class LoginController extends BaseController {
      */
     public function create() {
         if (session()->get('logged_in')) return redirect()->to('/');
-        return view('back/users/login', ['title' => 'Login']);
+        return view('front/pages/login', ['title' => 'Login']);
     }
 
     /**
