@@ -34,7 +34,7 @@ class ProductoService
         ];
 
         foreach ($productos as $p) {
-            if ($p['eliminado'] == 'NO') {
+            if ($p['deleted_at'] === null) {
                 $counts['activos']++;
                 if ($p['stock'] <= 0) $counts['sin_stock']++;
             } else {
@@ -86,7 +86,7 @@ class ProductoService
         try {
             if ($image && $image->isValid() && !$image->hasMoved()) {
                 // Borrar imagen anterior si existe
-                $producto_actual = $this->productoModel->find($id);
+                $producto_actual = $this->productoModel->withDeleted()->find($id);
                 if ($producto_actual && !empty($producto_actual['imagen'])) {
                     $old_path = FCPATH . 'assets/uploads/' . $producto_actual['imagen'];
                     if (file_exists($old_path)) @unlink($old_path);
@@ -112,7 +112,7 @@ class ProductoService
      */
     public function eliminar($id)
     {
-        return $this->productoModel->update($id, ['eliminado' => 'SI']);
+        return $this->productoModel->delete($id);
     }
 
     /**
@@ -120,7 +120,7 @@ class ProductoService
      */
     public function reactivar($id)
     {
-        return $this->productoModel->update($id, ['eliminado' => 'NO']);
+        return $this->productoModel->update($id, ['deleted_at' => null]);
     }
 
     /**
@@ -192,8 +192,8 @@ class ProductoService
         }
 
         try {
-            // Obtener datos del producto para borrar su imagen principal
-            $producto = $this->productoModel->find($id);
+            // Obtener datos del producto para borrar su imagen principal (incluye archivados)
+            $producto = $this->productoModel->withDeleted()->find($id);
             if (!$producto) {
                 return [
                     'status' => 'error',
@@ -222,8 +222,8 @@ class ProductoService
                 }
             }
 
-            // 5. Borrar físicamente el producto
-            $this->productoModel->delete($id);
+            // 5. Borrar físicamente el producto (purge=true, ignora el soft-delete)
+            $this->productoModel->delete($id, true);
 
             return [
                 'status' => 'success',

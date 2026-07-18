@@ -7,7 +7,9 @@ class ProductoModel extends Model
 {
     protected $table = 'productos';
     protected $primaryKey = 'id_producto';
-    protected $allowedFields = ['nombre_prod', 'imagen', 'categoria_id', 'precio', 'precio_vta', 'stock', 'stock_min', 'eliminado', 'descripcion'];
+    protected $useSoftDeletes = true;
+    protected $useTimestamps = true;
+    protected $allowedFields = ['nombre_prod', 'imagen', 'categoria_id', 'precio', 'precio_vta', 'stock', 'stock_min', 'descripcion'];
 
     protected $validationRules = [
         'nombre_prod'  => 'required|min_length[3]|max_length[100]',
@@ -20,20 +22,21 @@ class ProductoModel extends Model
     public function getProductoAll() {
         return $this->select('productos.*, categorias.descripcion as categoria')
                     ->join('categorias', 'categorias.id_categoria = productos.categoria_id')
+                    ->withDeleted()
                     ->findAll();
     }
 
     public function getProductosPublicos() {
         return $this->select('productos.*, categorias.descripcion as categoria')
                     ->join('categorias', 'categorias.id_categoria = productos.categoria_id')
-                    ->where('productos.eliminado', 'NO')
                     ->where('categorias.activo', 1)
                     ->findAll();
     }
 
     public function getBuilderProductos() {
         return $this->select('productos.*, categorias.descripcion as categoria, categorias.activo as categoria_activa')
-                    ->join('categorias', 'categorias.id_categoria = productos.categoria_id');
+                    ->join('categorias', 'categorias.id_categoria = productos.categoria_id')
+                    ->withDeleted();
     }
 
     public function getProducto($id = null) {

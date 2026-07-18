@@ -66,8 +66,7 @@ class ProductoController extends BaseController {
             'precio_vta'   => $this->request->getVar('precio-vta'),
             'stock'        => $this->request->getVar('stock'),
             'stock_min'    => $this->request->getVar('stock-min'),
-            'descripcion'  => $this->request->getVar('descripcion'),
-            'eliminado'    => $this->request->getVar('eliminado') ?? 'NO'
+            'descripcion'  => $this->request->getVar('descripcion')
         ], $this->request->getFile('image'));
 
         if ($resultado['status'] === 'success') {
@@ -155,7 +154,7 @@ class ProductoController extends BaseController {
      */
     public function ver_detalle($id) {
         $producto = $this->productoService->getProductoConGaleria($id);
-        if (!$producto || $producto['eliminado'] == 'SI' || $producto['categoria_activa'] == 0) {
+        if (!$producto || $producto['deleted_at'] !== null || $producto['categoria_activa'] == 0) {
             return redirect()->to('/productos')->with('fail', 'Producto no disponible.');
         }
 

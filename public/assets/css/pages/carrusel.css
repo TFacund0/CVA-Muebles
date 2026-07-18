@@ -122,21 +122,8 @@
     border-width: 2px !important;
 }
 
-/* Define .btn-gold Premium Style */
-.btn-gold {
-    background-color: var(--cva-gold) !important;
-    color: white !important;
-    border: 2px solid var(--cva-gold) !important;
-    box-shadow: 0 5px 20px rgba(229, 160, 13, 0.3) !important;
-}
-
-.btn-gold:hover {
-    background-color: var(--cva-brown) !important;
-    border-color: var(--cva-brown) !important;
-    color: white !important;
-    transform: scale(1.05) translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(45, 27, 25, 0.4) !important;
-}
+/* .btn-gold vive en base/global.css — no se redefine acá para evitar
+   que el hover de esta página quede distinto al resto del sitio. */
 
 /* Specific Hover Interactions for Hero Carousel Buttons */
 #heroCarousel .glass-caption .btn-vivid:hover {

@@ -21,7 +21,8 @@ class UsuarioService
      */
     public function autenticar($login, $password)
     {
-        $usuario = $this->usuarioModel->where('email', $login)
+        $usuario = $this->usuarioModel->withDeleted()
+                                      ->where('email', $login)
                                       ->orWhere('usuario', $login)
                                       ->first();
 
@@ -29,7 +30,7 @@ class UsuarioService
             return ['status' => 'error', 'message' => 'Email o nombre de usuario incorrectos'];
         }
 
-        if ($usuario['baja'] == 'SI') {
+        if ($usuario['deleted_at'] !== null) {
             return ['status' => 'error', 'message' => 'Usuario dado de baja'];
         }
 
@@ -67,7 +68,7 @@ class UsuarioService
         ];
 
         foreach ($usuarios as $u) {
-            if ($u['baja'] == 'NO') $counts['activos']++;
+            if ($u['deleted_at'] === null) $counts['activos']++;
             else $counts['suspendidos']++;
             
             if ($u['perfil_id'] == 1) $counts['admins']++;
@@ -96,7 +97,6 @@ class UsuarioService
                 'email'     => $data['email'],
                 'pass'      => password_hash($data['pass'], PASSWORD_DEFAULT),
                 'perfil_id' => 2,
-                'baja'      => 'NO'
             ];
 
             if ($this->usuarioModel->insert($userData) === false) {
@@ -177,7 +177,7 @@ class UsuarioService
      */
     public function cambiarPerfil($id)
     {
-        $usuario = $this->usuarioModel->find($id);
+        $usuario = $this->usuarioModel->withDeleted()->find($id);
         if (!$usuario) return false;
 
         $nuevo_perfil = ($usuario['perfil_id'] == 1) ? 2 : 1;
@@ -189,7 +189,7 @@ class UsuarioService
      */
     public function darDeBaja($id)
     {
-        return $this->usuarioModel->update($id, ['baja' => 'SI']);
+        return $this->usuarioModel->delete($id);
     }
 
     /**
@@ -197,25 +197,24 @@ class UsuarioService
      */
     public function reactivar($id)
     {
-        return $this->usuarioModel->update($id, ['baja' => 'NO']);
+        return $this->usuarioModel->update($id, ['deleted_at' => null]);
     }
 
     /**
-     * Busca un usuario por ID.
+     * Busca un usuario por ID (incluye dados de baja).
      */
     public function getUsuario($id)
     {
-        return $this->usuarioModel->find($id);
+        return $this->usuarioModel->withDeleted()->find($id);
     }
 
     /**
-     * Obtiene todos los clientes activos (perfil_id = 2, baja = NO).
+     * Obtiene todos los clientes activos (perfil_id = 2, no dados de baja).
      */
     public function getClientesActivos()
     {
         return $this->usuarioModel
             ->where('perfil_id', 2)
-            ->where('baja', 'NO')
             ->findAll();
     }
 
@@ -239,8 +238,8 @@ class UsuarioService
             // 2. Eliminar favoritos en favoritos
             $db->table('favoritos')->where('usuario_id', $id)->delete();
 
-            // 3. Eliminar de la tabla usuarios
-            $this->usuarioModel->delete($id);
+            // 3. Eliminar de la tabla usuarios (purge=true, ignora el soft-delete)
+            $this->usuarioModel->delete($id, true);
 
             return [
                 'status' => 'success',

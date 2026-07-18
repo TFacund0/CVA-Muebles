@@ -160,6 +160,7 @@
             <tbody id="user-table-body">
                 <?php foreach ($usuarios as $u):
                     $isSelf = (session()->get('id_usuario') == $u['id_usuario']);
+                    $u['baja'] = $u['deleted_at'] !== null ? 'SI' : 'NO';
                 ?>
                     <tr class="user-row"
                         data-search="<?= strtolower(esc($u['nombre'] . ' ' . $u['apellido'] . ' ' . $u['email'] . ' ' . $u['usuario'])) ?>"

@@ -7,7 +7,9 @@ class UsuarioModel extends Model
 {
     protected $table = 'usuarios';
     protected $primaryKey = 'id_usuario';
-    protected $allowedFields = ['nombre', 'apellido', 'usuario', 'email', 'pass', 'imagen', 'perfil_id', 'baja'];
+    protected $useSoftDeletes = true;
+    protected $useTimestamps = true;
+    protected $allowedFields = ['nombre', 'apellido', 'usuario', 'email', 'pass', 'imagen', 'perfil_id'];
     
     protected $validationRules = [
         'nombre'    => 'required|min_length[2]|max_length[50]',
@@ -20,6 +22,7 @@ class UsuarioModel extends Model
     public function getUsuariosAll() {
         return $this->select('usuarios.*, perfiles.descripcion as perfil')
                     ->join('perfiles', 'perfiles.id = usuarios.perfil_id')
+                    ->withDeleted()
                     ->findAll();
     }
 }

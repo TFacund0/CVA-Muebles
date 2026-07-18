@@ -165,8 +165,9 @@
             <tbody id="table-body">
                 <?php if(!empty($productos)): ?>
                     <?php foreach ($productos as $p): ?>
-                        <tr class="product-row" 
-                            data-name="<?= strtolower(esc($p['nombre_prod'])) ?>" 
+                        <?php $p['eliminado'] = $p['deleted_at'] !== null ? 'SI' : 'NO'; ?>
+                        <tr class="product-row"
+                            data-name="<?= strtolower(esc($p['nombre_prod'])) ?>"
                             data-category="<?= esc($p['categoria'] ?? 'Sin Categoría') ?>"
                             data-eliminado="<?= $p['eliminado'] ?>">
                             <td class="ps-4" data-label="PIEZA">

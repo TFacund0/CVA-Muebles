@@ -31,9 +31,10 @@ class CategoriaService
         }
         
         foreach ($categorias as &$cat) {
-            $cat['total_productos'] = $this->productoModel->where('categoria_id', $cat['id_categoria'])->countAllResults();
+            $cat['total_productos'] = $this->productoModel->where('categoria_id', $cat['id_categoria'])
+                                                            ->withDeleted()
+                                                            ->countAllResults();
             $cat['productos_activos'] = $this->productoModel->where('categoria_id', $cat['id_categoria'])
-                                                            ->where('eliminado', 'NO')
                                                             ->countAllResults();
         }
 
