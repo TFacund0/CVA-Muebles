@@ -28,6 +28,13 @@ class UsuarioController extends BaseController {
      * Valida y registra un nuevo usuario delegando al servicio.
      */
     public function formValidation() {
+        $throttler = \Config\Services::throttler();
+
+        // Limitar a 5 registros por hora por cada IP.
+        if ($throttler->check(md5($this->request->getIPAddress()) . '-registro', 5, HOUR) === false) {
+            return redirect()->back()->withInput()->with('fail', 'Demasiados intentos de registro. Por favor, esperá un momento.');
+        }
+
         $resultado = $this->usuarioService->registrarUsuario($this->request->getPost());
 
         if ($resultado['status'] === 'success') {
