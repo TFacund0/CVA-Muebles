@@ -9,4 +9,4 @@ phpunit.xml
 .phpunit.result.cache
 vendor/
 public/assets/uploads/*
-!public/assets/uploads/.gitkeep
+!public/assets/uploads/.gitkeepbuild/

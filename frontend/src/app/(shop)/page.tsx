@@ -1,13 +1,16 @@
+import { Suspense } from "react";
 import Link from "next/link";
+import Hero from "@/components/home/Hero";
 import ProductoCard from "@/components/product/ProductoCard";
+import SearchBar from "@/components/product/SearchBar";
 import { getCategorias, getProductos, type Categoria, type Producto } from "@/lib/api";
 
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ categoria?: string }>;
+  searchParams: Promise<{ categoria?: string; q?: string }>;
 }) {
-  const { categoria } = await searchParams;
+  const { categoria, q } = await searchParams;
 
   let productos: Producto[] = [];
   let categorias: Categoria[] = [];
@@ -19,42 +22,54 @@ export default async function Home({
     error = err instanceof Error ? err.message : "No se pudo cargar el catálogo.";
   }
 
-  return (
-    <main className="mx-auto max-w-5xl px-6 py-12">
-      <h1 className="mb-8 text-3xl font-semibold">Catálogo CVA Muebles</h1>
+  const filtrados = q
+    ? productos.filter((p) => p.nombre_prod.toLowerCase().includes(q.toLowerCase()))
+    : productos;
 
-      {categorias.length > 0 && (
-        <div className="mb-6 flex flex-wrap gap-2">
-          <Link
-            href="/"
-            className={`rounded-full border px-3 py-1 text-sm ${!categoria ? "bg-black text-white" : ""}`}
-          >
-            Todos
-          </Link>
-          {categorias.map((cat) => (
+  return (
+    <main>
+      <Hero />
+
+      <div className="mx-auto max-w-6xl px-6 py-12">
+      <h1 className="font-heading mb-8 text-4xl font-bold text-cva-brown">Catálogo CVA Muebles</h1>
+
+      <div className="mb-6 grid gap-3 lg:grid-cols-[minmax(0,320px)_1fr] lg:items-center">
+        <Suspense fallback={<div className="search-artisan w-full" />}>
+          <SearchBar />
+        </Suspense>
+
+        {categorias.length > 0 && (
+          <div className="flex flex-wrap gap-2 lg:justify-end">
             <Link
-              key={cat.id_categoria}
-              href={`/?categoria=${encodeURIComponent(cat.descripcion)}`}
-              className={`rounded-full border px-3 py-1 text-sm ${
-                categoria === cat.descripcion ? "bg-black text-white" : ""
-              }`}
+              href="/"
+              className={`btn-filter-artisan ${!categoria ? "active" : ""}`}
             >
-              {cat.descripcion}
+              Todos
             </Link>
-          ))}
-        </div>
-      )}
+            {categorias.map((cat) => (
+              <Link
+                key={cat.id_categoria}
+                href={`/?categoria=${encodeURIComponent(cat.descripcion)}`}
+                className={`btn-filter-artisan ${categoria === cat.descripcion ? "active" : ""}`}
+              >
+                {cat.descripcion}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
 
       {error && <p className="text-red-600">{error}</p>}
 
-      {!error && productos.length === 0 && (
-        <p className="text-zinc-500">No hay productos disponibles por el momento.</p>
+      {!error && filtrados.length === 0 && (
+        <p className="text-cva-text-muted">No hay productos disponibles por el momento.</p>
       )}
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-        {productos.map((producto) => (
-          <ProductoCard key={producto.id_producto} producto={producto} />
+        {filtrados.map((producto, index) => (
+          <ProductoCard key={producto.id_producto} producto={producto} priority={index < 3} />
         ))}
+      </div>
       </div>
     </main>
   );

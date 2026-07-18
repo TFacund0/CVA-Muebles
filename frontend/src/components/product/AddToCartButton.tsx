@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useCart } from "@/context/CartContext";
 import type { Producto } from "@/lib/api";
 
-export default function AddToCartButton({ producto }: { producto: Producto }) {
+export default function AddToCartButton({
+  producto,
+  compact = false,
+}: {
+  producto: Producto;
+  compact?: boolean;
+}) {
   const { addItem } = useCart();
   const [agregado, setAgregado] = useState(false);
 
@@ -20,11 +26,8 @@ export default function AddToCartButton({ producto }: { producto: Producto }) {
   }
 
   return (
-    <button
-      onClick={handleClick}
-      className="mt-4 rounded bg-black px-4 py-2 text-white transition hover:bg-zinc-800"
-    >
-      {agregado ? "¡Agregado!" : "Agregar al carrito"}
+    <button onClick={handleClick} className={compact ? "btn-brown-solid" : "btn-artisan-primary"}>
+      {agregado ? "¡Agregado!" : compact ? "Agregar" : "🛒 Agregar al Carrito"}
     </button>
   );
 }
