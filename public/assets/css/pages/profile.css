@@ -186,13 +186,13 @@
     .profile-sidebar-summary h3 { font-size: 1.5rem; }
     
     .profile-form-content { padding: 2.5rem 1.5rem; }
-    .profile-form-content h2 { font-size: 1.6rem !important; }
+    .profile-form-content h2 { font-size: 1.6rem; }
     
     .artisan-label-v3 { font-size: 0.65rem; }
     .artisan-control-v3 { padding: 0.8rem 1rem; font-size: 0.9rem; }
     
     .btn-artisan-v3 { width: 100%; padding: 1rem; }
-    .btnGroup .d-flex { flex-direction: column; gap: 10px !important; }
+    .btnGroup .d-flex { flex-direction: column; gap: 10px; }
     #cancelEdit { width: 100%; }
 }
 

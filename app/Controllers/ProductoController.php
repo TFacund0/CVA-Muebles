@@ -18,6 +18,8 @@ class ProductoController extends BaseController {
 
     /**
      * Muestra el listado de productos para administración.
+     *
+     * @return string
      */
     public function index() {
 
@@ -35,6 +37,8 @@ class ProductoController extends BaseController {
 
     /**
      * Muestra el formulario de alta de producto.
+     *
+     * @return string
      */
     public function create_alta_producto() {
 
@@ -46,20 +50,12 @@ class ProductoController extends BaseController {
     }
 
     /**
-     * Valida y crea un producto delegando al servicio.
+     * Lee del request los campos comunes al alta y la edición de un producto.
+     *
+     * @return array
      */
-    public function formValidation() {
-
-        // Validación estricta de la imagen para prevenir subida de archivos maliciosos (RCE)
-        $rules = [
-            'image' => 'is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/webp]|max_size[image,2048]'
-        ];
-        
-        if ($this->request->getFile('image')->isValid() && !$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('fail', 'El archivo subido no es una imagen válida o supera los 2MB.');
-        }
-
-        $resultado = $this->productoService->crearProducto([
+    private function productoDataFromRequest(): array {
+        return [
             'nombre_prod'  => $this->request->getVar('nombre_producto'),
             'categoria_id' => $this->request->getVar('categoria_id'),
             'precio'       => $this->request->getVar('precio'),
@@ -67,7 +63,29 @@ class ProductoController extends BaseController {
             'stock'        => $this->request->getVar('stock'),
             'stock_min'    => $this->request->getVar('stock-min'),
             'descripcion'  => $this->request->getVar('descripcion')
-        ], $this->request->getFile('image'));
+        ];
+    }
+
+    /**
+     * Valida y crea un producto delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
+    public function formValidation() {
+
+        // Validación estricta de la imagen para prevenir subida de archivos maliciosos (RCE)
+        $rules = [
+            'image' => $this->imageValidationRule('image')
+        ];
+
+        if ($this->request->getFile('image')->isValid() && !$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('fail', 'El archivo subido no es una imagen válida o supera los 2MB.');
+        }
+
+        $resultado = $this->productoService->crearProducto(
+            $this->productoDataFromRequest(),
+            $this->request->getFile('image')
+        );
 
         if ($resultado['status'] === 'success') {
             return redirect()->to('/alta-producto')->with('success', $resultado['message']);
@@ -78,6 +96,9 @@ class ProductoController extends BaseController {
 
     /**
      * Muestra el formulario de edición de producto.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return string|\CodeIgniter\HTTP\RedirectResponse
      */
     public function index_editar_producto($id) {
 
@@ -94,13 +115,16 @@ class ProductoController extends BaseController {
 
     /**
      * Actualiza un producto delegando al servicio.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function modificar_producto($id) {
 
 
         // Validación estricta de la imagen principal
         $rulesMain = [
-            'imagen' => 'is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen,2048]'
+            'imagen' => $this->imageValidationRule('imagen')
         ];
         
         if ($this->request->getFile('imagen')->isValid() && !$this->validate($rulesMain)) {
@@ -108,15 +132,11 @@ class ProductoController extends BaseController {
         }
 
         // Actualizar datos básicos e imagen principal
-        $resultado = $this->productoService->actualizarProducto($id, [
-            'nombre_prod'  => $this->request->getVar('nombre_producto'),
-            'categoria_id' => $this->request->getVar('categoria_id'),
-            'precio'       => $this->request->getVar('precio'),
-            'precio_vta'   => $this->request->getVar('precio-vta'),
-            'stock'        => $this->request->getVar('stock'),
-            'stock_min'    => $this->request->getVar('stock-min'),
-            'descripcion'  => $this->request->getVar('descripcion')
-        ], $this->request->getFile('imagen'));
+        $resultado = $this->productoService->actualizarProducto(
+            $id,
+            $this->productoDataFromRequest(),
+            $this->request->getFile('imagen')
+        );
 
         // Procesar galería adicional si vienen archivos
         $galeria = $this->request->getFileMultiple('fotos_galeria');
@@ -133,6 +153,9 @@ class ProductoController extends BaseController {
 
     /**
      * Elimina un producto delegando al servicio.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function delete_producto($id) {
 
@@ -142,6 +165,9 @@ class ProductoController extends BaseController {
 
     /**
      * Reactiva un producto delegando al servicio.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function activar_producto($id) {
 
@@ -151,6 +177,9 @@ class ProductoController extends BaseController {
 
     /**
      * Muestra el detalle del producto para el cliente.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return string|\CodeIgniter\HTTP\RedirectResponse
      */
     public function ver_detalle($id) {
         $producto = $this->productoService->getProductoConGaleria($id);
@@ -166,13 +195,16 @@ class ProductoController extends BaseController {
 
     /**
      * Sube fotos a la galería de un producto.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function subir_fotos_galeria($id) {
 
 
         // Validación estricta de imágenes múltiples
         $rulesGaleria = [
-            'fotos_galeria' => 'is_image[fotos_galeria]|mime_in[fotos_galeria,image/jpg,image/jpeg,image/png,image/webp]|max_size[fotos_galeria,2048]'
+            'fotos_galeria' => $this->imageValidationRule('fotos_galeria')
         ];
 
         // Solo validamos si efectivamente subieron algo
@@ -191,6 +223,9 @@ class ProductoController extends BaseController {
 
     /**
      * Elimina una foto de la galería.
+     *
+     * @param int|string $id Identificador de la foto de galería.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function eliminar_foto_galeria($id) {
 
@@ -203,6 +238,9 @@ class ProductoController extends BaseController {
 
     /**
      * Elimina permanentemente un producto delegando al servicio.
+     *
+     * @param int|string $id Identificador del producto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function eliminar_permanente($id) {
 

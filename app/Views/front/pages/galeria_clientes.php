@@ -1,10 +1,11 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/galeria.css?v=2.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/galeria.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
+<div id="galeria-page">
 <header class="gallery-header text-center">
     <div class="container">
         <h1 class="display-2 fw-bold font-lora">CVA en tu Hogar</h1>
@@ -51,11 +52,11 @@
             </div>
 
             <div class="collapse" id="collapseUpload">
-                <div class="upload-section p-4 p-md-5 mb-5 text-center shadow-lg border-artisan-gold mx-auto" style="max-width: 800px;">
+                <div class="upload-section p-4 p-md-5 mb-5 text-center shadow-lg border-artisan-gold mx-auto upload-section-narrow">
                     <h2 class="font-lora h3 fw-bold text-cva-brown mb-3">Compartí tu Legado</h2>
                     <p class="text-muted small mb-4">Contanos qué te parece tu mueble y unite a nuestra comunidad.</p>
-                    
-                    <form action="<?= base_url('galeria/subir') ?>" method="post" enctype="multipart/form-data" class="mx-auto" style="max-width: 600px;">
+
+                    <form action="<?= base_url('galeria/subir') ?>" method="post" enctype="multipart/form-data" class="mx-auto upload-form-narrow">
                         <?= csrf_field() ?>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-cva-brown">Seleccioná tu imagen</label>
@@ -70,7 +71,7 @@
             </div>
 
             <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success mt-4 rounded-pill border-0 text-center shadow-sm mx-auto" style="max-width: 600px;">
+                <div class="alert alert-success mt-4 rounded-pill border-0 text-center shadow-sm mx-auto alert-narrow">
                     <i class="bi bi-check-circle-fill me-2"></i> <?= session()->getFlashdata('success') ?>
                 </div>
             <?php endif; ?>
@@ -78,14 +79,14 @@
 
         <div class="masonry-gallery">
             <?php if (empty($fotos)): ?>
-                <div class="text-center py-5 w-100" style="grid-column: 1 / -1;">
-                    <i class="bi bi-camera text-muted opacity-25" style="font-size: 5rem;"></i>
+                <div class="text-center py-5 w-100 empty-gallery-state">
+                    <i class="bi bi-camera text-muted opacity-25 empty-gallery-icon"></i>
                     <h3 class="text-muted font-lora mt-3">Pronto veremos aquí las fotos de nuestros clientes</h3>
                 </div>
             <?php else: ?>
                 <?php foreach ($fotos as $foto): ?>
                     <div class="gallery-item">
-                        <img src="<?= base_url('assets/uploads/galeria/' . $foto['imagen']) ?>" alt="CVA en hogar">
+                        <img src="<?= imagen_url($foto['imagen'], 'galeria') ?>" alt="CVA en hogar">
                         <div class="gallery-info">
                             <span class="gallery-author">En el hogar de <?= esc($foto['nombre']) ?></span>
                             <p class="text-muted small mt-2 mb-0">"<?= esc($foto['comentario']) ?>"</p>
@@ -96,4 +97,5 @@
         </div>
     </div>
 </section>
+</div>
 <?= $this->endSection() ?>

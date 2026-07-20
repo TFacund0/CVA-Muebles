@@ -4,17 +4,8 @@
     background-color: rgba(220, 53, 69, 0.1);
 }
 
-.dashboard-icon-main {
-    width: 60px;
-    height: 60px;
-    background: #1a0f0d;
-    color: var(--cva-gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    border-radius: 1.2rem;
-}
+/* .dashboard-icon-main vive en admin/admin-panel.css — no se redefine
+   acá para evitar que esta página quede desincronizada del resto. */
 
 .avatar-premium {
     width: 45px;
@@ -29,26 +20,9 @@
     color: #1a0f0d;
 }
 
-.bg-gold-soft {
-    background: #fff9f0;
-}
-
-.btn-action-premium {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: white;
-    border: 1px solid #eee;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-action-premium:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
+/* .bg-gold-soft y .btn-action-premium viven en admin/admin-panel.css —
+   no se redefinen acá para evitar que esta página quede desincronizada
+   del resto. */
 
 /* Soporte de scroll horizontal para evitar desbordes en pantallas estrechas de escritorio */
 @media (min-width: 992px) {
@@ -92,4 +66,41 @@
         width: 15% !important;
         min-width: 160px !important;
     }
+}
+
+/* === Utilidades extraídas de style="" inline (CSP) === */
+.admin-kpi-accent-gold {
+    border-color: var(--cva-gold) !important;
+}
+.admin-filter-bar {
+    min-height: 52px;
+}
+.admin-filter-status {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.select-perfil-h42 {
+    border-radius: 10px;
+    height: 42px;
+}
+.avatar-fit-cover {
+    object-fit: cover;
+}
+.badge-corner-id {
+    transform: translate(-30%, -30%);
+    font-size: 0.6rem;
+    border: 1px solid var(--cva-gold);
+}
+.text-2xs {
+    font-size: 0.65rem;
+}
+.text-3xs {
+    font-size: 0.6rem;
+}
+.badge-suspendido {
+    font-size: 0.6rem;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+.admin-hidden-row {
+    display: none;
 }

@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -31,7 +31,7 @@
 
 <!-- Mensajes de Estado -->
 <?php if (session()->getFlashdata('success')): ?>
-    <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4 p-4 animate__animated animate__fadeInUp" role="alert" style="background: #f0fff4; border-left: 5px solid #48bb78 !important;">
+    <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4 p-4 animate__animated animate__fadeInUp alert-success-accent" role="alert">
         <div class="d-flex align-items-center">
             <div class="bg-success text-white p-2 rounded-circle me-3">
                 <i class="bi bi-check-lg fs-5"></i>
@@ -45,7 +45,7 @@
 <?php endif; ?>
 
 <?php if (session()->getFlashdata('fail')): ?>
-    <div class="alert alert-danger border-0 shadow-sm rounded-4 mb-4 p-4 animate__animated animate__shakeX" role="alert" style="background: #fff5f5; border-left: 5px solid #f56565 !important;">
+    <div class="alert alert-danger border-0 shadow-sm rounded-4 mb-4 p-4 animate__animated animate__shakeX alert-danger-accent" role="alert">
         <div class="d-flex align-items-center">
             <div class="bg-danger text-white p-2 rounded-circle me-3">
                 <i class="bi bi-exclamation-triangle fs-5"></i>
@@ -75,11 +75,11 @@
                     <div class="row g-3 g-md-4">
                         <div class="col-md-8 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2 tracking-wider">Nombre de la Pieza</label>
-                            <input type="text" name="nombre_producto" class="form-control border-0 bg-light py-3 px-4 rounded-3 shadow-sm" placeholder="Ej: Mesa de Comedor" required style="height: 58px;">
+                            <input type="text" name="nombre_producto" class="form-control border-0 bg-light py-3 px-4 rounded-3 shadow-sm input-h58" placeholder="Ej: Mesa de Comedor" required>
                         </div>
                         <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2 tracking-wider">Categoría</label>
-                            <select name="categoria_id" class="form-select border-0 bg-light py-3 px-4 rounded-3 shadow-sm" required style="height: 58px;">
+                            <select name="categoria_id" class="form-select border-0 bg-light py-3 px-4 rounded-3 shadow-sm input-h58" required>
                                 <option selected disabled>Seleccionar...</option>
                                 <?php foreach ($categorias as $categoria): ?>
                                     <option value="<?= $categoria['id_categoria'] ?>"><?= esc($categoria['descripcion']) ?></option>
@@ -106,22 +106,22 @@
                         <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Costo ($)</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-white border-0 text-muted shadow-sm" style="border-radius: 10px 0 0 10px;">$</span>
-                                <input type="number" step="0.01" name="precio" id="costo" class="form-control border-0 bg-light py-3 shadow-sm" style="border-radius: 0 10px 10px 0; height: 58px;" placeholder="0.00" required>
+                                <span class="input-group-text bg-white border-0 text-muted shadow-sm input-group-text-rounded-start">$</span>
+                                <input type="number" step="0.01" name="precio" id="costo" class="form-control border-0 bg-light py-3 shadow-sm form-control-rounded-end input-h58" placeholder="0.00" required>
                             </div>
                         </div>
                         <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Venta ($)</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-white border-0 text-gold fw-bold shadow-sm" style="border-radius: 10px 0 0 10px;">$</span>
-                                <input type="number" step="0.01" name="precio-vta" id="venta" class="form-control border-0 py-3 fw-bold text-cva-brown shadow-sm" style="background: #fffdf5; border-radius: 0 10px 10px 0; height: 58px;" placeholder="0.00" required>
+                                <span class="input-group-text bg-white border-0 text-gold fw-bold shadow-sm input-group-text-rounded-start">$</span>
+                                <input type="number" step="0.01" name="precio-vta" id="venta" class="form-control border-0 py-3 fw-bold text-cva-brown shadow-sm form-control-rounded-end input-h58 venta-input-highlight" placeholder="0.00" required>
                             </div>
                         </div>
                         <input type="hidden" name="stock" value="999">
                         <input type="hidden" name="stock-min" value="0">
                         <div class="col-md-4 col-12">
                             <label class="x-small fw-bold text-muted text-uppercase mb-2">Estado</label>
-                            <select name="eliminado" class="form-select border-0 py-3 shadow-sm fw-bold text-uppercase" style="font-size: 0.75rem; border-radius: 10px; height: 58px; background-color: #f8fafc;">
+                            <select name="eliminado" class="form-select border-0 py-3 shadow-sm fw-bold text-uppercase estado-select-sm">
                                 <option value="NO">Activo</option>
                                 <option value="SI">Archivado</option>
                             </select>
@@ -161,8 +161,8 @@
                     <p class="x-small text-muted mb-0">Sube la imagen principal de la obra.</p>
                 </div>
                 <div class="p-4 text-center">
-                    <label for="image" class="dropzone-premium-v2 mb-0 w-100 position-relative overflow-hidden rounded-4 d-flex align-items-center justify-content-center" style="height: 380px; cursor: pointer;">
-                        <img id="preview-image" src="" class="img-fluid w-100 h-100" style="display:none; object-fit: cover;">
+                    <label for="image" class="dropzone-premium-v2 mb-0 w-100 position-relative overflow-hidden rounded-4 d-flex align-items-center justify-content-center dropzone-h380">
+                        <img id="preview-image" src="" class="img-fluid w-100 h-100 preview-image-hidden">
                         <div id="placeholder-text" class="p-4 w-100 h-100 d-flex flex-column align-items-center justify-content-center">
                             <div class="upload-icon-container mb-3">
                                 <i class="bi bi-cloud-upload-fill display-3 text-gold"></i>
@@ -196,60 +196,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    // Preview de imagen
-    const imageInput = document.getElementById('image');
-    const preview = document.getElementById('preview-image');
-    const placeholder = document.getElementById('placeholder-text');
-
-    imageInput.addEventListener('change', function(event) {
-        const [file] = event.target.files;
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-            preview.style.display = 'block';
-            placeholder.style.display = 'none';
-        }
-    });
-
-    // Cálculo de Margen
-    const costoInput = document.getElementById('costo');
-    const ventaInput = document.getElementById('venta');
-    const margenD = document.getElementById('margen-dinero');
-    const margenP = document.getElementById('margen-porcentaje');
-
-    function calcularMargen() {
-        const costo = parseFloat(costoInput.value) || 0;
-        const venta = parseFloat(ventaInput.value) || 0;
-        
-        if (venta > 0) {
-            const utilidad = venta - costo;
-            const porcentaje = (utilidad / venta) * 100;
-            
-            margenD.innerText = `$${utilidad.toLocaleString('es-AR', {minimumFractionDigits: 2})}`;
-            margenP.innerText = `${porcentaje.toFixed(1)}%`;
-            
-            if (utilidad < 0) {
-                margenD.className = 'h4 fw-bold text-danger mb-0';
-                margenP.className = 'fw-bold text-danger';
-            } else {
-                margenD.className = 'h4 fw-bold text-success mb-0';
-                margenP.className = 'fw-bold text-cva-brown';
-            }
-        } else {
-            margenD.innerText = '$0.00';
-            margenP.innerText = '0%';
-        }
-    }
-
-    costoInput.addEventListener('input', calcularMargen);
-    ventaInput.addEventListener('input', calcularMargen);
-
-    document.getElementById('form-alta-producto').addEventListener('reset', () => {
-        setTimeout(() => {
-            preview.style.display = 'none';
-            placeholder.style.display = 'block';
-            calcularMargen();
-        }, 10);
-    });
-</script>
+<script src="<?= base_url('assets/js/admin/admin-alta-producto.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

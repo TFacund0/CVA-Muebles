@@ -3,7 +3,7 @@
 ?>
 
 <?php if ($session->getFlashdata('success')): ?>
-    <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4 animate-slide-down" role="alert" style="background: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.2) !important; color: #155724;">
+    <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4 animate-slide-down alert-flash-success" role="alert">
         <div class="d-flex align-items-center">
             <i class="bi bi-check-circle-fill fs-4 me-3"></i>
             <div>
@@ -15,7 +15,7 @@
 <?php endif; ?>
 
 <?php if ($session->getFlashdata('error')): ?>
-    <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4 animate-slide-down" role="alert" style="background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.2) !important; color: #721c24;">
+    <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4 animate-slide-down alert-flash-danger" role="alert">
         <div class="d-flex align-items-center">
             <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
             <div>
@@ -27,7 +27,7 @@
 <?php endif; ?>
 
 <?php if ($session->getFlashdata('fail')): ?>
-    <div class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4 animate-slide-down" role="alert" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.2) !important; color: #856404;">
+    <div class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm border-0 mb-4 animate-slide-down alert-flash-warning" role="alert">
         <div class="d-flex align-items-center">
             <i class="bi bi-info-circle-fill fs-4 me-3"></i>
             <div>

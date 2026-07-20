@@ -1,40 +1,64 @@
-/* 
+/*
   =============================================
   CVA MUEBLES - HERO CAROUSEL DESIGN (CONSOLIDADO)
+  Todos los selectores están scopeados bajo
+  #heroCarousel para que nunca puedan afectar,
+  ni ser afectados por, otra página. No usar
+  !important salvo para anular una regla de
+  Bootstrap puntual (documentado en cada caso).
   =============================================
 */
 
+/* Utilidades de maquetado (ex inline styles) */
+#heroCarousel .hero-badge-spacing {
+    letter-spacing: 2px;
+}
+
+#heroCarousel .hero-caption-lead-wide {
+    max-width: 600px;
+}
+
+#heroCarousel .hero-caption-lead {
+    max-width: 500px;
+}
+
 /* Override Bootstrap constraints to center the flexbox layout completely */
 #heroCarousel .carousel-caption {
-    position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    height: 100% !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    z-index: 10 !important;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Altura base del carrusel (antes vivía como inline style en el HTML) */
+#heroCarousel .carousel-inner {
+    height: 85vh;
+    min-height: 600px;
 }
 
 /* Hero Visuals */
-.hero-overlay-artisan {
+#heroCarousel .hero-overlay-artisan {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
     z-index: 1;
 }
 
-.glass-caption {
+#heroCarousel .glass-caption {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 3rem;
-    border-radius: 2rem;
+    border-radius: var(--radius-lg);
     color: white;
     z-index: 2;
     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
@@ -42,11 +66,11 @@
     width: 100%;
 }
 
-.glass-caption.left-align { border-left: 5px solid var(--cva-gold); }
-.glass-caption.right-align { border-right: 5px solid var(--cva-vivid); }
+#heroCarousel .glass-caption.left-align { border-left: 5px solid var(--cva-gold); }
+#heroCarousel .glass-caption.right-align { border-right: 5px solid var(--cva-vivid); }
 
 /* Animations - Dynamic Active Triggers */
-.zoom-animation {
+#heroCarousel .zoom-animation {
     animation: slowZoom 20s infinite alternate linear;
 }
 
@@ -56,20 +80,20 @@
 }
 
 /* Inactive slides have opacity 0 so they fade in cleanly when they become active */
-.carousel-item:not(.active) .glass-caption {
+#heroCarousel .carousel-item:not(.active) .glass-caption {
     opacity: 0;
     pointer-events: none;
 }
 
-.carousel-item.active .glass-caption.animate-up {
+#heroCarousel .carousel-item.active .glass-caption.animate-up {
     animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.carousel-item.active .glass-caption.animate-left {
+#heroCarousel .carousel-item.active .glass-caption.animate-left {
     animation: fadeInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.carousel-item.active .glass-caption.animate-right {
+#heroCarousel .carousel-item.active .glass-caption.animate-right {
     animation: fadeInRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -100,26 +124,26 @@
     }
 }
 
-.carousel-item.active .glass-caption .btn {
+#heroCarousel .carousel-item.active .glass-caption .btn {
     animation: heroButtonEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
 }
 
 /* --- HERO BUTTON SYSTEM (CONSOLIDATED & SYMMETRICAL) --- */
 #heroCarousel .glass-caption .btn {
-    height: 54px !important;
-    padding: 0 2.5rem !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-weight: 700 !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
-    border-radius: 50px !important;
-    vertical-align: middle !important;
-    font-size: 0.95rem !important;
-    margin: 0 !important;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    border-width: 2px !important;
+    height: 54px;
+    padding: 0 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+    vertical-align: middle;
+    font-size: 0.95rem;
+    margin: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border-width: 2px;
 }
 
 /* .btn-gold vive en base/global.css — no se redefine acá para evitar
@@ -127,28 +151,28 @@
 
 /* Specific Hover Interactions for Hero Carousel Buttons */
 #heroCarousel .glass-caption .btn-vivid:hover {
-    background-color: #A04000 !important;
-    border-color: #A04000 !important;
-    transform: scale(1.05) translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(211, 84, 0, 0.4) !important;
+    background-color: #A04000;
+    border-color: #A04000;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(211, 84, 0, 0.4);
 }
 
 #heroCarousel .glass-caption .btn-outline-light:hover {
-    background-color: white !important;
-    color: var(--cva-brown) !important;
-    border-color: white !important;
-    transform: scale(1.05) translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2) !important;
+    background-color: white;
+    color: var(--cva-brown);
+    border-color: white;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
 }
 
 /* Controls & Click Zones Protection */
 #heroCarousel .carousel-control-prev,
 #heroCarousel .carousel-control-next {
-    width: 80px !important;
-    z-index: 15 !important;
+    width: 80px;
+    z-index: 15;
 }
 
-.control-circle {
+#heroCarousel .control-circle {
     width: 60px; height: 60px;
     background: rgba(255,255,255,0.1);
     border-radius: 50%;
@@ -160,7 +184,7 @@
     transition: all 0.3s;
 }
 
-.control-circle:hover {
+#heroCarousel .control-circle:hover {
     background: var(--cva-gold);
     color: white;
     transform: scale(1.1);
@@ -169,33 +193,34 @@
 /* Desktop Caption Positioning Protection (Prevent edge clutter) */
 @media (min-width: 992px) {
     #heroCarousel .carousel-caption.justify-content-start {
-        padding-left: 8% !important;
+        padding-left: 8%;
     }
     #heroCarousel .carousel-caption.justify-content-end {
-        padding-right: 8% !important;
+        padding-right: 8%;
     }
 }
 
 /* Responsive Hero */
 @media (max-width: 991.98px) {
-    .carousel-inner { height: 70vh !important; min-height: 500px !important; }
-    .glass-caption { padding: 2rem !important; margin: 0 1.5rem; max-width: calc(100% - 3rem); }
-    .display-2 { font-size: 2.5rem !important; }
-    .display-3 { font-size: 2.2rem !important; }
-    .fs-5 { font-size: 1rem !important; }
-    
+    #heroCarousel .carousel-inner { height: 70vh; min-height: 500px; }
+    #heroCarousel .glass-caption { padding: 2rem; margin: 0 1.5rem; max-width: calc(100% - 3rem); }
+    #heroCarousel .display-2 { font-size: 2.5rem; }
+    #heroCarousel .display-3 { font-size: 2.2rem; }
+    #heroCarousel .fs-5 { font-size: 1rem; }
+
     #heroCarousel .glass-caption .btn {
-        height: 46px !important;
-        padding: 0 1.75rem !important;
-        font-size: 0.85rem !important;
+        height: 46px;
+        padding: 0 1.75rem;
+        font-size: 0.85rem;
     }
-    #heroCarousel .carousel-caption { padding: 0 !important; }
+    #heroCarousel .carousel-caption { padding: 0; }
 }
 
 @media (max-width: 575.98px) {
-    .carousel-inner { height: 60vh !important; min-height: 400px !important; }
-    .display-2 { font-size: 2rem !important; }
-    .display-3 { font-size: 1.8rem !important; }
-    .glass-caption { padding: 1.5rem !important; border-radius: 1.5rem !important; }
-    .carousel-control-prev, .carousel-control-next { display: none; } /* Ocultar flechas en móvil muy pequeño */
+    #heroCarousel .carousel-inner { height: 60vh; min-height: 400px; }
+    #heroCarousel .display-2 { font-size: 2rem; }
+    #heroCarousel .display-3 { font-size: 1.8rem; }
+    #heroCarousel .glass-caption { padding: 1.5rem; border-radius: var(--radius-md); }
+    #heroCarousel .carousel-control-prev,
+    #heroCarousel .carousel-control-next { display: none; } /* Ocultar flechas en móvil muy pequeño */
 }

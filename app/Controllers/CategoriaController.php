@@ -16,6 +16,8 @@ class CategoriaController extends BaseController {
 
     /**
      * Listado de categorías.
+     *
+     * @return string
      */
     public function index() {
 
@@ -28,6 +30,8 @@ class CategoriaController extends BaseController {
 
     /**
      * Procesa la creación de una categoría.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function guardar() {
 
@@ -46,6 +50,9 @@ class CategoriaController extends BaseController {
 
     /**
      * Procesa la edición de una categoría.
+     *
+     * @param int|string $id Identificador de la categoría a editar.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function editar($id) {
 
@@ -67,6 +74,9 @@ class CategoriaController extends BaseController {
 
     /**
      * Alterna el estado de una categoría.
+     *
+     * @param int|string $id Identificador de la categoría.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function toggle($id) {
 
@@ -76,6 +86,9 @@ class CategoriaController extends BaseController {
 
     /**
      * Elimina una categoría si es seguro.
+     *
+     * @param int|string $id Identificador de la categoría.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function eliminar($id) {
 

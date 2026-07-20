@@ -15,6 +15,8 @@ class LoginController extends BaseController {
 
     /**
      * Muestra la vista del formulario de login.
+     *
+     * @return string|\CodeIgniter\HTTP\RedirectResponse
      */
     public function create() {
         if (session()->get('logged_in')) return redirect()->to('/');
@@ -23,6 +25,8 @@ class LoginController extends BaseController {
 
     /**
      * Autentica al usuario delegando al servicio con protección de Throttling.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function auth() {
         $throttler = \Config\Services::throttler();
@@ -48,6 +52,8 @@ class LoginController extends BaseController {
 
     /**
      * Destruye la sesión.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function logout() {
         session()->destroy();

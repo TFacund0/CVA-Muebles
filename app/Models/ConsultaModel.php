@@ -18,6 +18,8 @@ class ConsultaModel extends Model {
 
     /**
      * Todas las consultas ordenadas de la más reciente a la más antigua.
+     *
+     * @return array Listado de consultas.
      */
     public function getAllOrdenadas(): array {
         return $this->orderBy('fecha', 'DESC')->findAll();

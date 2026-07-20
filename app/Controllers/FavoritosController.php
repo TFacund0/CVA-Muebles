@@ -15,6 +15,9 @@ class FavoritosController extends BaseController {
 
     /**
      * Alterna el estado de favorito de un producto (AJAX).
+     *
+     * @param int|string $id_producto Identificador del producto.
+     * @return \CodeIgniter\HTTP\ResponseInterface
      */
     public function toggleFavorito($id_producto) {
         $resultado = $this->favoritosService->toggle(session()->get('id_usuario'), $id_producto);
@@ -24,6 +27,8 @@ class FavoritosController extends BaseController {
 
     /**
      * Muestra la lista de favoritos del usuario.
+     *
+     * @return string
      */
     public function misFavoritos() {
         return view('front/pages/mis_favoritos', [

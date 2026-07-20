@@ -18,6 +18,8 @@ class ConsultaService
 
     /**
      * Obtiene todas las consultas con estadísticas procesadas.
+     *
+     * @return array ['consultas' => array, 'counts' => array]
      */
     public function getConsultasConStats()
     {
@@ -54,6 +56,9 @@ class ConsultaService
 
     /**
      * Registra una nueva consulta.
+     *
+     * @param array $data Datos de la consulta (nombre, apellido, email, asunto, etc.)
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function registrar($data)
     {
@@ -69,6 +74,9 @@ class ConsultaService
 
     /**
      * Marca una consulta como inactiva.
+     *
+     * @param int $id Identificador de la consulta
+     * @return bool Resultado de la actualización
      */
     public function desactivar($id)
     {
@@ -77,6 +85,9 @@ class ConsultaService
 
     /**
      * Restaura una consulta a estado activo (Pendiente).
+     *
+     * @param int $id Identificador de la consulta
+     * @return bool Resultado de la actualización
      */
     public function restaurar($id)
     {
@@ -85,6 +96,9 @@ class ConsultaService
 
     /**
      * Elimina físicamente una consulta de la base de datos.
+     *
+     * @param int $id Identificador de la consulta
+     * @return bool Resultado de la eliminación
      */
     public function eliminarPermanente($id)
     {
@@ -93,6 +107,8 @@ class ConsultaService
 
     /**
      * Cuenta las consultas activas (pendientes de responder).
+     *
+     * @return int Cantidad de consultas activas
      */
     public function countActivas()
     {

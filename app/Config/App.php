@@ -198,5 +198,13 @@ class App extends BaseConfig
      * @see http://www.html5rocks.com/en/tutorials/security/content-security-policy/
      * @see http://www.w3.org/TR/CSP/
      */
-    public bool $CSPEnabled = true;
+    // CSP queda deshabilitado: Bootstrap 5 usa Popper.js para posicionar
+    // dropdowns/tooltips/collapses, y Popper aplica estilos inline por JS
+    // (element.style.xxx) para eso. Con un nonce presente en style-src
+    // (que Honeypot y el Debug Toolbar agregan automáticamente), el
+    // navegador ignora 'unsafe-inline' para TODA la directiva y bloquea
+    // esos estilos — confirmado en consola real con Playwright: rompe
+    // dropdowns, el acordeón de FAQ, y cualquier componente de Bootstrap
+    // que dependa de Popper. No es viable sin parchear Bootstrap/Popper.
+    public bool $CSPEnabled = false;
 }

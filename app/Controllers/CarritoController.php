@@ -19,11 +19,24 @@ class CarritoController extends BaseController
 
     /**
      * Agrega un producto al carrito.
+     *
+     * Responde JSON si la petición es AJAX; en caso contrario redirige
+     * con flashdata (compatibilidad con envíos de formulario tradicionales).
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\HTTP\ResponseInterface
      */
     public function add()
     {
         $resultado = $this->carritoService->agregar($this->request->getPost());
-        
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'status'     => $resultado['status'],
+                'message'    => $resultado['message'],
+                'totalItems' => \Config\Services::cart()->totalItems()
+            ]);
+        }
+
         if ($resultado['status'] === 'error') {
             return redirect()->back()->with('error', $resultado['message']);
         }
@@ -31,16 +44,30 @@ class CarritoController extends BaseController
     }
 
     /**
-     * Elimina un item o vacía el carrito.
+     * Elimina un item del carrito.
+     *
+     * @param string $rowid Identificador de fila del carrito (CI4 cart)
+     * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\HTTP\ResponseInterface
      */
     public function remove($rowid)
     {
         $this->carritoService->eliminar($rowid);
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'status'     => 'success',
+                'totalItems' => \Config\Services::cart()->totalItems(),
+                'empty'      => \Config\Services::cart()->totalItems() === 0
+            ]);
+        }
+
         return redirect()->back();
     }
 
     /**
      * Vacía completamente el carrito.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function borrar_carrito()
     {
@@ -50,6 +77,8 @@ class CarritoController extends BaseController
 
     /**
      * Muestra el contenido del carrito.
+     *
+     * @return string
      */
     public function muestra()
     {
@@ -60,7 +89,10 @@ class CarritoController extends BaseController
     }
 
     /**
-     * Incrementa la cantidad.
+     * Incrementa la cantidad de un item del carrito.
+     *
+     * @param string $rowid Identificador de fila del carrito (CI4 cart)
+     * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\HTTP\ResponseInterface
      */
     public function suma($rowid)
     {
@@ -84,7 +116,10 @@ class CarritoController extends BaseController
     }
 
     /**
-     * Decrementa la cantidad.
+     * Decrementa la cantidad de un item del carrito.
+     *
+     * @param string $rowid Identificador de fila del carrito (CI4 cart)
+     * @return \CodeIgniter\HTTP\RedirectResponse|\CodeIgniter\HTTP\ResponseInterface
      */
     public function resta($rowid)
     {

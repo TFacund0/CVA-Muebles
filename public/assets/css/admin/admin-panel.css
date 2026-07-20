@@ -224,27 +224,27 @@
     background: #fff9f0 !important;
 }
 
+/* Nota: hasta hace poco esta clase estaba duplicada con una definición
+   distinta (forma píldora) en admin-panel.css y otra (botón cuadrado de
+   ícono) en admin-users.css. Solo la página de usuarios se beneficiaba de
+   la versión "correcta" — las demás páginas (productos, ventas, mensajes,
+   categorías) mostraban por error la forma píldora. Se consolidó acá la
+   versión que coincide con el uso real en todas las páginas. */
 .btn-action-premium {
-    background: white;
-    border: 1px solid #eee;
-    border-radius: 50px;
-    padding: 8px 15px;
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    text-decoration: none;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 12px;
+    background: white;
+    border: 1px solid #eee;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .btn-action-premium:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    filter: brightness(0.95);
-}
-.btn-action-premium:active {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .admin-card-v2 {
@@ -789,6 +789,38 @@
     left: 0;
     z-index: 1;
 }
+.admin-user-name {
+    font-size: 0.95rem;
+}
+.admin-user-role {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+}
+.avatar-circle-wrapper {
+    width: 50px;
+    height: 50px;
+}
+.avatar-circle-wrapper .avatar-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.avatar-circle-wrapper img.avatar-circle {
+    object-fit: cover;
+}
+#avatar-fallback.avatar-circle {
+    font-size: 1.2rem;
+}
+.avatar-online-badge {
+    transform: translate(20%, 20%);
+    z-index: 10;
+}
+.admin-user-dropdown-menu {
+    min-width: 220px;
+}
+.admin-global-action-form {
+    display: none;
+}
 
 /* ==========================================================================
    SISTEMA DE PESTAÑAS SEGMENTADAS PREMIUM (CENTRALIZADO)
@@ -851,4 +883,78 @@
         font-size: 0.65rem !important;
         white-space: nowrap !important;
     }
+}
+
+/* ==========================================================================
+   UTILIDADES COMPARTIDAS ENTRE VISTAS ADMIN (extraídas de style="" inline
+   para permitir Content-Security-Policy sin 'unsafe-inline' en style-src)
+   ========================================================================== */
+.admin-kpi-accent-gold {
+    border-color: var(--cva-gold) !important;
+}
+
+.admin-filter-bar {
+    min-height: 52px;
+}
+
+.admin-filter-status {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.admin-input-rounded-start {
+    border-radius: 1rem 0 0 1rem;
+}
+
+.admin-input-rounded-end {
+    border-radius: 0 1rem 1rem 0;
+}
+
+.col-inquiry-interesado { width: 25%; }
+.col-inquiry-fecha { width: 10%; }
+.col-inquiry-contacto { width: 20%; }
+.col-inquiry-mensaje { width: 30%; }
+.col-inquiry-acciones { width: 15%; }
+
+.badge-corner-id {
+    transform: translate(-30%, -30%);
+    font-size: 0.6rem;
+    border: 1px solid var(--cva-gold);
+}
+
+.text-2xs {
+    font-size: 0.65rem;
+}
+
+.text-3xs {
+    font-size: 0.6rem;
+}
+
+.avatar-md-50 {
+    width: 50px;
+    height: 50px;
+}
+
+.text-95 {
+    font-size: 0.95rem;
+}
+
+.admin-hidden-row {
+    display: none;
+}
+
+.icon-circle-40 {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+}
+
+.text-list-85 {
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.admin-input-confirm-spaced {
+    letter-spacing: 2px;
+    border-radius: 0.75rem;
 }

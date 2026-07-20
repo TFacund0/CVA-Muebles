@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=33.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -111,7 +111,7 @@
                 <div class="col-12 col-md-6 d-flex">
                     <a href="<?= base_url('/admin/galeria') ?>" class="action-btn-v2 flex-grow-1 position-relative">
                         <?php if (isset($total_galeria_pendientes) && $total_galeria_pendientes > 0): ?>
-                            <span class="position-absolute top-0 end-0 m-3 badge rounded-pill bg-danger" style="font-size: 0.75rem; padding: 0.4em 0.65em;">
+                            <span class="position-absolute top-0 end-0 m-3 badge rounded-pill bg-danger badge-pill-notification">
                                 <?= $total_galeria_pendientes ?>
                             </span>
                         <?php endif; ?>
@@ -148,8 +148,8 @@
                     <span class="opacity-75">EFICIENCIA GLOBAL</span>
                     <span class="text-gold"><?= $porcentaje ?>%</span>
                 </div>
-                <div class="progress" style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 50px;">
-                    <div class="progress-bar bg-gold progress-bar-striped progress-bar-animated" style="width: <?= $porcentaje ?>%"></div>
+                <div class="progress progress-h10">
+                    <div class="progress-bar bg-gold progress-bar-striped progress-bar-animated js-progress-width" data-progress="<?= $porcentaje ?>"></div>
                 </div>
             </div>
         </div>
@@ -157,4 +157,8 @@
 </div>
 
 
+<?= $this->endSection() ?>
+
+<?= $this->section('extra-js') ?>
+<script src="<?= base_url('assets/js/admin/admin-progress-bars.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

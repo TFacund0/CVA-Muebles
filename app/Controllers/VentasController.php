@@ -22,6 +22,8 @@ class VentasController extends BaseController {
 
     /**
      * Muestra el listado de ventas con estadísticas procesadas por el servicio.
+     *
+     * @return string
      */
     public function index_ventas() {
 
@@ -41,6 +43,8 @@ class VentasController extends BaseController {
 
     /**
      * Procesa el registro de una nueva venta delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function registrar_venta() {
         $items_seleccionados_ids = $this->request->getPost('selected_items');
@@ -74,12 +78,15 @@ class VentasController extends BaseController {
 
     /**
      * Muestra la factura de una venta específica.
+     *
+     * @param int|string $venta_id Identificador de la venta.
+     * @return string|\CodeIgniter\HTTP\RedirectResponse
      */
     public function ver_factura($venta_id) {
         $data = $this->ventasService->getGestionDetalle($venta_id);
         if (!$data) return redirect()->to('/productos')->with('error', 'Pedido no encontrado.');
 
-        $isAdmin = session()->get('perfil_id') == 1;
+        $isAdmin = $this->isAdmin();
 
         // Seguridad: Verificar que el pedido sea del usuario o que el usuario sea Admin
         if (!$isAdmin && $data['venta']['usuario_id'] != session()->get('id_usuario')) {
@@ -97,6 +104,8 @@ class VentasController extends BaseController {
 
     /**
      * Muestra todas las facturas del usuario actual.
+     *
+     * @return string
      */
     public function ver_facturas_usuario() {
         $id_usuario = session()->get('id_usuario');
@@ -110,6 +119,9 @@ class VentasController extends BaseController {
 
     /**
      * Actualiza el estado de una venta delegando al servicio.
+     *
+     * @param int|string $venta_id Identificador de la venta.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function actualizar_estado($venta_id) {
 
@@ -128,6 +140,8 @@ class VentasController extends BaseController {
 
     /**
      * Muestra estadísticas agregadas del taller.
+     *
+     * @return string
      */
     public function estadisticas() {
 
@@ -142,6 +156,8 @@ class VentasController extends BaseController {
 
     /**
      * Muestra el formulario para registrar un pedido manual.
+     *
+     * @return string
      */
     public function nuevo_pedido_personalizado() {
         return view('back/sales/nuevo_pedido_personalizado', [
@@ -152,6 +168,8 @@ class VentasController extends BaseController {
 
     /**
      * Procesa el registro de un pedido manual delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function guardar_pedido_personalizado() {
 
@@ -179,6 +197,9 @@ class VentasController extends BaseController {
 
     /**
      * Vista de gestión detallada para el administrador.
+     *
+     * @param int|string $venta_id Identificador de la venta.
+     * @return string|\CodeIgniter\HTTP\RedirectResponse
      */
     public function ver_gestion_pedido($venta_id) {
 
@@ -192,6 +213,8 @@ class VentasController extends BaseController {
 
     /**
      * Registra un pago delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function registrar_pago() {
         $monto = $this->request->getPost('monto');
@@ -211,6 +234,8 @@ class VentasController extends BaseController {
 
     /**
      * Actualiza las observaciones delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function guardar_observaciones() {
         $observaciones = $this->request->getPost('observaciones');
@@ -232,6 +257,9 @@ class VentasController extends BaseController {
 
     /**
      * Sube un pedido en el orden de prioridad del listado activo.
+     *
+     * @param int|string $venta_id Identificador de la venta.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function subir_prioridad($venta_id) {
 
@@ -242,6 +270,9 @@ class VentasController extends BaseController {
 
     /**
      * Baja un pedido en el orden de prioridad del listado activo.
+     *
+     * @param int|string $venta_id Identificador de la venta.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function bajar_prioridad($venta_id) {
 

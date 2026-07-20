@@ -18,6 +18,10 @@ class UsuarioService
 
     /**
      * Autentica a un usuario.
+     *
+     * @param string $login Email o nombre de usuario
+     * @param string $password Contraseña en texto plano
+     * @return array ['status' => 'success', 'data' => array]|['status' => 'error', 'message' => string]
      */
     public function autenticar($login, $password)
     {
@@ -52,6 +56,8 @@ class UsuarioService
 
     /**
      * Obtiene el listado de usuarios con estadísticas procesadas para el panel.
+     *
+     * @return array ['usuarios' => array, 'counts' => array]
      */
     public function getUsuariosConStats()
     {
@@ -79,6 +85,9 @@ class UsuarioService
 
     /**
      * Registra un nuevo usuario.
+     *
+     * @param array $data Datos del formulario de registro (name, surname, user, email, pass)
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function registrarUsuario($data)
     {
@@ -108,6 +117,11 @@ class UsuarioService
 
     /**
      * Actualiza el perfil de un usuario.
+     *
+     * @param int $userId Identificador del usuario
+     * @param array $data Datos del perfil (usuario, nombre, apellido, email)
+     * @param \CodeIgniter\HTTP\Files\UploadedFile|null $image Nueva imagen de perfil opcional (reemplaza la anterior)
+     * @return array ['status' => 'success', 'message' => string, 'updated_data' => array]|['status' => 'error', 'message' => string]
      */
     public function actualizarPerfil($userId, $data, $image = null)
     {
@@ -145,6 +159,12 @@ class UsuarioService
 
     /**
      * Cambia la contraseña de un usuario validando su contraseña actual.
+     *
+     * @param int $userId Identificador del usuario
+     * @param string $currentPassword Contraseña actual en texto plano
+     * @param string $newPassword Nueva contraseña en texto plano
+     * @param string $confirmPassword Confirmación de la nueva contraseña
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function cambiarPassword($userId, $currentPassword, $newPassword, $confirmPassword)
     {
@@ -171,6 +191,9 @@ class UsuarioService
 
     /**
      * Cambia el rol de un usuario (Admin <-> Cliente).
+     *
+     * @param int $id Identificador del usuario
+     * @return bool|array Resultado de la actualización, false si el usuario no existe
      */
     public function cambiarPerfil($id)
     {
@@ -183,6 +206,9 @@ class UsuarioService
 
     /**
      * Da de baja (soft delete) a un usuario.
+     *
+     * @param int $id Identificador del usuario
+     * @return bool Resultado de la eliminación
      */
     public function darDeBaja($id)
     {
@@ -191,6 +217,9 @@ class UsuarioService
 
     /**
      * Reactiva a un usuario dado de baja.
+     *
+     * @param int $id Identificador del usuario
+     * @return bool Resultado de la actualización
      */
     public function reactivar($id)
     {
@@ -202,6 +231,9 @@ class UsuarioService
 
     /**
      * Busca un usuario por ID (incluye dados de baja).
+     *
+     * @param int $id Identificador del usuario
+     * @return array|null Datos del usuario o null si no existe
      */
     public function getUsuario($id)
     {
@@ -210,6 +242,8 @@ class UsuarioService
 
     /**
      * Obtiene todos los clientes activos (perfil_id = 2, no dados de baja).
+     *
+     * @return array Listado de usuarios con perfil de cliente
      */
     public function getClientesActivos()
     {
@@ -220,6 +254,9 @@ class UsuarioService
 
     /**
      * Elimina permanentemente a un usuario si no tiene compras asociadas.
+     *
+     * @param int $id Identificador del usuario
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function eliminarPermanente($id)
     {

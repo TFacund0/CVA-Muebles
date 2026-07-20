@@ -18,6 +18,10 @@ class FavoritosService
 
     /**
      * Alterna un producto como favorito para un usuario.
+     *
+     * @param int $usuario_id Identificador del usuario
+     * @param int $producto_id Identificador del producto
+     * @return array ['status' => 'added'|'removed', 'message' => string]
      */
     public function toggle($usuario_id, $producto_id)
     {
@@ -38,6 +42,9 @@ class FavoritosService
 
     /**
      * Obtiene los IDs de productos favoritos de un usuario.
+     *
+     * @param int $usuario_id Identificador del usuario
+     * @return array Lista de IDs de productos favoritos
      */
     public function getFavoritosIds($usuario_id)
     {
@@ -47,6 +54,9 @@ class FavoritosService
 
     /**
      * Obtiene los productos favoritos con sus detalles.
+     *
+     * @param int $usuario_id Identificador del usuario
+     * @return array Productos favoritos con su información completa
      */
     public function getFavoritosConDetalle($usuario_id)
     {

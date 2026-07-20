@@ -18,6 +18,8 @@ class GaleriaService
 
     /**
      * Obtiene fotos aprobadas para la vista pública.
+     *
+     * @return array Fotos activas de la galería
      */
     public function getAprobadas()
     {
@@ -26,6 +28,8 @@ class GaleriaService
 
     /**
      * Obtiene todas las fotos con datos de usuario para el admin.
+     *
+     * @return array Fotos de la galería con el nombre del usuario, ordenadas por estado y fecha
      */
     public function getAllConUsuarios()
     {
@@ -38,6 +42,8 @@ class GaleriaService
 
     /**
      * Obtiene la cantidad de fotos pendientes de moderación.
+     *
+     * @return int Cantidad de fotos con estado inactivo
      */
     public function getPendientesCount()
     {
@@ -46,6 +52,11 @@ class GaleriaService
 
     /**
      * Procesa la subida de una foto por parte de un cliente.
+     *
+     * @param int $usuario_id Identificador del usuario que sube la foto
+     * @param \CodeIgniter\HTTP\Files\UploadedFile $img Archivo de imagen subido
+     * @param string $comentario Comentario asociado a la foto
+     * @return int|bool ID insertado en éxito, false si el archivo no es válido
      */
     public function subir($usuario_id, $img, $comentario)
     {
@@ -66,6 +77,9 @@ class GaleriaService
 
     /**
      * Aprueba una foto.
+     *
+     * @param int $id Identificador de la foto
+     * @return bool Resultado de la actualización
      */
     public function aprobar($id)
     {
@@ -73,7 +87,10 @@ class GaleriaService
     }
 
     /**
-     * Elimina una foto.
+     * Elimina una foto, incluyendo el archivo físico si existe.
+     *
+     * @param int $id Identificador de la foto
+     * @return bool Resultado de la eliminación, false si la foto no existe
      */
     public function eliminar($id)
     {

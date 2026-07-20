@@ -35,6 +35,8 @@ class VentasService
 
     /**
      * Obtiene todas las ventas con estadísticas procesadas para el panel.
+     *
+     * @return array ['ventas' => array, 'solicitados' => array, 'counts' => array]
      */
     public function getVentasConEstadisticas()
     {
@@ -86,6 +88,11 @@ class VentasService
     /**
      * Procesa una venta completa: valida stock (opcional), crea registros y guarda mensaje.
      * Nota: Ya no descuenta stock aquí, se hace al aprobar el pedido.
+     *
+     * @param int $usuario_id Identificador del usuario que realiza la compra
+     * @param array $items_seleccionados Items del carrito, cada uno con 'id', 'price' y 'qty'
+     * @param string $observaciones Observaciones opcionales del pedido
+     * @return array ['status' => 'success', 'total' => float, 'venta_id' => int]|['status' => 'error', 'message' => string]
      */
     public function procesarVenta($usuario_id, $items_seleccionados, $observaciones = '')
     {
@@ -133,6 +140,9 @@ class VentasService
 
     /**
      * Obtiene el detalle completo de una venta para gestión administrativa.
+     *
+     * @param int $venta_id Identificador de la venta
+     * @return array|null ['venta' => array, 'detalles' => array, 'pagos' => array, 'total_pagado' => float, 'saldo_pendiente' => float] o null si no existe
      */
     public function getGestionDetalle($venta_id)
     {
@@ -154,6 +164,10 @@ class VentasService
 
     /**
      * Actualiza el estado de una venta y gestiona el stock si es necesario.
+     *
+     * @param int $venta_id Identificador de la venta
+     * @param string $estado Nuevo estado (ACEPTADO, RECHAZADO, PENDIENTE, EN_PROCESO, TERMINADO, ENTREGADO)
+     * @return bool Resultado de la actualización, false si la venta no existe o falla la transacción
      */
     public function actualizarEstado($venta_id, $estado)
     {
@@ -186,6 +200,11 @@ class VentasService
 
     /**
      * Registra un pago para una venta.
+     *
+     * @param int $venta_id Identificador de la venta
+     * @param float $monto Monto del pago
+     * @param string $nota Nota u observación opcional del pago
+     * @return bool|int Resultado de la inserción
      */
     public function registrarPago($venta_id, $monto, $nota = '')
     {
@@ -198,6 +217,10 @@ class VentasService
 
     /**
      * Actualiza las observaciones de una venta.
+     *
+     * @param int $venta_id Identificador de la venta
+     * @param string $observaciones Nuevo texto de observaciones
+     * @return bool Resultado de la actualización
      */
     public function actualizarObservaciones($venta_id, $observaciones)
     {
@@ -206,6 +229,8 @@ class VentasService
 
     /**
      * Obtiene estadísticas agregadas para el dashboard en una sola query.
+     *
+     * @return array Cantidad de ventas por estado (PENDIENTE, EN_PROCESO, TERMINADO, ENTREGADO)
      */
     public function getDashboardStats()
     {
@@ -227,6 +252,10 @@ class VentasService
 
     /**
      * Registra un pedido personalizado.
+     *
+     * @param array $data Datos del pedido: usuario_id (opcional), nombre_cliente, detalles_obra, total_venta, monto_sena
+     * @param \CodeIgniter\HTTP\Files\UploadedFile|null $file Imagen de referencia opcional
+     * @return array ['status' => 'success', 'venta_id' => int]|['status' => 'error', 'message' => string]
      */
     public function registrarPedidoPersonalizado($data, $file = null)
     {
@@ -282,6 +311,9 @@ class VentasService
     }
     /**
      * Obtiene el historial de ventas de un usuario específico.
+     *
+     * @param int $usuario_id Identificador del usuario
+     * @return array Ventas del usuario ordenadas por fecha descendente, con sus items
      */
     public function getVentasPorUsuario($usuario_id)
     {
@@ -300,47 +332,35 @@ class VentasService
 
     /**
      * Incrementa la prioridad del pedido para subirlo en el listado activo.
+     *
+     * @param int $venta_id Identificador de la venta
+     * @return void
      */
     public function subirPrioridad($venta_id)
     {
-        $ventas_activas = $this->ventasModel->getVentasActivas();
-
-        // Encontrar la posición actual en la lista activa
-        $index = -1;
-        for ($i = 0; $i < count($ventas_activas); $i++) {
-            if ($ventas_activas[$i]['id'] == $venta_id) {
-                $index = $i;
-                break;
-            }
-        }
-
-        if ($index > 0) {
-            $item_current = $ventas_activas[$index];
-            $item_above = $ventas_activas[$index - 1];
-
-            $p_current = (int) ($item_current['prioridad'] ?? 0);
-            $p_above = (int) ($item_above['prioridad'] ?? 0);
-
-            if ($p_current != $p_above) {
-                // Si las prioridades son distintas, las intercambiamos
-                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_above]);
-                $this->ventasModel->update($item_above['id'], ['prioridad' => $p_current]);
-            } else {
-                // Si son iguales, al que sube (current) le damos la del de arriba + 1
-                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_above + 1]);
-            }
-        } elseif ($index == 0 && !empty($ventas_activas)) {
-            // Ya está arriba de todo, pero incrementamos para asegurar
-            $item_current = $ventas_activas[0];
-            $p_current = (int) ($item_current['prioridad'] ?? 0);
-            $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current + 1]);
-        }
+        $this->moverPrioridad($venta_id, -1);
     }
 
     /**
      * Decrementa la prioridad del pedido para bajarlo en el listado activo.
+     *
+     * @param int $venta_id Identificador de la venta
+     * @return void
      */
     public function bajarPrioridad($venta_id)
+    {
+        $this->moverPrioridad($venta_id, 1);
+    }
+
+    /**
+     * Mueve un pedido una posición dentro del listado activo, intercambiando
+     * prioridad con su vecino. $offset = -1 sube el pedido (subirPrioridad),
+     * $offset = +1 lo baja (bajarPrioridad). Unifica lo que antes eran dos
+     * métodos casi idénticos (subirPrioridad/bajarPrioridad) que solo
+     * diferían en la dirección del vecino y en cuál de los dos ítems recibe
+     * el ajuste +1 cuando ambas prioridades están empatadas.
+     */
+    private function moverPrioridad($venta_id, int $offset)
     {
         $ventas_activas = $this->ventasModel->getVentasActivas();
 
@@ -353,26 +373,39 @@ class VentasService
             }
         }
 
-        if ($index != -1 && $index < count($ventas_activas) - 1) {
+        if ($index === -1) {
+            return;
+        }
+
+        $lastIndex = count($ventas_activas) - 1;
+        $neighborIndex = $index + $offset;
+
+        if ($neighborIndex >= 0 && $neighborIndex <= $lastIndex) {
             $item_current = $ventas_activas[$index];
-            $item_below = $ventas_activas[$index + 1];
+            $item_neighbor = $ventas_activas[$neighborIndex];
 
             $p_current = (int) ($item_current['prioridad'] ?? 0);
-            $p_below = (int) ($item_below['prioridad'] ?? 0);
+            $p_neighbor = (int) ($item_neighbor['prioridad'] ?? 0);
 
-            if ($p_current != $p_below) {
+            if ($p_current != $p_neighbor) {
                 // Si las prioridades son distintas, las intercambiamos
-                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_below]);
-                $this->ventasModel->update($item_below['id'], ['prioridad' => $p_current]);
+                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_neighbor]);
+                $this->ventasModel->update($item_neighbor['id'], ['prioridad' => $p_current]);
+            } elseif ($offset < 0) {
+                // Al subir, el que se mueve (current) recibe prioridad+1 del de arriba
+                $this->ventasModel->update($item_current['id'], ['prioridad' => $p_neighbor + 1]);
             } else {
-                // Si son iguales, al que sube (below) le damos la del de arriba (current) + 1
-                $this->ventasModel->update($item_below['id'], ['prioridad' => $p_current + 1]);
+                // Al bajar, el vecino de abajo recibe prioridad+1 para quedar sobre el actual
+                $this->ventasModel->update($item_neighbor['id'], ['prioridad' => $p_current + 1]);
             }
-        } elseif ($index == count($ventas_activas) - 1 && $index != -1) {
+        } elseif ($index === 0 && $offset < 0) {
+            // Ya está arriba de todo, pero incrementamos para asegurar
+            $p_current = (int) ($ventas_activas[$index]['prioridad'] ?? 0);
+            $this->ventasModel->update($ventas_activas[$index]['id'], ['prioridad' => $p_current + 1]);
+        } elseif ($index === $lastIndex && $offset > 0) {
             // Ya está en el fondo, pero decrementamos para asegurar
-            $item_current = $ventas_activas[$index];
-            $p_current = (int) ($item_current['prioridad'] ?? 0);
-            $this->ventasModel->update($item_current['id'], ['prioridad' => $p_current - 1]);
+            $p_current = (int) ($ventas_activas[$index]['prioridad'] ?? 0);
+            $this->ventasModel->update($ventas_activas[$index]['id'], ['prioridad' => $p_current - 1]);
         }
     }
 }

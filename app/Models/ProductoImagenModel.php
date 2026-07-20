@@ -18,6 +18,9 @@ class ProductoImagenModel extends Model
 
     /**
      * Obtiene las imágenes secundarias de un producto.
+     *
+     * @param int $producto_id ID del producto.
+     * @return array Listado de imágenes secundarias del producto, ordenadas por su campo orden.
      */
     public function getImagenesPorProducto($producto_id)
     {

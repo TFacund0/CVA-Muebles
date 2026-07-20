@@ -1,22 +1,26 @@
 ﻿<?= $this->extend('layout/main') ?>
 
+<?= $this->section('extra-css') ?>
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/beneficios.css?v=1.0') ?>">
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
 <section class="beneficios-page py-5">
     <div class="container py-5">
         <div class="text-center mb-5 animate-fade-in">
-            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 4px;">Experiencia CVA Muebles</span>
+            <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-4">Experiencia CVA Muebles</span>
             <h1 class="display-3 fw-bold font-lora text-cva-brown mt-2">Nuestros Compromisos</h1>
-            <p class="lead text-muted mx-auto mt-3" style="max-width: 700px;">
+            <p class="lead text-muted mx-auto mt-3 beneficios-lead">
                 En nuestra carpintería, cada pieza es una promesa de calidad y dedicación artesanal.
             </p>
-            <div class="mx-auto mt-4" style="width: 80px; height: 4px; background: var(--cva-gold); border-radius: 2px;"></div>
+            <div class="mx-auto mt-4 beneficios-divider"></div>
         </div>
 
         <div class="row g-4 mt-5">
             <!-- Beneficio 1: Calidad Real -->
             <div class="col-lg-4">
-                <div class="level-card p-5 h-100 text-center border-0 rounded-5 shadow-sm" style="background: white;">
-                    <div class="level-icon mb-4 bg-cva-brown text-white mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border-radius: 50%;">
+                <div class="level-card p-5 h-100 text-center border-0 rounded-5 shadow-sm">
+                    <div class="level-icon mb-4 bg-cva-brown text-white mx-auto d-flex align-items-center justify-content-center">
                         <i class="bi bi-shield-check fs-2"></i>
                     </div>
                     <h3 class="font-lora fw-bold text-cva-brown">Maderas de Primera</h3>
@@ -26,8 +30,8 @@
 
             <!-- Beneficio 2: Hecho a Mano -->
             <div class="col-lg-4">
-                <div class="level-card p-5 h-100 text-center border-0 rounded-5 shadow-sm" style="background: white;">
-                    <div class="level-icon mb-4 bg-cva-gold text-cva-brown mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border-radius: 50%;">
+                <div class="level-card p-5 h-100 text-center border-0 rounded-5 shadow-sm">
+                    <div class="level-icon mb-4 bg-cva-gold text-cva-brown mx-auto d-flex align-items-center justify-content-center">
                         <i class="bi bi-hammer fs-2"></i>
                     </div>
                     <h3 class="font-lora fw-bold text-cva-brown">Pasión Artesanal</h3>
@@ -37,8 +41,8 @@
 
             <!-- Beneficio 3: Atención Directa -->
             <div class="col-lg-4">
-                <div class="level-card p-5 h-100 text-center border-0 rounded-5 shadow-sm" style="background: white;">
-                    <div class="level-icon mb-4 bg-cva-vivid text-white mx-auto d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; border-radius: 50%;">
+                <div class="level-card p-5 h-100 text-center border-0 rounded-5 shadow-sm">
+                    <div class="level-icon mb-4 bg-cva-vivid text-white mx-auto d-flex align-items-center justify-content-center">
                         <i class="bi bi-chat-heart fs-2"></i>
                     </div>
                     <h3 class="font-lora fw-bold text-cva-brown">Trato Cercano</h3>

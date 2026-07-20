@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=2.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -37,10 +37,10 @@
             <thead class="bg-brown text-white">
                 <tr>
                     <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest">DESCRIPCIÓN</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest d-none d-lg-table-cell" style="width: 100px;">ID</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest" style="width: 150px;">PRODUCTOS</th>
-                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest" style="width: 150px;">ESTADO</th>
-                    <th class="pe-4 py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest" style="width: 200px;">GESTIÓN</th>
+                    <th class="py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest d-none d-lg-table-cell col-cat-id">ID</th>
+                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest col-cat-productos">PRODUCTOS</th>
+                    <th class="py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest col-cat-estado">ESTADO</th>
+                    <th class="pe-4 py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest col-cat-gestion">GESTIÓN</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,12 +52,12 @@
                                 <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
                                     <?= strtoupper(substr(trim($cat['descripcion']), 0, 2)) ?>
                                 </div>
-                                <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none" style="transform: translate(-30%, -30%); font-size: 0.6rem; border: 1px solid var(--cva-gold);">#<?= $cat['id_categoria'] ?></span>
+                                <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none badge-corner-id">#<?= $cat['id_categoria'] ?></span>
                             </div>
                             <div class="order-text-details">
                                 <div class="fw-bold text-cva-brown"><?= esc($cat['descripcion']) ?></div>
                                 <div class="d-flex gap-2 align-items-center mt-1">
-                                    <span class="badge bg-light text-muted border d-none d-md-inline-block" style="font-size: 0.65rem;">CATEGORÍA: #<?= $cat['id_categoria'] ?></span>
+                                    <span class="badge bg-light text-muted border d-none d-md-inline-block text-2xs">CATEGORÍA: #<?= $cat['id_categoria'] ?></span>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                     </td>
                     <td class="text-center" data-label="PRODUCTOS">
                         <div class="d-flex flex-column align-items-center">
-                            <span class="badge bg-gold-soft text-gold border border-gold border-opacity-10 px-3 py-2 shadow-sm" style="min-width: 60px;" title="Total de productos vinculados a esta categoría">
+                            <span class="badge bg-gold-soft text-gold border border-gold border-opacity-10 px-3 py-2 shadow-sm badge-min-w-60" title="Total de productos vinculados a esta categoría">
                                 <span class="fs-6"><?= $cat['total_productos'] ?></span> <i class="bi bi-box-seam ms-1"></i>
                             </span>
                         </div>
@@ -85,26 +85,31 @@
                     </td>
                     <td class="pe-4 text-center" data-label="GESTIÓN">
                         <div class="d-flex justify-content-center gap-2">
-                            <button class="btn btn-action-premium text-primary border-primary border-opacity-10" 
-                                    onclick="prepararEdicion(<?= $cat['id_categoria'] ?>, '<?= esc($cat['descripcion']) ?>')"
+                            <button class="btn btn-action-premium text-primary border-primary border-opacity-10 js-editar-categoria"
+                                    data-id="<?= $cat['id_categoria'] ?>" data-descripcion="<?= esc($cat['descripcion']) ?>"
                                     data-bs-toggle="modal" data-bs-target="#modalEditarCategoria">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
-                            
+
                             <?php if ($cat['activo'] == 1): ?>
-                                <button type="button" onclick="submitAction('<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>', '¿Quieres OCULTAR esta categoría? Los clientes no podrán verla ni acceder a sus productos en el catálogo público.')" 
-                                   class="btn btn-action-premium text-warning border-warning border-opacity-10 shadow-sm" title="Ocultar de la tienda (Pasar a borrador)">
+                                <button type="button" class="btn btn-action-premium text-warning border-warning border-opacity-10 shadow-sm js-submit-action"
+                                   data-url="<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>"
+                                   data-confirm-msg="¿Quieres OCULTAR esta categoría? Los clientes no podrán verla ni acceder a sus productos en el catálogo público."
+                                   title="Ocultar de la tienda (Pasar a borrador)">
                                     <i class="bi bi-eye-slash-fill"></i>
                                 </button>
                             <?php else: ?>
-                                <button type="button" onclick="submitAction('<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>', '¿Quieres MOSTRAR esta categoría? Será visible para todos los clientes en el menú de la tienda.')" 
-                                   class="btn btn-action-premium text-success border-success border-opacity-10 shadow-sm" title="Mostrar en la tienda (Hacer visible)">
+                                <button type="button" class="btn btn-action-premium text-success border-success border-opacity-10 shadow-sm js-submit-action"
+                                   data-url="<?= base_url('admin/categorias/toggle/' . $cat['id_categoria']) ?>"
+                                   data-confirm-msg="¿Quieres MOSTRAR esta categoría? Será visible para todos los clientes en el menú de la tienda."
+                                   title="Mostrar en la tienda (Hacer visible)">
                                     <i class="bi bi-eye-fill"></i>
                                 </button>
                             <?php endif; ?>
 
-                            <button type="button" onclick="submitAction('<?= base_url('admin/categorias/eliminar/' . $cat['id_categoria']) ?>', '¿Estás seguro de eliminar esta categoría? Solo se podrá si no tiene productos vinculados.')" 
-                               class="btn btn-action-premium text-danger border-danger border-opacity-10">
+                            <button type="button" class="btn btn-action-premium text-danger border-danger border-opacity-10 js-submit-action"
+                               data-url="<?= base_url('admin/categorias/eliminar/' . $cat['id_categoria']) ?>"
+                               data-confirm-msg="¿Estás seguro de eliminar esta categoría? Solo se podrá si no tiene productos vinculados.">
                                 <i class="bi bi-trash3-fill"></i>
                             </button>
                         </div>
@@ -145,7 +150,7 @@
 <div class="modal fade" id="modalEditarCategoria" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
-            <form id="formEditar" method="post">
+            <form id="formEditar" method="post" data-base-url="<?= base_url('admin/categorias/editar/') ?>">
                 <?= csrf_field() ?>
                 <div class="modal-header bg-brown text-gold">
                     <h5 class="modal-title fw-bold">EDITAR CATEGORÍA</h5>
@@ -166,12 +171,6 @@
     </div>
 </div>
 
-<script>
-    function prepararEdicion(id, descripcion) {
-        document.getElementById('descEditar').value = descripcion;
-        document.getElementById('formEditar').action = '<?= base_url('admin/categorias/editar/') ?>' + id;
-    }
-</script>
-
+<script src="<?= base_url('assets/js/admin/admin-categorias.js?v=1.0') ?>"></script>
 
 <?= $this->endSection() ?>

@@ -20,6 +20,9 @@ class CarritoService
 
     /**
      * Agrega un producto al carrito con validación de stock.
+     *
+     * @param array $data Datos del formulario, debe incluir 'id_producto'
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function agregar($data)
     {
@@ -45,6 +48,9 @@ class CarritoService
 
     /**
      * Incrementa la cantidad de un producto.
+     *
+     * @param string $rowid Identificador de fila del carrito
+     * @return array|false ['status' => 'success'] o false si el item no existe
      */
     public function incrementar($rowid)
     {
@@ -61,6 +67,9 @@ class CarritoService
 
     /**
      * Decrementa la cantidad de un producto.
+     *
+     * @param string $rowid Identificador de fila del carrito
+     * @return bool true si se procesó (decrementó o eliminó), false si el item no existe
      */
     public function decrementar($rowid)
     {
@@ -80,6 +89,9 @@ class CarritoService
 
     /**
      * Elimina un item o vacía el carrito.
+     *
+     * @param string $rowid Identificador de fila del carrito, o "all" para vaciarlo
+     * @return bool true siempre que la operación se ejecuta
      */
     public function eliminar($rowid)
     {
@@ -93,6 +105,9 @@ class CarritoService
 
     /**
      * Elimina varios items por su rowid.
+     *
+     * @param array $rowids Lista de identificadores de fila del carrito
+     * @return bool true si se eliminaron, false si la lista está vacía
      */
     public function eliminarVarios($rowids)
     {
@@ -105,6 +120,8 @@ class CarritoService
 
     /**
      * Obtiene el contenido del carrito.
+     *
+     * @return array Items actuales del carrito
      */
     public function getContenido()
     {
@@ -113,6 +130,8 @@ class CarritoService
 
     /**
      * Vacía el carrito.
+     *
+     * @return void
      */
     public function vaciar()
     {

@@ -18,14 +18,18 @@ class UsuarioController extends BaseController {
      * Muestra la vista de registro.
      * Nota: los clientes logueados (perfil_id != 1) son redirigidos al inicio.
      * Los admins logueados SÍ pueden acceder para dar de alta nuevos usuarios.
+     *
+     * @return string|\CodeIgniter\HTTP\RedirectResponse
      */
-    public function index_registrar() {    
+    public function index_registrar() {
         if (session()->get('logged_in') && session()->get('perfil_id') != 1) return redirect()->to('/');
         return view('front/pages/registro', ['title' => 'Registro']);
     }
 
     /**
      * Valida y registra un nuevo usuario delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function formValidation() {
         $throttler = \Config\Services::throttler();
@@ -38,7 +42,7 @@ class UsuarioController extends BaseController {
         $resultado = $this->usuarioService->registrarUsuario($this->request->getPost());
 
         if ($resultado['status'] === 'success') {
-            if (session()->get('logged_in') && session()->get('perfil_id') == 1) {
+            if ($this->isAdmin()) {
                 return redirect()->to('/crud-usuarios')->with('success', 'Usuario registrado exitosamente');
             }
             return redirect()->to('/login')->with('success', $resultado['message']);
@@ -49,6 +53,8 @@ class UsuarioController extends BaseController {
 
     /**
      * Muestra el listado de usuarios para administración.
+     *
+     * @return string
      */
     public function index() {
 
@@ -65,6 +71,8 @@ class UsuarioController extends BaseController {
 
     /**
      * Muestra la configuración del perfil.
+     *
+     * @return string
      */
     public function index_perfil() {
         return view('back/users/perfil_config', ['title' => 'Configuración Perfil']);
@@ -72,6 +80,8 @@ class UsuarioController extends BaseController {
 
     /**
      * Guarda cambios en el perfil delegando al servicio.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function guardarCambios() {
         $image = $this->request->getFile('image');
@@ -106,6 +116,8 @@ class UsuarioController extends BaseController {
 
     /**
      * Cambia la contraseña del perfil.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function cambiarPassword() {
         $resultado = $this->usuarioService->cambiarPassword(
@@ -124,6 +136,9 @@ class UsuarioController extends BaseController {
 
     /**
      * Da de baja a un usuario delegando al servicio.
+     *
+     * @param int|string $id Identificador del usuario.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function delete_usuario($id) {
 
@@ -133,6 +148,9 @@ class UsuarioController extends BaseController {
 
     /**
      * Reactiva a un usuario delegando al servicio.
+     *
+     * @param int|string $id Identificador del usuario.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function activar_usuario($id) {
 
@@ -142,6 +160,9 @@ class UsuarioController extends BaseController {
 
     /**
      * Cambia el perfil de un usuario delegando al servicio.
+     *
+     * @param int|string $id Identificador del usuario.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function editar_usuario($id) {
 
@@ -151,6 +172,9 @@ class UsuarioController extends BaseController {
 
     /**
      * Elimina permanentemente a un usuario delegando al servicio.
+     *
+     * @param int|string $id Identificador del usuario.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function eliminar_permanente($id) {
 

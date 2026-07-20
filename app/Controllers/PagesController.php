@@ -7,28 +7,55 @@ namespace App\Controllers;
  */
 class PagesController extends BaseController
 {
+    /**
+     * Muestra la página institucional "Quiénes Somos".
+     *
+     * @return string
+     */
     public function quienesSomos() {
         return view('front/pages/quienesSomos', ['title' => 'Quiénes Somos']);
     }
 
-    public function comercializacion() {   
+    /**
+     * Muestra la página de comercialización.
+     *
+     * @return string
+     */
+    public function comercializacion() {
         return view('front/pages/comercializacion', ['title' => 'Comercialización']);
     }
 
+    /**
+     * Muestra la página de información de contacto.
+     *
+     * @return string
+     */
     public function informacionContacto() {
         return view('front/pages/informacionContacto', ['title' => 'Contacto']);
     }
 
+    /**
+     * Muestra la página de términos y condiciones.
+     *
+     * @return string
+     */
     public function terminosYCondiciones() {
         return view('front/pages/terminosYCondiciones', ['title' => 'Términos y Condiciones']);
     }
 
+    /**
+     * Muestra la página del programa de fidelidad/beneficios.
+     *
+     * @return string
+     */
     public function beneficios() {
         return view('front/pages/beneficios', ['title' => 'Programa de Fidelidad']);
     }
 
     /**
      * Muestra el catálogo de productos delegando al servicio.
+     *
+     * @return string
      */
     public function productos() {
         $productoService  = new \App\Services\ProductoService();

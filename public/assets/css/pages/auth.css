@@ -28,7 +28,7 @@
 .auth-side-branding {
     flex: 1;
     background: linear-gradient(rgba(62, 39, 35, 0.8), rgba(62, 39, 35, 0.8)), 
-                url('../../../assets/img/branding/wood-texture.jpg');
+                url('../../img/ui/textures/madera.jpg');
     background-size: cover;
     background-position: center;
     padding: 4rem;
@@ -198,7 +198,7 @@
     .auth-quote { font-size: 1.5rem; margin-bottom: 1rem; }
     .auth-side-branding .mt-4 { display: none; } 
     .auth-side-branding p { font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .auth-side-branding .mt-auto { padding-top: 1.5rem !important; }
+    .auth-side-branding .mt-auto { padding-top: 1.5rem; }
     .auth-side-form { padding: 2.5rem 2rem; }
     .auth-header { margin-bottom: 1.5rem; }
     .auth-header h2 { font-size: 1.6rem; }

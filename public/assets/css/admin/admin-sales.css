@@ -62,15 +62,11 @@
 .action-btn-v2:hover .action-icon { background: var(--cva-gold); color: white; }
 
 /* === NUEVO PEDIDO PERSONALIZADO === */
-.admin-control {
-    width: 100%;
-    border: 2px solid #eeebe6;
-    border-radius: 1rem;
-    padding: 0.8rem 1.2rem;
-}
+/* .admin-control (base) vive en admin/admin-panel.css — acá solo se
+   ajusta su comportamiento dentro de un input-group. */
 .input-group .admin-control {
-    width: 1% !important;
-    flex: 1 1 auto !important;
+    width: 1%;
+    flex: 1 1 auto;
 }
 
 /* === DETALLE VENTAS - Badges Estado === */
@@ -167,17 +163,17 @@
 @media (max-width: 767.98px) {
     .kpi-value { font-size: 2rem; }
     .kpi-icon-container { width: 50px; height: 50px; font-size: 1.4rem; }
-    .kpi-body { padding: 1.5rem 1rem !important; }
+    .kpi-body { padding: 1.5rem 1rem; }
     .action-btn-v2 { padding: 1rem; }
     .action-icon { width: 35px; height: 35px; font-size: 1rem; }
     .action-text span { font-size: 0.9rem; }
-    .col-lg-5.text-lg-end { text-align: center !important; margin-top: 1rem; }
+    .col-lg-5.text-lg-end { text-align: center; margin-top: 1rem; }
     .btn-admin-outline { width: 100%; justify-content: center; }
-    .btn-admin-primary { width: 100%; padding: 1rem !important; font-size: 1.1rem !important; }
-    .display-6 { font-size: 1.8rem !important; }
-    .admin-card-body-v2 { padding: 1.5rem !important; }
-    .mb-5 { margin-bottom: 2.5rem !important; }
-    .input-group-text { padding: 0.5rem 0.75rem !important; }
+    .btn-admin-primary { width: 100%; padding: 1rem; font-size: 1.1rem; }
+    .display-6 { font-size: 1.8rem; }
+    .admin-card-body-v2 { padding: 1.5rem; }
+    .mb-5 { margin-bottom: 2.5rem; }
+    .input-group-text { padding: 0.5rem 0.75rem; }
     .factura-header { padding: 1.5rem; }
     .order-card { border-radius: 1rem; }
 }
@@ -187,109 +183,109 @@
 @media (min-width: 992px) {
     /* Por defecto, permitir que las tablas se ajusten automáticamente en ventas */
     .table-responsive-stack table {
-        table-layout: auto !important;
-        width: 100% !important;
+        table-layout: auto;
+        width: 100%;
     }
 
     /* Excepto para consultas, donde queremos preservar el table-layout: fixed para recortar mensajes */
     .table-responsive-stack.table-layout-fixed table {
-        table-layout: fixed !important;
+        table-layout: fixed;
     }
 
     /* Soporte de scroll horizontal para evitar desbordes en pantallas estrechas de escritorio */
     .table-responsive-stack {
-        overflow-x: auto !important;
-        max-width: 100% !important;
+        overflow-x: auto;
+        max-width: 100%;
     }
     
 
 
     /* Garantizar ancho mínimo global de la tabla de solicitudes en escritorio para evitar que se aplaste */
     #panel-solicitudes table {
-        min-width: 880px !important;
-        table-layout: auto !important;
+        min-width: 880px;
+        table-layout: auto;
     }
 
     /* Ajustar celdas en la tabla de solicitudes pendientes para ganar espacio horizontal */
     #panel-solicitudes table th,
     #panel-solicitudes table td {
-        padding: 0.75rem 0.5rem !important;
+        padding: 0.75rem 0.5rem;
     }
 
     /* Botones más compactos y legibles en la tabla de solicitudes pendientes en escritorio */
     #panel-solicitudes table .btn-sm {
-        padding: 0.35rem 0.65rem !important;
-        font-size: 0.75rem !important;
-        letter-spacing: 0.3px !important;
-        white-space: nowrap !important;
+        padding: 0.35rem 0.65rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
     }
 
     /* Asegurar que el contenedor de los botones de acción no haga wrap y se centre correctamente */
     #panel-solicitudes .col-solicitud-acciones > div {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 0.5rem !important;
-        flex-wrap: nowrap !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: nowrap;
     }
 
     /* Asignar anchos y mínimos robustos a cada columna usando clases específicas */
     .col-solicitud-fecha {
-        width: 150px !important;
-        min-width: 150px !important;
-        white-space: nowrap !important;
+        width: 150px;
+        min-width: 150px;
+        white-space: nowrap;
     }
     .col-solicitud-cliente {
         /* Se adapta automáticamente al espacio restante */
     }
     .col-solicitud-monto {
-        width: 140px !important;
-        min-width: 140px !important;
-        text-align: right !important;
-        white-space: nowrap !important;
+        width: 140px;
+        min-width: 140px;
+        text-align: right;
+        white-space: nowrap;
     }
     .col-solicitud-acciones {
-        width: 350px !important;
-        min-width: 350px !important;
-        text-align: center !important;
+        width: 350px;
+        min-width: 350px;
+        text-align: center;
     }
 
 
     /* Proporciones perfectas y anchos mínimos para la tabla de pedidos activos en desktop */
     #panel-activos table th:nth-child(1),
     #panel-activos table td:nth-child(1) {
-        width: 28% !important;
-        min-width: 180px !important;
+        width: 28%;
+        min-width: 180px;
     }
     #panel-activos table th:nth-child(2),
     #panel-activos table td:nth-child(2) {
-        width: 6% !important;
-        min-width: 60px !important;
+        width: 6%;
+        min-width: 60px;
     }
     #panel-activos table th:nth-child(3),
     #panel-activos table td:nth-child(3) {
-        width: 14% !important;
-        min-width: 110px !important;
+        width: 14%;
+        min-width: 110px;
     }
     #panel-activos table th:nth-child(4),
     #panel-activos table td:nth-child(4) {
-        width: 16% !important;
-        min-width: 130px !important;
+        width: 16%;
+        min-width: 130px;
     }
     #panel-activos table th:nth-child(5),
     #panel-activos table td:nth-child(5) {
-        width: 13% !important;
-        min-width: 110px !important;
+        width: 13%;
+        min-width: 110px;
     }
     #panel-activos table th:nth-child(6),
     #panel-activos table td:nth-child(6) {
-        width: 11% !important;
-        min-width: 100px !important;
+        width: 11%;
+        min-width: 100px;
     }
     #panel-activos table th:nth-child(7),
     #panel-activos table td:nth-child(7) {
-        width: 12% !important;
-        min-width: 100px !important;
+        width: 12%;
+        min-width: 100px;
     }
 }
 
@@ -324,4 +320,100 @@
         transform: scale(0.95);
         box-shadow: 0 0 0 0 rgba(184, 134, 11, 0);
     }
+}
+
+/* === Utilidades extraídas de style="" inline (CSP) === */
+.admin-kpi-accent-blue {
+    border-color: #0284c7 !important;
+}
+.text-2xs {
+    font-size: 0.65rem;
+}
+.text-3xs {
+    font-size: 0.6rem;
+}
+.admin-filter-bar {
+    min-height: 52px;
+}
+.admin-filter-status {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.admin-input-rounded-start {
+    border-radius: 1rem 0 0 1rem;
+}
+.admin-input-rounded-end {
+    border-radius: 0 1rem 1rem 0;
+}
+.badge-corner-id {
+    transform: translate(-30%, -30%);
+    font-size: 0.6rem;
+    border: 1px solid var(--cva-gold);
+}
+.admin-hidden-row {
+    display: none;
+}
+.priority-btn-32 {
+    width: 32px;
+    height: 32px;
+}
+.badge-pill-notification {
+    font-size: 0.75rem;
+    padding: 0.4em 0.65em;
+}
+.progress-h10 {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+}
+.progress-h10-light {
+    height: 10px;
+    background-color: #f0ece2;
+    border-radius: 10px;
+}
+.production-stepper .progress-bar {
+    background-color: var(--cva-gold);
+}
+.step-item-flex {
+    flex: 1;
+}
+.step-item-label {
+    letter-spacing: 0.5px;
+}
+.zoom-container-max-w-100 {
+    max-width: 100%;
+}
+.zoom-img-max-h-400 {
+    max-height: 400px;
+}
+.thumb-70 {
+    width: 70px;
+    height: 70px;
+}
+.finance-card-gradient {
+    background: linear-gradient(135deg, #1a0f0d 0%, #3e2723 100%);
+}
+.wallet-icon-bg {
+    font-size: 8rem;
+    transform: translate(20%, 20%);
+}
+.nota-cliente-text {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #2b1d0c !important;
+}
+.col-imagen-100 {
+    width: 100px;
+}
+.payment-note-truncate {
+    max-width: 150px;
+}
+.admin-img-preview-min-h {
+    min-height: 120px;
+}
+.money-input-rounded-start {
+    border-radius: 1rem 0 0 1rem;
+}
+.money-input-rounded-end {
+    border-radius: 0 1rem 1rem 0;
 }

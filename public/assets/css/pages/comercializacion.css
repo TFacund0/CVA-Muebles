@@ -1,29 +1,34 @@
-/* 
+/*
   =============================================
   CVA MUEBLES - COMERCIALIZACIÓN ARTISAN
+  Todos los selectores están scopeados bajo
+  #container-comercializacion-wrapper para que
+  nunca puedan afectar (ni ser afectados por)
+  otra página. No usar !important salvo para
+  anular una regla de Bootstrap puntual
+  (documentado en cada caso).
   =============================================
 */
 
-/* 1. FONDO GENERAL */
 #container-comercializacion-wrapper {
     background-color: transparent;
-    padding-bottom: 0 !important;
+    padding-bottom: 0;
 }
 
 /* 2. CABECERA (FONDO FIJO / PARALLAX) */
-.comercializacion-header {
+#container-comercializacion-wrapper .comercializacion-header {
     background-image: linear-gradient(rgba(38, 20, 18, 0.8), rgba(38, 20, 18, 0.6)),
-                      url('../../img/ui/textures/comercializacion_header_v2.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-attachment: fixed !important; /* Fondo Fijo solicitado */
+                      url('../../img/ui/textures/comercializacion_header_v2.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Fondo Fijo solicitado */
     padding: 180px 0;
     color: white;
     text-align: center;
 }
 
-.comercializacion-header h1 {
-    font-family: 'Lora', serif;
+#container-comercializacion-wrapper .comercializacion-header h1 {
+    font-family: var(--font-heading);
     font-size: 5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
@@ -31,25 +36,25 @@
 }
 
 /* 3. PAYMENT CARDS (PREMIUM) */
-.payment-card-premium {
+#container-comercializacion-wrapper .payment-card-premium {
     background: white;
     padding: 2.5rem;
-    border-radius: 2rem;
+    border-radius: var(--radius-lg);
     height: 100%;
-    transition: all 0.4s ease;
+    transition: var(--transition-base);
     border: 1px solid rgba(0,0,0,0.03);
 }
 
-.payment-card-premium:hover {
+#container-comercializacion-wrapper .payment-card-premium:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(62, 39, 35, 0.08);
+    box-shadow: var(--shadow-md);
 }
 
-.payment-card-premium .icon-wrap {
+#container-comercializacion-wrapper .payment-card-premium .icon-wrap {
     width: 60px;
     height: 60px;
     background: var(--cva-sand);
-    border-radius: 1rem;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,14 +63,14 @@
     margin-bottom: 1.5rem;
 }
 
-.payment-card-premium h5 {
-    font-family: 'Lora', serif;
+#container-comercializacion-wrapper .payment-card-premium h5 {
+    font-family: var(--font-heading);
     font-weight: 800;
     color: var(--cva-brown);
 }
 
 /* 4. LOGÍSTICA BADGES */
-.badge-logistica {
+#container-comercializacion-wrapper .badge-logistica {
     width: 50px;
     height: 50px;
     border: 2px solid var(--cva-gold);
@@ -78,18 +83,60 @@
     flex-shrink: 0;
 }
 
-/* 4.5. BOTÓN TÉRMINOS Y CONDICIONES CON ANIMACIÓN ULTRA PREMIUM */
-.section-garantia-full .btn-outline-brown {
-    position: relative;
-    background-color: transparent !important;
-    color: var(--cva-brown) !important;
-    border: 2px solid var(--cva-brown) !important;
-    overflow: hidden;
-    z-index: 1;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+/* 4.4. UTILIDADES DE MAQUETADO (ex inline styles) */
+#container-comercializacion-wrapper .kicker-spacing-3 {
+    letter-spacing: 3px;
 }
 
-.section-garantia-full .btn-outline-brown::before {
+#container-comercializacion-wrapper .kicker-spacing-2 {
+    letter-spacing: 2px;
+}
+
+#container-comercializacion-wrapper .section-pagos-full {
+    background-color: var(--cva-sand);
+}
+
+#container-comercializacion-wrapper .section-logistica-full {
+    background-color: var(--cva-forest);
+    color: white;
+}
+
+#container-comercializacion-wrapper .coverage-highlight-box {
+    background: var(--cva-sand);
+}
+
+#container-comercializacion-wrapper .section-garantia-full {
+    background-color: #fdfbf7;
+    border-top: 1px solid rgba(184, 134, 11, 0.1);
+    color: var(--cva-brown);
+    text-align: center;
+}
+
+#container-comercializacion-wrapper .garantia-divider {
+    width: 100px;
+    height: 3px;
+    background: var(--cva-gold);
+    margin-bottom: 2.5rem;
+}
+
+#container-comercializacion-wrapper .garantia-lead {
+    max-width: 800px;
+    color: #5c4a44;
+    font-weight: 500;
+}
+
+/* 4.5. BOTÓN TÉRMINOS Y CONDICIONES CON ANIMACIÓN ULTRA PREMIUM */
+#container-comercializacion-wrapper .section-garantia-full .btn-outline-brown {
+    position: relative;
+    background-color: transparent;
+    color: var(--cva-brown);
+    border: 2px solid var(--cva-brown);
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#container-comercializacion-wrapper .section-garantia-full .btn-outline-brown::before {
     content: '';
     position: absolute;
     top: 0;
@@ -103,53 +150,54 @@
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.section-garantia-full .btn-outline-brown:hover {
-    color: white !important;
+#container-comercializacion-wrapper .section-garantia-full .btn-outline-brown:hover {
+    color: white;
     transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(45, 27, 25, 0.2) !important;
+    box-shadow: 0 10px 20px rgba(45, 27, 25, 0.2);
 }
 
-.section-garantia-full .btn-outline-brown:hover::before {
+#container-comercializacion-wrapper .section-garantia-full .btn-outline-brown:hover::before {
     transform: scaleX(1);
     transform-origin: left;
 }
 
-.section-garantia-full .btn-outline-brown:active {
+#container-comercializacion-wrapper .section-garantia-full .btn-outline-brown:active {
     transform: translateY(-1px) scale(0.98);
 }
 
 /* 5. RESPONSIVE (DIMENSIONES ESTABLECIDAS) */
 @media (max-width: 991.98px) {
-    .comercializacion-header { padding: 100px 20px 60px; background-attachment: scroll !important; }
-    .comercializacion-header h1 { font-size: 2.2rem; }
-    .display-4 { font-size: 1.8rem !important; }
-    .display-5 { font-size: 1.8rem !important; }
-    .lead { font-size: 0.95rem !important; }
-    
-    .section-intro-comercializacion, 
-    .section-pagos-full, 
-    .section-logistica-full, 
-    .section-garantia-full { padding: 40px 15px !important; }
-    
-    .payment-card-premium { padding: 1.5rem; border-radius: 1.5rem; }
-    .payment-card-premium .icon-wrap { width: 50px; height: 50px; font-size: 1.5rem; margin-bottom: 1rem; }
-    .payment-card-premium h5 { font-size: 1.1rem; }
-    .payment-card-premium p { font-size: 0.8rem; }
-    
-    .section-logistica-full .p-5 { padding: 2rem 1.5rem !important; margin-top: 2rem; }
-    .section-logistica-full h3 { font-size: 1.5rem; }
-    
-    .section-garantia-full .display-4 { font-size: 1.8rem !important; }
-    .section-garantia-full .lead { font-size: 0.9rem !important; }
-    .section-garantia-full .btn-outline-brown { 
-        padding: 0.6rem 1.5rem !important; 
-        font-size: 0.75rem !important; 
-        letter-spacing: 1px !important;
+    #container-comercializacion-wrapper .comercializacion-header { padding: 100px 20px 60px; background-attachment: scroll; }
+    #container-comercializacion-wrapper .comercializacion-header h1 { font-size: 2.2rem; }
+    #container-comercializacion-wrapper .display-4 { font-size: 1.8rem; }
+    #container-comercializacion-wrapper .display-5 { font-size: 1.8rem; }
+    #container-comercializacion-wrapper .lead { font-size: 0.95rem; }
+
+    #container-comercializacion-wrapper .section-intro-comercializacion,
+    #container-comercializacion-wrapper .section-pagos-full,
+    #container-comercializacion-wrapper .section-logistica-full,
+    #container-comercializacion-wrapper .section-garantia-full { padding: 40px 15px; }
+
+    #container-comercializacion-wrapper .payment-card-premium { padding: 1.5rem; border-radius: var(--radius-md); }
+    #container-comercializacion-wrapper .payment-card-premium .icon-wrap { width: 50px; height: 50px; font-size: 1.5rem; margin-bottom: 1rem; }
+    #container-comercializacion-wrapper .payment-card-premium h5 { font-size: 1.1rem; }
+    #container-comercializacion-wrapper .payment-card-premium p { font-size: 0.8rem; }
+
+    #container-comercializacion-wrapper .section-logistica-full .p-5 { padding: 2rem 1.5rem; margin-top: 2rem; }
+    #container-comercializacion-wrapper .section-logistica-full h3 { font-size: 1.5rem; }
+
+    #container-comercializacion-wrapper .section-garantia-full .display-4 { font-size: 1.8rem; }
+    #container-comercializacion-wrapper .section-garantia-full .lead { font-size: 0.9rem; }
+    #container-comercializacion-wrapper .section-garantia-full .btn-outline-brown {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
     }
 }
 
 @media (max-width: 575.98px) {
-    .comercializacion-header h1 { font-size: 1.8rem; }
-    .display-4, .display-5 { font-size: 1.6rem !important; }
-    .btn-vivid { padding: 1rem !important; font-size: 0.85rem; }
+    #container-comercializacion-wrapper .comercializacion-header h1 { font-size: 1.8rem; }
+    #container-comercializacion-wrapper .display-4,
+    #container-comercializacion-wrapper .display-5 { font-size: 1.6rem; }
+    #container-comercializacion-wrapper .btn-vivid { padding: 1rem; font-size: 0.85rem; }
 }

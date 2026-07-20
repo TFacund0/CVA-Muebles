@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=2.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class="col-6 col-md-4">
-        <div class="admin-card-v2 p-3 p-md-4 border-start border-4 h-100 shadow-sm" style="border-color: var(--cva-gold) !important;">
+        <div class="admin-card-v2 p-3 p-md-4 border-start border-4 h-100 shadow-sm admin-kpi-accent-gold">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <span class="d-block x-small text-uppercase fw-bold text-muted mb-1">Diseños Activos</span>
@@ -115,9 +115,9 @@
 
 <!-- Filtros Avanzados -->
 <div class="admin-card-v2 mb-4 border-0 shadow-sm overflow-hidden">
-    <div class="bg-light p-3 border-bottom d-flex align-items-center justify-content-between" style="min-height: 52px;">
+    <div class="bg-light p-3 border-bottom d-flex align-items-center justify-content-between admin-filter-bar">
         <h6 class="mb-0 fw-bold text-cva-brown"><i class="bi bi-filter-right me-2 text-gold"></i> Filtros de Búsqueda</h6>
-        <div id="filter-status" class="x-small fw-bold text-success" style="opacity: 0; transition: opacity 0.2s ease;">
+        <div id="filter-status" class="x-small fw-bold text-success admin-filter-status">
             <span class="spinner-grow spinner-grow-sm me-1"></span> FILTRANDO...
         </div>
     </div>
@@ -153,10 +153,10 @@
 <!-- Listado Maestro -->
 <div class="admin-card-v2 border-0 shadow-sm overflow-hidden mb-5">
     <div class="table-responsive-stack">
-        <table class="table table-hover align-middle mb-0" id="products-table">
+        <table class="table table-hover align-middle mb-0" id="products-table" data-initial-view="<?= esc($vista) ?>">
             <thead class="bg-brown text-white">
                 <tr>
-                    <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest" style="width: 55%;">PIEZA Y ESPECIFICACIONES</th>
+                    <th class="ps-4 py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest col-product-piece">PIEZA Y ESPECIFICACIONES</th>
                     <th class="py-4 text-gold x-small fw-bold border-0 text-uppercase tracking-widest">CATEGORÍA</th>
                     <th class="py-4 text-gold x-small fw-bold border-0 text-end text-uppercase tracking-widest">PRECIO VENTA</th>
                     <th class="pe-4 py-4 text-gold x-small fw-bold border-0 text-center text-uppercase tracking-widest">GESTIÓN</th>
@@ -173,15 +173,15 @@
                             <td class="ps-4" data-label="PIEZA">
                                 <div class="d-flex align-items-center gap-3 py-3 product-info-wrapper">
                                     <div class="flex-shrink-0 position-relative product-img-container">
-                                        <img src="<?= base_url('assets/uploads/' . $p['imagen']) ?>" 
-                                             class="rounded-3 shadow-sm border p-1 bg-white transition-transform" style="width: 80px; height: 80px; object-fit: cover;">
-                                        <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-md-none" style="transform: translate(-20%, -20%); font-size: 0.7rem; border: 1px solid var(--cva-gold); z-index: 1;">#<?= $p['id_producto'] ?></span>
+                                        <img src="<?= imagen_url($p['imagen']) ?>"
+                                             class="rounded-3 shadow-sm border p-1 bg-white transition-transform product-thumb-80">
+                                        <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-md-none badge-corner-id-md">#<?= $p['id_producto'] ?></span>
                                     </div>
                                     <div class="product-text-details">
                                         <div class="h6 fw-bold text-cva-brown mb-1"><?= esc($p['nombre_prod']) ?></div>
                                         <div class="small text-muted mb-2 d-none d-md-block"><?= character_limiter(esc($p['descripcion'] ?? ''), 60) ?></div>
                                         <div class="d-flex gap-2">
-                                            <span class="x-small fw-bold text-uppercase badge bg-light text-muted border px-2 py-1" style="font-size: 0.55rem;">ID: <?= $p['id_producto'] ?></span>
+                                            <span class="x-small fw-bold text-uppercase badge bg-light text-muted border px-2 py-1 text-4xs">ID: <?= $p['id_producto'] ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -192,7 +192,7 @@
                                 </span>
                             </td>
                             <td class="text-end" data-label="PRECIO">
-                                <div class="fw-bold text-cva-brown mb-0">$<?= number_format($p['precio_vta'], 2, ',', '.') ?></div>
+                                <div class="fw-bold text-cva-brown mb-0">$<?= money($p['precio_vta'], 2) ?></div>
                             </td>
                             <td class="text-center" data-label="GESTIÓN">
                                 <div class="d-flex flex-column flex-sm-row flex-lg-column gap-2 align-items-center justify-content-center w-100">
@@ -202,16 +202,19 @@
                                     </a>
                                     
                                     <div class="w-100 btn-group-actions">
-                                        <button type="button" onclick="submitAction('<?= base_url('/delete-producto/' . $p['id_producto']) ?>', '¿Confirmas archivar esta pieza del catálogo?')" 
-                                                class="btn btn-action-premium text-danger border-danger border-opacity-25 w-100 action-archive <?= $p['eliminado'] == 'SI' ? 'd-none' : '' ?>">
+                                        <button type="button" class="btn btn-action-premium text-danger border-danger border-opacity-25 w-100 action-archive js-submit-action <?= $p['eliminado'] == 'SI' ? 'd-none' : '' ?>"
+                                                data-url="<?= base_url('/delete-producto/' . $p['id_producto']) ?>"
+                                                data-confirm-msg="¿Confirmas archivar esta pieza del catálogo?">
                                             <i class="bi bi-archive-fill me-2"></i> ARCHIVAR
                                         </button>
-                                        <button type="button" onclick="submitAction('<?= base_url('/activar-producto/' . $p['id_producto']) ?>', '¿Confirmas reactivar esta pieza?')" 
-                                                class="btn btn-action-premium text-success border-success border-opacity-25 w-100 action-restore <?= $p['eliminado'] == 'NO' ? 'd-none' : '' ?>">
+                                        <button type="button" class="btn btn-action-premium text-success border-success border-opacity-25 w-100 action-restore js-submit-action <?= $p['eliminado'] == 'NO' ? 'd-none' : '' ?>"
+                                                data-url="<?= base_url('/activar-producto/' . $p['id_producto']) ?>"
+                                                data-confirm-msg="¿Confirmas reactivar esta pieza?">
                                             <i class="bi bi-arrow-counterclockwise me-2"></i> RESTAURAR
                                         </button>
-                                        <button type="button" onclick="submitAction('<?= base_url('/eliminar-producto-permanente/' . $p['id_producto']) ?>', '¿Confirmas eliminar PERMANENTEMENTE este mueble del catálogo? Esta acción no se puede deshacer y borrará toda la información asociada.')" 
-                                                class="btn btn-action-premium text-danger border-danger border-opacity-25 w-100 mt-2 action-delete-permanent <?= $p['eliminado'] == 'NO' ? 'd-none' : '' ?>">
+                                        <button type="button" class="btn btn-action-premium text-danger border-danger border-opacity-25 w-100 mt-2 action-delete-permanent js-submit-action <?= $p['eliminado'] == 'NO' ? 'd-none' : '' ?>"
+                                                data-url="<?= base_url('/eliminar-producto-permanente/' . $p['id_producto']) ?>"
+                                                data-confirm-msg="¿Confirmas eliminar PERMANENTEMENTE este mueble del catálogo? Esta acción no se puede deshacer y borrará toda la información asociada.">
                                             <i class="bi bi-trash-fill me-2"></i> ELIMINAR
                                         </button>
                                     </div>
@@ -222,18 +225,18 @@
                 <?php endif; ?>
                 
                 <!-- Fila de "No hay resultados" (JS la controla) -->
-                <tr id="no-results-row" style="display: none;">
+                <tr id="no-results-row" class="admin-hidden-row">
                     <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-search display-1 text-muted opacity-25"></i>
                             <h4 class="text-muted mt-4">Sin coincidencias</h4>
                             <p class="text-muted small">No encontramos nada que coincida con tus filtros actuales.</p>
-                            <button type="button" onclick="resetFilters()" class="btn btn-outline-gold rounded-pill px-4 mt-3 animate-pulse-gold">Limpiar búsqueda</button>
+                            <button type="button" id="btn-reset-filters-empty" class="btn btn-outline-gold rounded-pill px-4 mt-3 animate-pulse-gold">Limpiar búsqueda</button>
                         </div>
                     </td>
                 </tr>
 
-                <tr id="empty-active-row" style="display: none;">
+                <tr id="empty-active-row" class="admin-hidden-row">
                     <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-box-seam-fill display-1 text-muted opacity-25"></i>
@@ -244,7 +247,7 @@
                     </td>
                 </tr>
 
-                <tr id="empty-archive-row" style="display: none;">
+                <tr id="empty-archive-row" class="admin-hidden-row">
                     <td colspan="4" class="text-center py-5 bg-light bg-opacity-50">
                         <div class="py-5 text-center">
                             <i class="bi bi-archive-fill display-1 text-muted opacity-25"></i>
@@ -260,106 +263,7 @@
 
 
 
-<script>
-    function submitAction(url, message) {
-        if (confirm(message)) {
-            const form = document.getElementById('global-action-form');
-            const separator = url.includes('?') ? '&' : '?';
-            const activosTab = document.getElementById('activos-tab');
-            const vista = (activosTab && activosTab.classList.contains('active')) ? 'NO' : 'SI';
-            form.action = url + separator + 'vista=' + vista;
-            form.submit();
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const inputSearch = document.getElementById('input-search');
-        const selectCategory = document.getElementById('select-category');
-        const activosTab = document.getElementById('activos-tab');
-        const archivadosTab = document.getElementById('archivados-tab');
-        const rows = document.querySelectorAll('.product-row');
-        const noResults = document.getElementById('no-results-row');
-        const emptyActive = document.getElementById('empty-active-row');
-        const emptyArchive = document.getElementById('empty-archive-row');
-        const filterStatus = document.getElementById('filter-status');
-        const btnReset = document.getElementById('btn-reset');
-
-        let currentView = '<?= esc($vista) ?>'; // 'NO' para Activos, 'SI' para Archivados
-
-        function filterProducts() {
-            const searchTerm = inputSearch.value.toLowerCase();
-            const categoryTerm = selectCategory.value;
-            let visibleCount = 0;
-            let totalInCurrentView = 0;
-
-            filterStatus.style.opacity = '1';
-
-            rows.forEach(row => {
-                const name = row.getAttribute('data-name');
-                const category = row.getAttribute('data-category');
-                const eliminado = row.getAttribute('data-eliminado');
-                
-                const isCorrectView = (eliminado === currentView);
-                const matchesSearch = name.includes(searchTerm);
-                const matchesCategory = (categoryTerm === 'all' || category === categoryTerm);
-
-                if (isCorrectView) {
-                    totalInCurrentView++;
-                    if (matchesSearch && matchesCategory) {
-                        row.style.display = '';
-                        visibleCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Control de filas vacías
-            if (noResults) noResults.style.display = (visibleCount === 0 && totalInCurrentView > 0) ? '' : 'none';
-            if (emptyActive) emptyActive.style.display = (totalInCurrentView === 0 && currentView === 'NO') ? '' : 'none';
-            if (emptyArchive) emptyArchive.style.display = (totalInCurrentView === 0 && currentView === 'SI') ? '' : 'none';
-            
-            setTimeout(() => {
-                filterStatus.style.opacity = '0';
-            }, 200);
-        }
-
-        function switchTab(view) {
-            currentView = view;
-            if (currentView === 'NO') {
-                activosTab.classList.add('active');
-                activosTab.setAttribute('aria-selected', 'true');
-                archivadosTab.classList.remove('active');
-                archivadosTab.setAttribute('aria-selected', 'false');
-            } else {
-                archivadosTab.classList.add('active');
-                archivadosTab.setAttribute('aria-selected', 'true');
-                activosTab.classList.remove('active');
-                activosTab.setAttribute('aria-selected', 'false');
-            }
-            filterProducts();
-        }
-
-        if (activosTab) activosTab.addEventListener('click', () => switchTab('NO'));
-        if (archivadosTab) archivadosTab.addEventListener('click', () => switchTab('SI'));
-
-        inputSearch.addEventListener('input', filterProducts);
-        selectCategory.addEventListener('change', filterProducts);
-        
-        btnReset.addEventListener('click', function() {
-            inputSearch.value = '';
-            selectCategory.value = 'all';
-            filterProducts();
-        });
-
-        // Inicializar vista
-        switchTab(currentView);
-    });
-
-    function resetFilters() {
-        document.getElementById('btn-reset').click();
-    }
-</script>
+<?= view('back/partials/tab_submit_action') ?>
+<script src="<?= base_url('assets/js/admin-tab-filter.js?v=1.0') ?>"></script>
+<script src="<?= base_url('assets/js/admin/admin-crud-productos.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

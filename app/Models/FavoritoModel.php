@@ -14,6 +14,10 @@ class FavoritoModel extends Model {
 
     /**
      * Verifica si un producto ya está en favoritos del usuario
+     *
+     * @param int $usuario_id ID del usuario.
+     * @param int $producto_id ID del producto.
+     * @return bool True si el producto ya está en favoritos del usuario.
      */
     public function esFavorito($usuario_id, $producto_id) {
         return $this->findFavorito($usuario_id, $producto_id) !== null;
@@ -21,6 +25,10 @@ class FavoritoModel extends Model {
 
     /**
      * Busca la fila de favorito para un usuario+producto (o null si no existe).
+     *
+     * @param int $usuario_id ID del usuario.
+     * @param int $producto_id ID del producto.
+     * @return array|null Fila de favorito como arreglo asociativo, o null si no existe.
      */
     public function findFavorito($usuario_id, $producto_id): ?array {
         return $this->where('usuario_id', $usuario_id)
@@ -30,6 +38,9 @@ class FavoritoModel extends Model {
 
     /**
      * IDs de los productos favoritos de un usuario.
+     *
+     * @param int $usuario_id ID del usuario.
+     * @return array Listado de filas de favoritos del usuario.
      */
     public function findByUsuario($usuario_id): array {
         return $this->where('usuario_id', $usuario_id)->findAll();
@@ -37,6 +48,9 @@ class FavoritoModel extends Model {
 
     /**
      * Obtiene los productos favoritos de un usuario con sus detalles
+     *
+     * @param int $usuario_id ID del usuario.
+     * @return array Listado de favoritos con los datos del producto y su categoría.
      */
     public function getFavoritosByUser($usuario_id) {
         return $this->select('favoritos.*, productos.nombre_prod, productos.imagen, productos.precio_vta, productos.descripcion, productos.categoria_id, categorias.descripcion as categoria')

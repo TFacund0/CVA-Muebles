@@ -21,6 +21,9 @@ class CategoriaService
 
     /**
      * Obtiene todas las categorías con estadísticas de uso.
+     *
+     * @param bool $soloActivas Si es true, filtra solo las categorías activas
+     * @return array Categorías con 'total_productos' y 'productos_activos' agregados
      */
     public function getCategoriasConStats($soloActivas = false)
     {
@@ -40,6 +43,9 @@ class CategoriaService
 
     /**
      * Crea una nueva categoría.
+     *
+     * @param array $data Datos de la categoría a insertar
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function crear($data)
     {
@@ -52,6 +58,10 @@ class CategoriaService
 
     /**
      * Actualiza una categoría.
+     *
+     * @param int $id Identificador de la categoría
+     * @param array $data Datos a actualizar
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function actualizar($id, $data)
     {
@@ -64,6 +74,9 @@ class CategoriaService
     /**
      * Elimina una categoría si no tiene productos asociados.
      * Si los tiene, lanza una excepción o devuelve un error.
+     *
+     * @param int $id Identificador de la categoría
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function eliminar($id)
     {
@@ -82,6 +95,9 @@ class CategoriaService
 
     /**
      * Alterna el estado activo/inactivo.
+     *
+     * @param int $id Identificador de la categoría
+     * @return bool true si se actualizó, false si la categoría no existe
      */
     public function toggleEstado($id)
     {
@@ -94,6 +110,9 @@ class CategoriaService
 
     /**
      * Obtiene una categoría por ID.
+     *
+     * @param int $id Identificador de la categoría
+     * @return array|null Datos de la categoría o null si no existe
      */
     public function getCategoria($id)
     {

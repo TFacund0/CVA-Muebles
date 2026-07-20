@@ -21,6 +21,8 @@ class ProductoService
 
     /**
      * Obtiene el listado de productos con estadísticas para el panel.
+     *
+     * @return array ['productos' => array, 'counts' => array]
      */
     public function getProductosConStats()
     {
@@ -50,6 +52,8 @@ class ProductoService
 
     /**
      * Obtiene el listado de productos públicos (no eliminados y con categorías activas).
+     *
+     * @return array Productos disponibles para el catálogo público
      */
     public function getProductosPublicos()
     {
@@ -58,6 +62,10 @@ class ProductoService
 
     /**
      * Crea un nuevo producto.
+     *
+     * @param array $data Datos del producto a insertar
+     * @param \CodeIgniter\HTTP\Files\UploadedFile|null $image Imagen principal opcional
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function crearProducto($data, $image = null)
     {
@@ -80,6 +88,11 @@ class ProductoService
 
     /**
      * Actualiza un producto existente.
+     *
+     * @param int $id Identificador del producto
+     * @param array $data Datos a actualizar
+     * @param \CodeIgniter\HTTP\Files\UploadedFile|null $image Nueva imagen principal opcional (reemplaza la anterior)
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function actualizarProducto($id, $data, $image = null)
     {
@@ -109,6 +122,9 @@ class ProductoService
 
     /**
      * Marca un producto como eliminado (soft delete).
+     *
+     * @param int $id Identificador del producto
+     * @return bool Resultado de la eliminación
      */
     public function eliminar($id)
     {
@@ -117,6 +133,9 @@ class ProductoService
 
     /**
      * Reactiva un producto eliminado.
+     *
+     * @param int $id Identificador del producto
+     * @return bool Resultado de la actualización
      */
     public function reactivar($id)
     {
@@ -131,6 +150,9 @@ class ProductoService
 
     /**
      * Obtiene un producto por ID con su galería de imágenes.
+     *
+     * @param int $id Identificador del producto
+     * @return array|null Datos del producto con la clave 'galeria', o null si no existe
      */
     public function getProductoConGaleria($id)
     {
@@ -143,6 +165,10 @@ class ProductoService
 
     /**
      * Sube imágenes adicionales a la galería.
+     *
+     * @param int $producto_id Identificador del producto
+     * @param array $files Lista de archivos subidos (UploadedFile)
+     * @return bool true si al menos una imagen se subió, false si no hay archivos o ninguna es válida
      */
     public function subirImagenesGaleria($producto_id, $files)
     {
@@ -166,7 +192,10 @@ class ProductoService
     }
 
     /**
-     * Elimina una imagen de la galería.
+     * Elimina una imagen de la galería, incluyendo el archivo físico si existe.
+     *
+     * @param int $id Identificador de la imagen
+     * @return bool Resultado de la eliminación, false si la imagen no existe
      */
     public function eliminarImagenGaleria($id)
     {
@@ -183,6 +212,9 @@ class ProductoService
 
     /**
      * Elimina permanentemente un producto del catálogo si no tiene ventas o pedidos asociados.
+     *
+     * @param int $id Identificador del producto
+     * @return array ['status' => 'success'|'error', 'message' => string]
      */
     public function eliminarPermanente($id)
     {

@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/condiciones.css?v=2.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/condiciones.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -9,7 +9,7 @@
     <!-- Cabecera Premium (Sello del Sitio) -->
     <header class="condiciones-header">
         <div class="container animate-fade-in">
-            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Transparencia CVA</span>
+            <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-3">Transparencia CVA</span>
             <h1 class="display-3 fw-bold font-lora">Marco Legal</h1>
             <div class="divider-artisan mx-auto mb-4"></div>
             <p class="lead">Nuestros compromisos y tus derechos en un lenguaje claro y artesanal.</p>
@@ -22,8 +22,8 @@
             <div class="row g-5">
                 <!-- Navegación Sticky (Izquierda) -->
                 <div class="col-lg-3 d-none d-lg-block">
-                    <div class="sticky-top" style="top: 100px;">
-                        <h5 class="fw-bold text-cva-brown mb-4 text-uppercase small" style="letter-spacing: 2px;">Contenido</h5>
+                    <div class="sticky-top">
+                        <h5 class="fw-bold text-cva-brown mb-4 text-uppercase small kicker-spacing-2">Contenido</h5>
                         <nav id="legal-nav" class="nav flex-column border-start border-2 border-light ps-3">
                             <a class="nav-link text-muted py-2 active" href="#privacidad">01. Privacidad</a>
                             <a class="nav-link text-muted py-2" href="#venta">02. Términos de Venta</a>
@@ -105,7 +105,7 @@
                         </div>
                         
                         <div class="text-end mt-5 pt-5 border-top opacity-50">
-                            <img src="<?= base_url('assets/img/ui/logo-cva.png') ?>" alt="Sello CVA" style="height: 30px; filter: grayscale(1);">
+                            <img src="<?= base_url('assets/img/branding/cva2.png') ?>" alt="Sello CVA" class="seal-img">
                             <p class="x-small mb-0 mt-2">Documento validado para 2026</p>
                         </div>
                     </div>

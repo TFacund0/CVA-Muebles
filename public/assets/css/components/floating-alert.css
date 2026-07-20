@@ -25,3 +25,21 @@
     from { width: 100%; }
     to { width: 0%; }
 }
+
+.toast-container-cva {
+    z-index: 9999;
+}
+
+.toast-icon-circle {
+    width: 40px;
+    height: 40px;
+}
+
+.toast-body-dashed {
+    border-top: 1px dashed #eee !important;
+}
+
+.toast-message-text {
+    line-height: 1.5;
+    font-size: 0.95rem;
+}

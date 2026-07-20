@@ -6,18 +6,18 @@
 
 /* --- NAVBAR PRINCIPAL --- */
 nav.navbar.artisan-main-nav {
-    background-image: var(--navbar-bg), url('../../img/ui/textures/madera.jpg') !important;
+    background-image: var(--navbar-bg), url('../../img/ui/textures/madera.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-bottom: 3px solid var(--cva-gold);
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    padding: 0 !important;
+    padding: 0;
     min-height: 80px;
     display: flex;
     align-items: center;
     transition: var(--transition-base);
-    z-index: 1030 !important;
+    z-index: 1030;
 }
 
 @media (max-width: 991.98px) {
@@ -27,6 +27,10 @@ nav.navbar.artisan-main-nav {
 }
 
 /* Botones de Iconos Circulares (Premium) */
+.d-none-form {
+    display: none;
+}
+
 .boton-icon-circle {
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.25);
@@ -38,7 +42,7 @@ nav.navbar.artisan-main-nav {
     justify-content: center;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     text-decoration: none;
-    color: white !important;
+    color: white;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
@@ -60,8 +64,13 @@ nav.navbar.artisan-main-nav {
 }
 
 .logo-img-nav {
-    width: 50px !important;
-    transition: transform 0.3s ease;
+    width: 50px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+}
+
+.logo-img-nav:hover {
+    transform: scale(1.12) rotate(-6deg);
+    filter: drop-shadow(0 4px 10px rgba(229, 160, 13, 0.5));
 }
 
 .artisan-main-nav .titulo-logo {
@@ -112,43 +121,43 @@ nav.navbar.artisan-main-nav {
 
 /* --- AUTH PILL (GUEST LOGIN) --- */
 .auth-pill-artisan {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    border-radius: 50px !important;
-    padding: 6px 18px !important;
-    display: none !important; /* Forzamos la ocultación total en móvil */
-    align-items: center !important;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
-    backdrop-filter: blur(8px) !important;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    padding: 6px 18px;
+    display: none; /* Forzamos la ocultación total en móvil */
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    backdrop-filter: blur(8px);
 }
 
 @media (min-width: 992px) {
     .auth-pill-artisan {
-        display: flex !important; /* Solo visible en desktop con alta prioridad */
+        display: flex; /* Solo visible en desktop con alta prioridad */
     }
 }
 
 .auth-pill-artisan:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-    border-color: var(--cva-gold) !important;
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--cva-gold);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
 
 .auth-pill-link {
-    color: #FFFFFF !important;
-    text-decoration: none !important;
-    font-size: 0.75rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    transition: all 0.3s ease !important;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
     padding: 4px 8px;
     border-radius: 20px;
 }
 
 .auth-pill-link:hover {
-    color: var(--cva-gold) !important;
+    color: var(--cva-gold);
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -161,13 +170,13 @@ nav.navbar.artisan-main-nav {
 
 /* Sidebar Specific */
 .menu-lateral {
-    width: 350px !important; /* Base para móvil */
+    width: 350px; /* Base para móvil */
     background-color: var(--sidebar-bg);
 }
 
 @media (min-width: 992px) {
     .menu-lateral {
-        width: 450px !important; /* Más ancho en PC para que no se vea "chico" */
+        width: 450px; /* Más ancho en PC para que no se vea "chico" */
     }
 }
 
@@ -194,6 +203,51 @@ nav.navbar.artisan-main-nav {
     object-fit: cover;
 }
 
+/* Navbar layout helpers */
+.navbar-flex-cell {
+    flex: 1;
+}
+
+.navbar-flex-cell-nav {
+    flex: 2;
+}
+
+.navbar-cart-badge {
+    font-size: 0.6rem;
+}
+
+.avatar-wrapper-lg {
+    width: 80px;
+    height: 80px;
+}
+
+.avatar-wrapper-sm {
+    width: 60px;
+    height: 60px;
+}
+
+.avatar-icon-fallback {
+    font-size: 3rem;
+}
+
+.avatar-icon-fallback-hidden {
+    font-size: 3rem;
+    display: none;
+}
+
+.avatar-bg-signup {
+    background: white;
+    border: 1px solid var(--cva-brown);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.avatar-icon-signup {
+    font-size: 1.8rem;
+}
+
 .status-indicator {
     position: absolute;
     bottom: 5px;
@@ -206,13 +260,13 @@ nav.navbar.artisan-main-nav {
 }
 
 .active-sidebar {
-    background-color: var(--cva-gold) !important;
-    color: white !important;
+    background-color: var(--cva-gold);
+    color: white;
     border-left: 4px solid var(--cva-brown);
 }
 
 .active-sidebar i {
-    color: white !important;
+    color: white;
 }
 
 .sidebar-section-label {
@@ -232,7 +286,7 @@ nav.navbar.artisan-main-nav {
     font-size: 0.9rem;
     padding: 12px 20px;
     transition: all 0.2s ease;
-    border: none !important;
+    border: none;
     color: var(--cva-brown);
 }
 
@@ -250,15 +304,15 @@ nav.navbar.artisan-main-nav {
 .auth-section-mobile {
     background: linear-gradient(135deg, #fdfaf7 0%, #f4eee8 100%);
     border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding: 30px 20px !important;
+    padding: 30px 20px;
 }
 
 .btn-brown-solid {
-    background-color: var(--cva-brown) !important;
-    color: white !important;
-    border: none !important;
-    padding: 12px !important;
-    font-weight: 700 !important;
+    background-color: var(--cva-brown);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 0.85rem;
@@ -271,11 +325,11 @@ nav.navbar.artisan-main-nav {
 }
 
 .btn-outline-brown {
-    background-color: transparent !important;
-    color: var(--cva-brown) !important;
-    border: 2px solid var(--cva-brown) !important;
-    padding: 10px !important;
-    font-weight: 700 !important;
+    background-color: transparent;
+    color: var(--cva-brown);
+    border: 2px solid var(--cva-brown);
+    padding: 10px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 0.85rem;
@@ -283,21 +337,21 @@ nav.navbar.artisan-main-nav {
 }
 
 .btn-outline-brown:hover {
-    background-color: var(--cva-brown) !important;
-    color: white !important;
+    background-color: var(--cva-brown);
+    color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(45, 27, 25, 0.15);
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
 .btn-outline-brown:active {
-    background-color: rgba(45, 27, 25, 0.05) !important;
+    background-color: rgba(45, 27, 25, 0.05);
     transform: scale(0.98);
 }
 
 /* FOOTER */
 footer.artisan-footer {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('../../img/ui/textures/madera.jpg') !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('../../img/ui/textures/madera.jpg');
     background-size: cover;
     background-position: center;
     color: var(--cva-white);

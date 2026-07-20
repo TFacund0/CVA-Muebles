@@ -29,7 +29,7 @@ if ($estado == 'PENDIENTE') {
     $icon = "bi-inbox";
 }
 ?>
-<span class="badge px-3 py-2 rounded-pill x-small fw-bold <?= $badge_class ?>" style="min-width: 100px;">
+<span class="badge px-3 py-2 rounded-pill x-small fw-bold badge-status <?= $badge_class ?>">
     <i class="bi <?= $icon ?> me-1"></i>
     <?= $estado ?>
 </span>

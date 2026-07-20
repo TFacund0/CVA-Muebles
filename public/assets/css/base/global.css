@@ -34,6 +34,18 @@
     /* Transitions */
     --transition-base: all 0.3s ease;
 
+    /* Radius Scale */
+    --radius-sm: 1rem;
+    --radius-md: 1.5rem;
+    --radius-lg: 2rem;
+    --radius-xl: 2.5rem;
+    --radius-pill: 50px;
+
+    /* Shadow Scale */
+    --shadow-sm: 0 10px 20px rgba(62, 39, 35, 0.06);
+    --shadow-md: 0 20px 40px rgba(62, 39, 35, 0.08);
+    --shadow-lg: 0 30px 60px rgba(62, 39, 35, 0.12);
+
     /* Component Tokens */
     --navbar-height: 80px;
     --navbar-bg: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5));
@@ -147,6 +159,62 @@ h6 {
     box-shadow: 0 8px 25px rgba(211, 84, 0, 0.4);
 }
 
+.text-vivid {
+    color: var(--cva-vivid) !important;
+}
+
+/* Vivid Premium Button (formerly duplicated in contacto.css and galeria.css
+   with diverging styles — consolidated here as the single source of truth) */
+.btn-vivid-premium {
+    background: var(--cva-vivid);
+    color: white;
+    font-weight: 800;
+    letter-spacing: 2px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(211, 84, 0, 0.3);
+    transition: var(--transition-base);
+}
+
+.btn-vivid-premium:hover {
+    background: var(--cva-brown);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(62, 39, 35, 0.4);
+}
+
+/* Premium Action Button (icon + label, used on contact-style cards) */
+.btn-premium-action {
+    background: var(--cva-brown);
+    color: white;
+    border-radius: var(--radius-pill);
+    padding: 0.8rem 2rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: var(--transition-base);
+    border: none;
+    width: 100%;
+}
+
+.btn-premium-action:hover {
+    background: var(--cva-gold);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(229, 160, 13, 0.3);
+}
+
+.btn-premium-action i {
+    transition: transform 0.4s ease;
+}
+
+.btn-premium-action:hover i {
+    transform: translateX(5px);
+}
+
 /* New Gold Premium Button */
 .btn-gold {
     background-color: var(--cva-gold) !important;
@@ -194,4 +262,28 @@ h6 {
 
 .animate-slide-up {
     animation: slideUp 0.6s ease-out forwards;
+}
+
+/* Flash Alert Component (components/alert_message.php) */
+.alert-flash-success {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2) !important;
+    color: #155724;
+}
+
+.alert-flash-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2) !important;
+    color: #721c24;
+}
+
+.alert-flash-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.2) !important;
+    color: #856404;
+}
+
+/* Status Badge Component (components/status_badge.php) */
+.badge-status {
+    min-width: 100px;
 }

@@ -19,8 +19,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <!-- Design System & Global Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=4.0')?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/layout/main-layout.css?v=7.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=4.1')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/layout/main-layout.css?v=8.1')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/floating-alert.css?v=2.0')?>">
 
 
@@ -50,16 +50,9 @@
     <!-- Page Specific JS Section -->
     <?= $this->renderSection('extra-js') ?>
 
-    <script>
-        function submitAction(url, message) {
-            if (confirm(message)) {
-                const form = document.getElementById('global-action-form');
-                form.action = url;
-                form.submit();
-            }
-        }
-    </script>
-    <form id="global-action-form" method="POST" style="display: none;">
+    <script src="<?= base_url('assets/js/components/floating-alert.js?v=1.0') ?>"></script>
+    <script src="<?= base_url('assets/js/main.js?v=1.0') ?>"></script>
+    <form id="global-action-form" method="POST" class="d-none-form">
         <?= csrf_field() ?>
     </form>
 </body>

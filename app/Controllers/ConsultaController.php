@@ -16,8 +16,10 @@ class ConsultaController extends BaseController {
 
     /**
      * Muestra el listado de consultas para administración.
+     *
+     * @return string
      */
-    public function index() {    
+    public function index() {
 
 
         $resultado = $this->consultaService->getConsultasConStats();
@@ -33,6 +35,8 @@ class ConsultaController extends BaseController {
 
     /**
      * Procesa el envío de una nueva consulta.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function cargarConsulta() {
         $throttler = \Config\Services::throttler();
@@ -58,6 +62,9 @@ class ConsultaController extends BaseController {
 
     /**
      * Desactiva (archiva) una consulta delegando al servicio.
+     *
+     * @param int|string $id Identificador de la consulta.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function eliminarConsulta($id) {
 
@@ -68,6 +75,9 @@ class ConsultaController extends BaseController {
 
     /**
      * Restaura una consulta a pendientes delegando al servicio.
+     *
+     * @param int|string $id Identificador de la consulta.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function restaurarConsulta($id) {
 
@@ -78,6 +88,9 @@ class ConsultaController extends BaseController {
 
     /**
      * Elimina permanentemente una consulta delegando al servicio.
+     *
+     * @param int|string $id Identificador de la consulta.
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
     public function eliminarPermanente($id) {
 

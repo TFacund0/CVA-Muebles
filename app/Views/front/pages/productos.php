@@ -1,11 +1,14 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/pages/productos.css?v=11.0') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/productos.css?v=12.0') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
-<section id="productos" class="contenedor-productos">
+<section id="productos" class="contenedor-productos"
+    data-csrf-token="<?= csrf_hash() ?>"
+    data-favoritos-toggle-url="<?= base_url('favoritos/toggle/') ?>"
+    data-login-url="<?= base_url('login') ?>">
     <!-- Cabecera Premium -->
     <div class="header-productos text-center shadow-sm">
         <div class="container">
@@ -49,103 +52,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    let csrfToken = '<?= csrf_hash() ?>';
-    let favoriteQueue = Promise.resolve();
-
-    function toggleFav(event, id, btn) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        // Evitar múltiples clics en el mismo botón mientras está procesándose
-        if (btn.classList.contains('loading')) return;
-        btn.classList.add('loading');
-
-        const icon = btn.querySelector('i');
-        const wasActive = btn.classList.contains('active');
-
-        // Toggle visual optimista inmediato para una respuesta instantánea
-        btn.classList.toggle('active');
-        if (wasActive) {
-            icon.classList.remove('bi-heart-fill');
-            icon.classList.add('bi-heart');
-        } else {
-            icon.classList.remove('bi-heart');
-            icon.classList.add('bi-heart-fill');
-        }
-
-        // Encolar la petición de forma secuencial para garantizar consistencia del token CSRF
-        favoriteQueue = favoriteQueue.then(() => {
-            return fetch('<?= base_url('favoritos/toggle/') ?>' + id, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Response error');
-                    return response.json();
-                })
-                .then(data => {
-                    btn.classList.remove('loading');
-                    
-                    if (data.csrf) csrfToken = data.csrf; // Actualizar token CSRF global para la siguiente petición
-
-                    if (data.status === 'error') {
-                        // Revertir cambio optimista si no está autenticado y mandar a login
-                        btn.classList.toggle('active', wasActive);
-                        if (wasActive) {
-                            icon.classList.remove('bi-heart');
-                            icon.classList.add('bi-heart-fill');
-                        } else {
-                            icon.classList.remove('bi-heart-fill');
-                            icon.classList.add('bi-heart');
-                        }
-                        window.location.href = '<?= base_url('login') ?>';
-                    }
-                })
-                .catch(err => {
-                    btn.classList.remove('loading');
-                    console.error('Error:', err);
-                    // Revertir cambio optimista ante un fallo de red o servidor
-                    btn.classList.toggle('active', wasActive);
-                    if (wasActive) {
-                        icon.classList.remove('bi-heart');
-                        icon.classList.add('bi-heart-fill');
-                    } else {
-                        icon.classList.remove('bi-heart-fill');
-                        icon.classList.add('bi-heart');
-                    }
-                });
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const botones = document.querySelectorAll('.filtro-categoria');
-        const productos = document.querySelectorAll('#lista-productos > div');
-
-        botones.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Manejo de clase activa
-                botones.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                const categoria = btn.dataset.categoria.toLowerCase();
-                const items = document.querySelectorAll('#lista-productos > div');
-
-                items.forEach(prod => {
-                    const catProd = prod.dataset.categorias.toLowerCase();
-                    if (categoria === 'todos' || catProd === categoria) {
-                        prod.style.display = 'block';
-                    } else {
-                        prod.style.display = 'none';
-                    }
-                });
-            });
-        });
-    });
-</script>
+<script src="<?= base_url('assets/js/favoritos.js?v=1.0') ?>"></script>
+<script src="<?= base_url('assets/js/pages/productos.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

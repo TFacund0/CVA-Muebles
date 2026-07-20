@@ -1,7 +1,7 @@
 ﻿<?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/pages/frontend-pages.css?v=1.0') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/frontend-pages.css?v=2.0') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -12,7 +12,7 @@
             <span class="cart-header-badge">ESTUDIO DE CARPINTERÍA</span>
             <h1 class="cart-title-main">Mi Carrito</h1>
             <p class="text-muted fs-5">Piezas artesanales seleccionadas para tu espacio personal.</p>
-            <div style="width: 100px; height: 4px; background: var(--cva-gold); border-radius: 2px;"></div>
+            <div class="cart-header-divider"></div>
         </div>
 
 
@@ -42,10 +42,10 @@
                                 <div class="d-flex flex-column align-items-center">
                                     <input class="form-check-input item-checkbox cart-item-checkbox" type="checkbox" name="selected_items[]" value="<?= $item['rowid'] ?>" checked
                                         data-price="<?= $item['price'] ?>" data-qty="<?= $item['qty'] ?>" data-subtotal="<?= $item['subtotal'] ?>">
-                                    <span class="x-small text-muted mt-2 fw-bold" style="font-size: 0.6rem;">PEDIR</span>
+                                    <span class="x-small text-muted mt-2 fw-bold cart-checkbox-label">PEDIR</span>
                                 </div>
                                 <div class="cart-img-wrapper">
-                                    <img src="<?= base_url('assets/uploads/' . $item['imagen']) ?>" alt="<?= esc($item['name']) ?>">
+                                    <img src="<?= imagen_url($item['imagen']) ?>" alt="<?= esc($item['name']) ?>">
                                 </div>
 
                                 <div class="flex-grow-1">
@@ -55,8 +55,9 @@
                                             <h5 class="fw-bold text-cva-brown mb-1"><?= esc($item['name']) ?></h5>
                                             <p class="small text-muted mb-0">Colección Artesanal CVA</p>
                                         </div>
-                                        <button type="button" onclick="submitAction('<?= base_url('carrito_elimina/' . $item['rowid']) ?>', '¿Quitar este producto del carrito?')"
-                                            class="btn btn-trash-artisan" title="Quitar del carrito">
+                                        <button type="button" class="btn btn-trash-artisan js-cart-remove" title="Quitar del carrito"
+                                            data-url="<?= base_url('carrito_elimina/' . $item['rowid']) ?>"
+                                            data-confirm="¿Quitar este producto del carrito?">
                                             <i class="bi bi-trash3"></i>
                                         </button>
                                     </div>
@@ -69,8 +70,8 @@
                                         </div>
 
                                         <div class="text-end">
-                                            <p class="small text-muted mb-0">Precio Unitario: $<?= number_format($item['price'], 0, ',', '.') ?></p>
-                                            <p class="fw-bold text-cva-brown fs-5 mb-0" id="subtotal-<?= $item['rowid'] ?>">$<?= number_format($item['subtotal'], 0, ',', '.') ?></p>
+                                            <p class="small text-muted mb-0">Precio Unitario: $<?= money($item['price'], 0) ?></p>
+                                            <p class="fw-bold text-cva-brown fs-5 mb-0" id="subtotal-<?= $item['rowid'] ?>">$<?= money($item['subtotal'], 0) ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +101,7 @@
 
                         <div class="cart-total-line">
                             <span>Subtotal Obras</span>
-                            <span class="text-cva-brown fw-bold">$<?= number_format($gran_total, 0, ',', '.') ?></span>
+                            <span class="text-cva-brown fw-bold">$<?= money($gran_total, 0) ?></span>
                         </div>
                         <div class="cart-total-line">
                             <span>Logística / Envío</span>
@@ -113,7 +114,7 @@
 
                         <div class="cart-total-final">
                             <span class="fw-bold text-cva-brown">TOTAL</span>
-                            <div class="amount">$<?= number_format($gran_total, 0, ',', '.') ?></div>
+                            <div class="amount">$<?= money($gran_total, 0) ?></div>
                         </div>
 
                         <div class="mt-5">
@@ -140,81 +141,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkboxes = document.querySelectorAll('.item-checkbox');
-        const summarySubtotal = document.querySelector('.cart-total-line span:last-child');
-        const summaryTotal = document.querySelector('.amount');
-
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('es-AR', {
-                style: 'currency',
-                currency: 'ARS',
-                minimumFractionDigits: 0
-            }).format(amount);
-        }
-
-        function updateTotal() {
-            let total = 0;
-            document.querySelectorAll('.item-checkbox').forEach(cb => {
-                if (cb.checked) {
-                    total += parseFloat(cb.dataset.subtotal);
-                }
-            });
-            const formatted = formatCurrency(total);
-            if (summarySubtotal) summarySubtotal.textContent = formatted;
-            if (summaryTotal) summaryTotal.textContent = formatted;
-        }
-
-        // AJAX Quantity Updates
-        document.querySelectorAll('.ajax-qty').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const url = this.dataset.url;
-                const rowid = this.dataset.rowid;
-
-                fetch(url, {
-                        headers: {
-                            "X-Requested-With": "XMLHttpRequest"
-                        }
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            // Find the item in the returned cart
-                            const item = Object.values(data.cart).find(i => i.rowid === rowid);
-                            if (item) {
-                                // Update Qty display
-                                document.getElementById(`qty-${rowid}`).textContent = item.qty;
-                                // Update Item subtotal
-                                document.getElementById(`subtotal-${rowid}`).textContent = formatCurrency(item.subtotal);
-                                // Update Checkbox data
-                                const cb = document.querySelector(`.item-checkbox[value="${rowid}"]`);
-                                cb.dataset.qty = item.qty;
-                                cb.dataset.subtotal = item.subtotal;
-
-                                updateTotal();
-
-                                // Update Navbar Badge if exists
-                                const badge = document.querySelector('.navbar .badge');
-                                if (badge) badge.textContent = data.totalItems;
-                            } else {
-                                // Item removed (resta to 0)
-                                location.reload();
-                            }
-                        } else if (data.status === 'error') {
-                            alert(data.message);
-                        }
-                    })
-                    .catch(err => console.error(err));
-            });
-        });
-
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateTotal);
-        });
-
-        updateTotal();
-    });
-</script>
+<script src="<?= base_url('assets/js/pages/carrito.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

@@ -1,0 +1,153 @@
+/*
+  =============================================
+  CVA MUEBLES - MIS COMPRAS (historial cliente)
+  Todos los selectores están scopeados bajo
+  .purchases-wrapper para que nunca puedan
+  afectar, ni ser afectados por, otra página.
+  No usar !important salvo para anular una
+  regla de Bootstrap puntual (documentado).
+
+  Nota: este archivo reemplaza a la porción de
+  "Mis Compras" que antes vivía mezclada con
+  Carrito, Home y Productos dentro de
+  frontend-pages.css (ver git history si hace
+  falta recuperar algo del resto de ese archivo).
+  =============================================
+*/
+
+.purchases-wrapper {
+    background: linear-gradient(135deg, var(--cva-sand) 0%, #e8e2d8 100%);
+    min-height: 85vh;
+    padding: 4rem 0;
+}
+
+.purchases-wrapper .cart-header-badge {
+    background: var(--cva-brown);
+    color: var(--cva-gold);
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.purchases-wrapper .cart-title-main {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--cva-brown);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.purchases-wrapper .btn-filter-artisan {
+    background: white;
+    color: var(--cva-brown);
+    border: 1.5px solid #eeebe6;
+    border-radius: var(--radius-pill);
+    padding: 0.6rem 1.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.165,0.84,0.44,1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+}
+
+.purchases-wrapper .btn-filter-artisan:hover { border-color: var(--cva-gold); color: var(--cva-gold); transform: translateY(-2px); }
+.purchases-wrapper .btn-filter-artisan.active { background: var(--cva-brown); color: var(--cva-gold); border-color: var(--cva-brown); }
+
+.purchases-wrapper .purchase-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.4s cubic-bezier(0.165,0.84,0.44,1);
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    position: relative;
+}
+
+.purchases-wrapper .purchase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(62,39,35,0.1);
+    border-color: var(--cva-gold);
+    background: white;
+}
+
+.purchases-wrapper .purchase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed rgba(0,0,0,0.05);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.purchases-wrapper .status-badge {
+    font-size: 0.7rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    padding: 0.5rem 1.25rem; border-radius: var(--radius-pill);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.purchases-wrapper .status-solicitado  { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+.purchases-wrapper .status-pendiente   { background: #fff3cd; color: #856404; }
+.purchases-wrapper .status-aceptado    { background: #d4edda; color: #155724; }
+.purchases-wrapper .status-rechazado   { background: #f8d7da; color: #721c24; }
+.purchases-wrapper .status-entregado   { background: #cce5ff; color: #004085; }
+.purchases-wrapper .status-en_proceso  { background: #d1ecf1; color: #0c5460; }
+.purchases-wrapper .status-terminado   { background: #d4edda; color: #155724; }
+
+.purchases-wrapper .purchase-body { display: flex; justify-content: space-between; align-items: flex-end; }
+.purchases-wrapper .purchase-main-info h4 { font-weight: 900; color: var(--cva-brown); margin-bottom: 0.25rem; }
+.purchases-wrapper .info-label {
+    font-size: 0.65rem; font-weight: 800; color: #a08d7c;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; display: block;
+}
+.purchases-wrapper .purchase-footer {
+    margin-top: 1.5rem; padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.03);
+    display: flex; justify-content: space-between; align-items: center;
+}
+.purchases-wrapper .btn-wa-support {
+    background: rgba(37,211,102,0.1); color: #128C7E;
+    padding: 0.5rem 1rem; border-radius: var(--radius-pill);
+    font-size: 0.7rem; font-weight: 700; text-decoration: none;
+    transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+}
+.purchases-wrapper .btn-wa-support:hover { background: #25D366; color: white; transform: scale(1.05); }
+
+.purchases-wrapper .empty-history {
+    text-align: center; padding: 5rem 2rem; background: white;
+    border-radius: var(--radius-xl); box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+}
+
+/* Utilidades extraídas de style="" inline (CSP) */
+.purchases-wrapper .title-divider-gold {
+    width: 100px; height: 4px; background: var(--cva-gold); border-radius: 2px;
+}
+.purchases-wrapper .sort-purchases-wrap { height: 48px; }
+.purchases-wrapper .sort-purchases-select { box-shadow: none; font-size: 0.85rem; cursor: pointer; min-width: 150px; }
+.purchases-wrapper .no-results-purchases-box {
+    background: rgba(255,255,255,0.5); border-radius: 2rem;
+    border: 1px dashed rgba(184, 134, 11, 0.2); padding: 3rem !important;
+}
+.purchases-wrapper .no-results-icon { font-size: 4rem; }
+.purchases-wrapper .btn-artisan-sm-text { font-size: 0.7rem; }
+
+@media (max-width: 767.98px) {
+    .purchases-wrapper .purchase-card { padding: 1.5rem; }
+    .purchases-wrapper .purchase-header,
+    .purchases-wrapper .purchase-body,
+    .purchases-wrapper .purchase-footer { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .purchases-wrapper .purchase-footer .d-flex { flex-direction: column; width: 100%; gap: 0.75rem; }
+    .purchases-wrapper .purchase-footer .btn-artisan,
+    .purchases-wrapper .purchase-footer .btn-wa-support { width: 100%; justify-content: center; padding: 0.75rem; }
+    .purchases-wrapper .purchase-body .text-end { text-align: left; margin-top: 1rem; }
+    .purchases-wrapper .display-6 { font-size: 1.5rem; }
+    .purchases-wrapper .cart-title-main { font-size: 2.2rem; }
+}

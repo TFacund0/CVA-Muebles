@@ -6,6 +6,9 @@ writable/uploads/*
 !writable/*/index.html
 /assets/css/*.rar
 .env
+.env.*
+!.env.example
+!.env.production.example
 phpunit.xml
 .phpunit.result.cache
 vendor/

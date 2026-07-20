@@ -19,6 +19,11 @@ class UsuarioModel extends Model
         'perfil_id' => 'required|numeric'
     ];
 
+    /**
+     * Obtiene todos los usuarios (incluidos los dados de baja) con la descripción de su perfil.
+     *
+     * @return array Listado de usuarios con los datos de su perfil asociado.
+     */
     public function getUsuariosAll() {
         return $this->select('usuarios.*, perfiles.descripcion as perfil')
                     ->join('perfiles', 'perfiles.id = usuarios.perfil_id')
@@ -30,6 +35,9 @@ class UsuarioModel extends Model
      * Busca un usuario por email o nombre de usuario (incluye dados de baja,
      * para que UsuarioService::autenticar() pueda distinguir ese caso del de
      * "no existe").
+     *
+     * @param string $login Email o nombre de usuario a buscar.
+     * @return array|null Datos del usuario como arreglo asociativo, o null si no existe.
      */
     public function findByEmailOUsuario(string $login): ?array {
         return $this->withDeleted()

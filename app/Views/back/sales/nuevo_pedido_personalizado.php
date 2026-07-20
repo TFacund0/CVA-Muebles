@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=33.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -103,7 +103,7 @@
                             </div>
                             <div class="col-12">
                                 <label class="admin-label">Imagen o Boceto de Referencia (Opcional)</label>
-                                <div class="admin-img-preview" style="min-height: 120px;" onclick="document.getElementById('ref_img').click()">
+                                <div class="admin-img-preview admin-img-preview-min-h" id="ref-img-trigger">
                                     <div class="d-flex align-items-center gap-3">
                                         <i class="bi bi-cloud-arrow-up display-6 text-gold opacity-50"></i>
                                         <div class="text-start">
@@ -131,17 +131,17 @@
                             <div class="col-md-6">
                                 <label class="admin-label">Inversión Total ($)</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white border-2 border-end-0 fw-bold text-muted" style="border-radius: 1rem 0 0 1rem;">$</span>
-                                    <input type="number" step="0.01" name="total_venta" class="form-control admin-control border-start-0" 
-                                           style="border-radius: 0 1rem 1rem 0;" required placeholder="0.00">
+                                    <span class="input-group-text bg-white border-2 border-end-0 fw-bold text-muted money-input-rounded-start">$</span>
+                                    <input type="number" step="0.01" name="total_venta" class="form-control admin-control border-start-0 money-input-rounded-end"
+                                           required placeholder="0.00">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="admin-label">Entrega Inicial / Seña ($)</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white border-2 border-end-0 fw-bold text-muted" style="border-radius: 1rem 0 0 1rem;">$</span>
-                                    <input type="number" step="0.01" name="monto_sena" class="form-control admin-control border-start-0" 
-                                           style="border-radius: 0 1rem 1rem 0;" value="0.00">
+                                    <span class="input-group-text bg-white border-2 border-end-0 fw-bold text-muted money-input-rounded-start">$</span>
+                                    <input type="number" step="0.01" name="monto_sena" class="form-control admin-control border-start-0 money-input-rounded-end"
+                                           value="0.00">
                                 </div>
                             </div>
                         </div>
@@ -159,12 +159,9 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('ref_img').addEventListener('change', function() {
-        const fileName = this.files[0] ? this.files[0].name : '';
-        document.getElementById('file-name').innerHTML = fileName ? '<i class="bi bi-file-earmark-check me-1"></i> Seleccionado: ' + fileName : '';
-    });
-</script>
 
+<?= $this->endSection() ?>
 
+<?= $this->section('extra-js') ?>
+<script src="<?= base_url('assets/js/admin/admin-nuevo-pedido.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

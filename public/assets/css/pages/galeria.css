@@ -1,36 +1,60 @@
-/* 
+/*
   =============================================
   CVA MUEBLES - GALERÍA DE CLIENTES
+  Todos los selectores están scopeados bajo
+  #galeria-page. No usar !important salvo para
+  anular una regla de Bootstrap puntual
+  (documentado).
   =============================================
 */
 
-.gallery-header {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('../../img/ui/backgrounds/cva_hogares_bg.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-attachment: fixed !important;
+#galeria-page .upload-section-narrow {
+    max-width: 800px;
+}
+
+#galeria-page .upload-form-narrow {
+    max-width: 600px;
+}
+
+#galeria-page .alert-narrow {
+    max-width: 600px;
+}
+
+#galeria-page .empty-gallery-state {
+    grid-column: 1 / -1;
+}
+
+#galeria-page .empty-gallery-icon {
+    font-size: 5rem;
+}
+
+#galeria-page .gallery-header {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url('../../img/ui/backgrounds/cva_hogares_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     padding: 160px 0 120px;
     color: white;
     text-align: center;
 }
 
-.gallery-header h1 {
-    font-family: 'Lora', serif;
+#galeria-page .gallery-header h1 {
+    font-family: var(--font-heading);
     font-size: 5rem;
     font-weight: 700;
 }
 
-.masonry-gallery {
+#galeria-page .masonry-gallery {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
 }
 
-.gallery-item {
+#galeria-page .gallery-item {
     display: flex;
     flex-direction: column;
-    border-radius: 1.5rem;
+    border-radius: var(--radius-md);
     overflow: hidden;
     background: white;
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -38,12 +62,12 @@
     height: 100%;
 }
 
-.gallery-item:hover {
+#galeria-page .gallery-item:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px rgba(62, 39, 35, 0.15);
 }
 
-.gallery-item img {
+#galeria-page .gallery-item img {
     width: 100%;
     height: 320px;
     object-fit: cover;
@@ -51,11 +75,11 @@
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.gallery-item:hover img {
+#galeria-page .gallery-item:hover img {
     transform: scale(1.05);
 }
 
-.gallery-info {
+#galeria-page .gallery-info {
     padding: 1.5rem;
     flex-grow: 1;
     display: flex;
@@ -63,7 +87,7 @@
     justify-content: center;
 }
 
-.gallery-author {
+#galeria-page .gallery-author {
     font-weight: 800;
     font-size: 0.75rem;
     color: var(--cva-gold);
@@ -72,7 +96,7 @@
 }
 
 /* Formulario Estilizado */
-.upload-section {
+#galeria-page .upload-section {
     background: #fdfaf7;
     border-radius: 3rem;
     border: 2px dashed var(--cva-gold);
@@ -80,84 +104,71 @@
     max-width: 800px;
 }
 
-.border-artisan-gold {
-    border: 2px solid var(--cva-gold) !important;
-}
-
-.btn-vivid-premium {
-    background: var(--cva-vivid);
-    color: white !important;
-    letter-spacing: 1px;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-.btn-vivid-premium:hover {
-    background: var(--cva-brown);
-    transform: scale(1.05);
+#galeria-page .border-artisan-gold {
+    border: 2px solid var(--cva-gold);
 }
 
 /* Clases de Utilidad y Diseño para eliminar estilos en línea (DRY/SoC) */
-.gold-divider {
+#galeria-page .gold-divider {
     width: 100px;
     height: 5px;
     background: var(--cva-gold);
     border-radius: 5px;
 }
 
-.moderation-active-panel {
+#galeria-page .moderation-active-panel {
     max-width: 800px;
     background-color: #fdfaf7;
 }
 
-.icon-badge-gold {
+#galeria-page .icon-badge-gold {
     width: 50px;
     height: 50px;
     background-color: var(--cva-gold);
     flex-shrink: 0;
 }
 
-.badge-sm-text {
+#galeria-page .badge-sm-text {
     font-size: 0.8rem;
 }
 
-.form-upload-photo {
+#galeria-page .form-upload-photo {
     max-width: 600px;
 }
 
-.alert-max-width {
+#galeria-page .alert-max-width {
     max-width: 600px;
 }
 
-.gallery-empty-state {
+#galeria-page .gallery-empty-state {
     grid-column: 1 / -1;
 }
 
-.gallery-empty-icon {
+#galeria-page .gallery-empty-icon {
     font-size: 5rem;
 }
 
 /* 6. RESPONSIVE (DIMENSIONES ESTABLECIDAS) */
 @media (max-width: 991.98px) {
-    .gallery-header { padding: 100px 20px 60px; background-attachment: scroll !important; }
-    .gallery-header h1 { font-size: 2.2rem; }
-    .gallery-header .lead { font-size: 0.95rem !important; }
-    
-    .masonry-gallery { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    
-    .upload-section { padding: 2rem 1.5rem !important; border-radius: 2rem; }
-    .upload-section h2 { font-size: 1.8rem !important; }
-    .upload-section p { font-size: 0.9rem; }
-    
-    .gallery-item { border-radius: 1rem; margin-bottom: 1rem; }
-    .gallery-info { padding: 1rem; }
-    .gallery-author { font-size: 0.65rem; }
-    
-    section.py-5 { padding: 40px 0 !important; }
+    #galeria-page .gallery-header { padding: 100px 20px 60px; background-attachment: scroll; }
+    #galeria-page .gallery-header h1 { font-size: 2.2rem; }
+    #galeria-page .gallery-header .lead { font-size: 0.95rem; }
+
+    #galeria-page .masonry-gallery { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+    #galeria-page .upload-section { padding: 2rem 1.5rem; border-radius: var(--radius-lg); }
+    #galeria-page .upload-section h2 { font-size: 1.8rem; }
+    #galeria-page .upload-section p { font-size: 0.9rem; }
+
+    #galeria-page .gallery-item { border-radius: 1rem; margin-bottom: 1rem; }
+    #galeria-page .gallery-info { padding: 1rem; }
+    #galeria-page .gallery-author { font-size: 0.65rem; }
+
+    #galeria-page section.py-5 { padding: 40px 0; }
 }
 
 @media (max-width: 575.98px) {
-    .gallery-header h1 { font-size: 1.8rem; }
-    .masonry-gallery { grid-template-columns: 1fr; } /* 1 COLUMNA para apreciar mejor la foto del cliente */
-    .btn-vivid-premium { width: 100%; font-size: 0.8rem; padding: 1rem !important; }
+    #galeria-page .gallery-header h1 { font-size: 1.8rem; }
+    #galeria-page .masonry-gallery { grid-template-columns: 1fr; } /* 1 COLUMNA para apreciar mejor la foto del cliente */
+    #galeria-page .btn-vivid-premium { width: 100%; font-size: 0.8rem; padding: 1rem; }
 }

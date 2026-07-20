@@ -25,7 +25,7 @@ if ($env_cart_enabled) {
 <nav class="navbar navbar-expand-lg artisan-main-nav sticky-top">
   <div class="container-fluid px-3 px-lg-5 d-flex align-items-center justify-content-between">
 
-    <div class="d-lg-none d-flex align-items-center gap-2" style="flex: 1;">
+    <div class="d-lg-none d-flex align-items-center gap-2 navbar-flex-cell">
       <button class="boton-icon-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
         <i class="bi bi-list fs-4"></i>
       </button>
@@ -34,7 +34,7 @@ if ($env_cart_enabled) {
         <a href="<?= base_url('muestro') ?>" class="boton-icon-circle position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5"></i>
           <?php if ($cartCount > 0): ?>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger navbar-cart-badge">
               <?= $cartCount ?>
             </span>
           <?php endif; ?>
@@ -43,7 +43,7 @@ if ($env_cart_enabled) {
     </div>
 
     <!-- [DESKTOP: IZQUIERDA / MÓVIL: CENTRO] LOGO -->
-    <div class="d-flex align-items-center justify-content-center justify-content-lg-start" style="flex: 1;">
+    <div class="d-flex align-items-center justify-content-center justify-content-lg-start navbar-flex-cell">
       <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="<?= base_url('/') ?>">
         <img src="<?= base_url('assets/img/branding/cva2.png') ?>" alt="Logo" class="logo-img-nav">
         <h1 class="titulo-logo d-none d-lg-block">CVA Muebles</h1>
@@ -51,7 +51,7 @@ if ($env_cart_enabled) {
     </div>
 
     <!-- [DESKTOP: CENTRO] NAVEGACIÓN (Oculto en móvil) -->
-    <div class="collapse navbar-collapse justify-content-center" id="navbarNav" style="flex: 2;">
+    <div class="collapse navbar-collapse justify-content-center navbar-flex-cell-nav" id="navbarNav">
       <ul class="navbar-nav gap-1">
         <li class="nav-item"><a class="nav-link-custom <?= $active_inicio ?>" href="<?= base_url('/') ?>">Inicio</a></li>
         <li class="nav-item"><a class="nav-link-custom <?= $active_productos ?>" href="<?= base_url('productos') ?>">Productos</a></li>
@@ -63,12 +63,12 @@ if ($env_cart_enabled) {
     </div>
 
     <!-- [DERECHA] ICONOS USUARIO / AUTH -->
-    <div class="d-flex align-items-center justify-content-end gap-2" style="flex: 1;">
+    <div class="d-flex align-items-center justify-content-end gap-2 navbar-flex-cell">
       <?php if ($env_cart_enabled && $isLogged): ?>
         <a href="<?= base_url('muestro') ?>" class="boton-icon-circle d-none d-lg-flex position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5"></i>
           <?php if ($cartCount > 0): ?>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger navbar-cart-badge">
               <?= $cartCount ?>
             </span>
           <?php endif; ?>
@@ -103,20 +103,20 @@ if ($env_cart_enabled) {
   <div class="offcanvas-body p-0">
     <?php if ($isLogged): ?>
       <div class="user-profile-card p-4 text-center">
-        <div class="avatar-wrapper mx-auto mb-3" style="width: 80px; height: 80px;">
+        <div class="avatar-wrapper mx-auto mb-3 avatar-wrapper-lg">
           <div class="avatar-bg shadow-sm">
-            <?php if (!empty($imagen)): ?><img src="<?= base_url('assets/uploads/perfil/' . $imagen) ?>" alt="Perfil"><?php else: ?><i class="bi bi-person-fill text-secondary" style="font-size: 3rem;"></i><?php endif; ?>
+            <?php if (!empty($imagen)): ?><img src="<?= imagen_url($imagen, 'perfil') ?>" alt="Perfil" class="js-avatar-img" data-fallback-icon="1"><i class="bi bi-person-fill text-secondary avatar-icon-fallback-hidden"></i><?php else: ?><i class="bi bi-person-fill text-secondary avatar-icon-fallback"></i><?php endif; ?>
           </div>
         </div>
         <h5 class="mb-1 fw-bold"><?= esc($nombre) ?></h5>
-        <span class="badge bg-cva-brown rounded-pill px-3 py-1 mb-2" style="font-size: 0.6rem;"><?= ($perfil == 1) ? 'ADMINISTRADOR' : 'CLIENTE CVA' ?></span>
+        <span class="badge bg-cva-brown rounded-pill px-3 py-1 mb-2 navbar-cart-badge"><?= ($perfil == 1) ? 'ADMINISTRADOR' : 'CLIENTE CVA' ?></span>
         <br><a href="<?= base_url('/perfil') ?>" class="text-decoration-none small text-gold fw-bold">MI PERFIL <i class="bi bi-chevron-right"></i></a>
       </div>
     <?php else: ?>
       <div class="auth-section-mobile p-4 text-center">
-        <div class="avatar-wrapper mx-auto mb-3" style="width: 60px; height: 60px;">
-          <div class="avatar-bg shadow-sm" style="background: white; border: 1px solid var(--cva-brown); display: flex; align-items: center; justify-content: center; border-radius: 50%;">
-            <i class="bi bi-person-plus text-cva-brown" style="font-size: 1.8rem;"></i>
+        <div class="avatar-wrapper mx-auto mb-3 avatar-wrapper-sm">
+          <div class="avatar-bg shadow-sm avatar-bg-signup">
+            <i class="bi bi-person-plus text-cva-brown avatar-icon-signup"></i>
           </div>
         </div>
         <p class="small text-muted mb-3">Bienvenido a nuestra carpintería artesanal.</p>
@@ -159,17 +159,4 @@ if ($env_cart_enabled) {
   </div>
 </div>
 
-<script>
-  function adjustOffcanvasPosition() {
-    const offcanvas = document.getElementById('offcanvasNavbar');
-    if (window.innerWidth < 992) {
-      offcanvas.classList.remove('offcanvas-end');
-      offcanvas.classList.add('offcanvas-start');
-    } else {
-      offcanvas.classList.remove('offcanvas-start');
-      offcanvas.classList.add('offcanvas-end');
-    }
-  }
-  window.addEventListener('resize', adjustOffcanvasPosition);
-  window.addEventListener('DOMContentLoaded', adjustOffcanvasPosition);
-</script>
+<script src="<?= base_url('assets/js/partials/navbar.js?v=1.0') ?>"></script>

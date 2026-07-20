@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/contacto.css?v=8.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/contacto.css?v=9.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -9,7 +9,7 @@
     <!-- Cabecera Premium (FONDO FIJO) -->
     <header class="contact-header">
         <div class="container animate-fade-in">
-            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Atención Personalizada</span>
+            <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-3">Atención Personalizada</span>
             <h1 class="display-3 fw-bold font-lora">Contacto</h1>
             <div class="divider-artisan mx-auto mb-4"></div>
             <p class="lead">Estamos aquí para ayudarte a dar vida a tus proyectos en madera noble.</p>
@@ -17,12 +17,12 @@
     </header>
 
     <!-- BLOQUE 1: DATOS DE CONTACTO (ARENA) -->
-    <section class="section-contact-data py-5" style="background-color: var(--cva-sand);">
+    <section class="section-contact-data py-5">
         <div class="container py-5">
             <!-- Título de Sección Agregado -->
             <div class="row mb-5 text-center">
                 <div class="col-lg-8 mx-auto">
-                    <span class="text-vivid fw-bold text-uppercase small" style="letter-spacing: 2px;">Vías Directas</span>
+                    <span class="text-vivid fw-bold text-uppercase small kicker-spacing-2">Vías Directas</span>
                     <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2">Nuestros Canales</h2>
                     <div class="divider-artisan mx-auto"></div>
                 </div>
@@ -47,7 +47,7 @@
                         <div class="icon-contact-wrapper"><i class="bi bi-whatsapp"></i></div>
                         <h4 class="font-lora fw-bold">WhatsApp</h4>
                         <p class="text-muted mb-4"><?= $env_whatsapp ?><br>Atención Inmediata</p>
-                        <a href="https://wa.me/<?= $env_whatsapp ?>" target="_blank" class="btn btn-premium-action w-whatsapp">
+                        <a href="<?= wa_link($env_whatsapp) ?>" target="_blank" class="btn btn-premium-action w-whatsapp">
                             <span>HABLAR AHORA</span>
                             <i class="bi bi-chat-dots"></i>
                         </a>
@@ -75,7 +75,7 @@
             <!-- Título de Sección Solicitado -->
             <div class="row mb-5 text-center">
                 <div class="col-lg-8 mx-auto">
-                    <span class="text-vivid fw-bold text-uppercase small" style="letter-spacing: 2px;">Consultas</span>
+                    <span class="text-vivid fw-bold text-uppercase small kicker-spacing-2">Consultas</span>
                     <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2">Canales de Atención</h2>
                     <div class="divider-artisan mx-auto"></div>
                 </div>
@@ -85,7 +85,7 @@
                 <!-- Info Institucional (REDiseño) -->
                 <div class="col-lg-5">
                     <div class="institutional-box-premium p-4 p-xl-5 rounded-5 h-100 d-flex flex-column">
-                        <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">CVA Muebles</span>
+                        <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-3">CVA Muebles</span>
                         <h2 class="font-lora h1 fw-bold text-white mt-2 mb-4">Nuestra Identidad</h2>
                         
                         <div class="legal-item-premium mb-3">
@@ -144,7 +144,7 @@
                             <?= csrf_field() ?>
                             
                             <!-- Campo Honeypot (Trampa para bots) -->
-                            <div style="display:none">
+                            <div class="honeypot-field">
                                 <label>Si eres humano, deja esto vacío</label>
                                 <input type="text" name="honeypot" value="">
                             </div>
@@ -200,13 +200,12 @@
             </div>
         </div>
     </section>
-</div>
-</div>
+
     <!-- BLOQUE 3: PREGUNTAS FRECUENTES (ARENA SUAVE) -->
-    <section class="section-faq py-5" style="background-color: #fdfaf7;">
+    <section class="section-faq py-5">
         <div class="container py-5">
             <div class="text-center mb-5">
-                <span class="text-vivid fw-bold text-uppercase small" style="letter-spacing: 2px;">Resolviendo Dudas</span>
+                <span class="text-vivid fw-bold text-uppercase small kicker-spacing-2">Resolviendo Dudas</span>
                 <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2">Preguntas Frecuentes</h2>
                 <div class="divider-artisan mx-auto"></div>
             </div>
@@ -218,7 +217,7 @@
                         <!-- Pregunta 1 -->
                         <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
                             <h2 class="accordion-header">
-                                <button class="accordion-button fw-bold text-cva-brown py-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: white;">
+                                <button class="accordion-button fw-bold text-cva-brown py-4 shadow-none accordion-button-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
                                     ¿Cuánto tiempo tarda la fabricación de un mueble?
                                 </button>
                             </h2>
@@ -232,7 +231,7 @@
                         <!-- Pregunta 2 -->
                         <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold text-cva-brown py-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: white;">
+                                <button class="accordion-button collapsed fw-bold text-cva-brown py-4 shadow-none accordion-button-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
                                     ¿Realizan envíos fuera de Mantilla?
                                 </button>
                             </h2>
@@ -246,7 +245,7 @@
                         <!-- Pregunta 3 -->
                         <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold text-cva-brown py-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: white;">
+                                <button class="accordion-button collapsed fw-bold text-cva-brown py-4 shadow-none accordion-button-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
                                     ¿Puedo pedir un mueble con medidas personalizadas?
                                 </button>
                             </h2>
@@ -260,7 +259,7 @@
                         <!-- Pregunta 4 -->
                         <div class="accordion-item mb-3 border-0 rounded-4 shadow-sm overflow-hidden">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed fw-bold text-cva-brown py-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background: white;">
+                                <button class="accordion-button collapsed fw-bold text-cva-brown py-4 shadow-none accordion-button-white" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
                                     ¿Qué tipos de madera utilizan?
                                 </button>
                             </h2>
@@ -276,5 +275,6 @@
             </div>
         </div>
     </section>
+</div>
 
 <?= $this->endSection() ?>

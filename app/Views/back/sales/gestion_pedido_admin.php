@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=33.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -21,7 +21,7 @@
                 <h1 class="display-6 display-md-5 fw-bold text-cva-brown mb-1">Producción</h1>
                 <p class="text-muted mb-0 small">
                     <i class="bi bi-person-badge text-gold me-1"></i> <?= esc($venta['nombre'] . ' ' . $venta['apellido']) ?>
-                    <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $venta['usuario'] ?? '') ?>?text=Hola%20<?= urlencode($venta['nombre']) ?>,%20te%20contacto%20por%20tu%20pedido%20#<?= $venta['id'] ?>%20en%20CVA%20Muebles" 
+                    <a href="<?= wa_link($venta['usuario'] ?? '', "Hola " . $venta['nombre'] . ", te contacto por tu pedido #" . $venta['id'] . " en CVA Muebles", null) ?>"
                        target="_blank" class="ms-2 badge bg-success text-white text-decoration-none">
                         <i class="bi bi-whatsapp me-1"></i> Contactar
                     </a>
@@ -31,7 +31,7 @@
     </div>
     <div class="col-lg-5 text-lg-end">
         <div class="badge bg-gold-soft text-gold px-4 py-2 rounded-pill fs-6 fw-bold border border-gold shadow-sm w-sm-100 justify-content-center">
-            #<?= $venta['id'] ?> | <?= date('d M, Y', strtotime($venta['fecha'])) ?>
+            #<?= $venta['id'] ?> | <?= fecha_local($venta['fecha'], 'd M, Y') ?>
         </div>
     </div>
 </div>
@@ -60,7 +60,7 @@
                                     <i class="bi bi-check-lg me-2"></i> ACEPTAR Y EMPEZAR OBRA
                                 </button>
                             </form>
-                            <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" onsubmit="return confirm('¿Seguro que deseas rechazar este pedido?')">
+                            <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" data-confirm="¿Seguro que deseas rechazar este pedido?">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="estado" value="RECHAZADO">
                                 <button type="submit" class="btn btn-outline-danger px-5 py-3 rounded-pill fw-bold">
@@ -81,15 +81,15 @@
                         $current_idx = array_search($estado_visual, $steps);
                         $progress = ($current_idx / (count($steps)-1)) * 100;
                     ?>
-                    <div class="progress mb-4" style="height: 10px; background-color: #f0ece2; border-radius: 10px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
-                             style="width: <?= $progress ?>%; background-color: var(--cva-gold);"></div>
+                    <div class="progress mb-4 progress-h10-light production-stepper">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated js-progress-width" role="progressbar"
+                             data-progress="<?= $progress ?>"></div>
                     </div>
                     <div class="d-flex justify-content-between text-center position-relative">
                         <?php foreach($steps as $idx => $step): ?>
-                            <div class="step-item <?= $idx <= $current_idx ? 'active' : '' ?>" style="flex: 1;">
+                            <div class="step-item step-item-flex <?= $idx <= $current_idx ? 'active' : '' ?>">
                                 <div class="step-dot mb-2 mx-auto shadow-sm"></div>
-                                <span class="x-small fw-bold d-block text-uppercase <?= $idx <= $current_idx ? 'text-brown' : 'text-muted' ?>" style="letter-spacing: 0.5px;"><?= $step ?></span>
+                                <span class="x-small fw-bold d-block text-uppercase step-item-label <?= $idx <= $current_idx ? 'text-brown' : 'text-muted' ?>"><?= $step ?></span>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -141,7 +141,7 @@
                     <i class="bi bi-chat-left-quote fs-4 text-gold opacity-50"></i>
                     <div>
                         <span class="admin-label mb-1">Nota del Cliente / Pedido</span>
-                        <p class="mb-0 text-brown fw-semibold italic" style="font-size: 1.25rem; line-height: 1.6; color: #2b1d0c !important;"><?= nl2br(esc($obs_clean)) ?></p>
+                        <p class="mb-0 text-brown fw-semibold italic nota-cliente-text"><?= nl2br(esc($obs_clean)) ?></p>
                     </div>
                 </div>
             </div>
@@ -151,10 +151,10 @@
                 <?php if (!empty($img_ref)): ?>
                     <div class="mb-4 text-center p-3 border rounded-4 bg-light">
                         <span class="admin-label mb-2 d-block">Imagen de Referencia / Boceto</span>
-                        <div class="product-img-zoom-container rounded-3 overflow-hidden shadow-sm d-inline-block" style="max-width: 100%;">
+                        <div class="product-img-zoom-container rounded-3 overflow-hidden shadow-sm d-inline-block zoom-container-max-w-100">
                             <a href="<?= base_url('assets/uploads/referencias/' . $img_ref) ?>" target="_blank">
-                                <img src="<?= base_url('assets/uploads/referencias/' . $img_ref) ?>" 
-                                     class="img-fluid transition-all" style="max-height: 400px;" alt="Referencia">
+                                <img src="<?= base_url('assets/uploads/referencias/' . $img_ref) ?>"
+                                     class="img-fluid transition-all zoom-img-max-h-400" alt="Referencia">
                             </a>
                         </div>
                         <div class="mt-2 x-small text-muted italic"><i class="bi bi-zoom-in me-1"></i> Pasa el mouse para ampliar o haz clic para ver original</div>
@@ -191,7 +191,7 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-white d-none d-md-table-header-group">
                         <tr class="x-small text-uppercase text-muted fw-bold">
-                            <th class="py-3 px-4 border-0" style="width: 100px;">Imagen</th>
+                            <th class="py-3 px-4 border-0 col-imagen-100">Imagen</th>
                             <th class="py-3 border-0">Producto</th>
                             <th class="py-3 text-center border-0">Cant.</th>
                             <th class="py-3 text-end border-0">Unit.</th>
@@ -203,13 +203,13 @@
                         <tr>
                             <td class="ps-4 py-3" data-label="IMAGEN">
                                 <?php if (!empty($det['imagen'])): ?>
-                                    <div class="product-img-zoom-container rounded-3 border overflow-hidden shadow-sm" style="width: 70px; height: 70px;">
-                                        <img src="<?= base_url('assets/uploads/' . $det['imagen']) ?>" 
-                                             class="img-fluid h-100 w-100 object-fit-cover transition-all" 
+                                    <div class="product-img-zoom-container rounded-3 border overflow-hidden shadow-sm thumb-70">
+                                        <img src="<?= imagen_url($det['imagen']) ?>"
+                                             class="img-fluid h-100 w-100 object-fit-cover transition-all"
                                              alt="<?= esc($det['nombre_prod'] ?? 'Mueble a Medida / Personalizado') ?>">
                                     </div>
                                 <?php else: ?>
-                                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center text-muted" style="width: 70px; height: 70px;">
+                                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center text-muted thumb-70">
                                         <i class="bi bi-image"></i>
                                     </div>
                                 <?php endif; ?>
@@ -219,15 +219,15 @@
                                 <div class="x-small text-muted">ID: <?= $det['producto_id'] ?? 'CUSTOM' ?></div>
                             </td>
                             <td class="text-center fw-bold" data-label="CANTIDAD"><?= $det['cantidad'] ?></td>
-                            <td class="text-end text-muted small" data-label="UNITARIO">$ <?= number_format($det['precio'], 2, ',', '.') ?></td>
-                            <td class="text-end px-4 fw-bold text-brown" data-label="SUBTOTAL">$ <?= number_format($det['cantidad'] * $det['precio'], 2, ',', '.') ?></td>
+                            <td class="text-end text-muted small" data-label="UNITARIO">$ <?= money($det['precio'], 2) ?></td>
+                            <td class="text-end px-4 fw-bold text-brown" data-label="SUBTOTAL">$ <?= money($det['cantidad'] * $det['precio'], 2) ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot class="bg-light border-top border-2">
                         <tr>
                             <td colspan="4" class="text-end py-3 px-4 text-muted x-small fw-bold text-uppercase d-none d-md-table-cell">Total Venta</td>
-                            <td class="text-end py-3 px-4 text-brown fw-bold font-lora fs-5" data-label="TOTAL FINAL">$ <?= number_format($venta['total_venta'], 2, ',', '.') ?></td>
+                            <td class="text-end py-3 px-4 text-brown fw-bold font-lora fs-5" data-label="TOTAL FINAL">$ <?= money($venta['total_venta'], 2) ?></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -239,24 +239,23 @@
     <div class="col-lg-4">
         
         <!-- ESTADO FINANCIERO -->
-        <div class="admin-card-v2 p-4 border-0 shadow-lg mb-4 text-white finance-card position-relative overflow-hidden" 
-             style="background: linear-gradient(135deg, #1a0f0d 0%, #3e2723 100%);">
+        <div class="admin-card-v2 p-4 border-0 shadow-lg mb-4 text-white finance-card position-relative overflow-hidden finance-card-gradient">
             <div class="position-relative z-1">
                 <h6 class="text-gold x-small fw-bold text-uppercase mb-4 tracking-wider">Estado Financiero</h6>
                 
                 <div class="mb-4">
                     <small class="d-block opacity-50 x-small mb-1">TOTAL COBRADO</small>
-                    <h3 class="fw-bold text-success mb-0">$ <?= number_format($total_pagado, 2, ',', '.') ?></h3>
+                    <h3 class="fw-bold text-success mb-0">$ <?= money($total_pagado, 2) ?></h3>
                 </div>
 
                 <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10 shadow-inner">
                     <small class="d-block opacity-50 x-small mb-1 fw-bold">SALDO PENDIENTE</small>
                     <h2 class="fw-bold font-lora mb-0 <?= $saldo_pendiente > 0 ? 'text-gold' : 'text-success' ?>">
-                        $ <?= number_format($saldo_pendiente, 2, ',', '.') ?>
+                        $ <?= money($saldo_pendiente, 2) ?>
                     </h2>
                 </div>
             </div>
-            <i class="bi bi-wallet2 position-absolute end-0 bottom-0 text-white opacity-05" style="font-size: 8rem; transform: translate(20%, 20%);"></i>
+            <i class="bi bi-wallet2 position-absolute end-0 bottom-0 text-white opacity-05 wallet-icon-bg"></i>
         </div>
 
         <!-- REGISTRAR PAGO -->
@@ -300,11 +299,11 @@
                         <?php foreach ($pagos as $pago): ?>
                             <div class="payment-item d-flex justify-content-between align-items-center p-3 border-bottom bg-white hover-bg-light transition-all">
                                 <div>
-                                    <div class="fw-bold text-brown">$ <?= number_format($pago['monto'], 2, ',', '.') ?></div>
-                                    <small class="text-muted d-block text-truncate x-small" style="max-width: 150px;"><?= esc($pago['nota']) ?></small>
+                                    <div class="fw-bold text-brown">$ <?= money($pago['monto'], 2) ?></div>
+                                    <small class="text-muted d-block text-truncate x-small payment-note-truncate"><?= esc($pago['nota']) ?></small>
                                 </div>
                                 <div class="text-end">
-                                    <span class="badge bg-light text-muted fw-normal x-small border"><?= date('d/m/y', strtotime($pago['fecha'])) ?></span>
+                                    <span class="badge bg-light text-muted fw-normal x-small border"><?= fecha_local($pago['fecha'], 'd/m/y') ?></span>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -317,4 +316,8 @@
 
 
 
+<?= $this->endSection() ?>
+
+<?= $this->section('extra-js') ?>
+<script src="<?= base_url('assets/js/admin/admin-progress-bars.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

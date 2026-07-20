@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=1.1')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=3.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -43,15 +43,14 @@
     <div class="row g-4">
         <!-- COLUMNA IZQUIERDA: IMAGEN PRINCIPAL -->
         <div class="col-lg-4">
-            <div class="admin-card-v2 p-0 overflow-hidden shadow-sm border-0 mb-4 sticky-top" style="top: 20px;">
+            <div class="admin-card-v2 p-0 overflow-hidden shadow-sm border-0 mb-4 sticky-top product-preview-sticky">
                 <div class="bg-brown p-3 text-center">
                     <h6 class="mb-0 fw-bold text-gold small text-uppercase tracking-wider">Imagen de Portada</h6>
                 </div>
                 <div class="p-4">
-                    <div class="product-preview-container mb-4 position-relative bg-light rounded-4 border overflow-hidden" style="height: 350px;">
-                        <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" 
-                             class="img-fluid w-100 h-100" 
-                             style="object-fit: contain;" 
+                    <div class="product-preview-container mb-4 position-relative bg-light rounded-4 border overflow-hidden product-preview-media">
+                        <img src="<?= imagen_url($producto['imagen']) ?>"
+                             class="img-fluid w-100 h-100 product-preview-fit-contain"
                              id="main-preview">
                         <div class="position-absolute bottom-0 end-0 p-3">
                             <span class="badge bg-gold px-3 py-2 rounded-pill shadow-sm">Principal</span>
@@ -61,7 +60,7 @@
                     <div class="upload-zone p-4 border-2 border-dashed rounded-4 text-center bg-light-gold position-relative">
                         <i class="bi bi-camera fs-2 text-gold mb-2 d-block"></i>
                         <span class="d-block small fw-bold text-muted mb-2 text-uppercase">Cambiar Fotografía</span>
-                        <input type="file" name="imagen" class="stretched-link opacity-0" accept="image/*" onchange="previewImage(event)">
+                        <input type="file" name="imagen" id="imagen-input" class="stretched-link opacity-0" accept="image/*">
                         <p class="x-small text-muted mb-0">Se recomienda formato cuadrado.</p>
                     </div>
                 </div>
@@ -146,12 +145,12 @@
                             <?php foreach($producto['galeria'] as $img): ?>
                                 <div class="col-4 col-md-3 col-lg-2">
                                     <div class="gallery-item-admin rounded-3 overflow-hidden shadow-sm position-relative border">
-                                        <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" class="img-fluid w-100" style="height: 100px; object-fit: cover;">
+                                        <img src="<?= imagen_url($img['imagen']) ?>" class="img-fluid w-100 gallery-thumb-h100">
                                         <div class="gallery-actions position-absolute top-0 end-0 p-1">
-                                            <a href="<?= base_url('/admin/productos/eliminar-foto/' . $img['id']) ?>" 
-                                               class="btn btn-danger btn-sm rounded-circle p-1" 
-                                               onclick="return confirm('¿Eliminar esta foto?')">
-                                                <i class="bi bi-x-lg" style="font-size: 10px;"></i>
+                                            <a href="<?= base_url('/admin/productos/eliminar-foto/' . $img['id']) ?>"
+                                               class="btn btn-danger btn-sm rounded-circle p-1"
+                                               data-confirm-click="¿Eliminar esta foto?">
+                                                <i class="bi bi-x-lg icon-10"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -164,8 +163,7 @@
                 <!-- SECCIÓN 4: DESCRIPCIÓN -->
                 <div class="mb-5 border-top pt-5">
                     <label class="x-small fw-bold text-muted text-uppercase mb-2">Ficha Técnica y Descripción</label>
-                    <textarea name="descripcion" class="form-control admin-control p-4" rows="6" 
-                              style="line-height: 1.6;"><?= esc($producto['descripcion']) ?></textarea>
+                    <textarea name="descripcion" class="form-control admin-control p-4 description-textarea" rows="6"><?= esc($producto['descripcion']) ?></textarea>
                 </div>
 
                 <!-- BOTONES DE ACCIÓN -->
@@ -192,21 +190,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    function previewImage(event) {
-        const input = event.target;
-        const preview = document.getElementById('main-preview');
-        const indicator = document.getElementById('new-badge-indicator');
-        
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.classList.add('animate__animated', 'animate__pulse');
-                indicator.classList.remove('d-none');
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
+<script src="<?= base_url('assets/js/admin/admin-editar-producto.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

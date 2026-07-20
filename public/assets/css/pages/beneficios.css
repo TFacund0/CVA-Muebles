@@ -1,0 +1,33 @@
+/*
+  =============================================
+  CVA MUEBLES - PÁGINA DE BENEFICIOS
+  Todos los selectores están scopeados bajo
+  .beneficios-page para que nunca puedan afectar,
+  ni ser afectados por, otra página.
+  =============================================
+*/
+
+.beneficios-page .kicker-spacing-4 {
+    letter-spacing: 4px;
+}
+
+.beneficios-page .beneficios-lead {
+    max-width: 700px;
+}
+
+.beneficios-page .beneficios-divider {
+    width: 80px;
+    height: 4px;
+    background: var(--cva-gold);
+    border-radius: 2px;
+}
+
+.beneficios-page .level-card {
+    background: white;
+}
+
+.beneficios-page .level-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}

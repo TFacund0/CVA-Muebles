@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/profile.css?v=1.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/profile.css?v=2.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -27,7 +27,7 @@
         <aside class="profile-sidebar-summary">
             <div class="avatar-circle-v3">
                 <?php if (!empty($image)): ?>
-                    <img src="<?= base_url('assets/uploads/perfil/' . $image) ?>" alt="Perfil" id="previewImg">
+                    <img src="<?= imagen_url($image, 'perfil') ?>" alt="Perfil" id="previewImg">
                 <?php else: ?>
                     <div class="avatar-placeholder-v3">
                         <i class="bi bi-person-fill"></i>
@@ -147,27 +147,8 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggleEdit = document.getElementById('toggleEdit');
-        const cancelEdit = document.getElementById('cancelEdit');
-        const btnGroup = document.getElementById('btnGroup');
-        const fileGroup = document.getElementById('fileGroup');
-        const inputs = document.querySelectorAll('.artisan-control-v3');
+<?= $this->endSection() ?>
 
-        toggleEdit.addEventListener('click', () => {
-            inputs.forEach(input => input.disabled = false);
-            btnGroup.classList.remove('d-none');
-            fileGroup.classList.remove('d-none');
-            toggleEdit.classList.add('d-none');
-        });
-
-        cancelEdit.addEventListener('click', () => {
-            inputs.forEach(input => input.disabled = true);
-            btnGroup.classList.add('d-none');
-            fileGroup.classList.add('d-none');
-            toggleEdit.classList.remove('d-none');
-        });
-    });
-</script>
+<?= $this->section('extra-js') ?>
+<script src="<?= base_url('assets/js/admin/admin-perfil-config.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>

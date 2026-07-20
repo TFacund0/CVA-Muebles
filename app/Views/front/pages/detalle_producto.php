@@ -1,10 +1,14 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=3.0') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.0') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
+<?php
+    $imagenPrincipalUrl = imagen_url($producto['imagen']);
+    $galeriaUrls = array_map(fn($img) => imagen_url($img['imagen']), $producto['galeria'] ?? []);
+?>
 <div class="product-detail-wrapper">
     <!-- Breadcrumb Nav (Sutil) -->
     <div class="container mb-4">
@@ -21,17 +25,17 @@
             <!-- Columna de Imagen -->
             <div class="col-lg-6 image-column">
                 <div class="image-container main-image-box shadow-sm rounded-4 overflow-hidden mb-3 position-relative">
-                    <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" 
-                         class="img-fluid main-img" 
+                    <img src="<?= $imagenPrincipalUrl ?>"
+                         class="img-fluid main-img"
                          id="main-product-img"
                          alt="<?= esc($producto['nombre_prod']) ?>">
                     
                     <?php if(!empty($producto['galeria'])): ?>
                         <!-- Flechas de navegación (Aseguramos que estén dentro del position-relative) -->
-                        <button class="gallery-arrow arrow-left" onclick="moveGallery(-1)" aria-label="Anterior">
+                        <button class="gallery-arrow arrow-left js-gallery-move" data-step="-1" aria-label="Anterior">
                             <i class="bi bi-chevron-left"></i>
                         </button>
-                        <button class="gallery-arrow arrow-right" onclick="moveGallery(1)" aria-label="Siguiente">
+                        <button class="gallery-arrow arrow-right js-gallery-move" data-step="1" aria-label="Siguiente">
                             <i class="bi bi-chevron-right"></i>
                         </button>
                     <?php endif; ?>
@@ -40,12 +44,12 @@
                 <?php if(!empty($producto['galeria'])): ?>
                     <div class="product-gallery-thumbs d-flex gap-2 overflow-auto pb-2">
                         <!-- Imagen Principal como miniatura -->
-                        <div class="thumb-item active" onclick="changeMainImg('<?= base_url('assets/uploads/' . $producto['imagen']) ?>', this)">
-                            <img src="<?= base_url('assets/uploads/' . $producto['imagen']) ?>" alt="Principal">
+                        <div class="thumb-item active js-thumb" data-img="<?= $imagenPrincipalUrl ?>">
+                            <img src="<?= $imagenPrincipalUrl ?>" alt="Principal">
                         </div>
-                        <?php foreach($producto['galeria'] as $img): ?>
-                            <div class="thumb-item" onclick="changeMainImg('<?= base_url('assets/uploads/' . $img['imagen']) ?>', this)">
-                                <img src="<?= base_url('assets/uploads/' . $img['imagen']) ?>" alt="Galería">
+                        <?php foreach($galeriaUrls as $url): ?>
+                            <div class="thumb-item js-thumb" data-img="<?= $url ?>">
+                                <img src="<?= $url ?>" alt="Galería">
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -64,11 +68,11 @@
                     <div class="price-label">Inversión artesanal</div>
                     <div class="price-value">
                         <span class="price-symbol">$</span>
-                        <span><?= number_format($producto['precio_vta'], 0, ',', '.') ?></span>
+                        <span><?= money($producto['precio_vta'], 0) ?></span>
                     </div>
                     <div class="stock-info">
-                        <i class="bi bi-hammer text-gold" style="color: var(--cva-gold, #b8860b) !important;"></i>
-                        <span class="fw-bold" style="color: var(--cva-gold, #b8860b);">Fabricación bajo pedido (Consultar tiempos de entrega)</span>
+                        <i class="bi bi-hammer text-gold stock-info-gold"></i>
+                        <span class="fw-bold stock-info-gold">Fabricación bajo pedido (Consultar tiempos de entrega)</span>
                     </div>
                 </div>
 
@@ -99,12 +103,12 @@
                                     <input type="hidden" name="precio_vta" value="<?= esc($producto['precio_vta']) ?>">
                                     <input type="hidden" name="nombre_prod" value="<?= esc($producto['nombre_prod']) ?>">
                                     <input type="hidden" name="imagen" value="<?= esc($producto['imagen']) ?>">
-                                    <button type="submit" class="btn btn-artisan-primary w-100 py-3 rounded-3 fs-5">
+                                    <button type="submit" class="btn btn-detalle-primary w-100 py-3 rounded-3 fs-5">
                                         <i class="bi bi-cart-plus me-2"></i> AGREGAR AL CARRITO
                                     </button>
                                 </form>
                             <?php else: ?>
-                                <a href="https://wa.me/<?= $env_whatsapp ?>?text=Hola!%20Me%20interesa%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>%20y%20me%20gustaría%20consultar%20para%20encargarlo." 
+                                <a href="<?= wa_link($env_whatsapp, "Hola! Me interesa el mueble " . $producto['nombre_prod'] . " y me gustaría consultar para encargarlo.") ?>"
                                    target="_blank" class="btn btn-outline-brown w-100 py-3 mb-3 rounded-3 fs-5">
                                     <i class="bi bi-whatsapp me-2"></i> CONSULTAR FABRICACIÓN
                                 </a>
@@ -116,10 +120,8 @@
                         <?php endif; ?>
                     <?php else: ?>
                         <?php if (session()->get('logged_in')): ?>
-                            <?php 
-                                $whatsapp_num = $env_whatsapp;
-                                $mensaje = urlencode("Hola! Me interesa este mueble artesanal: " . $producto['nombre_prod'] . ". ¿Podrías darme más detalles?");
-                                $url_whatsapp = "https://wa.me/{$whatsapp_num}?text={$mensaje}";
+                            <?php
+                                $url_whatsapp = wa_link($env_whatsapp, "Hola! Me interesa este mueble artesanal: " . $producto['nombre_prod'] . ". ¿Podrías darme más detalles?");
                             ?>
                             <a href="<?= $url_whatsapp ?>" target="_blank" class="btn btn-whatsapp-premium mb-3">
                                 <i class="bi bi-whatsapp"></i> CONSULTAR POR WHATSAPP
@@ -132,7 +134,7 @@
                     <?php endif; ?>
 
                     <?php if (session()->get('logged_in')): ?>
-                        <a href="https://wa.me/<?= $env_whatsapp ?>?text=Hola!%20Me%20gustaría%20personalizar%20el%20mueble%20<?= urlencode($producto['nombre_prod']) ?>" 
+                        <a href="<?= wa_link($env_whatsapp, "Hola! Me gustaría personalizar el mueble " . $producto['nombre_prod']) ?>"
                            class="btn btn-personalizar">
                             <i class="bi bi-pencil-square"></i> SOLICITAR MEDIDAS ESPECIALES
                         </a>
@@ -189,57 +191,6 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-js') ?>
-<script>
-    // Lista de todas las imágenes (Principal + Galería)
-    const imagesList = [
-        '<?= base_url('assets/uploads/' . $producto['imagen']) ?>',
-        <?php if(!empty($producto['galeria'])): ?>
-            <?php foreach($producto['galeria'] as $img): ?>
-                '<?= base_url('assets/uploads/' . $img['imagen']) ?>',
-            <?php endforeach; ?>
-        <?php endif; ?>
-    ];
-    
-    let currentIndex = 0;
-
-    function changeMainImg(src, element) {
-        const mainImg = document.getElementById('main-product-img');
-        if (!mainImg) return;
-
-        currentIndex = imagesList.indexOf(src);
-        
-        // Transición suave
-        mainImg.style.opacity = '0.4';
-        mainImg.style.transform = 'scale(0.98)';
-        
-        setTimeout(() => {
-            mainImg.src = src;
-            mainImg.style.opacity = '1';
-            mainImg.style.transform = 'scale(1)';
-        }, 150);
-
-        // Actualizar miniaturas
-        document.querySelectorAll('.thumb-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        
-        const thumbs = document.querySelectorAll('.thumb-item');
-        if (element) {
-            element.classList.add('active');
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        } else if (thumbs[currentIndex]) {
-            thumbs[currentIndex].classList.add('active');
-            thumbs[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-    }
-
-    function moveGallery(step) {
-        currentIndex += step;
-        if (currentIndex >= imagesList.length) currentIndex = 0;
-        if (currentIndex < 0) currentIndex = imagesList.length - 1;
-        
-        changeMainImg(imagesList[currentIndex]);
-    }
-</script>
+<script src="<?= base_url('assets/js/pages/detalle-producto.js?v=1.0') ?>"></script>
 <?= $this->endSection() ?>
 

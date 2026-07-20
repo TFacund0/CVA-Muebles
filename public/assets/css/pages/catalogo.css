@@ -1,140 +1,202 @@
-/* 
+/*
   =============================================
   CVA MUEBLES - HOMEPAGE CATALOG & SECTIONS DESIGN
+  Todos los selectores están scopeados bajo
+  #home-page para que nunca puedan afectar, ni
+  ser afectados por, otra página. No usar
+  !important salvo para anular una regla de
+  Bootstrap puntual (documentado en cada caso).
   =============================================
 */
 
-/* 1. ESPECIALIDADES PREMIUM */
-.section-categorias { 
-    padding: 80px 0; 
-    background-color: white !important; 
-    background-image: none !important; 
+/* 0. UTILIDADES DE MAQUETADO (ex inline styles) */
+#home-page .kicker-spacing-4 {
+    letter-spacing: 4px;
 }
 
-.catalogo-card-premium {
+#home-page .kicker-spacing-5 {
+    letter-spacing: 5px;
+}
+
+#home-page .kicker-spacing-3 {
+    letter-spacing: 3px;
+}
+
+#home-page .kicker-spacing-2 {
+    letter-spacing: 2px;
+}
+
+#home-page .section-divider-sm {
+    width: 80px;
+    height: 4px;
+    background: var(--cva-gold);
+    border-radius: 2px;
+}
+
+#home-page .section-divider-thin {
+    width: 80px;
+    height: 3px;
+    background: var(--cva-gold);
+}
+
+#home-page .btn-detail-artisan-sm {
+    width: 35px;
+    height: 35px;
+}
+
+#home-page .section-ubicacion .row-min-height {
+    min-height: 700px;
+}
+
+#home-page .section-ubicacion .ubicacion-content {
+    max-width: 600px;
+}
+
+#home-page .ubicacion-icon-box {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#home-page .ubicacion-map-frame {
+    border: 0;
+    min-height: 700px;
+}
+
+/* 1. ESPECIALIDADES PREMIUM */
+#home-page .section-categorias {
+    padding: 80px 0;
+    background-color: white;
+    background-image: none;
+}
+
+#home-page .catalogo-card-premium {
     position: relative;
     height: 450px;
-    border-radius: 2.5rem;
+    border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(62, 39, 35, 0.08);
+    box-shadow: var(--shadow-md);
     transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     border: 1px solid rgba(0,0,0,0.03);
 }
 
-.catalogo-card-premium:hover {
+#home-page .catalogo-card-premium:hover {
     transform: translateY(-15px);
     box-shadow: 0 40px 80px rgba(62, 39, 35, 0.15);
 }
 
-.card-img-artisan {
-    width: 100%; 
-    height: 100%; 
+#home-page .card-img-artisan {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     transition: transform 1.2s ease;
 }
 
-.catalogo-card-premium:hover .card-img-artisan {
+#home-page .catalogo-card-premium:hover .card-img-artisan {
     transform: scale(1.1);
 }
 
-.card-overlay-modern {
-    position: absolute; 
+#home-page .card-overlay-modern {
+    position: absolute;
     inset: 0;
     background: linear-gradient(to top, rgba(38, 20, 18, 0.9) 0%, rgba(38, 20, 18, 0.2) 60%, transparent 100%);
-    padding: 2.5rem; 
-    display: flex; 
-    flex-direction: column; 
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
     justify-content: flex-end;
-    color: white; 
+    color: white;
     transition: background 0.4s;
 }
 
-.catalogo-card-premium:hover .card-overlay-modern { 
-    background: linear-gradient(to top, var(--cva-brown) 0%, rgba(62, 39, 35, 0.6) 100%); 
+#home-page .catalogo-card-premium:hover .card-overlay-modern {
+    background: linear-gradient(to top, var(--cva-brown) 0%, rgba(62, 39, 35, 0.6) 100%);
 }
 
-.catalogo-card-premium:hover .category-line { 
-    width: 100%; 
+#home-page .catalogo-card-premium:hover .category-line {
+    width: 100%;
 }
 
 /* 2. PRODUCTOS DESTACADOS */
-.section-destacados-dinamica { 
-    padding: 100px 0; 
-    background-color: var(--cva-sand); 
+#home-page .section-destacados-dinamica {
+    padding: 100px 0;
+    background-color: var(--cva-sand);
 }
 
-.product-card-vivid {
-    background: white; 
-    border-radius: 2rem; 
+#home-page .product-card-vivid {
+    background: white;
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(0,0,0,0.05); 
+    border: 1px solid rgba(0,0,0,0.05);
     position: relative;
 }
 
-.product-card-vivid:hover { 
-    transform: scale(1.05) translateY(-10px); 
-    box-shadow: 0 30px 60px rgba(62, 39, 35, 0.15); 
-    z-index: 10; 
+#home-page .product-card-vivid:hover {
+    transform: scale(1.05) translateY(-10px);
+    box-shadow: 0 30px 60px rgba(62, 39, 35, 0.15);
+    z-index: 10;
 }
 
-.product-img-container { 
-    border-radius: 1.5rem; 
-    overflow: hidden; 
-    margin-bottom: 1.5rem; 
-    height: 220px; 
-    position: relative; 
+#home-page .product-img-container {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    height: 220px;
+    position: relative;
 }
 
-.product-img-container img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    transition: transform 0.8s; 
+#home-page .product-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s;
 }
 
-.product-card-vivid:hover .product-img-container img { 
-    transform: scale(1.1); 
+#home-page .product-card-vivid:hover .product-img-container img {
+    transform: scale(1.1);
 }
 
-.price-badge-artisan {
-    position: absolute; 
-    top: 15px; 
-    right: 15px; 
+#home-page .price-badge-artisan {
+    position: absolute;
+    top: 15px;
+    right: 15px;
     background: var(--cva-gold);
-    color: white; 
-    padding: 0.5rem 1rem; 
-    border-radius: 1rem; 
-    font-weight: 800; 
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-weight: 800;
     font-size: 0.9rem;
 }
 
-.btn-detail-artisan {
-    width: 45px; 
-    height: 45px; 
-    border-radius: 50%; 
+#home-page .btn-detail-artisan {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
     background: var(--cva-brown);
-    color: white; 
-    display: flex; 
-    align-items: center; 
+    color: white;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    transition: all 0.3s; 
-    border: none; 
+    transition: all 0.3s;
+    border: none;
     text-decoration: none;
 }
 
-.btn-detail-artisan:hover { 
-    background: var(--cva-gold); 
-    transform: rotate(90deg); 
-    color: white; 
+#home-page .btn-detail-artisan:hover {
+    background: var(--cva-gold);
+    transform: rotate(90deg);
+    color: white;
 }
 
-/* 3. SWIPER CAROUSEL CUSTOM */
-.swiper-destacados { 
-    padding: 0 0 4rem !important; 
+/* 3. SWIPER CAROUSEL CUSTOM (anula estilos por defecto de la librería Swiper) */
+#home-page .swiper-destacados {
+    padding: 0 0 4rem !important;
 }
 
-.swiper-button-next, .swiper-button-prev {
+#home-page .swiper-button-next,
+#home-page .swiper-button-prev {
     color: var(--cva-brown) !important;
     background: white;
     width: 50px !important;
@@ -145,51 +207,53 @@
     transition: all 0.3s ease;
 }
 
-.swiper-button-next:after, .swiper-button-prev:after { 
-    font-size: 1.2rem !important; 
-    font-weight: 800; 
+#home-page .swiper-button-next:after,
+#home-page .swiper-button-prev:after {
+    font-size: 1.2rem !important;
+    font-weight: 800;
 }
 
-.swiper-button-next:hover, .swiper-button-prev:hover { 
-    background: var(--cva-gold); 
-    color: white !important; 
-    border-color: var(--cva-gold); 
+#home-page .swiper-button-next:hover,
+#home-page .swiper-button-prev:hover {
+    background: var(--cva-gold);
+    color: white !important;
+    border-color: var(--cva-gold);
 }
 
-.swiper-pagination-bullet-active { 
-    background: var(--cva-gold) !important; 
+#home-page .swiper-pagination-bullet-active {
+    background: var(--cva-gold) !important;
 }
 
 /* 4. SECCIÓN MISIÓN (Verde Bosque Premium) */
-.mission-statement-premium {
-    background-color: var(--cva-forest) !important;
+#home-page .mission-statement-premium {
+    background-color: var(--cva-forest);
     color: white;
-    padding: 160px 0 !important;
+    padding: 160px 0;
     position: relative;
     overflow: hidden;
 }
 
-.mission-bg-accent {
+#home-page .mission-bg-accent {
     position: absolute;
-    top: 50%; 
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 25rem;
-    font-family: 'Lora', serif;
+    font-family: var(--font-heading);
     opacity: 0.03;
     z-index: 0;
     pointer-events: none;
     user-select: none;
 }
 
-.mission-content {
+#home-page .mission-content {
     position: relative;
     z-index: 1;
     max-width: 900px;
     margin: 0 auto;
 }
 
-.mission-divider {
+#home-page .mission-divider {
     width: 60px;
     height: 3px;
     background: var(--cva-gold);
@@ -197,8 +261,8 @@
     border-radius: 2px;
 }
 
-.mission-quote {
-    font-family: 'Lora', serif;
+#home-page .mission-quote {
+    font-family: var(--font-heading);
     font-style: italic;
     font-size: 1.5rem;
     line-height: 1.8;
@@ -207,107 +271,131 @@
     padding: 0 40px;
 }
 
-.mission-quote::before, .mission-quote::after {
+#home-page .mission-quote::before,
+#home-page .mission-quote::after {
     content: '"';
     position: absolute;
     font-size: 4rem;
     color: var(--cva-gold);
     opacity: 0.5;
-    font-family: 'Lora', serif;
+    font-family: var(--font-heading);
 }
 
-.mission-quote::before { 
-    top: -20px; 
-    left: 0; 
+#home-page .mission-quote::before {
+    top: -20px;
+    left: 0;
 }
 
-.mission-quote::after { 
-    bottom: -60px; 
-    right: 0; 
+#home-page .mission-quote::after {
+    bottom: -60px;
+    right: 0;
 }
 
-/* 5. RESPONSIVE MEDIA QUERIES */
+/* 5. SECCIÓN UBICACIÓN (recuperada de section-artisan.css, que se eliminó
+   por ser CSS muerto/duplicado que competía con este archivo) */
+#home-page .section-ubicacion {
+    background-color: #faf7f2;
+    padding: 100px 0;
+    width: 100%;
+    border-top: 1px solid rgba(0,0,0,0.03);
+}
+
+#home-page .section-ubicacion h3 {
+    color: var(--cva-brown);
+    font-weight: 700;
+}
+
+#home-page .section-ubicacion h4 {
+    color: var(--cva-gold);
+    font-weight: 700;
+}
+
+#home-page .section-ubicacion .lead {
+    color: var(--cva-text);
+}
+
+/* 6. RESPONSIVE MEDIA QUERIES */
 
 /* Categorías y Destacados Responsivo */
 @media (max-width: 991.98px) {
-    .section-categorias { 
-        padding: 60px 0; 
+    #home-page .section-categorias {
+        padding: 60px 0;
     }
-    .catalogo-card-premium { 
-        height: 280px; 
-        border-radius: 1.5rem; 
+    #home-page .catalogo-card-premium {
+        height: 280px;
+        border-radius: var(--radius-lg);
     }
-    .card-overlay-modern { 
-        padding: 1.2rem; 
+    #home-page .card-overlay-modern {
+        padding: 1.2rem;
     }
-    .display-5 { 
-        font-size: 2.2rem !important; 
+    #home-page .display-5 {
+        font-size: 2.2rem;
     }
-    .card-overlay-modern h3 { 
-        font-size: 1.5rem !important; 
+    #home-page .card-overlay-modern h3 {
+        font-size: 1.5rem;
     }
-    
-    .section-destacados-dinamica { 
-        padding: 60px 0; 
+
+    #home-page .section-destacados-dinamica {
+        padding: 60px 0;
     }
-    .product-card-vivid { 
-        padding: 1rem; 
-        border-radius: 1.5rem; 
+    #home-page .product-card-vivid {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
     }
-    .product-img-container { 
-        height: 180px; 
-        margin-bottom: 1rem; 
+    #home-page .product-img-container {
+        height: 180px;
+        margin-bottom: 1rem;
     }
-    .price-badge-artisan { 
-        padding: 0.4rem 0.8rem; 
-        font-size: 0.8rem; 
+    #home-page .price-badge-artisan {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
 }
 
 /* Misión Responsivo */
 @media (max-width: 991.98px) {
-    .mission-statement-premium { 
-        padding: 100px 0 !important; 
+    #home-page .mission-statement-premium {
+        padding: 100px 0;
     }
-    .display-3 { 
-        font-size: 2.5rem !important; 
+    #home-page .display-3 {
+        font-size: 2.5rem;
     }
-    .mission-quote { 
-        font-size: 1.2rem; 
-        padding: 0 20px; 
+    #home-page .mission-quote {
+        font-size: 1.2rem;
+        padding: 0 20px;
     }
-    .mission-bg-accent { 
-        font-size: 15rem; 
+    #home-page .mission-bg-accent {
+        font-size: 15rem;
     }
 }
 
 @media (max-width: 575.98px) {
-    .mission-statement-premium { 
-        padding: 80px 0 !important; 
+    #home-page .mission-statement-premium {
+        padding: 80px 0;
     }
-    .display-3 { 
-        font-size: 2rem !important; 
+    #home-page .display-3 {
+        font-size: 2rem;
     }
-    .mission-quote { 
-        font-size: 1.1rem; 
+    #home-page .mission-quote {
+        font-size: 1.1rem;
     }
 }
 
 /* Ubicación Responsivo */
 @media (max-width: 991.98px) {
-    .section-ubicacion .row.g-0 { 
-        flex-direction: column; 
+    #home-page .section-ubicacion .row.g-0 {
+        flex-direction: column;
     }
-    .section-ubicacion .col-lg-5 { 
-        padding: 40px 20px !important; 
+    #home-page .section-ubicacion .col-lg-5 {
+        padding: 40px 20px;
     }
-    .section-ubicacion .display-3 { 
-        font-size: 2.5rem !important; 
+    #home-page .section-ubicacion .display-3 {
+        font-size: 2.5rem;
     }
-    .section-ubicacion iframe { 
-        min-height: 400px !important; 
+    #home-page .section-ubicacion iframe {
+        min-height: 400px;
     }
-    .section-ubicacion .row.g-0 { 
-        min-height: auto !important; 
+    #home-page .section-ubicacion .row.g-0 {
+        min-height: auto;
     }
 }

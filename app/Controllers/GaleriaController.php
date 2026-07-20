@@ -13,9 +13,14 @@ class GaleriaController extends BaseController {
         $this->galeriaService = new \App\Services\GaleriaService();
     }
 
+    /**
+     * Muestra la galería pública de fotos de clientes aprobadas.
+     *
+     * @return string
+     */
     public function index() {
         $pendientesCount = 0;
-        if (session()->get('logged_in') && session()->get('perfil_id') == 1) {
+        if ($this->isAdmin()) {
             $pendientesCount = $this->galeriaService->getPendientesCount();
         }
 
@@ -26,10 +31,15 @@ class GaleriaController extends BaseController {
         ]);
     }
 
+    /**
+     * Procesa la subida de una foto de cliente a la galería.
+     *
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function subir() {
         $rules = [
             'imagen' => [
-                'rules'  => 'uploaded[imagen]|is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png,image/webp]|max_size[imagen,2048]',
+                'rules'  => 'uploaded[imagen]|' . $this->imageValidationRule('imagen'),
                 'label'  => 'Foto de cliente',
                 'errors' => [
                     'mime_in' => 'Solo se permiten imágenes en formato JPG, JPEG, PNG o WEBP.',
@@ -58,6 +68,11 @@ class GaleriaController extends BaseController {
         return redirect()->back()->with('error', 'Hubo un problema al subir la imagen.');
     }
 
+    /**
+     * Muestra el listado de fotos para moderación por parte del administrador.
+     *
+     * @return string
+     */
     public function admin_index() {
 
 
@@ -67,12 +82,24 @@ class GaleriaController extends BaseController {
         ]);
     }
 
+    /**
+     * Aprueba una foto pendiente y la publica en la galería.
+     *
+     * @param int|string $id Identificador de la foto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function aprobar($id) {
 
         $this->galeriaService->aprobar($id);
         return redirect()->back()->with('success', 'Foto aprobada y publicada.');
     }
 
+    /**
+     * Elimina una foto de la galería.
+     *
+     * @param int|string $id Identificador de la foto.
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function eliminar($id) {
 
         $this->galeriaService->eliminar($id);

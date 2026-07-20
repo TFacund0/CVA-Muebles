@@ -21,22 +21,22 @@
     transform: scale(1.1) translateY(-5px);
 }
 .border-gold-glow {
-    border: 1px solid rgba(201, 161, 107, 0.2) !important;
-    box-shadow: 0 10px 30px rgba(201, 161, 107, 0.08) !important;
+    border: 1px solid rgba(201, 161, 107, 0.2);
+    box-shadow: 0 10px 30px rgba(201, 161, 107, 0.08);
 }
 .admin-control:focus, .form-control:focus, .form-select:focus {
-    background: white !important;
-    border-color: var(--cva-gold) !important;
-    box-shadow: 0 0 0 4px rgba(201, 161, 107, 0.1) !important;
+    background: white;
+    border-color: var(--cva-gold);
+    box-shadow: 0 0 0 4px rgba(201, 161, 107, 0.1);
 }
 
 @media (max-width: 767.98px) {
-    .dropzone-premium-v2 { height: 300px !important; }
+    .dropzone-premium-v2 { height: 300px; }
     .dashboard-icon-main { width: 50px; height: 50px; font-size: 1.5rem; border-radius: 0.8rem; }
-    .display-6 { font-size: 1.8rem !important; }
-    .admin-card-v2 .p-4 { padding: 1.5rem !important; }
-    .btn-admin-primary { padding: 1.2rem !important; }
-    .shadow-gold { box-shadow: 0 10px 20px rgba(201, 161, 107, 0.2) !important; }
+    .display-6 { font-size: 1.8rem; }
+    .admin-card-v2 .p-4 { padding: 1.5rem; }
+    .btn-admin-primary { padding: 1.2rem; }
+    .shadow-gold { box-shadow: 0 10px 20px rgba(201, 161, 107, 0.2); }
 }
 
 .bg-success-soft { background: #f0fff4; }
@@ -47,11 +47,11 @@
 
 .upload-zone, .upload-zone-secondary {
     transition: all 0.3s ease;
-    border-style: dashed !important;
+    border-style: dashed;
 }
 .upload-zone:hover, .upload-zone-secondary:hover {
-    background: #fdfaf5 !important;
-    border-color: var(--cva-gold) !important;
+    background: #fdfaf5;
+    border-color: var(--cva-gold);
 }
 
 .gallery-item-admin img {
@@ -85,7 +85,7 @@
     background: var(--cva-gold);
     color: white;
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2) !important;
+    box-shadow: 0 10px 20px rgba(184, 134, 11, 0.2);
 }
 .btn-admin-gold:active {
     transform: translateY(-2px);
@@ -98,7 +98,7 @@
 /* Animación de Imagen */
 .product-img-container:hover img {
     transform: scale(1.08) rotate(2deg);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
 }
 .transition-transform { transition: all 0.4s ease; }
 
@@ -116,6 +116,77 @@
     .product-img-container { width: 80px; }
     .product-row td[data-label="PIEZA"] { min-height: 80px; }
 }
+
+/* === Utilidades extraídas de style="" inline (CSP) === */
+.alert-success-accent {
+    background: #f0fff4;
+    border-left: 5px solid #48bb78 !important;
+}
+.alert-danger-accent {
+    background: #fff5f5;
+    border-left: 5px solid #f56565 !important;
+}
+.input-h58 {
+    height: 58px;
+}
+.input-group-text-rounded-start {
+    border-radius: 10px 0 0 10px;
+}
+.input-group-text-rounded-end,
+.form-control-rounded-end {
+    border-radius: 0 10px 10px 0;
+}
+.form-control-rounded-end.input-h58 {
+    height: 58px;
+}
+.venta-input-highlight {
+    background: #fffdf5;
+}
+.estado-select-sm {
+    font-size: 0.75rem;
+    border-radius: 10px;
+    height: 58px;
+    background-color: #f8fafc;
+}
+.dropzone-h380 {
+    height: 380px;
+    cursor: pointer;
+}
+.preview-image-hidden {
+    display: none;
+    object-fit: cover;
+}
+.product-preview-sticky {
+    top: 20px;
+}
+.product-preview-media {
+    height: 350px;
+}
+.product-preview-fit-contain {
+    object-fit: contain;
+}
+.gallery-thumb-h100 {
+    height: 100px;
+    object-fit: cover;
+}
+.icon-10 {
+    font-size: 10px;
+}
+.description-textarea {
+    line-height: 1.6;
+}
+.col-cat-id { width: 100px; }
+.col-cat-productos { width: 150px; }
+.col-cat-estado { width: 150px; }
+.col-cat-gestion { width: 200px; }
+.badge-min-w-60 { min-width: 60px; }
+.admin-filter-bar { min-height: 52px; }
+.admin-filter-status { opacity: 0; transition: opacity 0.2s ease; }
+.admin-hidden-row { display: none; }
+.badge-corner-id-md { transform: translate(-20%, -20%); font-size: 0.7rem; border: 1px solid var(--cva-gold); z-index: 1; }
+.col-product-piece { width: 55%; }
+.product-thumb-80 { width: 80px; height: 80px; object-fit: cover; }
+.text-4xs { font-size: 0.55rem; }
 
 
 

@@ -1,6 +1,11 @@
-﻿/* 
+/*
   =============================================
   CVA MUEBLES - DETALLE DE PRODUCTO (ARTISAN)
+  Todos los selectores están scopeados bajo
+  .product-detail-wrapper. No usar !important
+  salvo para anular una regla de Bootstrap
+  puntual (documentado).
+
   =============================================
 */
 
@@ -11,7 +16,7 @@
 }
 
 /* Header Banner - Similar to Catalog */
-.header-detalle {
+.product-detail-wrapper .header-detalle {
     background-image: linear-gradient(rgba(248, 245, 240, 0.8), rgba(248, 245, 240, 0.8)),
         url('../../img/ui/textures/textura-clara-hoja.jpg');
     background-size: cover;
@@ -20,16 +25,16 @@
 }
 
 /* 2. MAIN CARD (CENTRAL BOX COMPACTO) */
-.main-artisan-card {
+.product-detail-wrapper .main-artisan-card {
     background-color: white;
-    border: none !important;
-    border-radius: 2rem !important;
+    border: none;
+    border-radius: var(--radius-lg);
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.06);
     margin-bottom: 3rem;
 }
 
 /* Image Column */
-.image-column {
+.product-detail-wrapper .image-column {
     background-color: #fcfbf8;
     display: flex;
     flex-direction: column;
@@ -39,7 +44,7 @@
     border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.image-container {
+.product-detail-wrapper .image-container {
     width: 100%;
     min-height: 500px;
     height: auto;
@@ -50,7 +55,7 @@
     overflow: visible;
 }
 
-.main-img {
+.product-detail-wrapper .main-img {
     max-width: 100%;
     max-height: 650px;
     width: auto;
@@ -61,12 +66,12 @@
 }
 
 /* Info Column */
-.info-column {
-    padding: 2.5rem !important;
+.product-detail-wrapper .info-column {
+    padding: 2.5rem;
     background: white;
 }
 
-.category-tag {
+.product-detail-wrapper .category-tag {
     color: var(--cva-gold);
     font-weight: 800;
     font-size: 0.7rem;
@@ -76,8 +81,8 @@
     display: block;
 }
 
-.product-title {
-    font-family: 'Lora', serif;
+.product-detail-wrapper .product-title {
+    font-family: var(--font-heading);
     color: var(--cva-brown);
     font-size: 2.5rem;
     font-weight: 700;
@@ -85,7 +90,7 @@
     margin-bottom: 1rem;
 }
 
-.title-divider {
+.product-detail-wrapper .title-divider {
     width: 50px;
     height: 3px;
     background-color: var(--cva-gold);
@@ -93,15 +98,15 @@
 }
 
 /* Price Section (Compacto) */
-.price-box {
+.product-detail-wrapper .price-box {
     background: #fdfbf8;
     padding: 1.5rem 2rem;
-    border-radius: 1.5rem;
+    border-radius: var(--radius-md);
     margin-bottom: 2rem;
     border: 1px solid rgba(184, 134, 11, 0.1);
 }
 
-.price-label {
+.product-detail-wrapper .price-label {
     text-transform: uppercase;
     font-size: 0.65rem;
     font-weight: 800;
@@ -110,22 +115,22 @@
     margin-bottom: 0.5rem;
 }
 
-.price-value {
+.product-detail-wrapper .price-value {
     font-size: 2.8rem;
     font-weight: 800;
     color: var(--cva-vivid);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-main);
     display: flex;
     align-items: flex-start;
     gap: 0.3rem;
 }
 
-.price-symbol {
+.product-detail-wrapper .price-symbol {
     font-size: 1.4rem;
     margin-top: 0.5rem;
 }
 
-.stock-info {
+.product-detail-wrapper .stock-info {
     font-weight: 700;
     font-size: 0.8rem;
     color: #2e7d32;
@@ -135,19 +140,23 @@
     gap: 0.5rem;
 }
 
+.product-detail-wrapper .stock-info-gold {
+    color: var(--cva-gold, #b8860b) !important;
+}
+
 /* Features */
-.features-list {
+.product-detail-wrapper .features-list {
     margin-bottom: 2.5rem;
 }
 
-.feature-item {
+.product-detail-wrapper .feature-item {
     display: flex;
     align-items: flex-start;
     gap: 1.2rem;
     margin-bottom: 1.5rem;
 }
 
-.feature-icon {
+.product-detail-wrapper .feature-icon {
     width: 45px;
     height: 45px;
     background-color: white;
@@ -161,15 +170,15 @@
     flex-shrink: 0;
 }
 
-.feature-text h6 {
+.product-detail-wrapper .feature-text h6 {
     margin: 0 0 0.2rem;
     font-size: 0.95rem;
     font-weight: 800;
     color: var(--cva-brown);
-    font-family: 'Lora', serif;
+    font-family: var(--font-heading);
 }
 
-.feature-text p {
+.product-detail-wrapper .feature-text p {
     margin: 0;
     font-size: 0.8rem;
     color: #888;
@@ -177,12 +186,12 @@
 }
 
 /* Buttons */
-.btn-artisan-primary {
-    background-color: var(--cva-brown) !important;
-    color: white !important;
-    padding: 0.9rem !important;
-    border-radius: 1rem !important;
-    font-weight: 800 !important;
+.product-detail-wrapper .btn-detalle-primary {
+    background-color: var(--cva-brown);
+    color: white;
+    padding: 0.9rem;
+    border-radius: 1rem;
+    font-weight: 800;
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
     border: none;
@@ -190,13 +199,14 @@
     font-size: 0.9rem;
 }
 
-.btn-artisan-primary:hover {
-    background-color: var(--cva-vivid) !important;
+.product-detail-wrapper .btn-detalle-primary:hover {
+    background-color: var(--cva-vivid);
+    color: white;
     transform: translateY(-5px);
     box-shadow: 0 20px 40px rgba(62, 39, 35, 0.3);
 }
 
-.btn-whatsapp-premium {
+.product-detail-wrapper .btn-whatsapp-premium {
     background-color: #2e7d32;
     color: white;
     padding: 0.9rem;
@@ -214,14 +224,14 @@
     font-size: 0.9rem;
 }
 
-.btn-whatsapp-premium:hover {
+.product-detail-wrapper .btn-whatsapp-premium:hover {
     background-color: #1b5e20;
     transform: translateY(-5px);
     box-shadow: 0 20px 40px rgba(46, 125, 50, 0.25);
     color: white;
 }
 
-.btn-personalizar {
+.product-detail-wrapper .btn-personalizar {
     background-color: transparent;
     border: 2px solid #ddd;
     color: #666;
@@ -237,29 +247,29 @@
     width: 100%;
 }
 
-.btn-personalizar:hover {
+.product-detail-wrapper .btn-personalizar:hover {
     border-color: var(--cva-gold);
     color: var(--cva-gold);
     background: #fffdf8;
 }
 
 /* Technical Details Section */
-.technical-section {
+.product-detail-wrapper .technical-section {
     background-color: white;
     padding: 4rem 3rem;
     border-top: 1px solid #eee;
 }
 
-.technical-title {
+.product-detail-wrapper .technical-title {
     font-size: 2.2rem;
     margin-bottom: 2rem;
 }
 
-.technical-title span {
+.product-detail-wrapper .technical-title span {
     color: var(--cva-gold);
 }
 
-.description-box {
+.product-detail-wrapper .description-box {
     background-color: #fdfaf7;
     border: 1px dashed rgba(62, 39, 35, 0.2);
     padding: 2.5rem;
@@ -270,28 +280,27 @@
 }
 
 /* Trust Badges */
-.trust-badges {
+.product-detail-wrapper .trust-badges {
     margin-top: 4rem;
     padding-top: 4rem;
     border-top: 1px solid #f0f0f0;
 }
 
-.badge-card {
+.product-detail-wrapper .badge-card {
     text-align: center;
 }
 
-.badge-icon-wrap {
+.product-detail-wrapper .badge-icon-wrap {
     font-size: 3rem;
     margin-bottom: 1.5rem;
 }
 
-.badge-card h5 {
+.product-detail-wrapper .badge-card h5 {
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--cva-brown);
 }
 
-/* Animations */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -303,30 +312,30 @@
     }
 }
 
-.animate-fade-in-up {
+.product-detail-wrapper .animate-fade-in-up {
     animation: fadeInUp 0.8s ease forwards;
 }
 
 /* Responsive */
 @media (max-width: 991.98px) {
-    .image-container {
+    .product-detail-wrapper .image-container {
         min-height: 400px;
     }
-    .info-column {
+    .product-detail-wrapper .info-column {
         padding: 2rem;
     }
-    .product-title {
+    .product-detail-wrapper .product-title {
         font-size: 2.2rem;
     }
 }
 
 /* -------------------- Galería de Miniaturas -------------------- */
-.product-gallery-thumbs {
+.product-detail-wrapper .product-gallery-thumbs {
     padding: 0.5rem 0;
     width: 100%;
 }
 
-.thumb-item {
+.product-detail-wrapper .thumb-item {
     width: 80px;
     height: 80px;
     border-radius: 12px;
@@ -338,30 +347,30 @@
     opacity: 0.6;
 }
 
-.thumb-item img {
+.product-detail-wrapper .thumb-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.thumb-item:hover {
+.product-detail-wrapper .thumb-item:hover {
     opacity: 1;
     transform: translateY(-3px);
 }
 
-.thumb-item.active {
+.product-detail-wrapper .thumb-item.active {
     border-color: var(--cva-gold);
     opacity: 1;
     box-shadow: 0 5px 15px rgba(184, 134, 11, 0.2);
 }
 
-.main-image-box {
+.product-detail-wrapper .main-image-box {
     background: #fff;
     border: 1px solid rgba(0,0,0,0.05);
 }
 
 /* -------------------- Flechas de Galería -------------------- */
-.gallery-arrow {
+.product-detail-wrapper .gallery-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -382,35 +391,35 @@
     opacity: 0;
 }
 
-.image-container:hover .gallery-arrow {
+.product-detail-wrapper .image-container:hover .gallery-arrow {
     opacity: 1;
 }
 
-.gallery-arrow:hover {
+.product-detail-wrapper .gallery-arrow:hover {
     background-color: var(--cva-gold);
     color: white;
     transform: translateY(-50%) scale(1.1);
 }
 
-.gallery-arrow.arrow-left {
+.product-detail-wrapper .gallery-arrow.arrow-left {
     left: 20px;
 }
 
-.gallery-arrow.arrow-right {
+.product-detail-wrapper .gallery-arrow.arrow-right {
     right: 20px;
 }
 
 @media (max-width: 768px) {
-    .gallery-arrow {
+    .product-detail-wrapper .gallery-arrow {
         opacity: 1;
         width: 40px;
         height: 40px;
         font-size: 1.2rem;
     }
-    .gallery-arrow.arrow-left { left: 10px; }
-    .gallery-arrow.arrow-right { right: 10px; }
+    .product-detail-wrapper .gallery-arrow.arrow-left { left: 10px; }
+    .product-detail-wrapper .gallery-arrow.arrow-right { right: 10px; }
 }
 
-#main-product-img {
+.product-detail-wrapper #main-product-img {
     transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }

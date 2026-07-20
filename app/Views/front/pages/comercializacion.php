@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/comercializacion.css?v=8.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/comercializacion.css?v=9.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -9,7 +9,7 @@
     <!-- Sección de encabezado Premium (FONDO FIJO) -->
     <header class="comercializacion-header">
         <div class="container animate-fade-in">
-            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Transparencia y Confianza</span>
+            <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-3">Transparencia y Confianza</span>
             <h1 class="display-3 fw-bold font-lora">Comercialización</h1>
             <div class="divider-artisan mx-auto mb-4"></div>
             <p class="lead">Descubrí el camino que recorre cada una de nuestras piezas desde el taller hasta tu hogar.</p>
@@ -32,11 +32,11 @@
     </section>
 
     <!-- BLOQUE 2: MÉTODOS DE PAGO (ARENA) -->
-    <section class="section-pagos-full py-5" style="background-color: var(--cva-sand);">
+    <section class="section-pagos-full py-5">
         <div class="container py-5">
             <div class="row align-items-center">
                 <div class="col-lg-5 mb-5 mb-lg-0">
-                    <span class="text-vivid fw-bold text-uppercase small" style="letter-spacing: 2px;">Inversión Segura</span>
+                    <span class="text-vivid fw-bold text-uppercase small kicker-spacing-2">Inversión Segura</span>
                     <h2 class="display-5 fw-bold font-lora text-cva-brown mt-2">Formas de Pago</h2>
                     <p class="text-muted mt-3">Facilitamos tu inversión en calidad artesanal con diversas modalidades adaptadas a tu comodidad.</p>
                 </div>
@@ -77,11 +77,11 @@
     </section>
 
     <!-- BLOQUE 3: LOGÍSTICA (VERDE BOSQUE) -->
-    <section class="section-logistica-full py-5" style="background-color: var(--cva-forest); color: white;">
+    <section class="section-logistica-full py-5">
         <div class="container py-5">
             <div class="row">
                 <div class="col-lg-6 mb-5 mb-lg-0 pe-lg-5">
-                    <span class="text-gold fw-bold text-uppercase small" style="letter-spacing: 2px;">Del Taller a tu Casa</span>
+                    <span class="text-gold fw-bold text-uppercase small kicker-spacing-2">Del Taller a tu Casa</span>
                     <h2 class="display-5 fw-bold font-lora text-white mt-2">Logística Artesanal</h2>
                     <p class="opacity-75 mt-3">Entendemos que un mueble de autor requiere un traslado a su altura. No somos solo un flete, somos custodios de tu pieza.</p>
                     
@@ -113,7 +113,7 @@
                     <h3 class="font-lora fw-bold mb-4">Área de Cobertura</h3>
                     <p class="text-muted mb-5">Llegamos a toda la provincia de **Corrientes** con logística propia. Consultanos por envíos nacionales.</p>
                     
-                    <div class="p-4 rounded-4 mb-4" style="background: var(--cva-sand);">
+                    <div class="p-4 rounded-4 mb-4 coverage-highlight-box">
                         <div class="d-flex align-items-center gap-3">
                             <i class="bi bi-geo-alt-fill text-vivid fs-3"></i>
                             <div>
@@ -130,13 +130,13 @@
     </section>
 
     <!-- BLOQUE 4: GARANTÍA (PREMIUM LIGHT ARTISAN) -->
-    <section class="section-garantia-full py-5" style="background-color: #fdfbf7; border-top: 1px solid rgba(184, 134, 11, 0.1); color: var(--cva-brown); text-align: center;">
+    <section class="section-garantia-full py-5">
         <div class="container py-5 animate-fade-in">
-            <span class="text-gold fw-bold text-uppercase x-small" style="letter-spacing: 3px;">Seguridad y Garantía</span>
+            <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-3">Seguridad y Garantía</span>
             <h2 class="display-4 fw-bold font-lora text-cva-brown mt-2 mb-4">Compromiso para Generaciones</h2>
-            <div class="mx-auto" style="width: 100px; height: 3px; background: var(--cva-gold); margin-bottom: 2.5rem;"></div>
-            <p class="lead mb-5 mx-auto" style="max-width: 800px; color: #5c4a44; font-weight: 500;">Cada mueble CVA cuenta con <strong>1 año de garantía estructural</strong>. Nuestra meta es que tu única preocupación sea disfrutar de la calidez de la madera en tu hogar.</p>
-            <a href="<?= base_url('terminosYCondiciones') ?>" class="btn btn-outline-brown px-5 py-3 rounded-pill fw-bold" style="letter-spacing: 2px;">VER TÉRMINOS Y CONDICIONES</a>
+            <div class="mx-auto garantia-divider"></div>
+            <p class="lead mb-5 mx-auto garantia-lead">Cada mueble CVA cuenta con <strong>1 año de garantía estructural</strong>. Nuestra meta es que tu única preocupación sea disfrutar de la calidez de la madera en tu hogar.</p>
+            <a href="<?= base_url('terminosYCondiciones') ?>" class="btn btn-outline-brown px-5 py-3 rounded-pill fw-bold kicker-spacing-2">VER TÉRMINOS Y CONDICIONES</a>
         </div>
     </section>
 </div>
