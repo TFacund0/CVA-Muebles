@@ -26,10 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'bsvabbatgmxrasmi0qg1-mysql.services.clever-cloud.com',
-        'username'     => 'ujzytnsxxnkik2i4',
-        'password'     => 'TarUdI9x9YI903QAToU9',
-        'database'     => 'bsvabbatgmxrasmi0qg1',
+        'hostname'     => '',
+        'username'     => '',
+        'password'     => '',
+        'database'     => '',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -193,22 +193,20 @@ class Database extends Config
     {
         parent::__construct();
 
-        $envHost = $_SERVER['database.default.hostname'] ?? getenv('database.default.hostname') ?: ($_SERVER['DATABASE_DEFAULT_HOSTNAME'] ?? getenv('DATABASE_DEFAULT_HOSTNAME'));
-        $envDb   = $_SERVER['database.default.database'] ?? getenv('database.default.database') ?: ($_SERVER['DATABASE_DEFAULT_DATABASE'] ?? getenv('DATABASE_DEFAULT_DATABASE'));
-        $envUser = $_SERVER['database.default.username'] ?? getenv('database.default.username') ?: ($_SERVER['DATABASE_DEFAULT_USERNAME'] ?? getenv('DATABASE_DEFAULT_USERNAME'));
-        $envPass = $_SERVER['database.default.password'] ?? getenv('database.default.password') ?: ($_SERVER['DATABASE_DEFAULT_PASSWORD'] ?? getenv('DATABASE_DEFAULT_PASSWORD'));
+        $map = [
+            'hostname' => ['database.default.hostname', 'DATABASE_DEFAULT_HOSTNAME', 'MYSQL_ADDON_HOST'],
+            'database' => ['database.default.database', 'DATABASE_DEFAULT_DATABASE', 'MYSQL_ADDON_DB'],
+            'username' => ['database.default.username', 'DATABASE_DEFAULT_USERNAME', 'MYSQL_ADDON_USER'],
+            'password' => ['database.default.password', 'DATABASE_DEFAULT_PASSWORD', 'MYSQL_ADDON_PASSWORD'],
+            'port'     => ['database.default.port', 'DATABASE_DEFAULT_PORT', 'MYSQL_ADDON_PORT'],
+        ];
 
-        if (!empty($envHost)) {
-            $this->default['hostname'] = $envHost;
-        }
-        if (!empty($envDb)) {
-            $this->default['database'] = $envDb;
-        }
-        if (!empty($envUser)) {
-            $this->default['username'] = $envUser;
-        }
-        if (!empty($envPass)) {
-            $this->default['password'] = $envPass;
+        foreach ($map as $key => $names) {
+            $value = $this->readEnv($names);
+
+            if ($value !== null && $value !== '') {
+                $this->default[$key] = $key === 'port' ? (int) $value : $value;
+            }
         }
 
         $this->default['DBDriver'] = 'MySQLi';
@@ -217,5 +215,21 @@ class Database extends Config
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
         }
+    }
+
+    /**
+     * Returns the first non-empty value among the given environment variable names.
+     */
+    private function readEnv(array $names): ?string
+    {
+        foreach ($names as $name) {
+            $value = $_ENV[$name] ?? $_SERVER[$name] ?? getenv($name);
+
+            if (is_string($value) && $value !== '') {
+                return $value;
+            }
+        }
+
+        return null;
     }
 }

@@ -37,9 +37,9 @@ class CloudinaryService
         if (!isset($this->uploadApi)) {
             $cloudinary = new Cloudinary([
                 'cloud' => [
-                    'cloud_name' => $this->cloudName ?: 'dztaqoc3d',
-                    'api_key'    => $this->apiKey ?: '617577895379293',
-                    'api_secret' => $this->apiSecret ?: 'okP3udtQ0Re3D348ZMHE7kp-m30',
+                    'cloud_name' => $this->cloudName,
+                    'api_key'    => $this->apiKey,
+                    'api_secret' => $this->apiSecret,
                 ],
             ]);
             $this->uploadApi = $cloudinary->uploadApi();
