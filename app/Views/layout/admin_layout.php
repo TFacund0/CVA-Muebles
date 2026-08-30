@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $title ?? 'Panel Control - CVA Muebles' ?></title>
 
+    <!-- Favicon -->
+    <link rel="icon" href="<?= base_url('favicon.ico') ?>" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png') ?>">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

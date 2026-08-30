@@ -9,6 +9,11 @@
     <meta name="keywords" content="muebles, carpinteria, artesanal, algarrobo, corrientes, mantilla, a medida">
     <meta name="author" content="CVA Muebles">
 
+    <!-- Favicon -->
+    <link rel="icon" href="<?= base_url('favicon.ico') ?>" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png') ?>">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
