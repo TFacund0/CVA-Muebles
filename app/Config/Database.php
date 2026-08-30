@@ -193,27 +193,71 @@ class Database extends Config
     {
         parent::__construct();
 
-        $map = [
-            'hostname' => ['database.default.hostname', 'DATABASE_DEFAULT_HOSTNAME', 'MYSQL_ADDON_HOST'],
-            'database' => ['database.default.database', 'DATABASE_DEFAULT_DATABASE', 'MYSQL_ADDON_DB'],
-            'username' => ['database.default.username', 'DATABASE_DEFAULT_USERNAME', 'MYSQL_ADDON_USER'],
-            'password' => ['database.default.password', 'DATABASE_DEFAULT_PASSWORD', 'MYSQL_ADDON_PASSWORD'],
-            'port'     => ['database.default.port', 'DATABASE_DEFAULT_PORT', 'MYSQL_ADDON_PORT'],
-        ];
-
-        foreach ($map as $key => $names) {
-            $value = $this->readEnv($names);
-
-            if ($value !== null && $value !== '') {
-                $this->default[$key] = $key === 'port' ? (int) $value : $value;
-            }
-        }
+        $this->applyConnectionUrl();
+        $this->applyDiscreteEnvVars();
 
         $this->default['DBDriver'] = 'MySQLi';
         $this->default['DSN']      = '';
 
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
+
+            return;
+        }
+
+        $this->reportIncompleteConfig();
+    }
+
+    /**
+     * Applies a full connection URL such as mysql://user:pass@host:3306/database.
+     */
+    private function applyConnectionUrl(): void
+    {
+        $url = $this->readEnv(['DATABASE_URL', 'MYSQL_ADDON_URI', 'MYSQL_URL', 'CLEVER_DATABASE_URL']);
+
+        if ($url === null) {
+            return;
+        }
+
+        $parts = parse_url($url);
+
+        if ($parts === false || ! isset($parts['host'])) {
+            return;
+        }
+
+        $this->default['hostname'] = $parts['host'];
+        $this->default['port']     = (int) ($parts['port'] ?? 3306);
+
+        if (isset($parts['user'])) {
+            $this->default['username'] = rawurldecode($parts['user']);
+        }
+        if (isset($parts['pass'])) {
+            $this->default['password'] = rawurldecode($parts['pass']);
+        }
+        if (isset($parts['path'])) {
+            $this->default['database'] = ltrim($parts['path'], '/');
+        }
+    }
+
+    /**
+     * Applies individual environment variables, overriding any connection URL.
+     */
+    private function applyDiscreteEnvVars(): void
+    {
+        $map = [
+            'hostname' => ['database.default.hostname', 'database_default_hostname', 'DATABASE_DEFAULT_HOSTNAME', 'MYSQL_ADDON_HOST'],
+            'database' => ['database.default.database', 'database_default_database', 'DATABASE_DEFAULT_DATABASE', 'MYSQL_ADDON_DB'],
+            'username' => ['database.default.username', 'database_default_username', 'DATABASE_DEFAULT_USERNAME', 'MYSQL_ADDON_USER'],
+            'password' => ['database.default.password', 'database_default_password', 'DATABASE_DEFAULT_PASSWORD', 'MYSQL_ADDON_PASSWORD'],
+            'port'     => ['database.default.port', 'database_default_port', 'DATABASE_DEFAULT_PORT', 'MYSQL_ADDON_PORT'],
+        ];
+
+        foreach ($map as $key => $names) {
+            $value = $this->readEnv($names);
+
+            if ($value !== null) {
+                $this->default[$key] = $key === 'port' ? (int) $value : $value;
+            }
         }
     }
 
@@ -231,5 +275,44 @@ class Database extends Config
         }
 
         return null;
+    }
+
+    /**
+     * Logs which connection settings are missing, listing the environment variable
+     * names visible to PHP so a misnamed variable can be spotted. Names only —
+     * values are never logged.
+     */
+    private function reportIncompleteConfig(): void
+    {
+        $missing = [];
+
+        foreach (['hostname', 'database', 'username'] as $key) {
+            if ($this->default[$key] === '') {
+                $missing[] = $key;
+            }
+        }
+
+        if ($missing === []) {
+            return;
+        }
+
+        $env     = getenv();
+        $names   = array_unique(array_merge(
+            array_keys(is_array($env) ? $env : []),
+            array_keys($_ENV),
+            array_keys($_SERVER),
+        ));
+        $related = array_values(array_filter(
+            $names,
+            static fn ($name) => preg_match('/database|mysql|cloudinary|encryption|baseurl|CI_ENV/i', (string) $name) === 1,
+        ));
+
+        sort($related);
+
+        error_log(sprintf(
+            '[DB CONFIG] Faltan: %s. Variables de entorno visibles relacionadas (solo nombres): %s',
+            implode(', ', $missing),
+            $related === [] ? '(ninguna)' : implode(' | ', $related),
+        ));
     }
 }
