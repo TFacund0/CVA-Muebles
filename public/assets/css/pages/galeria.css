@@ -165,6 +165,9 @@
     #galeria-page .gallery-author { font-size: 0.65rem; }
 
     #galeria-page section.py-5 { padding: 40px 0; }
+
+    #galeria-page .icon-badge-gold { width: 40px; height: 40px; }
+    #galeria-page .empty-gallery-icon, #galeria-page .gallery-empty-icon { font-size: 3.5rem; }
 }
 
 @media (max-width: 575.98px) {
