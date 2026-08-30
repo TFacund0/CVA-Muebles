@@ -193,6 +193,11 @@ class Database extends Config
     {
         parent::__construct();
 
+        $dsn = env('database.default.DSN', getenv('database.default.DSN') ?: (getenv('MYSQL_URL') ?: getenv('DATABASE_URL')));
+        if (!empty($dsn)) {
+            $this->default['DSN'] = $dsn;
+        }
+
         $this->default['hostname'] = env('database.default.hostname', getenv('database.default.hostname') ?: (getenv('DATABASE_DEFAULT_HOSTNAME') ?: (getenv('MYSQLHOST') ?: $this->default['hostname'])));
         $this->default['database'] = env('database.default.database', getenv('database.default.database') ?: (getenv('DATABASE_DEFAULT_DATABASE') ?: (getenv('MYSQLDATABASE') ?: $this->default['database'])));
         $this->default['username'] = env('database.default.username', getenv('database.default.username') ?: (getenv('DATABASE_DEFAULT_USERNAME') ?: (getenv('MYSQLUSER') ?: $this->default['username'])));
