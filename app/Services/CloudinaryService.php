@@ -18,10 +18,10 @@ class CloudinaryService
     {
         $config ??= config(CloudinaryConfig::class);
 
-        $cloudName    = env('cloudinary.cloudName', $config->cloudName);
-        $apiKey       = env('cloudinary.apiKey', $config->apiKey);
-        $apiSecret    = env('cloudinary.apiSecret', $config->apiSecret);
-        $uploadFolder = env('cloudinary.uploadFolder', $config->uploadFolder);
+        $cloudName    = env('cloudinary.cloudName', getenv('cloudinary.cloudName') ?: (getenv('CLOUDINARY_CLOUD_NAME') ?: $config->cloudName));
+        $apiKey       = env('cloudinary.apiKey', getenv('cloudinary.apiKey') ?: (getenv('CLOUDINARY_API_KEY') ?: $config->apiKey));
+        $apiSecret    = env('cloudinary.apiSecret', getenv('cloudinary.apiSecret') ?: (getenv('CLOUDINARY_API_SECRET') ?: $config->apiSecret));
+        $uploadFolder = env('cloudinary.uploadFolder', getenv('cloudinary.uploadFolder') ?: (getenv('CLOUDINARY_UPLOAD_FOLDER') ?: $config->uploadFolder));
 
         $cloudinary = new Cloudinary([
             'cloud' => [
