@@ -199,17 +199,9 @@ class Database extends Config
         $this->default['password'] = env('database.default.password', getenv('database.default.password') ?: (getenv('DATABASE_DEFAULT_PASSWORD') ?: (getenv('MYSQLPASSWORD') ?: $this->default['password'])));
         $this->default['port']     = (int) env('database.default.port', getenv('database.default.port') ?: (getenv('DATABASE_DEFAULT_PORT') ?: (getenv('MYSQLPORT') ?: $this->default['port'])));
 
-        $driver = env('database.default.DBDriver', getenv('database.default.DBDriver') ?: (getenv('DATABASE_DEFAULT_DBDRIVER') ?: $this->default['DBDriver']));
-        if (strtolower($driver) === 'mysql') {
-            $driver = 'MySQLi';
-        }
-        $this->default['DBDriver'] = $driver;
-
-        $dsn = env('database.default.DSN', getenv('database.default.DSN') ?: (getenv('MYSQL_URL') ?: getenv('DATABASE_URL')));
-        if (!empty($dsn)) {
-            $this->default['DSN'] = $dsn;
-            $this->default['DBDriver'] = 'MySQLi';
-        }
+        // Forzar siempre MySQLi (driver oficial de CodeIgniter 4 para MySQL)
+        $this->default['DBDriver'] = 'MySQLi';
+        $this->default['DSN']      = '';
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
