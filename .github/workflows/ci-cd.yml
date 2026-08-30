@@ -31,9 +31,9 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: "8.2"
           extensions: intl, mysqli, mbstring, gd, zip, pdo, pdo_mysql, curl
-          coverage: none
+          coverage: pcov
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -43,6 +43,9 @@ jobs:
           until mysqladmin ping -h 127.0.0.1 -u root --silent; do
             sleep 2
           done
+
+      - name: Load database schema
+        run: mysql -h 127.0.0.1 -u root cva_muebles_test < database/cva_muebles.sql
 
       - name: Run tests
         env:

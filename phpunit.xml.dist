@@ -25,6 +25,9 @@
     <testsuites>
         <testsuite name="App">
             <directory>./tests</directory>
+            <!-- Scaffold de CodeIgniter, su migracion de ejemplo choca con las
+                 migraciones reales en una base de datos recien creada (CI). -->
+            <exclude>./tests/database</exclude>
         </testsuite>
     </testsuites>
     <logging>
