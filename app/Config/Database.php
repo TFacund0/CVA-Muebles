@@ -26,10 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'cva_muebles',
+        'hostname'     => 'bsvabbatgmxrasmi0qg1-mysql.services.clever-cloud.com',
+        'username'     => 'ujzytnsxxnkik2i4',
+        'password'     => 'TarUdI9x9YI903QAToU9',
+        'database'     => 'bsvabbatgmxrasmi0qg1',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
