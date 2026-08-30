@@ -33,7 +33,7 @@ jobs:
         with:
           php-version: "8.2"
           extensions: intl, mysqli, mbstring, gd, zip, pdo, pdo_mysql, curl
-          coverage: none
+          coverage: pcov
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
