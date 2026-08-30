@@ -10,9 +10,9 @@
     <meta name="author" content="CVA Muebles">
 
     <!-- Favicon -->
-    <link rel="icon" href="<?= base_url('favicon.ico') ?>" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png') ?>">
-    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png') ?>">
+    <link rel="icon" href="<?= base_url('favicon.ico?v=2') ?>" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png?v=2') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png?v=2') ?>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
