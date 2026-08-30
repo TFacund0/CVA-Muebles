@@ -140,12 +140,11 @@ final class LoginControllerFeatureTest extends CIUnitTestCase
     }
 
     /**
-     * NOTA (desviación documentada respecto al spec): el controlador actual
-     * NO protege realmente contra enumeración de usuarios — UsuarioService::autenticar
-     * devuelve mensajes distintos para "no existe" ('Email o nombre de usuario
-     * incorrectos') y "contraseña incorrecta" ('Contraseña Incorrecta'). Esta
-     * prueba documenta el comportamiento actual (falla de forma genérica, sin
-     * autenticar), no que los mensajes sean indistinguibles.
+     * Fix de enumeración de usuarios: UsuarioService::autenticar devuelve el
+     * mismo mensaje genérico ('Email/usuario o contraseña incorrectos') tanto
+     * para "no existe" como para "contraseña incorrecta", por lo que un
+     * atacante no puede distinguir ambos casos. Esta prueba verifica que el
+     * login falla de forma genérica, sin autenticar.
      */
     public function testAuthConEmailInexistenteNoAutentica(): void
     {
