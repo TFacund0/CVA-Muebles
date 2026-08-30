@@ -28,7 +28,7 @@ final class UsuarioServiceUnitTest extends CIUnitTestCase
         $resultado = $service->autenticar('nadie@test.com', 'cualquiera');
 
         $this->assertSame('error', $resultado['status']);
-        $this->assertSame('Email o nombre de usuario incorrectos', $resultado['message']);
+        $this->assertSame('Email/usuario o contraseña incorrectos', $resultado['message']);
     }
 
     public function testAutenticarUsuarioDadoDeBajaDevuelveError(): void
@@ -58,7 +58,23 @@ final class UsuarioServiceUnitTest extends CIUnitTestCase
         $resultado = $service->autenticar('activo@test.com', 'claveIncorrecta');
 
         $this->assertSame('error', $resultado['status']);
-        $this->assertSame('Contraseña Incorrecta', $resultado['message']);
+        $this->assertSame('Email/usuario o contraseña incorrectos', $resultado['message']);
+    }
+
+    public function testAutenticarMensajesDeErrorSonIdenticosParaUsuarioInexistenteYPasswordIncorrecta(): void
+    {
+        $serviceInexistente = $this->usuarioMock(null);
+        $resultadoInexistente = $serviceInexistente->autenticar('nadie@test.com', 'cualquiera');
+
+        $servicePasswordIncorrecta = $this->usuarioMock([
+            'id_usuario' => 1,
+            'email'      => 'activo@test.com',
+            'pass'       => password_hash('claveCorrecta', PASSWORD_DEFAULT),
+            'deleted_at' => null,
+        ]);
+        $resultadoPasswordIncorrecta = $servicePasswordIncorrecta->autenticar('activo@test.com', 'claveIncorrecta');
+
+        $this->assertSame($resultadoInexistente['message'], $resultadoPasswordIncorrecta['message']);
     }
 
     public function testAutenticarConCredencialesValidasDevuelveSuccess(): void

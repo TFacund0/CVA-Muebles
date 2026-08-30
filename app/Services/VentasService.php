@@ -100,9 +100,15 @@ class VentasService
             return ['status' => 'error', 'message' => 'No hay productos seleccionados para el pedido.'];
         }
 
+        $productos = [];
         $total = 0;
         foreach ($items_seleccionados as $item) {
-            $total += $item['price'] * $item['qty'];
+            $producto = $this->productoModel->find($item['id']);
+            if (!$producto) {
+                return ['status' => 'error', 'message' => 'Uno de los productos del carrito ya no está disponible. Actualizá tu carrito e intentá de nuevo.'];
+            }
+            $productos[$item['id']] = $producto;
+            $total += $producto['precio_vta'] * $item['qty'];
         }
 
         $this->db->transStart();
@@ -126,7 +132,7 @@ class VentasService
                     'venta_id'    => $venta_id,
                     'producto_id' => $item['id'],
                     'cantidad'    => $item['qty'],
-                    'precio'      => $item['price'],
+                    'precio'      => $productos[$item['id']]['precio_vta'],
                 ]);
             }
 

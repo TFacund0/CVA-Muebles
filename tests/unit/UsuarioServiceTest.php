@@ -60,7 +60,7 @@ final class UsuarioServiceTest extends CIUnitTestCase
         $resultado = $this->service->autenticar($email, 'password-equivocada');
 
         $this->assertSame('error', $resultado['status']);
-        $this->assertSame('Contraseña Incorrecta', $resultado['message']);
+        $this->assertSame('Email/usuario o contraseña incorrectos', $resultado['message']);
     }
 
     public function testAutenticarUsuarioInexistenteFalla(): void

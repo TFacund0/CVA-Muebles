@@ -28,7 +28,7 @@ class UsuarioService
         $usuario = $this->usuarioModel->findByEmailOUsuario($login);
 
         if (!$usuario) {
-            return ['status' => 'error', 'message' => 'Email o nombre de usuario incorrectos'];
+            return ['status' => 'error', 'message' => 'Email/usuario o contraseña incorrectos'];
         }
 
         if ($usuario['deleted_at'] !== null) {
@@ -36,7 +36,7 @@ class UsuarioService
         }
 
         if (!password_verify($password, $usuario['pass'])) {
-            return ['status' => 'error', 'message' => 'Contraseña Incorrecta'];
+            return ['status' => 'error', 'message' => 'Email/usuario o contraseña incorrectos'];
         }
 
         return [

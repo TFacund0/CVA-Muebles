@@ -51,10 +51,16 @@ final class VentasServiceUnitTest extends CIUnitTestCase
         $detalleModel = $this->createMock(VentasDetalleModel::class);
         $detalleModel->expects($this->exactly(2))->method('insert');
 
+        $productoModel = $this->createMock(ProductoModel::class);
+        $productoModel->method('find')->willReturnMap([
+            [1, ['id' => 1, 'precio_vta' => 1500]],
+            [2, ['id' => 2, 'precio_vta' => 2000]],
+        ]);
+
         $service = new VentasService(
             $ventasModel,
             $detalleModel,
-            $this->createMock(ProductoModel::class),
+            $productoModel,
             $this->createMock(VentasPagosModel::class),
             $this->dbMock()
         );
@@ -69,6 +75,38 @@ final class VentasServiceUnitTest extends CIUnitTestCase
         $this->assertSame('success', $resultado['status']);
         $this->assertSame(6500, $resultado['total']);
         $this->assertSame(99, $resultado['venta_id']);
+    }
+
+    public function testProcesarVentaConProductoInexistenteDevuelveErrorSinPersistir(): void
+    {
+        $ventasModel = $this->createMock(VentasCabeceraModel::class);
+        $ventasModel->expects($this->never())->method('insert');
+
+        $detalleModel = $this->createMock(VentasDetalleModel::class);
+        $detalleModel->expects($this->never())->method('insert');
+
+        $productoModel = $this->createMock(ProductoModel::class);
+        $productoModel->method('find')->willReturn(null);
+
+        $db = $this->dbMock();
+        $db->expects($this->never())->method('transStart');
+
+        $service = new VentasService(
+            $ventasModel,
+            $detalleModel,
+            $productoModel,
+            $this->createMock(VentasPagosModel::class),
+            $db
+        );
+
+        $items = [
+            ['id' => 999, 'price' => 1500, 'qty' => 1],
+        ];
+
+        $resultado = $service->procesarVenta(7, $items);
+
+        $this->assertSame('error', $resultado['status']);
+        $this->assertSame('Uno de los productos del carrito ya no está disponible. Actualizá tu carrito e intentá de nuevo.', $resultado['message']);
     }
 
     public function testGetGestionDetalleCalculaSaldoPendiente(): void
