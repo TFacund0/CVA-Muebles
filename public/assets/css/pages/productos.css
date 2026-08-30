@@ -345,3 +345,16 @@
 
     #productos .contenedor-muebles-artisan { padding: 0 10px; }
 }
+
+@media (max-width: 575.98px) {
+    #productos .header-productos h2 { font-size: 1.5rem; }
+    #productos .header-productos p { font-size: 0.8rem; }
+    #productos .product-card .img-wrapper { height: 175px; }
+    #productos .product-card .card-body { padding: 1rem; }
+    #productos .product-card .card-title { font-size: 1.05rem; }
+    #productos .product-card p.small { font-size: 0.75rem; }
+    #productos .precio-tag { font-size: 1.2rem; }
+    #productos .filtro-categoria { padding: 0.4rem 0.9rem; font-size: 0.7rem; }
+    #productos .btn-artisan-gold, #productos .btn-brown-solid, #productos .btn-whatsapp-artisan { padding: 0.6rem 0.8rem; font-size: 0.7rem; }
+    #productos .card-footer { padding: 0.8rem; }
+}
