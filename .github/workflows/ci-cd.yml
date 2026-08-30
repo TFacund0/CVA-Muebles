@@ -44,6 +44,11 @@ jobs:
             sleep 2
           done
 
+      - name: Run migrations
+        env:
+          CI_ENVIRONMENT: testing
+        run: php spark migrate --all --no-interaction
+
       - name: Run tests
         env:
           CI_ENVIRONMENT: testing
