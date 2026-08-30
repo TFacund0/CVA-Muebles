@@ -11,8 +11,7 @@ use Config\Cloudinary as CloudinaryConfig;
  */
 class CloudinaryService
 {
-    protected UploadApi $uploadApi;
-    protected string $uploadFolder;
+    protected ?Cloudinary $cloudinary = null;
 
     public function __construct(?CloudinaryConfig $config = null)
     {
@@ -23,16 +22,29 @@ class CloudinaryService
         $apiSecret    = env('cloudinary.apiSecret', getenv('cloudinary.apiSecret') ?: (getenv('CLOUDINARY_API_SECRET') ?: $config->apiSecret));
         $uploadFolder = env('cloudinary.uploadFolder', getenv('cloudinary.uploadFolder') ?: (getenv('CLOUDINARY_UPLOAD_FOLDER') ?: $config->uploadFolder));
 
-        $cloudinary = new Cloudinary([
-            'cloud' => [
-                'cloud_name' => $cloudName,
-                'api_key'    => $apiKey,
-                'api_secret' => $apiSecret,
-            ],
-        ]);
-
-        $this->uploadApi    = $cloudinary->uploadApi();
+        $this->cloudName    = $cloudName ?? '';
+        $this->apiKey       = $apiKey ?? '';
+        $this->apiSecret    = $apiSecret ?? '';
         $this->uploadFolder = $uploadFolder ?: 'cva_muebles';
+    }
+
+    protected string $cloudName;
+    protected string $apiKey;
+    protected string $apiSecret;
+
+    protected function getUploadApi(): UploadApi
+    {
+        if (!isset($this->uploadApi)) {
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => $this->cloudName ?: 'dztaqoc3d',
+                    'api_key'    => $this->apiKey ?: '617577895379293',
+                    'api_secret' => $this->apiSecret ?: 'okP3udtQ0Re3D348ZMHE7kp-m30',
+                ],
+            ]);
+            $this->uploadApi = $cloudinary->uploadApi();
+        }
+        return $this->uploadApi;
     }
 
     /**
@@ -43,7 +55,7 @@ class CloudinaryService
      */
     public function subir(string $path): array
     {
-        $resultado = $this->uploadApi->upload($path, [
+        $resultado = $this->getUploadApi()->upload($path, [
             'folder' => $this->uploadFolder,
         ]);
 
@@ -81,7 +93,7 @@ class CloudinaryService
         $publicId = $this->publicIdDesdeUrl($url);
 
         if ($publicId !== null) {
-            $this->uploadApi->destroy($publicId);
+            $this->getUploadApi()->destroy($publicId);
         }
     }
 
