@@ -193,23 +193,23 @@ class Database extends Config
     {
         parent::__construct();
 
-        $hostname = $_SERVER['database.default.hostname'] ?? getenv('database.default.hostname') ?: ($_SERVER['DATABASE_DEFAULT_HOSTNAME'] ?? getenv('DATABASE_DEFAULT_HOSTNAME') ?: ($_SERVER['MYSQLHOST'] ?? getenv('MYSQLHOST') ?: $this->default['hostname']));
-        $database = $_SERVER['database.default.database'] ?? getenv('database.default.database') ?: ($_SERVER['DATABASE_DEFAULT_DATABASE'] ?? getenv('DATABASE_DEFAULT_DATABASE') ?: ($_SERVER['MYSQLDATABASE'] ?? getenv('MYSQLDATABASE') ?: $this->default['database']));
-        $username = $_SERVER['database.default.username'] ?? getenv('database.default.username') ?: ($_SERVER['DATABASE_DEFAULT_USERNAME'] ?? getenv('DATABASE_DEFAULT_USERNAME') ?: ($_SERVER['MYSQLUSER'] ?? getenv('MYSQLUSER') ?: $this->default['username']));
-        $password = $_SERVER['database.default.password'] ?? getenv('database.default.password') ?: ($_SERVER['DATABASE_DEFAULT_PASSWORD'] ?? getenv('DATABASE_DEFAULT_PASSWORD') ?: ($_SERVER['MYSQLPASSWORD'] ?? getenv('MYSQLPASSWORD') ?: $this->default['password']));
-        $port     = $_SERVER['database.default.port'] ?? getenv('database.default.port') ?: ($_SERVER['DATABASE_DEFAULT_PORT'] ?? getenv('DATABASE_DEFAULT_PORT') ?: ($_SERVER['MYSQLPORT'] ?? getenv('MYSQLPORT') ?: $this->default['port']));
+        // En entornos Linux / Docker, si las variables de entorno estan presentes las toma, sino mantiene $default
+        if (!empty($_SERVER['DATABASE_DEFAULT_HOSTNAME']) || !empty(getenv('DATABASE_DEFAULT_HOSTNAME'))) {
+            $this->default['hostname'] = $_SERVER['DATABASE_DEFAULT_HOSTNAME'] ?? getenv('DATABASE_DEFAULT_HOSTNAME');
+        }
+        if (!empty($_SERVER['DATABASE_DEFAULT_DATABASE']) || !empty(getenv('DATABASE_DEFAULT_DATABASE'))) {
+            $this->default['database'] = $_SERVER['DATABASE_DEFAULT_DATABASE'] ?? getenv('DATABASE_DEFAULT_DATABASE');
+        }
+        if (!empty($_SERVER['DATABASE_DEFAULT_USERNAME']) || !empty(getenv('DATABASE_DEFAULT_USERNAME'))) {
+            $this->default['username'] = $_SERVER['DATABASE_DEFAULT_USERNAME'] ?? getenv('DATABASE_DEFAULT_USERNAME');
+        }
+        if (!empty($_SERVER['DATABASE_DEFAULT_PASSWORD']) || !empty(getenv('DATABASE_DEFAULT_PASSWORD'))) {
+            $this->default['password'] = $_SERVER['DATABASE_DEFAULT_PASSWORD'] ?? getenv('DATABASE_DEFAULT_PASSWORD');
+        }
 
-        $this->default['hostname'] = $hostname;
-        $this->default['database'] = $database;
-        $this->default['username'] = $username;
-        $this->default['password'] = $password;
-        $this->default['port']     = (int) $port ?: 3306;
         $this->default['DBDriver'] = 'MySQLi';
         $this->default['DSN']      = '';
 
-        // Ensure that we always set the database group to 'tests' if
-        // we are currently running an automated test suite, so that
-        // we don't overwrite live data on accident.
         if (ENVIRONMENT === 'testing') {
             $this->defaultGroup = 'tests';
         }
