@@ -1,0 +1,55 @@
+schema: spec-driven
+
+context: |
+  Tech stack: PHP 8.1, CodeIgniter 4 (codeigniter4/framework, composer-managed).
+  Database: MySQL (Clever Cloud managed instance based on recent commit history around app/Config/Database.php).
+  Architecture: CodeIgniter 4 MVC — app/Controllers, app/Models, app/Views, app/Config, app/Database/Migrations, app/Database/Seeds.
+  Frontend: server-rendered views (app/Views) plus static assets under public/.
+  Domain: e-commerce for furniture (CVA Muebles) — controllers include CarritoController, CategoriaController, ProductoController, VentasController, UsuarioController, LoginController, FavoritosController, GaleriaController, ConsultaController.
+  Testing: PHPUnit is present as a dev dependency (phpunit ^10.5 || ^11.2) with phpunit.xml.dist at repo root and a vendor/bin/phpunit binary. A tests/ directory exists with subfolders: _support, database, session, unit. CI (.github/workflows/ci-cd.yml) has a `test` job that provisions a MySQL `cva_muebles_test` database and runs `vendor/bin/phpunit`, so PHPUnit IS enforced in CI.
+  Style: no PHP-CS-Fixer/coding-standard enforcement confirmed as active (codeigniter/coding-standard and friendsofphp/php-cs-fixer are present as dev dependencies but no confirmed CI/pre-commit gate was found).
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes (especially anything touching app/Database/Migrations or app/Config/Database.php)
+    - Call out any change touching payment/checkout flow (CarritoController, VentasController) as higher risk
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows (e.g. cart/checkout, auth)
+    - Document architecture decisions with rationale, respecting CodeIgniter 4 MVC conventions
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow existing CodeIgniter 4 conventions (Controllers/Models/Views/Config layout)
+      - Prefer CodeIgniter query builder / migrations over raw SQL where the codebase already does so
+    tdd: true            # PHPUnit is CI-enforced (.github/workflows/ci-cd.yml); no explicit marker, defaulted per decision gate
+    test_command: "vendor/bin/phpunit"
+  verify:
+    test_command: "vendor/bin/phpunit"
+    build_command: ""
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas (especially DB migrations)
+
+testing:
+  runner: phpunit
+  runner_version: "^10.5.16 || ^11.2"
+  config_file: phpunit.xml.dist
+  binary: vendor/bin/phpunit
+  test_dirs:
+    - tests/unit
+    - tests/database
+    - tests/session
+    - tests/_support
+  coverage_tool: unknown
+  ci_enforced: true
+  ci_workflow: .github/workflows/ci-cd.yml
+  strict_tdd: true
+  notes: |
+    phpunit.xml.dist exists (not phpunit.xml), meaning local overrides are expected via untracked phpunit.xml if used.
+    CI runs `vendor/bin/phpunit` against a provisioned MySQL `cva_muebles_test` database in the `test` job, gating a downstream deploy job (`needs: test`).
+    No explicit strict-TDD marker (e.g. CLAUDE.md/AGENTS.md TDD directive) was found in the project root. Per the sdd-init decision gate ("no marker but test runner exists -> default strict_tdd: true"), strict_tdd is set to true since a CI-enforced PHPUnit runner exists. Revisit if the team does not actually practice test-first development.
