@@ -6,7 +6,8 @@
 
 /* --- NAVBAR PRINCIPAL --- */
 nav.navbar.artisan-main-nav {
-    background-image: var(--navbar-bg), url('../../img/ui/textures/madera.jpg');
+    background-color: var(--cva-brown);
+    background-image: var(--navbar-bg);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -378,10 +379,15 @@ footer.artisan-footer {
 }
 
 @media (max-width: 991.98px) {
+    /* El contenedor pasa a ser el punto de referencia del titulo centrado,
+       independiente del ancho real del logo o de los iconos. */
+    .artisan-main-nav .container-fluid {
+        position: relative;
+    }
+
     .artisan-main-nav .nav-cell-brand {
         order: 1;
-        flex: 1 1 auto;
-        min-width: 0;
+        flex: 0 0 auto;
         justify-content: flex-start;
     }
 
@@ -398,9 +404,6 @@ footer.artisan-footer {
     .artisan-main-nav .navbar-brand {
         display: flex;
         align-items: center;
-        min-width: 0;
-        max-width: 100%;
-        overflow: hidden;
     }
 
     .artisan-main-nav .logo-img-nav {
@@ -408,13 +411,22 @@ footer.artisan-footer {
         width: 40px;
     }
 
+    /* Centrado real respecto a todo el navbar, no a la celda del logo:
+       asi el titulo queda en el medio de la pantalla sin importar cuanto
+       ancho ocupen el logo o los iconos a los costados. */
     .artisan-main-nav .titulo-logo {
         display: block;
-        min-width: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
         font-size: 1.15rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 55%;
+        text-align: center;
     }
 
     .artisan-main-nav .boton-icon-circle {
@@ -425,6 +437,6 @@ footer.artisan-footer {
 
 @media (max-width: 575.98px) {
     .artisan-main-nav .logo-img-nav { width: 36px; }
-    .artisan-main-nav .titulo-logo { font-size: 1rem; }
+    .artisan-main-nav .titulo-logo { font-size: 1rem; max-width: 48%; }
     .artisan-main-nav .boton-icon-circle { width: 40px; height: 40px; }
 }
