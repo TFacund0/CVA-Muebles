@@ -18,16 +18,21 @@ class CloudinaryService
     {
         $config ??= config(CloudinaryConfig::class);
 
+        $cloudName    = env('cloudinary.cloudName', $config->cloudName);
+        $apiKey       = env('cloudinary.apiKey', $config->apiKey);
+        $apiSecret    = env('cloudinary.apiSecret', $config->apiSecret);
+        $uploadFolder = env('cloudinary.uploadFolder', $config->uploadFolder);
+
         $cloudinary = new Cloudinary([
             'cloud' => [
-                'cloud_name' => $config->cloudName,
-                'api_key'    => $config->apiKey,
-                'api_secret' => $config->apiSecret,
+                'cloud_name' => $cloudName,
+                'api_key'    => $apiKey,
+                'api_secret' => $apiSecret,
             ],
         ]);
 
         $this->uploadApi    = $cloudinary->uploadApi();
-        $this->uploadFolder = $config->uploadFolder;
+        $this->uploadFolder = $uploadFolder ?: 'cva_muebles';
     }
 
     /**
