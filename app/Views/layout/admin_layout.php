@@ -6,9 +6,9 @@
     <title><?= $title ?? 'Panel Control - CVA Muebles' ?></title>
 
     <!-- Favicon -->
-    <link rel="icon" href="<?= base_url('favicon.ico?v=2') ?>" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png?v=2') ?>">
-    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png?v=2') ?>">
+    <link rel="icon" href="<?= base_url('favicon.ico?v=3') ?>" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png?v=3') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png?v=3') ?>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

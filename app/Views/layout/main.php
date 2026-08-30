@@ -10,9 +10,9 @@
     <meta name="author" content="CVA Muebles">
 
     <!-- Favicon -->
-    <link rel="icon" href="<?= base_url('favicon.ico?v=2') ?>" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png?v=2') ?>">
-    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png?v=2') ?>">
+    <link rel="icon" href="<?= base_url('favicon.ico?v=3') ?>" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/img/branding/favicon-32.png?v=3') ?>">
+    <link rel="apple-touch-icon" href="<?= base_url('assets/img/branding/apple-touch-icon.png?v=3') ?>">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,7 @@
     <!-- Design System & Global Styles -->
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=4.1')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/layout/main-layout.css?v=8.1')?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/components/floating-alert.css?v=2.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/components/floating-alert.css?v=3.0')?>">
 
 
     <!-- Page Specific CSS Section -->
