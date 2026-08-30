@@ -69,7 +69,8 @@ CREATE TABLE `consultas` (
 
 LOCK TABLES `consultas` WRITE;
 /*!40000 ALTER TABLE `consultas` DISABLE KEYS */;
-INSERT INTO `consultas` VALUES (2,'Facu','Ace','facu@gmail.com','3777 45 05214','Presupuesto','Me gustaria saber el presupuesto para un mueble en especifico\r\n','2025-06-17 00:00:00','NO'),(4,'Fer','Arce','fer@gmail.com','315125','Garantía','Estoy interasado en saber como funciona la garantia\r\n','2025-06-18 00:00:00','SI'),(5,'Fer','Arce','fer@gmail.com','3251512','Solicitud de presupuesto','Quiero saber de cuanto es el presupuesto acerca de un mueble que quiero diseñar\r\n','2025-06-19 00:00:00','SI'),(6,'Luciano','Erck','LucianoErck@gmail.com','315325235','Consulta general','Tengo una duda acerca de como se realiza el pago de algún mueble\r\n','2025-06-19 00:00:00','NO');
+-- Consultas de ejemplo. Los datos reales de contacto se excluyen a proposito de este dump.
+INSERT INTO `consultas` VALUES (2,'Nombre','Apellido','consulta1@example.com','3700000001','Presupuesto','Me gustaria saber el presupuesto para un mueble en especifico\r\n','2025-06-17 00:00:00','NO'),(4,'Nombre','Apellido','consulta2@example.com','3700000002','Garantía','Estoy interasado en saber como funciona la garantia\r\n','2025-06-18 00:00:00','SI'),(5,'Nombre','Apellido','consulta3@example.com','3700000003','Solicitud de presupuesto','Quiero saber de cuanto es el presupuesto acerca de un mueble que quiero diseñar\r\n','2025-06-19 00:00:00','SI'),(6,'Nombre','Apellido','consulta4@example.com','3700000004','Consulta general','Tengo una duda acerca de como se realiza el pago de algún mueble\r\n','2025-06-19 00:00:00','NO');
 /*!40000 ALTER TABLE `consultas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +277,9 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (14,'admin','nimda','admin','admin@gmail.com','$2y$10$SBAcSTcay9333SmJXXcTaOSez0nQ/40gUaQzLw66.gKnLln8cd136','https://res.cloudinary.com/dztaqoc3d/image/upload/v1779595564/cva_muebles/perfil/kozjmaysmptgkg4jmxnh.jpg',1,NULL,'2026-08-30 13:52:15',NULL),(20,'Cliente','Externo','cliente_whatsapp','whatsapp@cva.com','manual_order_only','',2,NULL,NULL,'2026-07-17 21:34:00'),(23,'Shoto','Todoroki','Shoto','shototodorokiasta@gmail.com','$2y$10$pUvfqDehh8xyB6as8CckwONsKNhr9X.6PXrOrkK0LRD3GqTfs8WHm','https://lh3.googleusercontent.com/a/ACg8ocKj7jyDMaPLxQ0WaPSvvP33nKvPwOIUs2vvl0b1yFgA73E3DQ=s96-c',2,NULL,NULL,NULL);
+-- Datos de ejemplo. Los IDs se conservan porque ventas_cabecera y favoritos los referencian.
+-- La clave del usuario admin es CambiarEstaClave123 y debe cambiarse en la primera sesion.
+INSERT INTO `usuarios` VALUES (14,'Admin','Sistema','admin','admin@example.com','$2y$10$6FMOBIi/nKa/yLZ.yr2.K.rN1U.AFOMs1kXTqnXtALgckvq1O6fbG','',1,NULL,'2026-08-30 13:52:15',NULL),(20,'Cliente','Externo','cliente_whatsapp','whatsapp@example.com','manual_order_only','',2,NULL,NULL,'2026-07-17 21:34:00'),(23,'Cliente','Demo','cliente_demo','cliente.demo@example.com','$2y$10$6FMOBIi/nKa/yLZ.yr2.K.rN1U.AFOMs1kXTqnXtALgckvq1O6fbG','',2,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
