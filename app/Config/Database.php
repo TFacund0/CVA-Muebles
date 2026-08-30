@@ -193,17 +193,23 @@ class Database extends Config
     {
         parent::__construct();
 
-        $dsn = env('database.default.DSN', getenv('database.default.DSN') ?: (getenv('MYSQL_URL') ?: getenv('DATABASE_URL')));
-        if (!empty($dsn)) {
-            $this->default['DSN'] = $dsn;
-        }
-
         $this->default['hostname'] = env('database.default.hostname', getenv('database.default.hostname') ?: (getenv('DATABASE_DEFAULT_HOSTNAME') ?: (getenv('MYSQLHOST') ?: $this->default['hostname'])));
         $this->default['database'] = env('database.default.database', getenv('database.default.database') ?: (getenv('DATABASE_DEFAULT_DATABASE') ?: (getenv('MYSQLDATABASE') ?: $this->default['database'])));
         $this->default['username'] = env('database.default.username', getenv('database.default.username') ?: (getenv('DATABASE_DEFAULT_USERNAME') ?: (getenv('MYSQLUSER') ?: $this->default['username'])));
         $this->default['password'] = env('database.default.password', getenv('database.default.password') ?: (getenv('DATABASE_DEFAULT_PASSWORD') ?: (getenv('MYSQLPASSWORD') ?: $this->default['password'])));
         $this->default['port']     = (int) env('database.default.port', getenv('database.default.port') ?: (getenv('DATABASE_DEFAULT_PORT') ?: (getenv('MYSQLPORT') ?: $this->default['port'])));
-        $this->default['DBDriver'] = env('database.default.DBDriver', getenv('database.default.DBDriver') ?: (getenv('DATABASE_DEFAULT_DBDRIVER') ?: $this->default['DBDriver']));
+
+        $driver = env('database.default.DBDriver', getenv('database.default.DBDriver') ?: (getenv('DATABASE_DEFAULT_DBDRIVER') ?: $this->default['DBDriver']));
+        if (strtolower($driver) === 'mysql') {
+            $driver = 'MySQLi';
+        }
+        $this->default['DBDriver'] = $driver;
+
+        $dsn = env('database.default.DSN', getenv('database.default.DSN') ?: (getenv('MYSQL_URL') ?: getenv('DATABASE_URL')));
+        if (!empty($dsn)) {
+            $this->default['DSN'] = $dsn;
+            $this->default['DBDriver'] = 'MySQLi';
+        }
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
