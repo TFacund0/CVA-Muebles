@@ -193,18 +193,22 @@ class Database extends Config
     {
         parent::__construct();
 
-        // En entornos Linux / Docker, si las variables de entorno estan presentes las toma, sino mantiene $default
-        if (!empty($_SERVER['DATABASE_DEFAULT_HOSTNAME']) || !empty(getenv('DATABASE_DEFAULT_HOSTNAME'))) {
-            $this->default['hostname'] = $_SERVER['DATABASE_DEFAULT_HOSTNAME'] ?? getenv('DATABASE_DEFAULT_HOSTNAME');
+        $envHost = $_SERVER['database.default.hostname'] ?? getenv('database.default.hostname') ?: ($_SERVER['DATABASE_DEFAULT_HOSTNAME'] ?? getenv('DATABASE_DEFAULT_HOSTNAME'));
+        $envDb   = $_SERVER['database.default.database'] ?? getenv('database.default.database') ?: ($_SERVER['DATABASE_DEFAULT_DATABASE'] ?? getenv('DATABASE_DEFAULT_DATABASE'));
+        $envUser = $_SERVER['database.default.username'] ?? getenv('database.default.username') ?: ($_SERVER['DATABASE_DEFAULT_USERNAME'] ?? getenv('DATABASE_DEFAULT_USERNAME'));
+        $envPass = $_SERVER['database.default.password'] ?? getenv('database.default.password') ?: ($_SERVER['DATABASE_DEFAULT_PASSWORD'] ?? getenv('DATABASE_DEFAULT_PASSWORD'));
+
+        if (!empty($envHost)) {
+            $this->default['hostname'] = $envHost;
         }
-        if (!empty($_SERVER['DATABASE_DEFAULT_DATABASE']) || !empty(getenv('DATABASE_DEFAULT_DATABASE'))) {
-            $this->default['database'] = $_SERVER['DATABASE_DEFAULT_DATABASE'] ?? getenv('DATABASE_DEFAULT_DATABASE');
+        if (!empty($envDb)) {
+            $this->default['database'] = $envDb;
         }
-        if (!empty($_SERVER['DATABASE_DEFAULT_USERNAME']) || !empty(getenv('DATABASE_DEFAULT_USERNAME'))) {
-            $this->default['username'] = $_SERVER['DATABASE_DEFAULT_USERNAME'] ?? getenv('DATABASE_DEFAULT_USERNAME');
+        if (!empty($envUser)) {
+            $this->default['username'] = $envUser;
         }
-        if (!empty($_SERVER['DATABASE_DEFAULT_PASSWORD']) || !empty(getenv('DATABASE_DEFAULT_PASSWORD'))) {
-            $this->default['password'] = $_SERVER['DATABASE_DEFAULT_PASSWORD'] ?? getenv('DATABASE_DEFAULT_PASSWORD');
+        if (!empty($envPass)) {
+            $this->default['password'] = $envPass;
         }
 
         $this->default['DBDriver'] = 'MySQLi';
