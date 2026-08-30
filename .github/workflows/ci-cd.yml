@@ -44,10 +44,8 @@ jobs:
             sleep 2
           done
 
-      - name: Run migrations
-        env:
-          CI_ENVIRONMENT: testing
-        run: php spark migrate --all --no-interaction
+      - name: Load database schema
+        run: mysql -h 127.0.0.1 -u root cva_muebles_test < database/cva_muebles.sql
 
       - name: Run tests
         env:
