@@ -168,10 +168,13 @@
 
     #galeria-page .icon-badge-gold { width: 40px; height: 40px; }
     #galeria-page .empty-gallery-icon, #galeria-page .gallery-empty-icon { font-size: 3.5rem; }
+
+    #galeria-page .gallery-item img { height: 240px; }
 }
 
 @media (max-width: 575.98px) {
     #galeria-page .gallery-header h1 { font-size: 1.8rem; }
     #galeria-page .masonry-gallery { grid-template-columns: 1fr; } /* 1 COLUMNA para apreciar mejor la foto del cliente */
     #galeria-page .btn-vivid-premium { width: 100%; font-size: 0.8rem; padding: 1rem; }
+    #galeria-page .gallery-item img { height: 220px; }
 }
