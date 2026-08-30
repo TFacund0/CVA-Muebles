@@ -154,7 +154,8 @@
 }
 .preview-image-hidden {
     display: none;
-    object-fit: cover;
+    object-fit: contain;
+    background: #f8fafc;
 }
 .product-preview-sticky {
     top: 20px;

@@ -13,7 +13,7 @@ if ($estado == 'PENDIENTE') {
     $badge_class = "bg-warning-soft text-warning border-warning";
     $icon = "bi-hourglass-split";
 } elseif ($estado == 'EN_PROCESO') {
-    $badge_class = "bg-proceso-soft text-proceso border-proceso";
+    $badge_class = "bg-info text-dark border-info";
     $icon = "bi-tools";
 } elseif ($estado == 'TERMINADO') {
     $badge_class = "bg-success-soft text-success border-success";

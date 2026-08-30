@@ -33,7 +33,7 @@ class GaleriaService
      */
     public function getAllConUsuarios()
     {
-        return $this->galeriaModel->select('galeria_clientes.*, usuarios.nombre')
+        return $this->galeriaModel->select('galeria_clientes.id, galeria_clientes.usuario_id, galeria_clientes.imagen, galeria_clientes.comentario, galeria_clientes.fecha, galeria_clientes.activo, usuarios.nombre')
                                   ->join('usuarios', 'usuarios.id_usuario = galeria_clientes.usuario_id')
                                   ->orderBy('activo', 'ASC')
                                   ->orderBy('fecha', 'DESC')

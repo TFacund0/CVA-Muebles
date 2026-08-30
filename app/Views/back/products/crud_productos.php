@@ -174,6 +174,7 @@
                                 <div class="d-flex align-items-center gap-3 py-3 product-info-wrapper">
                                     <div class="flex-shrink-0 position-relative product-img-container">
                                         <img src="<?= imagen_url($p['imagen']) ?>"
+                                             onerror="this.onerror=null; this.src='<?= base_url('assets/img/branding/cva2.png') ?>';"
                                              class="rounded-3 shadow-sm border p-1 bg-white transition-transform product-thumb-80">
                                         <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-md-none badge-corner-id-md">#<?= $p['id_producto'] ?></span>
                                     </div>

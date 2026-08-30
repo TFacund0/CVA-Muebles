@@ -143,7 +143,7 @@ class UsuarioController extends BaseController {
     public function delete_usuario($id) {
 
         $this->usuarioService->darDeBaja($id);
-        return redirect()->to('/crud-usuarios?vista=' . ($this->request->getGet('vista') ?? 'NO'));
+        return redirect()->to('/crud-usuarios?vista=SI')->with('success', 'Usuario suspendido/archivado correctamente.');
     }
 
     /**
@@ -155,7 +155,7 @@ class UsuarioController extends BaseController {
     public function activar_usuario($id) {
 
         $this->usuarioService->reactivar($id);
-        return redirect()->to('/crud-usuarios?vista=' . ($this->request->getGet('vista') ?? 'SI'));
+        return redirect()->to('/crud-usuarios?vista=NO')->with('success', 'Usuario reactivado correctamente.');
     }
 
     /**

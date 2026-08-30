@@ -12,11 +12,13 @@ class ProductoService
 {
     protected $productoModel;
     protected $imagenModel;
+    protected $cloudinary;
 
-    public function __construct(?ProductoModel $productoModel = null, ?ProductoImagenModel $imagenModel = null)
+    public function __construct(?ProductoModel $productoModel = null, ?ProductoImagenModel $imagenModel = null, ?CloudinaryService $cloudinary = null)
     {
         $this->productoModel = $productoModel ?? new ProductoModel();
         $this->imagenModel = $imagenModel ?? new ProductoImagenModel();
+        $this->cloudinary = $cloudinary ?? new CloudinaryService();
     }
 
     /**
@@ -71,9 +73,8 @@ class ProductoService
     {
         try {
             if ($image && $image->isValid() && !$image->hasMoved()) {
-                $nombre_imagen = $image->getRandomName();
-                $image->move(FCPATH . 'assets/uploads', $nombre_imagen);
-                $data['imagen'] = $nombre_imagen;
+                $subida = $this->cloudinary->subir($image->getTempName());
+                $data['imagen'] = $subida['secure_url'];
             }
 
             if ($this->productoModel->insert($data) === false) {
@@ -101,13 +102,11 @@ class ProductoService
                 // Borrar imagen anterior si existe
                 $producto_actual = $this->productoModel->withDeleted()->find($id);
                 if ($producto_actual && !empty($producto_actual['imagen'])) {
-                    $old_path = FCPATH . 'assets/uploads/' . $producto_actual['imagen'];
-                    if (file_exists($old_path)) @unlink($old_path);
+                    $this->cloudinary->eliminarPorUrl($producto_actual['imagen']);
                 }
 
-                $nombre_imagen = $image->getRandomName();
-                $image->move(FCPATH . 'assets/uploads', $nombre_imagen);
-                $data['imagen'] = $nombre_imagen;
+                $subida = $this->cloudinary->subir($image->getTempName());
+                $data['imagen'] = $subida['secure_url'];
             }
 
             if ($this->productoModel->update($id, $data) === false) {
@@ -177,12 +176,11 @@ class ProductoService
         $count = 0;
         foreach ($files as $img) {
             if ($img->isValid() && !$img->hasMoved()) {
-                $newName = $img->getRandomName();
-                $img->move(FCPATH . 'assets/uploads', $newName);
+                $subida = $this->cloudinary->subir($img->getTempName());
 
                 $this->imagenModel->insert([
                     'producto_id' => $producto_id,
-                    'imagen'      => $newName,
+                    'imagen'      => $subida['secure_url'],
                     'orden'       => 0
                 ]);
                 $count++;
@@ -201,10 +199,7 @@ class ProductoService
     {
         $img = $this->imagenModel->find($id);
         if ($img) {
-            $path = FCPATH . 'assets/uploads/' . $img['imagen'];
-            if (file_exists($path)) {
-                @unlink($path);
-            }
+            $this->cloudinary->eliminarPorUrl($img['imagen']);
             return $this->imagenModel->delete($id);
         }
         return false;
@@ -242,10 +237,7 @@ class ProductoService
             // 2. Eliminar todas las imágenes de la galería (física y lógicamente)
             $imagenesGaleria = $this->imagenModel->getImagenesPorProducto($id);
             foreach ($imagenesGaleria as $img) {
-                $imgPath = FCPATH . 'assets/uploads/' . $img['imagen'];
-                if (file_exists($imgPath)) {
-                    @unlink($imgPath);
-                }
+                $this->cloudinary->eliminarPorUrl($img['imagen']);
             }
             $db->table('producto_imagenes')->where('producto_id', $id)->delete();
 
@@ -254,10 +246,7 @@ class ProductoService
 
             // 4. Borrar la imagen principal del producto
             if (!empty($producto['imagen'])) {
-                $mainImgPath = FCPATH . 'assets/uploads/' . $producto['imagen'];
-                if (file_exists($mainImgPath)) {
-                    @unlink($mainImgPath);
-                }
+                $this->cloudinary->eliminarPorUrl($producto['imagen']);
             }
 
             // 5. Borrar físicamente el producto (purge=true, ignora el soft-delete)

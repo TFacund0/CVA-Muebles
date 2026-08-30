@@ -9,7 +9,7 @@ if (!function_exists('imagen_url')) {
     function imagen_url(?string $imagen, string $subcarpeta = ''): string
     {
         if (empty($imagen)) {
-            return '';
+            return base_url('assets/img/branding/cva2.png');
         }
 
         if (preg_match('#^https?://#i', $imagen)) {

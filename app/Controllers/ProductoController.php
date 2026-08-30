@@ -160,7 +160,7 @@ class ProductoController extends BaseController {
     public function delete_producto($id) {
 
         $this->productoService->eliminar($id);
-        return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'NO'));
+        return redirect()->to('/crud-productos?vista=SI')->with('success', 'Producto archivado correctamente.');
     }
 
     /**
@@ -172,7 +172,7 @@ class ProductoController extends BaseController {
     public function activar_producto($id) {
 
         $this->productoService->reactivar($id);
-        return redirect()->to('/crud-productos?vista=' . ($this->request->getGet('vista') ?? 'SI'));
+        return redirect()->to('/crud-productos?vista=NO')->with('success', 'Producto restaurado correctamente.');
     }
 
     /**

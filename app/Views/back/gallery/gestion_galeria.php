@@ -39,7 +39,7 @@
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden moderation-card">
                     <div class="position-relative overflow-hidden moderation-card-media">
-                        <img src="<?= imagen_url($foto['imagen'], 'galeria') ?>" class="w-100 h-100" alt="Foto cliente">
+                        <img src="<?= imagen_url($foto['imagen'], 'galeria') ?>" onerror="this.onerror=null; this.src='<?= base_url('assets/img/branding/cva2.png') ?>';" class="w-100 h-100" alt="Foto cliente">
                         <?php if ($foto['activo'] == 'NO'): ?>
                             <span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark">PENDIENTE</span>
                         <?php else: ?>

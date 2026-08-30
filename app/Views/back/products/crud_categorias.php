@@ -50,7 +50,7 @@
                         <div class="d-flex align-items-center gap-3 py-1 order-info-wrapper">
                             <div class="position-relative">
                                 <div class="avatar-premium bg-brown text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm">
-                                    <?= strtoupper(substr(trim($cat['descripcion']), 0, 2)) ?>
+                                    <?= mb_strtoupper(mb_substr(trim($cat['descripcion']), 0, 2, 'UTF-8'), 'UTF-8') ?>
                                 </div>
                                 <span class="position-absolute top-0 start-0 badge rounded-pill bg-dark shadow-sm d-lg-none badge-corner-id">#<?= $cat['id_categoria'] ?></span>
                             </div>
