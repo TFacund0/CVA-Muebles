@@ -193,19 +193,17 @@ class Database extends Config
     {
         parent::__construct();
 
-        $hostname = env('database.default.hostname', getenv('database.default.hostname') ?: (getenv('DATABASE_DEFAULT_HOSTNAME') ?: (getenv('MYSQLHOST') ?: $this->default['hostname'])));
-        $database = env('database.default.database', getenv('database.default.database') ?: (getenv('DATABASE_DEFAULT_DATABASE') ?: (getenv('MYSQLDATABASE') ?: $this->default['database'])));
-        $username = env('database.default.username', getenv('database.default.username') ?: (getenv('DATABASE_DEFAULT_USERNAME') ?: (getenv('MYSQLUSER') ?: $this->default['username'])));
-        $password = env('database.default.password', getenv('database.default.password') ?: (getenv('DATABASE_DEFAULT_PASSWORD') ?: (getenv('MYSQLPASSWORD') ?: $this->default['password'])));
-        $port     = (int) env('database.default.port', getenv('database.default.port') ?: (getenv('DATABASE_DEFAULT_PORT') ?: (getenv('MYSQLPORT') ?: $this->default['port'])));
+        $hostname = $_SERVER['database.default.hostname'] ?? getenv('database.default.hostname') ?: ($_SERVER['DATABASE_DEFAULT_HOSTNAME'] ?? getenv('DATABASE_DEFAULT_HOSTNAME') ?: ($_SERVER['MYSQLHOST'] ?? getenv('MYSQLHOST') ?: $this->default['hostname']));
+        $database = $_SERVER['database.default.database'] ?? getenv('database.default.database') ?: ($_SERVER['DATABASE_DEFAULT_DATABASE'] ?? getenv('DATABASE_DEFAULT_DATABASE') ?: ($_SERVER['MYSQLDATABASE'] ?? getenv('MYSQLDATABASE') ?: $this->default['database']));
+        $username = $_SERVER['database.default.username'] ?? getenv('database.default.username') ?: ($_SERVER['DATABASE_DEFAULT_USERNAME'] ?? getenv('DATABASE_DEFAULT_USERNAME') ?: ($_SERVER['MYSQLUSER'] ?? getenv('MYSQLUSER') ?: $this->default['username']));
+        $password = $_SERVER['database.default.password'] ?? getenv('database.default.password') ?: ($_SERVER['DATABASE_DEFAULT_PASSWORD'] ?? getenv('DATABASE_DEFAULT_PASSWORD') ?: ($_SERVER['MYSQLPASSWORD'] ?? getenv('MYSQLPASSWORD') ?: $this->default['password']));
+        $port     = $_SERVER['database.default.port'] ?? getenv('database.default.port') ?: ($_SERVER['DATABASE_DEFAULT_PORT'] ?? getenv('DATABASE_DEFAULT_PORT') ?: ($_SERVER['MYSQLPORT'] ?? getenv('MYSQLPORT') ?: $this->default['port']));
 
         $this->default['hostname'] = $hostname;
         $this->default['database'] = $database;
         $this->default['username'] = $username;
         $this->default['password'] = $password;
-        $this->default['port']     = $port ?: 3306;
-
-        // Forzar siempre MySQLi (driver oficial de CodeIgniter 4 para MySQL)
+        $this->default['port']     = (int) $port ?: 3306;
         $this->default['DBDriver'] = 'MySQLi';
         $this->default['DSN']      = '';
 
