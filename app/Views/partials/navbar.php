@@ -25,7 +25,7 @@ if ($env_cart_enabled) {
 <nav class="navbar navbar-expand-lg artisan-main-nav sticky-top">
   <div class="container-fluid px-3 px-lg-5 d-flex align-items-center justify-content-between">
 
-    <div class="d-lg-none d-flex align-items-center gap-2 navbar-flex-cell">
+    <div class="d-lg-none d-flex align-items-center gap-2 navbar-flex-cell nav-cell-actions">
       <button class="boton-icon-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
         <i class="bi bi-list fs-4"></i>
       </button>
@@ -43,10 +43,10 @@ if ($env_cart_enabled) {
     </div>
 
     <!-- [DESKTOP: IZQUIERDA / MÓVIL: CENTRO] LOGO -->
-    <div class="d-flex align-items-center justify-content-center justify-content-lg-start navbar-flex-cell">
+    <div class="d-flex align-items-center justify-content-center justify-content-lg-start navbar-flex-cell nav-cell-brand">
       <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="<?= base_url('/') ?>">
         <img src="<?= base_url('assets/img/branding/cva2.png') ?>" alt="Logo" class="logo-img-nav">
-        <h1 class="titulo-logo d-none d-lg-block">CVA Muebles</h1>
+        <h1 class="titulo-logo">CVA Muebles</h1>
       </a>
     </div>
 
@@ -63,7 +63,7 @@ if ($env_cart_enabled) {
     </div>
 
     <!-- [DERECHA] ICONOS USUARIO / AUTH -->
-    <div class="d-flex align-items-center justify-content-end gap-2 navbar-flex-cell">
+    <div class="d-flex align-items-center justify-content-end gap-2 navbar-flex-cell nav-cell-auth">
       <?php if ($env_cart_enabled && $isLogged): ?>
         <a href="<?= base_url('muestro') ?>" class="boton-icon-circle d-none d-lg-flex position-relative text-decoration-none">
           <i class="bi bi-cart3 fs-5"></i>

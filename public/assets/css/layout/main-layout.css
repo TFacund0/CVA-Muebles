@@ -376,3 +376,55 @@ footer.artisan-footer {
     color: var(--cva-gold);
     padding-left: 5px;
 }
+
+@media (max-width: 991.98px) {
+    .artisan-main-nav .nav-cell-brand {
+        order: 1;
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: flex-start;
+    }
+
+    .artisan-main-nav .nav-cell-actions {
+        order: 2;
+        flex: 0 0 auto;
+    }
+
+    .artisan-main-nav .nav-cell-auth {
+        order: 3;
+        flex: 0 0 auto;
+    }
+
+    .artisan-main-nav .navbar-brand {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .artisan-main-nav .logo-img-nav {
+        flex: 0 0 auto;
+        width: 40px;
+    }
+
+    .artisan-main-nav .titulo-logo {
+        display: block;
+        min-width: 0;
+        font-size: 1.15rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .artisan-main-nav .boton-icon-circle {
+        width: 42px;
+        height: 42px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .artisan-main-nav .logo-img-nav { width: 36px; }
+    .artisan-main-nav .titulo-logo { font-size: 1rem; }
+    .artisan-main-nav .boton-icon-circle { width: 40px; height: 40px; }
+}
