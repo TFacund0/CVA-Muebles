@@ -156,3 +156,30 @@ Fase 5 (QA en dispositivo real) — ahora cubre las 7 pantallas revisadas en tot
 
 1. Un viewport angosto en el navegador headless no alcanza para probar bugs de touch (como el hover pegado) — hace falta un contexto con `hasTouch`/`isMobile` reales para que `matchMedia('(hover: hover)')` evalúe como lo haría un celular de verdad, no solo achicar la ventana.
 2. Vale la pena, al terminar una iniciativa de "mobile" en un panel grande, revisar rápidamente si hay `:hover` sin guard en CSS que todavía no se tocó en esta pasada (acá, `admin-gallery.css` no había sido tocado en ninguna fase anterior y tenía el mismo defecto que ya se había resuelto en otra parte del proyecto).
+
+## Fase 5.6 — Formularios de Productos: COMPLETADA (fuera del pedido original)
+
+### Cambios aplicados
+
+1. **Dropzone de foto muerto en mobile** (`admin-products.css`): `.dropzone-premium-v2 { height: 300px; }` dentro del `@media max-width:767.98px` nunca se aplicaba — exactamente el mismo tipo de bug que el de la imagen de producto en Fase 0 (una regla mobile sin `!important` pierde contra una clase unconditional definida después en el mismo archivo, `.dropzone-h380 { height: 380px; }`). Confirmado con `getComputedStyle` antes (380px) y después (300px) del fix.
+2. **`.dashboard-icon-main` sin `flex-shrink: 0`** (`admin-panel.css`, bug nuevo y potencialmente presente en cualquiera de las 10 pantallas, no solo esta): en una fila flex angosta con texto largo al lado, el ícono se achicaba en vez de mantenerse cuadrado. Se reprodujo en `editar_producto.php` (tiene el subtítulo más largo del panel) — medido: 29.4px de ancho real en vez de 50px. Se agregó `flex-shrink: 0` a la regla base del ícono, protegiendo las 10 pantallas de una vez (mismo criterio que la Fase 0: arreglar en el componente compartido, no página por página).
+3. **Encabezado de `editar_producto.php` desalineado del patrón compartido**: era la única vista de las 10 que no usaba `display-6 display-md-5` (achique de título en mobile), `g-4` en la fila del encabezado, ni `col-lg-7`/`col-lg-5` — usaba `display-5` fijo, sin gutter, y `col-md-8`/`col-md-4`. Se alineó al patrón usado en las otras 9 (confirmado por grep antes de tocar nada, para no "arreglar" algo que en realidad era la única variante intencional).
+4. Bump de cache-busting: `admin-products.css` v4→v5, `admin-panel.css` v34→v35.
+
+### Verificación realizada
+
+Repro del encabezado real de `editar_producto.php` (mismo HTML/CSS) a 375px, antes/después, más medición directa con `getComputedStyle` del ancho del ícono y de la altura del dropzone.
+
+- **Ícono de encabezado**: 29.4px de ancho (aplastado) → 50px (cuadrado correcto).
+- **Dropzone de foto**: 380px de alto (no se achicaba) → 300px (aplica el mobile real).
+- **Título**: tamaño fijo de escritorio en todas las pantallas → tamaño reducido en mobile, igual que el resto del panel.
+- No se ejecutó `vendor/bin/phpunit` (no disponible en el sandbox) — cambios CSS + clases de markup, sin lógica PHP tocada.
+
+### Pendiente
+
+Fase 5 (QA en dispositivo real) — ahora cubre 9 pantallas revisadas en total (5 originales + Consultas + Galería + los 2 formularios de Productos). `perfil_config.php` (Mi Perfil) y `nuevo_pedido_personalizado.php` quedan sin revisar si se quiere continuar más allá.
+
+## Key Learnings (Fase 5.6)
+
+1. El bug de `flex-shrink` faltante en `.dashboard-icon-main` estuvo latente en las 10 pantallas del panel desde siempre, pero solo se manifestaba visualmente con el subtítulo más largo del panel — un recordatorio de que "no se ve roto en los casos que probé" no es lo mismo que "no está roto"; conviene, al revisar un componente compartido, probarlo con el contenido más largo real que exista en el proyecto, no solo con el primero que aparezca.
+2. Segunda instancia del mismo patrón de "override mobile muerto por cascada" (imagen de producto en Fase 0, dropzone acá) — parece ser una forma de escribir CSS bastante extendida en este proyecto (agregar una clase utilitaria de tamaño fijo sin pensar en su interacción con reglas mobile previas). Vale la pena, si se siguen revisando más pantallas, buscar puntualmente este patrón (una clase de tamaño fijo sin `!important` definida después de un `@media` que la intenta sobreescribir).

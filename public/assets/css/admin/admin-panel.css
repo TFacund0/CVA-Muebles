@@ -218,6 +218,11 @@
     font-size: 2rem;
     border-radius: 1.2rem;
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    /* Sin esto, en una fila flex angosta con un subtítulo largo (ej.
+       editar_producto.php) el ícono se aplasta a un óvalo en vez de
+       mantenerse cuadrado — el texto de al lado ya puede achicarse
+       envolviendo líneas, así que el ícono no debería ceder espacio. */
+    flex-shrink: 0;
 }
 
 .bg-gold-soft {
