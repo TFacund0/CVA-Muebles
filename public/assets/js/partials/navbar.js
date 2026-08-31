@@ -1,17 +1,8 @@
 (function() {
-    function adjustOffcanvasPosition() {
-        const offcanvas = document.getElementById('offcanvasNavbar');
-        if (!offcanvas) return;
-        if (window.innerWidth < 992) {
-            offcanvas.classList.remove('offcanvas-end');
-            offcanvas.classList.add('offcanvas-start');
-        } else {
-            offcanvas.classList.remove('offcanvas-start');
-            offcanvas.classList.add('offcanvas-end');
-        }
-    }
-    window.addEventListener('resize', adjustOffcanvasPosition);
-    window.addEventListener('DOMContentLoaded', adjustOffcanvasPosition);
+    // El offcanvas siempre abre desde la derecha (offcanvas-end, fijo en el
+    // HTML): tanto la hamburguesa mobile como el boton de perfil desktop
+    // viven del lado derecho del navbar, asi que ya no hace falta alternar
+    // el lado segun el ancho de pantalla.
 
     // Fallback del avatar de perfil: si la imagen no carga, se oculta
     // y se muestra el ícono de persona genérico que la acompaña.
