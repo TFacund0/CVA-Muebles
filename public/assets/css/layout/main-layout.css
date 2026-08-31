@@ -182,8 +182,14 @@ nav.navbar.artisan-main-nav {
 }
 
 .menu-lateral .offcanvas-header {
-    background-color: var(--cva-parchment);
-    border-bottom: 2px solid var(--cva-gold);
+    background-color: var(--cva-brown);
+    background-image: var(--navbar-bg);
+    border-bottom: 3px solid var(--cva-gold);
+    color: var(--cva-white);
+}
+
+.menu-lateral .offcanvas-header .btn-close {
+    filter: brightness(0) invert(1);
 }
 
 .avatar-bg {

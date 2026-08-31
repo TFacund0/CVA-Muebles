@@ -108,6 +108,10 @@ class VentasController extends BaseController {
      * @return string
      */
     public function ver_facturas_usuario() {
+        if (!env('SHOPPING_CART_ENABLED')) {
+            return redirect()->to('/');
+        }
+
         $id_usuario = session()->get('id_usuario');
         $ventas = $this->ventasService->getVentasPorUsuario($id_usuario);
 

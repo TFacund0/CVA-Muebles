@@ -27,7 +27,7 @@
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     background: white;
-    box-shadow: 0 15px 35px rgba(62, 39, 35, 0.05);
+    box-shadow: var(--shadow-sm);
     position: relative;
     height: 100%;
     display: flex;
@@ -35,21 +35,28 @@
 }
 
 #favoritos-page .fav-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 30px 60px rgba(62, 39, 35, 0.12);
+    transform: translateY(-15px);
+    box-shadow: 0 40px 80px rgba(62, 39, 35, 0.12);
 }
 
+/* Mismo tratamiento que #productos .img-wrapper: fondo con tinte de marca
+   y object-fit:contain para que el mueble se vea completo, igual que en
+   el catálogo, en lugar de recortado por un cover a 280px. */
 #favoritos-page .fav-img-wrapper {
-    height: 280px;
+    height: 440px;
     overflow: hidden;
     position: relative;
+    background-color: color-mix(in srgb, var(--cva-brown) 16%, white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #favoritos-page .fav-img-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s;
+    object-fit: contain;
+    transition: transform 1.2s ease;
 }
 
 #favoritos-page .fav-card:hover .fav-img-wrapper img {
@@ -80,13 +87,38 @@
     transform: rotate(90deg);
 }
 
+/* Mismo estilo que #productos .precio-tag: texto llano en vivid, sin
+   badge de fondo, para que el precio se lea igual en ambas páginas. */
 #favoritos-page .price-tag-fav {
-    background: var(--cva-gold);
-    color: white;
-    padding: 5px 15px;
-    border-radius: 10px;
+    background: none;
+    padding: 0;
+    color: var(--cva-vivid);
     font-weight: 800;
-    font-size: 0.9rem;
+    font-size: 1.5rem;
+    font-family: var(--font-main);
+}
+
+/* Los botones de la tarjeta usan las mismas clases que #productos
+   (btn-brown-solid / btn-outline-brown), pero esas reglas viven scopeadas
+   ahi -- sin equivalente aca no tenian ningun estilo aplicado. */
+#favoritos-page .btn-brown-solid {
+    background-color: var(--cva-brown);
+    color: white;
+    font-weight: 700;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#favoritos-page .btn-outline-brown {
+    border: 2px solid var(--cva-brown);
+    color: var(--cva-brown);
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+#favoritos-page .btn-outline-secondary {
+    font-size: 0.8rem;
 }
 
 #favoritos-page .empty-state-fav {
@@ -208,4 +240,15 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* RESPONSIVE (mismos escalones que #productos .img-wrapper) */
+@media (max-width: 991.98px) {
+    #favoritos-page .fav-img-wrapper { height: 350px; }
+    #favoritos-page .fav-header { padding: 60px 15px; }
+}
+
+@media (max-width: 575.98px) {
+    #favoritos-page .fav-img-wrapper { height: 320px; }
+    #favoritos-page .price-tag-fav { font-size: 1.2rem; }
 }

@@ -224,6 +224,14 @@
 }
 
 @media (max-width: 575.98px) {
+    #quienes-somos-wrapper .team-img-wrapper { height: 220px; }
+    #quienes-somos-wrapper .team-body { padding: 1.2rem; }
+    #quienes-somos-wrapper .team-body h5 { font-size: 1.05rem; }
+    #quienes-somos-wrapper .team-overlay { padding-bottom: 1.2rem; }
+    #quienes-somos-wrapper .social-links-team a { width: 36px; height: 36px; font-size: 1rem; }
+}
+
+@media (max-width: 575.98px) {
     #quienes-somos-wrapper .info-header h1 { font-size: 1.8rem; }
     #quienes-somos-wrapper .display-4 { font-size: 1.6rem; }
     #quienes-somos-wrapper .display-6 { font-size: 1.2rem; }

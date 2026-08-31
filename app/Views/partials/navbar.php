@@ -100,7 +100,7 @@ if ($env_cart_enabled) {
   <div class="offcanvas-header shadow-sm">
     <div class="d-flex align-items-center">
       <img src="<?= base_url('assets/img/branding/cva2.png') ?>" alt="Logo" width="35px" class="me-2">
-      <h5 class="offcanvas-title fw-bold text-cva-brown">CVA Muebles</h5>
+      <h5 class="offcanvas-title fw-bold text-white">CVA Muebles</h5>
     </div>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
@@ -155,7 +155,9 @@ if ($env_cart_enabled) {
         <p class="sidebar-section-label">MI CUENTA</p>
         <div class="list-group list-group-flush rounded-4 overflow-hidden border shadow-sm">
           <a href="<?= base_url('/mis-favoritos') ?>" class="list-group-item list-group-item-action"><i class="bi bi-heart me-3 text-danger"></i> Favoritos</a>
-          <a href="<?= base_url('/ventas_lista') ?>" class="list-group-item list-group-item-action"><i class="bi bi-bag-check me-3 text-cva-gold"></i> Mis Compras</a>
+          <?php if ($env_cart_enabled): ?>
+            <a href="<?= base_url('/ventas_lista') ?>" class="list-group-item list-group-item-action"><i class="bi bi-bag-check me-3 text-cva-gold"></i> Mis Compras</a>
+          <?php endif; ?>
           <a href="<?= base_url('/logout') ?>" class="list-group-item list-group-item-action text-danger fw-bold"><i class="bi bi-box-arrow-right me-3"></i> Cerrar Sesión</a>
         </div>
       <?php endif; ?>
