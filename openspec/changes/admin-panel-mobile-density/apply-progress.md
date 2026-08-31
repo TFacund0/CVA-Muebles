@@ -183,3 +183,32 @@ Fase 5 (QA en dispositivo real) — ahora cubre 9 pantallas revisadas en total (
 
 1. El bug de `flex-shrink` faltante en `.dashboard-icon-main` estuvo latente en las 10 pantallas del panel desde siempre, pero solo se manifestaba visualmente con el subtítulo más largo del panel — un recordatorio de que "no se ve roto en los casos que probé" no es lo mismo que "no está roto"; conviene, al revisar un componente compartido, probarlo con el contenido más largo real que exista en el proyecto, no solo con el primero que aparezca.
 2. Segunda instancia del mismo patrón de "override mobile muerto por cascada" (imagen de producto en Fase 0, dropzone acá) — parece ser una forma de escribir CSS bastante extendida en este proyecto (agregar una clase utilitaria de tamaño fijo sin pensar en su interacción con reglas mobile previas). Vale la pena, si se siguen revisando más pantallas, buscar puntualmente este patrón (una clase de tamaño fijo sin `!important` definida después de un `@media` que la intenta sobreescribir).
+
+## Fase 5.7 — Pedido Manual: COMPLETADA (fuera del pedido original)
+
+### Cambios aplicados
+
+1. **`</form>` duplicado** en `nuevo_pedido_personalizado.php` (dos cierres para una sola apertura) — HTML inválido, eliminado. No es un bug de mobile específicamente, pero se corrigió al pasar por el archivo.
+2. **Tercera instancia del patrón "min-height inerte por un height fijo previo"** (`admin-sales.css`): `.admin-img-preview-min-h { min-height: 120px; }` no tenía ningún efecto porque `.admin-img-preview` (la clase base) ya trae `height: 350px` fijo, y CSS nunca deja que `min-height` reduzca por debajo de un `height` ya establecido más alto. La caja de "Cargar referencia visual" quedaba en 350px siempre — un rectángulo punteado grande, casi vacío, para un simple ícono + 2 líneas de texto. Se agregó `height: auto` a la clase modificadora. Verificado que es el único lugar del proyecto donde se usa `.admin-img-preview` (siempre junto con `-min-h`), así que el fix no puede afectar otro caso.
+3. Bump de cache-busting: `admin-sales.css` v35→v36 (las 4 vistas que lo cargan).
+
+### Verificación realizada
+
+Repro fiel de la caja "Cargar referencia visual" a 375px, antes/después, con medición de `getComputedStyle`.
+
+- **Antes**: 350px de alto, mayormente vacío.
+- **Después**: 120px de alto (el piso de `min-height`, ya que el contenido real es más bajo), ajustado al contenido.
+- No se ejecutó `vendor/bin/phpunit` (no disponible en el sandbox) — cambios CSS + limpieza de HTML inválido, sin lógica PHP tocada.
+
+### Nota: `perfil_config.php` (Mi Perfil) queda fuera de esta iniciativa
+
+Al revisar qué faltaba del panel, se encontró que `perfil_config.php` extiende `layout/main` (el layout público del sitio, con navbar de cliente), **no** `layout/admin_layout` — es una página compartida entre clientes y administradores, con su propio CSS (`assets/css/pages/profile.css`), arquitectónicamente fuera del "panel admin" aunque se acceda desde su sidebar. Tocarla implicaría entrar al sistema de diseño del sitio público, un alcance distinto al de esta iniciativa (mejoras mobile del **panel** admin). Se deja documentado, no se toca.
+
+### Pendiente
+
+Fase 5 (QA en dispositivo real) — con esta fase se completó la revisión de las 9 pantallas reales que usan `admin_layout.php` en el proyecto.
+
+## Key Learnings (Fase 5.7)
+
+1. Tercera aparición del mismo patrón de bug (`min-height`/`height` inerte por cascada) en dos fases seguidas — confirma que vale la pena, en un futuro trabajo sobre este CSS, hacer un barrido dedicado de todas las clases `*-min-h`/`*-h[0-9]+` del panel para revisar si hay más casos silenciosos.
+2. `perfil_config.php` es un recordatorio útil de que "está en el sidebar del admin" no es lo mismo que "es parte del layout del admin" — vale la pena confirmar el `extend()` de cada vista antes de asumir que comparte CSS/convenciones con el resto del panel.

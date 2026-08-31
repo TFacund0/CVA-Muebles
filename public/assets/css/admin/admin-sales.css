@@ -442,6 +442,12 @@
     max-width: 150px;
 }
 .admin-img-preview-min-h {
+    /* .admin-img-preview trae "height: 350px" fijo (admin-panel.css) —
+       min-height nunca puede bajar por debajo de un height ya más alto,
+       así que sin "height: auto" acá esta clase no hacía nada: la caja
+       de "Cargar referencia visual" (un simple ícono + texto en línea,
+       no un dropzone grande) se quedaba en 350px igual. */
+    height: auto;
     min-height: 120px;
 }
 .money-input-rounded-start {

@@ -73,6 +73,15 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   3. [x] **Inconsistencia encontrada (no un bug de layout roto, pero sí de "no adaptado a mobile")**: `editar_producto.php` era la única de las 10 pantallas del panel cuyo encabezado no seguía el patrón compartido — usaba `<h1 class="display-5">` fijo (sin la pareja `display-6 display-md-5` que reduce el tamaño en mobile en las otras 9), `row mb-5 align-items-center` sin `g-4`, y `col-md-8`/`col-md-4` en vez de `col-lg-7`/`col-lg-5`. Se alineó al patrón compartido (confirmado por grep contra las 10 vistas antes de tocar nada).
 - Criterio de hecho: repro 375px del encabezado antes/después — ícono cuadrado (no óvalo), título del tamaño mobile correcto, badge de ID centrado a ancho completo. Medido con `getComputedStyle` (ancho del ícono: 29.4px antes → 50px después). Detalle en `apply-progress.md`.
 
+## Fase 5.7 — Pedido Manual (fuera del pedido original) [x]
+
+- Última pantalla de Ventas sin revisar: `nuevo_pedido_personalizado.php`.
+- Sub-tareas:
+  1. [x] **Bug de markup encontrado (no específico de mobile, pero real)**: un `</form>` duplicado al final del formulario (dos etiquetas de cierre para una sola apertura) — HTML inválido, aunque los navegadores lo toleran silenciosamente. Eliminado.
+  2. [x] **Bug real encontrado (mismo patrón que el dropzone de Fase 5.6)**: `.admin-img-preview-min-h { min-height: 120px; }` no podía hacer nada — la clase base `.admin-img-preview` ya trae `height: 350px` fijo, y `min-height` nunca reduce por debajo de un `height` ya mayor. La caja de "Cargar referencia visual" (un simple ícono + texto en línea, no un dropzone grande como el de `alta_producto.php`) se quedaba en 350px siempre — un rectángulo punteado enorme casi vacío. Se agregó `height: auto` a la clase modificadora (confirmado que es la única forma en que `.admin-img-preview` se usa en todo el proyecto, así que no hay riesgo de afectar otro caso).
+  3. [x] Encabezado y resto del formulario ya seguían el patrón compartido correctamente (`g-4`, `display-6 display-md-5`, `col-lg-7`/`col-lg-5`) — este no era el caso atípico, `editar_producto.php` sí lo era (ver Fase 5.6).
+- Criterio de hecho: medido con `getComputedStyle` — altura de la caja de referencia 350px (antes) → 120px (después, ajustada a contenido). Detalle en `apply-progress.md`.
+
 ## Fase 5 — QA cruzado (manual, no delegable) [ ]
 
 - Sequential, al final, después de las fases anteriores.

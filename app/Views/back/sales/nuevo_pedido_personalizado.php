@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=35.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=36.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -152,7 +152,6 @@
                             <i class="bi bi-check2-circle me-2"></i> REGISTRAR PEDIDO EN EL SISTEMA
                         </button>
                     </div>
-                </form>
                 </form>
             </div>
         </div>
