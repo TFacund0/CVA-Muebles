@@ -41,11 +41,16 @@
             </div>
         </div>
 
-        <!-- Copyright -->
-        <div class="row mt-4 pt-4 border-top border-secondary">
-            <div class="col-12 text-center">
+        <!-- Copyright y Créditos -->
+        <div class="row mt-4 pt-4 border-top border-secondary align-items-center">
+            <div class="col-md-6 text-center text-md-start">
                 <p class="small mb-0 opacity-50">
                     &copy; <?= date('Y') ?> CVA Muebles. Artesanía en madera con tradición correntina.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                <p class="small mb-0 opacity-50">
+                    Sitio web creado por <a href="https://tobiasacevedo.vercel.app/" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold">Vyden</a>
                 </p>
             </div>
         </div>
