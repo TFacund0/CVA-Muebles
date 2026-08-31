@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <!-- Design System & Global Styles -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=4.1')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=4.2')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/layout/main-layout.css?v=8.2')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/floating-alert.css?v=3.0')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css?v=3.2')?>">

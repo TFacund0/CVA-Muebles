@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=33.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=34.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -138,7 +138,7 @@
             </h6>
             <p class="x-small opacity-75 mb-auto">Métricas de éxito acumuladas en la fabricación y entrega de piezas artesanales.</p>
             
-            <div class="production-display-compact p-4 rounded-4 border border-white border-opacity-10 my-4 text-center bg-white bg-opacity-5">
+            <div class="production-display-compact p-4 rounded-4 border border-white border-opacity-10 my-4 text-center bg-white bg-opacity-10">
                 <div class="text-gold display-4 fw-bold mb-0 lh-1"><?= $stats['ENTREGADO'] ?></div>
                 <div class="x-small text-uppercase fw-bold opacity-50 tracking-widest mt-2">Muebles Entregados</div>
             </div>

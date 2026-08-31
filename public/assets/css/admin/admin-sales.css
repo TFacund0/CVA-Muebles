@@ -164,9 +164,9 @@
 
 /* === RESPONSIVE UTILITIES === */
 @media (max-width: 767.98px) {
-    .kpi-value { font-size: 2rem; }
-    .kpi-icon-container { width: 50px; height: 50px; font-size: 1.4rem; }
-    .kpi-body { padding: 1.5rem 1rem; }
+    .kpi-value { font-size: 1.75rem; }
+    .kpi-icon-container { width: 44px; height: 44px; font-size: 1.2rem; }
+    .kpi-body { padding: 1.25rem 0.75rem; }
     .action-btn-v2 { padding: 1rem; }
     .action-icon { width: 35px; height: 35px; font-size: 1rem; }
     .action-text span { font-size: 0.9rem; }
@@ -179,6 +179,10 @@
     .input-group-text { padding: 0.5rem 0.75rem; }
     .factura-header { padding: 1.5rem; }
     .order-card { border-radius: 1rem; }
+    /* Tarjeta "Rendimiento Histórico" (Dashboard): número más chico y
+       menos padding para que no se sienta tan vacía/grande en mobile. */
+    .production-display-compact { padding: 1.25rem !important; }
+    .production-display-compact .display-4 { font-size: 2.75rem; }
 }
 
 

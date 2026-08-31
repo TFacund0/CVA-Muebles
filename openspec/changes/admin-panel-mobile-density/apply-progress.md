@@ -27,3 +27,31 @@ Fases 1-4 (Dashboard, Ventas, Productos/Catálogo, Usuarios) y Fase 5 (QA en dis
 
 1. El bug de la elipse en el avatar es un ejemplo más del mismo patrón que el fix de navbar: una regla CSS "genérica" (acá, un selector de utilidades Bootstrap sin acotar) que en la práctica solo debía aplicar a un componente específico (las pestañas) termina afectando a cualquier otro elemento que comparta esas mismas clases utilitarias por casualidad. Vale la pena, en las próximas fases, revisar si hay otros selectores igual de genéricos (`div.d-flex.algo`, `.algo:has(> .otra-cosa)` sin acotar) en `admin-panel.css`.
 2. La verificación visual con el repro estático no solo confirma el cambio planeado — encontró un bug real que no estaba en el relevamiento original. Vale la pena mantener esta técnica (antes/después con el HTML/CSS real) para las fases siguientes en vez de solo revisar el diff de CSS a ojo.
+
+## Fase 1 — Dashboard: COMPLETADA
+
+### Cambios aplicados
+
+1. **KPIs de producción** (`admin-sales.css`, `@media max-width:767.98px`): `kpi-value` 2rem→1.75rem, `kpi-icon-container` 50px→44px (font 1.4rem→1.2rem), `kpi-body` padding `1.5rem 1rem`→`1.25rem 0.75rem`.
+2. **Tarjeta "Rendimiento Histórico"**: nuevo override mobile para `.production-display-compact` (padding 1.25rem) y su `.display-4` interno (2.75rem).
+3. **Bug real encontrado al verificar (no estaba en el plan)**: `.bg-cva-brown` en `global.css` no tenía `!important`. Por orden de carga (`global.css` antes que `admin-panel.css` en `admin_layout.php`), `.admin-card-v2 { background: white; }` le ganaba en cascada a cualquier elemento con ambas clases — la tarjeta de Rendimiento Histórico se veía **blanca en vez de marrón**, y su párrafo descriptivo (`text-white` heredado) quedaba **invisible** (blanco sobre blanco). Este bug afectaba **desktop y mobile por igual** — no es específico de la iniciativa mobile, pero se descubrió y corrigió acá porque es la misma tarjeta que se estaba auditando. Se agregó `!important`, igual que ya tenía `.text-gold` al lado.
+4. **Hallazgo menor relacionado**: el panel interior con el número "142" usaba `bg-opacity-5`, una clase que Bootstrap no define (los pasos reales son 10/25/50/75/100) — quedaba sólido blanco en vez de un panel translúcido. Cambiado a `bg-opacity-10` en `estadisticas.php`.
+5. Bump de cache-busting: `admin-sales.css` v33→v34 (4 vistas), `global.css` v3.0→v3.1 (admin) y v4.1→v4.2 (sitio público, mismo archivo compartido).
+
+### Verificación realizada
+
+Reconstrucción estática fiel del contenido completo de `estadisticas.php` (encabezado, 4 KPIs, acciones rápidas, tarjeta de rendimiento) con el CSS real del repo, capturada a 375px de ancho (`fullPage`), antes/después. Además, medición directa vía `getComputedStyle` (no solo visual) del `background-color` de la tarjeta y del panel interior, para confirmar los valores RGB reales antes y después del fix — no solo cómo "se ve", sino el valor computado real.
+
+- **Antes**: tarjeta de rendimiento con fondo blanco (`rgb(255,255,255)`), párrafo descriptivo invisible, panel del número sólido blanco.
+- **Después**: fondo marrón correcto (`rgb(45,27,25)` = `#2D1B19`), párrafo legible, panel del número translúcido coherente con el borde `border-opacity-10` que ya tenía al lado.
+- No se ejecutó `vendor/bin/phpunit` (no disponible en el sandbox) — cambios CSS + un ajuste de clases Bootstrap en markup, sin lógica PHP tocada.
+
+### Pendiente
+
+Fases 2-4 (Ventas, Productos/Catálogo, Usuarios) y Fase 5 (QA en dispositivo real).
+
+## Key Learnings (Fase 1)
+
+1. Un bug de contraste/legibilidad puede pasar desapercibido durante mucho tiempo si el resto de la tarjeta (ícono, número grande) sigue siendo visualmente coherente — solo una línea de texto secundario quedaba invisible, no toda la tarjeta.
+2. Medir con `getComputedStyle` (no solo mirar la captura) fue clave para confirmar con certeza el color de fondo real antes de escribir el fix — evita "creer que ya está bien" por una captura ambigua.
+3. Vale la pena, en las próximas fases, revisar si aparecen más combinaciones `bg-*` + `bg-opacity-*` con un paso inválido (Bootstrap solo admite 10/25/50/75/100) — es un error fácil de cometer al escribir Tailwind-style opacity de memoria.

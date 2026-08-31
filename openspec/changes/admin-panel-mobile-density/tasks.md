@@ -13,15 +13,17 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   4. [x] **No planeado originalmente**: la verificación visual encontró que el selector `div.d-flex.justify-content-center` (pensado solo para las pestañas segmentadas) también capturaba `.avatar-premium` (que usa esas mismas clases Bootstrap para centrar sus iniciales) y lo forzaba a `width:100%`, deformándolo en una elipse en mobile — afectaba Usuarios, Ventas y Categorías. Se quitó el selector genérico (el otro selector del mismo bloque, `.d-flex:has(> .custom-segmented-tabs)`, ya cubre los 4 usos reales de pestañas del proyecto).
 - Criterio de hecho: repro estático 375px confirmó ícono de encabezado achicado (antes no se achicaba en Dashboard/Ventas/Usuarios), avatares circulares correctos (antes elípticos en Usuarios/Ventas/Categorías), botones de acción 36px, y las pestañas segmentadas siguen ocupando 100% de ancho sin regresión. Detalle completo en `apply-progress.md`.
 
-## Fase 1 — Dashboard [ ]
+## Fase 1 — Dashboard [x]
 
 - Sequential, depende de Fase 0 (recibe el fix del ícono de encabezado gratis).
-- Archivo: `admin-sales.css` (bloque `@media max-width:767.98px` existente, líneas 166-182), posible markup en `estadisticas.php` si se necesita alguna clase nueva para la tarjeta de rendimiento.
+- Archivos: `admin-sales.css`, `estadisticas.php`, `global.css` (bug no planeado, ver abajo).
 - Sub-tareas:
-  1. Re-explorar la pantalla puntualmente (medir con el repro estático a 375px lo que queda después de Fase 0, para no adivinar).
-  2. Afinar `kpi-value`/`kpi-icon-container` de las 4 tarjetas de producción si siguen sintiéndose grandes.
-  3. Agregar tratamiento mobile a la tarjeta "Rendimiento Histórico" (`display-4` sin override hoy).
-- Criterio de hecho: repro 375px de Dashboard antes/después, confirmando reducción visible sin romper el layout en desktop.
+  1. [x] Re-explorada la pantalla con repro estático fiel (header + 4 KPIs + acciones rápidas + tarjeta de rendimiento) a 375px.
+  2. [x] `kpi-value` 2rem→1.75rem, `kpi-icon-container` 50px→44px, `kpi-body` padding más ajustado.
+  3. [x] Tarjeta "Rendimiento Histórico": `.production-display-compact` padding 1.25rem + `.display-4` interno a 2.75rem en mobile.
+  4. [x] **No planeado — bug real encontrado al verificar**: `.bg-cva-brown` (global.css) no tenía `!important`, así que `.admin-card-v2 { background: white; }` (admin-panel.css, carga después) le ganaba en cascada — la tarjeta "Rendimiento Histórico" se veía **blanca en vez de marrón, con su párrafo descriptivo invisible** (texto blanco sobre fondo blanco). Bug de **desktop y mobile por igual**, no específico de esta iniciativa, pero descubierto acá. Se agregó `!important` (mismo criterio que `.text-gold`, que ya lo tenía). Beneficia también a `perfil_config.php` (modal) y a `navbar.php`/`beneficios.php` (sitio público), que comparten la misma clase.
+  5. [x] **Otro hallazgo menor en el mismo bloque**: `bg-opacity-5` en el panel interior del número "142" no es una clase válida de Bootstrap (los pasos son 10/25/50/75/100) — el panel se veía sólido blanco en vez de un panel translúcido "vidrio esmerilado". Cambiado a `bg-opacity-10` (el paso más chico real, consistente con el `border-opacity-10` ya usado ahí mismo).
+- Criterio de hecho: repro 375px de Dashboard antes/después — tarjeta de rendimiento ahora se ve marrón con texto legible y panel translúcido coherente; KPIs visiblemente más compactos. Detalle en `apply-progress.md`.
 
 ## Fase 2 — Ventas (listado + detalle) [ ]
 
