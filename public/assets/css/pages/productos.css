@@ -152,9 +152,11 @@
     height: 440px;
     overflow: hidden;
     position: relative;
-    /* Fondo calido para el espacio que deja "contain" cuando la foto no
-       llena el recuadro (en vez de blanco crudo, mezcla con la paleta). */
-    background-color: var(--cva-sand);
+    /* --cva-sand es tambien el fondo de TODA la pagina (body, contenedor-
+       productos) -- usarlo aca hacia que el marco de la foto se perdiera,
+       sin diferenciarse ni del fondo general ni del blanco de la tarjeta.
+       Un tinte tenue del marron de marca se distingue de los dos. */
+    background-color: color-mix(in srgb, var(--cva-brown) 16%, white);
     display: flex;
     align-items: center;
     justify-content: center;
