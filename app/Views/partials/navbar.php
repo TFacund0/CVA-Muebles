@@ -42,13 +42,17 @@ if ($env_cart_enabled) {
       <?php endif; ?>
     </div>
 
-    <!-- [DESKTOP: IZQUIERDA / MÓVIL: CENTRO] LOGO -->
+    <!-- [DESKTOP: IZQUIERDA] LOGO + MARCA (en móvil el título va aparte, ver abajo) -->
     <div class="d-flex align-items-center justify-content-center justify-content-lg-start navbar-flex-cell nav-cell-brand">
       <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="<?= base_url('/') ?>">
         <img src="<?= base_url('assets/img/branding/cva2.png') ?>" alt="Logo" class="logo-img-nav">
-        <h1 class="titulo-logo">CVA Muebles</h1>
+        <h1 class="titulo-logo d-none d-lg-block">CVA Muebles</h1>
       </a>
     </div>
+
+    <!-- [MÓVIL: CENTRO] Título de marca, celda independiente del logo y de los
+         iconos para que el grid lo centre sin poder pisarlos. -->
+    <a href="<?= base_url('/') ?>" class="titulo-logo-mobile d-lg-none text-decoration-none">CVA Muebles</a>
 
     <!-- [DESKTOP: CENTRO] NAVEGACIÓN (Oculto en móvil) -->
     <div class="collapse navbar-collapse justify-content-center navbar-flex-cell-nav" id="navbarNav">

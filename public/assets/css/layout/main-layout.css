@@ -379,54 +379,52 @@ footer.artisan-footer {
 }
 
 @media (max-width: 991.98px) {
-    /* El contenedor pasa a ser el punto de referencia del titulo centrado,
-       independiente del ancho real del logo o de los iconos. */
+    /* Grid de 3 columnas reales (no position:absolute): el navegador reparte
+       el ancho disponible respetando lo que ocupan el logo y los iconos, asi
+       que el titulo centrado nunca puede superponerse a ninguno de los dos
+       -- a diferencia de un centrado absoluto, que ignora a sus vecinos.
+       display:grid necesita !important porque Bootstrap aplica d-flex al
+       mismo elemento con !important en la clase utilitaria. */
     .artisan-main-nav .container-fluid {
-        position: relative;
+        display: grid !important;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        column-gap: 0.5rem;
     }
 
     .artisan-main-nav .nav-cell-brand {
-        order: 1;
-        flex: 0 0 auto;
-        justify-content: flex-start;
+        grid-column: 1;
+        justify-self: start;
+    }
+
+    .artisan-main-nav .titulo-logo-mobile {
+        grid-column: 2;
+        justify-self: center;
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: center;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--cva-white);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
     .artisan-main-nav .nav-cell-actions {
-        order: 2;
-        flex: 0 0 auto;
+        grid-column: 3;
+        justify-self: end;
     }
 
     .artisan-main-nav .nav-cell-auth {
-        order: 3;
-        flex: 0 0 auto;
-    }
-
-    .artisan-main-nav .navbar-brand {
-        display: flex;
-        align-items: center;
+        display: none;
     }
 
     .artisan-main-nav .logo-img-nav {
-        flex: 0 0 auto;
         width: 40px;
-    }
-
-    /* Centrado real respecto a todo el navbar, no a la celda del logo:
-       asi el titulo queda en el medio de la pantalla sin importar cuanto
-       ancho ocupen el logo o los iconos a los costados. */
-    .artisan-main-nav .titulo-logo {
-        display: block;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        margin: 0;
-        font-size: 1.15rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 55%;
-        text-align: center;
     }
 
     .artisan-main-nav .boton-icon-circle {
@@ -437,6 +435,6 @@ footer.artisan-footer {
 
 @media (max-width: 575.98px) {
     .artisan-main-nav .logo-img-nav { width: 36px; }
-    .artisan-main-nav .titulo-logo { font-size: 1rem; max-width: 48%; }
+    .artisan-main-nav .titulo-logo-mobile { font-size: 1rem; }
     .artisan-main-nav .boton-icon-circle { width: 40px; height: 40px; }
 }
