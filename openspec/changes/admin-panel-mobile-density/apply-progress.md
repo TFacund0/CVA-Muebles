@@ -103,3 +103,29 @@ Fase 4 (Usuarios) y Fase 5 (QA en dispositivo real).
 
 1. No todas las fases necesitan cambios de código — verificar y confirmar "ya está bien" es un resultado válido y vale la pena documentarlo con la misma rigurosidad que un fix, para que quede registro de que sí se revisó.
 2. Un repro con un `<div>` de relleno en vez de un `<img>` real puede dar falsos positivos cuando el CSS real usa un selector de etiqueta (`... img { ... }`) en vez de una clase — al armar repros para las próximas fases, usar siempre la etiqueta HTML real del elemento que se está midiendo, no un sustituto "equivalente".
+
+## Fase 4 — Usuarios: COMPLETADA
+
+### Cambios aplicados
+
+1. **Bug real encontrado al verificar (no estaba en el plan)**: la celda `ACCESO` de `user-row` (usuario + email) no depende del `::before` genérico como única etiqueta — tiene 2 `<div class="user-access-info">` propios con `width:100%` cada uno, pensados para apilarse verticalmente. Pero el `<td>` genérico del motor de tarjetas ya es `display:flex` en fila, y nada forzaba `flex-direction:column` en esta celda puntual — así que con un email medianamente largo (un caso normal, no extremo) el texto se salía de la tarjeta hacia la derecha, fuera de la pantalla, en vez de quedarse contenido. Se agregó `.user-row td[data-label="ACCESO"] { flex-direction:column !important; align-items:flex-end !important; }` y `word-break:break-word` a `.user-access-info`, en `admin-panel.css` (el motor compartido, no `admin-users.css` — el bug no era específico de esta página en el código, aunque solo la tabla de Usuarios expone una celda con esta forma de 2 líneas).
+2. **Filtros**: verificados tal cual están (buscador + selector de perfil + reset), se ven bien a 375px, sin cambios.
+3. Bump de cache-busting: `admin-panel.css` v33→v34.
+
+### Verificación realizada
+
+Repro fiel de `user-row` con datos "peor caso" a propósito (nombre largo, usuario largo, email largo — "maria.gabriela.fernandez@correo-largo-ejemplo.com") en vez de datos cortos de ejemplo, más los badges "SUSPENDIDO"/"TU SESIÓN" que no se habían probado en fases anteriores. Fue justamente usar datos largos lo que reveló el bug — con datos cortos el defecto no se nota, porque el texto nunca llega a competir por espacio en la fila.
+
+- **Antes**: el email se salía de la tarjeta hacia la derecha, cortado por el borde del viewport.
+- **Después**: usuario y email se apilan dentro de la celda, alineados a la derecha, sin salirse de la tarjeta.
+- El cambio vive dentro de `@media (max-width: 991.98px)`, así que no puede afectar el layout de escritorio (la tabla de escritorio ni siquiera usa este motor de tarjetas).
+- No se ejecutó `vendor/bin/phpunit` (no disponible en el sandbox) — cambio CSS puro.
+
+### Pendiente
+
+Fase 5 (QA en dispositivo real) — última fase del plan.
+
+## Key Learnings (Fase 4)
+
+1. Probar con datos "peor caso" (nombres/emails largos) en vez de datos cortos de ejemplo fue clave para encontrar este bug — los 3 repros anteriores de fases previas usaban nombres razonablemente cortos y no lo hubieran mostrado. Vale la pena que la QA manual de Fase 5 incluya, a propósito, al menos un registro con datos largos en cada pantalla.
+2. Mismo patrón de causa raíz que ya apareció dos veces: una celda/elemento con contenido propio de varias líneas queda a merced de una regla "genérica" (acá, `display:flex` en fila del motor de tarjetas) que no fue pensada para ese caso particular — vale la pena, en el futuro, revisar si alguna otra celda de las tablas del panel tiene la misma forma (label implícito + 2+ líneas de contenido propio) sin su propio `flex-direction:column`.

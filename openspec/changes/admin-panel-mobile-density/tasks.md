@@ -46,14 +46,15 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   4. [x] Botones de acción de fila: en Productos (texto+ícono, apilados `w-100`, ya con altura 36px por Fase 0) y en Categorías (solo ícono, fila centrada, mismo patrón ya verificado en Ventas) — ambos se ven bien, **sin cambios necesarios**. No se forzó el rediseño a "fila compacta de íconos" planteado como posible en la propuesta: el apilado actual ya es legible y no está roto, cambiarlo sería una decisión de gusto sin un defecto concreto detrás.
 - Criterio de hecho: repros 375px de fila de producto, filtro y fila de categoría — todo correcto tras la Fase 0, **no se necesitó ningún cambio de código adicional en esta fase** (a diferencia de las Fases 1 y 2, acá la verificación no encontró bugs nuevos). Detalle en `apply-progress.md`.
 
-## Fase 4 — Usuarios [ ]
+## Fase 4 — Usuarios [x]
 
 - Sequential, depende de Fase 0.
-- Archivo: `admin-users.css` si hace falta algo puntual además de lo heredado de Fase 0.
+- Archivo: `admin-panel.css` (el bug encontrado está en el motor de tarjetas compartido, no en `admin-users.css`).
 - Sub-tareas:
-  1. Re-explorar la vista puntualmente tras Fase 0.
-  2. Ajustes específicos si quedó algo pendiente (badges, `.user-access-info`).
-- Criterio de hecho: repro 375px antes/después; consistencia visual con Ventas/Productos (mismo tamaño de avatar/ícono).
+  1. [x] Re-explorada la vista con repros fieles: barra de filtros (buscador+perfil+reset) y fila de usuario, esta última probada a propósito con datos "peor caso" (nombre largo, usuario y email largos) en vez de datos cortos — fue justamente lo que reveló el bug.
+  2. [x] Filtros: verificados tal cual están, se ven prolijos a 375px, sin cambios necesarios.
+  3. [x] **Bug real encontrado al verificar (no estaba en el plan)**: la celda `ACCESO` (usuario + email) no usa el `::before` genérico como única etiqueta — tiene 2 divs propios con `width:100%`, pero el `<td>` genérico ya es `display:flex` en fila (herencia del motor de tarjetas), así que esos divs competían por espacio en una fila en vez de apilarse — con un email medianamente largo (nada extremo, un caso muy común en datos reales), el texto se salía de la tarjeta hacia la derecha, fuera de la pantalla. Se agregó `flex-direction:column` + `align-items:flex-end` a `.user-row td[data-label="ACCESO"]` y `word-break:break-word` a `.user-access-info` (por si aparece un string aún más largo sin espacios).
+- Criterio de hecho: repro 375px con datos largos antes/después — el texto ya no se sale de la tarjeta, queda apilado y alineado a la derecha como el resto de la celda. El cambio vive en el `@media` mobile del motor compartido, así que no toca desktop en absoluto (no aplica fuera de `≤991.98px`). Detalle en `apply-progress.md`.
 
 ## Fase 5 — QA cruzado (manual, no delegable) [ ]
 

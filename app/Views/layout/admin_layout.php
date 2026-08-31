@@ -21,7 +21,7 @@
     
     <!-- Admin Design System -->
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=3.1')?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-panel.css?v=33.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-panel.css?v=34.0')?>">
 
 
     <?= $this->renderSection('extra-css') ?>

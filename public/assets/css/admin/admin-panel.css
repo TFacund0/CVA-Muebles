@@ -631,11 +631,22 @@
     }
 
     /* === Ajustes Específicos para Usuarios === */
+    /* La celda ACCESO no usa el ::before genérico como única etiqueta —
+       adentro tiene 2 divs propios (usuario + email). Sin esta regla,
+       heredaban el "display:flex" en fila del <td> genérico y, con un
+       email largo (muy común en datos reales), el texto se salía de la
+       tarjeta hacia la derecha en vez de apilarse y ajustar el ancho. */
+    .user-row td[data-label="ACCESO"] {
+        flex-direction: column !important;
+        align-items: flex-end !important;
+    }
+
     .user-access-info {
         text-align: right !important;
         font-size: 0.8rem;
         color: #64748b !important;
         width: 100%;
+        word-break: break-word;
     }
 
     .user-access-info i {
