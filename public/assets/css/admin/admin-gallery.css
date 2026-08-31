@@ -9,18 +9,24 @@
     border: 2px solid transparent;
 }
 
-.moderation-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(62, 39, 35, 0.12);
-    border-color: var(--cva-gold);
-}
-
 .moderation-card img {
     transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.moderation-card:hover img {
-    transform: scale(1.05);
+/* Guard táctil: sin esto, tocar una tarjeta en celular deja el :hover
+   "pegado" (lift + zoom de imagen) hasta tocar en otro lado — mismo
+   patrón ya usado para .product-card-vivid/.catalogo-card-premium en
+   catalogo.css. */
+@media (hover: hover) and (pointer: fine) {
+    .moderation-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(62, 39, 35, 0.12);
+        border-color: var(--cva-gold);
+    }
+
+    .moderation-card:hover img {
+        transform: scale(1.05);
+    }
 }
 
 .btn-approve-gallery {

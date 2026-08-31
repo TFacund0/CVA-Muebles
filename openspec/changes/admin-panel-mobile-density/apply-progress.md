@@ -129,3 +129,30 @@ Fase 5 (QA en dispositivo real) — última fase del plan.
 
 1. Probar con datos "peor caso" (nombres/emails largos) en vez de datos cortos de ejemplo fue clave para encontrar este bug — los 3 repros anteriores de fases previas usaban nombres razonablemente cortos y no lo hubieran mostrado. Vale la pena que la QA manual de Fase 5 incluya, a propósito, al menos un registro con datos largos en cada pantalla.
 2. Mismo patrón de causa raíz que ya apareció dos veces: una celda/elemento con contenido propio de varias líneas queda a merced de una regla "genérica" (acá, `display:flex` en fila del motor de tarjetas) que no fue pensada para ese caso particular — vale la pena, en el futuro, revisar si alguna otra celda de las tablas del panel tiene la misma forma (label implícito + 2+ líneas de contenido propio) sin su propio `flex-direction:column`.
+
+## Fase 5.5 — Consultas y Galería: COMPLETADA (fuera del pedido original)
+
+### Contexto
+
+El usuario pidió continuar ("Seguís") mientras la Fase 5 (QA real) queda pendiente de su lado. Se extendió la misma revisión a las 2 pantallas restantes del grupo "Operaciones Taller" del sidebar (Consultas, Galería) que no habían sido nombradas explícitamente pero comparten el mismo panel admin.
+
+### Cambios aplicados
+
+1. **Consultas** (`lista_consultas.php`): verificada con repro fiel de `inquiry-row` (mensaje largo, asunto largo). El motor de tarjetas + el clamp de 2 líneas del mensaje (`-webkit-line-clamp:2`, ya existente) funcionan correctamente. **Sin cambios de código.**
+2. **Galería** (`gestion_galeria.php`): esta pantalla no usa el motor de tablas — es un grid de tarjetas de fotos, ya mobile-first (`col-lg-4 col-md-6 col-12`). **Bug real encontrado al verificar**: `.moderation-card:hover` y `.moderation-card:hover img` (lift de 8px + zoom de imagen) no tenían guard de `@media (hover: hover) and (pointer: fine)` — el mismo defecto de "hover pegado en touch" que ya se había identificado y resuelto para las tarjetas de producto del catálogo público (`refinamiento-mobile-home`, `catalogo.css`). En un celular, tocar una tarjeta de moderación dejaría la tarjeta "levantada" con la foto agrandada hasta tocar en otro lado — molesto en una pantalla donde justamente hay que comparar varias fotos para aprobar/rechazar. Se aplicó el mismo guard ya usado como convención en el proyecto.
+3. Bump de cache-busting: `admin-gallery.css` v2→v3.
+
+### Verificación realizada
+
+- Consultas: repro estático 375px con datos "peor caso" (mensaje largo).
+- Galería: contexto de navegador con emulación táctil real (`hasTouch: true, isMobile: true` en Playwright, no solo un viewport angosto) — confirmado que `matchMedia('(hover: hover)').matches` es `false` en ese contexto (por lo tanto la regla dentro del guard nunca se activa) y que el `transform` de la tarjeta permanece `none` después de un tap.
+- No se ejecutó `vendor/bin/phpunit` (no disponible en el sandbox) — cambios CSS puros.
+
+### Pendiente
+
+Fase 5 (QA en dispositivo real) — ahora cubre las 7 pantallas revisadas en total (5 originales + Consultas + Galería).
+
+## Key Learnings (Fase 5.5)
+
+1. Un viewport angosto en el navegador headless no alcanza para probar bugs de touch (como el hover pegado) — hace falta un contexto con `hasTouch`/`isMobile` reales para que `matchMedia('(hover: hover)')` evalúe como lo haría un celular de verdad, no solo achicar la ventana.
+2. Vale la pena, al terminar una iniciativa de "mobile" en un panel grande, revisar rápidamente si hay `:hover` sin guard en CSS que todavía no se tocó en esta pasada (acá, `admin-gallery.css` no había sido tocado en ninguna fase anterior y tenía el mismo defecto que ya se había resuelto en otra parte del proyecto).

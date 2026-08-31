@@ -56,13 +56,22 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   3. [x] **Bug real encontrado al verificar (no estaba en el plan)**: la celda `ACCESO` (usuario + email) no usa el `::before` genérico como única etiqueta — tiene 2 divs propios con `width:100%`, pero el `<td>` genérico ya es `display:flex` en fila (herencia del motor de tarjetas), así que esos divs competían por espacio en una fila en vez de apilarse — con un email medianamente largo (nada extremo, un caso muy común en datos reales), el texto se salía de la tarjeta hacia la derecha, fuera de la pantalla. Se agregó `flex-direction:column` + `align-items:flex-end` a `.user-row td[data-label="ACCESO"]` y `word-break:break-word` a `.user-access-info` (por si aparece un string aún más largo sin espacios).
 - Criterio de hecho: repro 375px con datos largos antes/después — el texto ya no se sale de la tarjeta, queda apilado y alineado a la derecha como el resto de la celda. El cambio vive en el `@media` mobile del motor compartido, así que no toca desktop en absoluto (no aplica fuera de `≤991.98px`). Detalle en `apply-progress.md`.
 
+## Fase 5.5 — Extensión a Consultas y Galería (fuera del pedido original, mismo panel) [x]
+
+- No estaba en el pedido original del usuario (que nombró Dashboard/Ventas/Productos/Categorías/Usuarios) — se agregó al continuar ("Seguís") mientras la Fase 5 (QA en dispositivo real) queda pendiente del usuario. Cubre las 2 pantallas restantes del grupo "Operaciones Taller" del sidebar, para que la revisión del panel quede completa.
+- Sub-tareas:
+  1. [x] `lista_consultas.php` (Consultas): re-explorada + repro fiel de `inquiry-row` con mensaje largo. Ya estaba bien resuelta (motor de tarjetas + clamp de 2 líneas del mensaje, ambos ya existentes) — **sin cambios de código**.
+  2. [x] `gestion_galeria.php` (Galería): **no usa el motor de tablas** — es un grid de tarjetas de fotos (`col-lg-4 col-md-6 col-12`, ya mobile-first por diseño). **Bug real encontrado al verificar**: `.moderation-card:hover`/`.moderation-card:hover img` (lift + zoom de imagen) no tenían guard `@media (hover: hover) and (pointer: fine)` — mismo defecto de "hover pegado en touch" ya identificado y resuelto en su momento para `.product-card-vivid`/`.catalogo-card-premium` (`catalogo.css`, ver `openspec/changes/refinamiento-mobile-home`). Se aplicó el mismo guard, mismo patrón.
+- Criterio de hecho: repro con contexto de navegador táctil emulado (`hasTouch:true, isMobile:true`) confirmando `matchMedia('(hover: hover)').matches === false` y que la tarjeta no queda con `transform` aplicado tras un tap. Detalle en `apply-progress.md`.
+
 ## Fase 5 — QA cruzado (manual, no delegable) [ ]
 
-- Sequential, al final, después de las 5 fases anteriores.
+- Sequential, al final, después de las fases anteriores.
 - Verificaciones en dispositivo real:
-  1. Las 5 pantallas se sienten consistentes entre sí (mismo tamaño de ícono de encabezado, avatar/imagen, botón de acción).
+  1. Las 5 pantallas originales se sienten consistentes entre sí (mismo tamaño de ícono de encabezado, avatar/imagen, botón de acción).
   2. Nada se rompió en desktop (`≥992px`).
   3. Con datos reales (nombres largos, montos grandes, muchos ítems) el layout se sostiene.
+  4. Consultas y Galería (Fase 5.5): tocar una tarjeta de foto en Galería y confirmar que no queda "pegada" con el lift/zoom después de soltar.
 - Criterio de hecho: confirmación del usuario en dispositivo real.
 
 ## Review Workload Forecast
