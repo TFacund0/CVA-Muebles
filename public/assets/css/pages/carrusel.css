@@ -38,9 +38,17 @@
     z-index: 10;
 }
 
-/* Altura base del carrusel (antes vivía como inline style en el HTML) */
+/* Altura base del carrusel (antes vivía como inline style en el HTML).
+   85vh se recalcula contra el viewport actual del navegador movil, que
+   cambia de alto cuando la barra de direcciones se oculta/muestra al
+   scrollear -- eso hacia que la caja (y la imagen de fondo en cover)
+   se vieran "agrandar" en cuanto el usuario tocaba el scroll. 85svh usa
+   el viewport chico estable (con la barra de direcciones siempre
+   contada), asi la altura no salta; el vh queda como fallback para
+   navegadores viejos que no entienden svh. */
 #heroCarousel .carousel-inner {
     height: 85vh;
+    height: 85svh;
     min-height: 600px;
 }
 
@@ -202,7 +210,7 @@
 
 /* Responsive Hero */
 @media (max-width: 991.98px) {
-    #heroCarousel .carousel-inner { height: 70vh; min-height: 500px; }
+    #heroCarousel .carousel-inner { height: 70vh; height: 70svh; min-height: 500px; }
     #heroCarousel .glass-caption { padding: 2rem; margin: 0 1.5rem; max-width: calc(100% - 3rem); }
     /* display-2/display-3 ya los cubre la regla centralizada de global.css
        (h1.display-*, h2.display-*), con los mismos valores -- no duplicar. */
@@ -233,7 +241,7 @@
 }
 
 @media (max-width: 575.98px) {
-    #heroCarousel .carousel-inner { height: 60vh; min-height: 380px; }
+    #heroCarousel .carousel-inner { height: 60vh; height: 60svh; min-height: 380px; }
     #heroCarousel h1.display-2, #heroCarousel h2.display-2,
     #heroCarousel h1.display-3, #heroCarousel h2.display-3 { font-size: 1.55rem; }
     #heroCarousel .glass-caption { padding: 1.25rem; border-radius: var(--radius-md); }
