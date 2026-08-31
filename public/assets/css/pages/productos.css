@@ -78,7 +78,11 @@
            negativo lo mete por encima del grid de productos. Un margen
            positivo normal no depende de cuantas filas termine ocupando:
            el espacio despues del panel siempre es real, sea 1 fila o 2. */
-        margin: 24px auto 90px;
+        /* 90px de margen inferior daba ~27px de aire real (sobra por el
+           margen negativo que aplica el .row de Bootstrap) pero se sentia
+           demasiado separado del grid. 75px da ~12px de aire real -- sigue
+           sin superponerse (verificado), pero mucho mas ajustado. */
+        margin: 16px auto 75px;
         display: flex;
         justify-content: center;
         border: 1px solid rgba(0, 0, 0, 0.05);
@@ -143,15 +147,27 @@
 }
 
 #productos .product-card .img-wrapper {
-    height: 320px;
+    /* 320 -> 440: la proporcion imagen/contenido pasa de ~50/50 a ~60/40,
+       a pedido -- el mueble pasa a ser claramente el protagonista. */
+    height: 440px;
     overflow: hidden;
     position: relative;
+    /* Fondo calido para el espacio que deja "contain" cuando la foto no
+       llena el recuadro (en vez de blanco crudo, mezcla con la paleta). */
+    background-color: var(--cva-sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #productos .product-card img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Llenar la tarjeta para impacto visual */
+    /* cover recortaba el mueble para llenar el recuadro; contain lo
+       muestra completo (a costa de dejar franjas vacias si la foto no
+       coincide en proporcion con la caja) -- a pedido, "que se vea bien
+       el mueble" pesa mas que llenar cada pixel del recuadro. */
+    object-fit: contain;
     transition: transform 1.2s ease;
 }
 
@@ -357,7 +373,7 @@
         justify-content: center;
         gap: 0.5rem;
         width: 100%;
-        margin-top: 1.5rem; /* separacion real del header oscuro, no depender solo de su padding-bottom */
+        margin-top: 1rem; /* separacion real del header oscuro, no depender solo de su padding-bottom */
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: var(--radius-pill);
@@ -420,7 +436,7 @@
         margin-bottom: 1.5rem;
     }
 
-    #productos .product-card .img-wrapper { height: 210px; } /* Altura equilibrada */
+    #productos .product-card .img-wrapper { height: 350px; } /* ~60% del alto de la tarjeta */
     #productos .product-card .card-body { padding: 1.2rem; }
 
     #productos .product-card .card-title {
@@ -446,9 +462,9 @@
     /* Foco en la foto: la descripcion y el espacio entre bloques se
        achican, y los 5 botones bajan de tamaño ahora que ya no compiten
        contra el py-3 !important de Bootstrap que tenian antes. */
-    #productos .line-clamp-2 { margin-bottom: 1rem; }
-    #productos .precio-row { margin-bottom: 0.85rem; }
-    #productos .action-buttons { margin-bottom: 0.6rem; }
+    #productos .line-clamp-2 { margin-bottom: 0.75rem; }
+    #productos .precio-row { margin-bottom: 0.6rem; }
+    #productos .action-buttons { margin-bottom: 0.5rem; }
 
     #productos .btn-artisan-gold,
     #productos .btn-brown-solid,
@@ -466,7 +482,7 @@
 @media (max-width: 575.98px) {
     #productos .header-productos h2 { font-size: 1.5rem; }
     #productos .header-productos p { font-size: 0.8rem; }
-    #productos .product-card .img-wrapper { height: 175px; }
+    #productos .product-card .img-wrapper { height: 320px; } /* ~60% del alto de la tarjeta */
     #productos .product-card .card-body { padding: 1rem; }
     #productos .product-card .card-title { font-size: 1.05rem; }
     #productos .product-card p.small { font-size: 0.75rem; }
@@ -478,9 +494,9 @@
 
     /* Celulares chicos: la descripcion baja a 1 sola linea (antes 2) para
        que la foto del mueble siga siendo lo primero que se vea. */
-    #productos .line-clamp-2 { -webkit-line-clamp: 1; margin-bottom: 0.75rem; }
-    #productos .precio-row { margin-bottom: 0.7rem; }
-    #productos .action-buttons { margin-bottom: 0.5rem; }
+    #productos .line-clamp-2 { -webkit-line-clamp: 1; margin-bottom: 0.6rem; }
+    #productos .precio-row { margin-bottom: 0.5rem; }
+    #productos .action-buttons { margin-bottom: 0.4rem; }
 
     #productos .btn-artisan-gold,
     #productos .btn-brown-solid,
