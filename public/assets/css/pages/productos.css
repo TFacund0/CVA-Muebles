@@ -277,32 +277,62 @@
     #productos .header-productos h2 { font-size: 1.8rem; margin-bottom: 1rem; }
     #productos .header-productos p { font-size: 0.85rem; line-height: 1.4; }
 
-    #productos .filter-container {
-        margin: -20px 0 30px;
+    /* Boton que abre el panel de filtros, unico rastro del filtro visible
+       en la pagina antes de tocarlo (el resto vive dentro del offcanvas). */
+    #productos .btn-filtro-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
         width: 100%;
-        overflow-x: auto;
-        padding: 15px 5px; /* Más padding vertical para evitar cortes */
-        white-space: nowrap;
         background: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        -webkit-overflow-scrolling: touch;
-        display: block;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: var(--radius-pill);
+        padding: 0.85rem 1.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        color: var(--cva-brown);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
 
+    #productos .btn-filtro-trigger .filtro-activo-label {
+        color: var(--cva-gold);
+        font-weight: 800;
+    }
+
+    /* offcanvas-lg deja el posicionamiento (fixed, animacion, backdrop) en
+       manos de Bootstrap; aca solo se ajusta el look para que combine con
+       el resto del sitio. */
+    #productos .filter-container.offcanvas-lg {
+        --bs-offcanvas-height: 65vh;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    #productos .filter-container .offcanvas-title {
+        color: var(--cva-brown);
+        font-weight: 700;
+    }
+
+    /* Grilla de 2 columnas: todas las categorias a la vista dentro del
+       panel, sin scroll horizontal escondido. */
     #productos .filter-group {
-        display: inline-block; /* Robusto para scroll */
-        white-space: nowrap;
-        padding-left: 10px;
-        padding-right: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
     }
 
     #productos .filtro-categoria {
-        display: inline-block;
-        padding: 0.5rem 1.2rem;
-        font-size: 0.75rem;
-        border-radius: var(--radius-pill);
-        margin-right: 8px;
-        width: auto;
+        width: 100%;
+        text-align: center;
+        background: var(--cva-sand);
+        padding: 0.85rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    #productos .filtro-categoria:hover {
+        transform: none; /* El "levantarse" de escritorio no aplica a chips en grilla */
     }
 
     /* Grid 1 columna móvil Premium - Ajuste de equilibrio (No tan grande) */
@@ -354,7 +384,10 @@
     #productos .product-card .card-title { font-size: 1.05rem; }
     #productos .product-card p.small { font-size: 0.75rem; }
     #productos .precio-tag { font-size: 1.2rem; }
-    #productos .filtro-categoria { padding: 0.4rem 0.9rem; font-size: 0.7rem; }
+    /* Una sola columna en celulares chicos: nombres de categoria largos no
+       quedan apretados como pasaria en 2 columnas. */
+    #productos .filter-group { grid-template-columns: 1fr; }
+    #productos .filtro-categoria { padding: 0.7rem 0.9rem; font-size: 0.75rem; }
     #productos .btn-artisan-gold, #productos .btn-brown-solid, #productos .btn-whatsapp-artisan { padding: 0.6rem 0.8rem; font-size: 0.7rem; }
     #productos .card-footer { padding: 0.8rem; }
 }

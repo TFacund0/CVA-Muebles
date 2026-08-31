@@ -71,6 +71,8 @@
         });
 
         const botones = document.querySelectorAll('.filtro-categoria');
+        const filtroActivoLabel = document.querySelector('.filtro-activo-label');
+        const filtrosOffcanvasEl = document.getElementById('filtrosOffcanvas');
 
         botones.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -89,6 +91,16 @@
                         prod.style.display = 'none';
                     }
                 });
+
+                // Reflejar la seleccion en el boton "Filtrar" y cerrar el
+                // panel mobile -- en escritorio el offcanvas no esta
+                // toggleado (offcanvas-lg lo muestra siempre), asi que
+                // .hide() ahi no hace nada.
+                if (filtroActivoLabel) filtroActivoLabel.textContent = btn.textContent.trim();
+                if (filtrosOffcanvasEl && typeof bootstrap !== 'undefined') {
+                    const instance = bootstrap.Offcanvas.getInstance(filtrosOffcanvasEl);
+                    if (instance) instance.hide();
+                }
             });
         });
     });
