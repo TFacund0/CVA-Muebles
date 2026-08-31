@@ -28,6 +28,10 @@
     font-size: 5rem;
 }
 
+#galeria-page .empty-gallery-state h3 {
+    font-size: 1.5rem;
+}
+
 #galeria-page .gallery-header {
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
                 url('../../img/ui/backgrounds/cva_hogares_bg.png');
@@ -168,6 +172,7 @@
 
     #galeria-page .icon-badge-gold { width: 40px; height: 40px; }
     #galeria-page .empty-gallery-icon, #galeria-page .gallery-empty-icon { font-size: 3.5rem; }
+    #galeria-page .empty-gallery-state h3 { font-size: 1.2rem; padding: 0 1rem; }
 
     #galeria-page .gallery-item img { height: 240px; }
 }
@@ -177,4 +182,6 @@
     #galeria-page .masonry-gallery { grid-template-columns: 1fr; } /* 1 COLUMNA para apreciar mejor la foto del cliente */
     #galeria-page .btn-vivid-premium { width: 100%; font-size: 0.8rem; padding: 1rem; }
     #galeria-page .gallery-item img { height: 220px; }
+    #galeria-page .empty-gallery-icon { font-size: 2.8rem; }
+    #galeria-page .empty-gallery-state h3 { font-size: 1.05rem; }
 }
