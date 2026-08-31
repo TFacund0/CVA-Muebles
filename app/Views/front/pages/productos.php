@@ -8,7 +8,8 @@
 <section id="productos" class="contenedor-productos"
     data-csrf-token="<?= csrf_hash() ?>"
     data-favoritos-toggle-url="<?= base_url('favoritos/toggle/') ?>"
-    data-login-url="<?= base_url('login') ?>">
+    data-login-url="<?= base_url('login') ?>"
+    data-login-modal="#modalLogin">
     <!-- Cabecera Premium -->
     <div class="header-productos text-center shadow-sm">
         <div class="container">
@@ -68,5 +69,5 @@
 
 <?= $this->section('extra-js') ?>
 <script src="<?= base_url('assets/js/favoritos.js?v=1.0') ?>"></script>
-<script src="<?= base_url('assets/js/pages/productos.js?v=1.0') ?>"></script>
+<script src="<?= base_url('assets/js/pages/productos.js?v=1.1') ?>"></script>
 <?= $this->endSection() ?>

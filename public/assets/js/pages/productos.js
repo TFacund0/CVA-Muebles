@@ -9,7 +9,17 @@
         let csrfToken = page.dataset.csrfToken;
         const favoritosToggleUrl = page.dataset.favoritosToggleUrl;
         const loginUrl = page.dataset.loginUrl;
+        const loginModalSelector = page.dataset.loginModal;
         let favoriteQueue = Promise.resolve();
+
+        function abrirLoginOnRedirigir() {
+            const el = loginModalSelector ? document.querySelector(loginModalSelector) : null;
+            if (el && window.bootstrap) {
+                new bootstrap.Modal(el).show();
+            } else {
+                window.location.href = loginUrl;
+            }
+        }
 
         function toggleFav(event, id, btn) {
             if (event) {
@@ -53,7 +63,7 @@
                         if (data.status === 'error') {
                             // Revertir cambio optimista si no está autenticado y mandar a login
                             revertToggle();
-                            window.location.href = loginUrl;
+                            abrirLoginOnRedirigir();
                         }
                     })
                     .catch(err => {

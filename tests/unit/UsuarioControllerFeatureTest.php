@@ -170,6 +170,46 @@ final class UsuarioControllerFeatureTest extends CIUnitTestCase
         $this->assertNotNull($creado);
     }
 
+    public function testEnviarFormAnonimoConRedirectToLoCarraAlLogin(): void
+    {
+        $this->mockThrottler(true);
+
+        $emailNuevo = 'registro.redirect.xyz@cva-muebles-test.local';
+        $this->emailsACrear[] = $emailNuevo;
+
+        $result = $this->withSession([])
+            ->post('/enviar-form', $this->conCsrf([
+                'name'        => 'Redirect',
+                'surname'     => 'Registro',
+                'user'        => 'reg_redirect_xyz',
+                'email'       => $emailNuevo,
+                'pass'        => self::PASSWORD_TEST,
+                'redirect_to' => '/mis_favoritos',
+            ]));
+
+        $result->assertRedirectTo('/login');
+        $result->assertSessionHas('success');
+        $result->assertSessionHas('redirect_to', '/mis_favoritos');
+    }
+
+    public function testEnviarFormEmailDuplicadoReabreModalRegistro(): void
+    {
+        $this->mockThrottler(true);
+
+        $result = $this->withSession([])
+            ->post('/enviar-form', $this->conCsrf([
+                'name'    => 'Duplicado',
+                'surname' => 'Test',
+                'user'    => 'usuario_duplicado_reopen_xyz',
+                'email'   => self::EMAIL_TEST,
+                'pass'    => self::PASSWORD_TEST,
+            ]));
+
+        $result->assertRedirect();
+        $result->assertSessionHas('fail');
+        $result->assertSessionHas('reopen_modal', 'registro');
+    }
+
     public function testEnviarFormAdminRegistraYRedirigeACrudUsuarios(): void
     {
         $this->mockThrottler(true);

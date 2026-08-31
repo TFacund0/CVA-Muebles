@@ -81,9 +81,9 @@ if ($env_cart_enabled) {
 
       <?php if (!$isLogged): ?>
         <div class="auth-pill-artisan d-none d-lg-flex">
-          <a href="<?= base_url('login') ?>" class="auth-pill-link">Ingresar</a>
+          <a href="<?= base_url('login') ?>" class="auth-pill-link" data-bs-toggle="modal" data-bs-target="#modalLogin">Ingresar</a>
           <div class="auth-pill-divider"></div>
-          <a href="<?= base_url('registro') ?>" class="auth-pill-link">Registrarse</a>
+          <a href="<?= base_url('registro') ?>" class="auth-pill-link" data-bs-toggle="modal" data-bs-target="#modalRegistro">Registrarse</a>
         </div>
       <?php else: ?>
         <button class="boton-icon-circle d-none d-lg-flex" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
@@ -125,8 +125,8 @@ if ($env_cart_enabled) {
         </div>
         <p class="small text-muted mb-3">Bienvenido a nuestra carpintería artesanal.</p>
         <div class="d-grid gap-2">
-          <a href="<?= base_url('login') ?>" class="btn btn-brown-solid rounded-pill">Iniciar Sesión</a>
-          <a href="<?= base_url('registro') ?>" class="btn btn-outline-brown rounded-pill">Registrarse</a>
+          <a href="<?= base_url('login') ?>" class="btn btn-brown-solid rounded-pill" data-bs-toggle="modal" data-bs-target="#modalLogin">Iniciar Sesión</a>
+          <a href="<?= base_url('registro') ?>" class="btn btn-outline-brown rounded-pill" data-bs-toggle="modal" data-bs-target="#modalRegistro">Registrarse</a>
         </div>
       </div>
     <?php endif; ?>

@@ -11,7 +11,7 @@
 
 .product-detail-wrapper {
     background-color: var(--cva-parchment);
-    padding-top: 4rem;
+    padding-top: 2rem;
     padding-bottom: 4rem;
 }
 
@@ -24,12 +24,18 @@
     border-bottom: 2px solid var(--cva-gold);
 }
 
-/* 2. MAIN CARD (CENTRAL BOX COMPACTO) */
+/* 2. MAIN CARD (CENTRAL BOX COMPACTO)
+   Antes: sombra muy grande (0 30px 80px) + fondo blanco puro contra el
+   parchment de la pagina hacia que la tarjeta se viera flotando, como
+   despegada del resto. Se reduce la sombra y se agrega un borde fino +
+   acento dorado arriba para anclarla visualmente, igual que el resto
+   de las paginas del sitio (headers con border-bottom dorado). */
 .product-detail-wrapper .main-artisan-card {
     background-color: white;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-top: 3px solid var(--cva-gold);
     border-radius: var(--radius-lg);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-sm);
     margin-bottom: 3rem;
 }
 

@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css?v=3.1')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css?v=3.2')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -25,23 +25,11 @@
 
 
 
-            <form method="post" action="<?= base_url('enviar-login') ?>">
-                <?= csrf_field(); ?>
-                
-                <div class="artisan-input-group">
-                    <label for="email">Usuario o Email</label>
-                    <input type="text" class="artisan-control" id="email" name="email" value="<?= old('email') ?>" placeholder="Ingresa tu usuario" required autofocus>
-                </div>
-
-                <div class="artisan-input-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" class="artisan-control" id="password" name="pass" placeholder="••••••••" required>
-                </div>
-
-                <button type="submit" class="btn-auth-primary">
-                    <i class="bi bi-door-open-fill me-2"></i> Ingresar al Portal
-                </button>
-            </form>
+            <?= view('partials/auth/_form_login', [
+                  'idPrefix'   => '',
+                  'isModal'    => false,
+                  'redirectTo' => session('redirect_to') ?? '/',
+            ]) ?>
 
             <div class="auth-footer">
                 ¿Aún no eres parte? <a href="<?= base_url('/registro') ?>">Crea tu cuenta aquí</a>

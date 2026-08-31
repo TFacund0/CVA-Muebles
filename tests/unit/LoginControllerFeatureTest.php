@@ -136,7 +136,38 @@ final class LoginControllerFeatureTest extends CIUnitTestCase
 
         $result->assertRedirect();
         $result->assertSessionHas('error');
+        $result->assertSessionHas('reopen_modal', 'login');
         $result->assertSessionMissing('logged_in');
+    }
+
+    public function testAuthConRedirectToValidoRedirigeAlOrigen(): void
+    {
+        $this->mockThrottler(true);
+
+        $result = $this->withSession([])
+            ->post('/enviar-login', $this->conCsrf([
+                'email'       => self::EMAIL_TEST,
+                'pass'        => self::PASSWORD_TEST,
+                'redirect_to' => '/detalle_producto/5',
+            ]));
+
+        $result->assertRedirectTo('/detalle_producto/5');
+        $result->assertSessionHas('success');
+    }
+
+    public function testAuthConRedirectToExternoCaeARaiz(): void
+    {
+        $this->mockThrottler(true);
+
+        $result = $this->withSession([])
+            ->post('/enviar-login', $this->conCsrf([
+                'email'       => self::EMAIL_TEST,
+                'pass'        => self::PASSWORD_TEST,
+                'redirect_to' => 'https://evil.example',
+            ]));
+
+        $result->assertRedirectTo('/');
+        $result->assertSessionHas('success');
     }
 
     /**

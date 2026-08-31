@@ -68,7 +68,7 @@
                         </a>
                     <?php endif; ?>
                 <?php else: ?>
-                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 small">Iniciá sesión para comprar</a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 small" data-bs-toggle="modal" data-bs-target="#modalLogin">Iniciá sesión para comprar</a>
                 <?php endif; ?>
             <?php else: ?>
                 <?php if (session()->get('logged_in')): ?>
@@ -80,7 +80,7 @@
                         <i class="bi bi-whatsapp me-2"></i> Consultar por WhatsApp
                     </a>
                 <?php else: ?>
-                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 small">Iniciá sesión para consultar</a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 small" data-bs-toggle="modal" data-bs-target="#modalLogin">Iniciá sesión para consultar</a>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

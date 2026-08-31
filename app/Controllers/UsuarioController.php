@@ -36,7 +36,7 @@ class UsuarioController extends BaseController {
 
         // Limitar a 5 registros por hora por cada IP.
         if ($throttler->check(md5($this->request->getIPAddress()) . '-registro', 5, HOUR) === false) {
-            return redirect()->back()->withInput()->with('fail', 'Demasiados intentos de registro. Por favor, esperá un momento.');
+            return redirect()->back()->withInput()->with('fail', 'Demasiados intentos de registro. Por favor, esperá un momento.')->with('reopen_modal', 'registro');
         }
 
         $resultado = $this->usuarioService->registrarUsuario($this->request->getPost());
@@ -45,9 +45,11 @@ class UsuarioController extends BaseController {
             if ($this->isAdmin()) {
                 return redirect()->to('/crud-usuarios')->with('success', 'Usuario registrado exitosamente');
             }
-            return redirect()->to('/login')->with('success', $resultado['message']);
+            return redirect()->to('/login')
+                ->with('success', $resultado['message'])
+                ->with('redirect_to', $this->request->getPost('redirect_to'));
         } else {
-            return redirect()->back()->withInput()->with('fail', $resultado['message']);
+            return redirect()->back()->withInput()->with('fail', $resultado['message'])->with('reopen_modal', 'registro');
         }
     }
 

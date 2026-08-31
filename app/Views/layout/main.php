@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=4.1')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/layout/main-layout.css?v=8.2')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components/floating-alert.css?v=3.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/auth.css?v=3.2')?>">
 
 
     <!-- Page Specific CSS Section -->
@@ -51,6 +52,12 @@
 
     <!-- Mensajes Flotantes Globales (Toasts) -->
     <?= view('components/floating_alert') ?>
+
+    <!-- Modal de Login/Registro (solo invitados, fuera de /login y /registro) -->
+    <?php $uri = uri_string(); ?>
+    <?php if (! session('logged_in') && ! in_array(trim($uri, '/'), ['login', 'registro'], true)): ?>
+        <?= view('partials/auth/modals') ?>
+    <?php endif; ?>
 
     <!-- Page Specific JS Section -->
     <?= $this->renderSection('extra-js') ?>

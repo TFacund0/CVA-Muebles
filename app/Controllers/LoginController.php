@@ -20,7 +20,8 @@ class LoginController extends BaseController {
      */
     public function create() {
         if (session()->get('logged_in')) return redirect()->to('/');
-        return view('front/pages/login', ['title' => 'Login']);
+        session()->keepFlashdata('redirect_to');
+        return view('front/pages/login', ['title' => 'Login', 'redirectTo' => session('redirect_to') ?? '/']);
     }
 
     /**
@@ -33,7 +34,7 @@ class LoginController extends BaseController {
 
         // Limitar a 5 intentos por minuto por cada IP
         if ($throttler->check(md5($this->request->getIPAddress()), 5, MINUTE) === false) {
-            return redirect()->back()->withInput()->with('error', 'Demasiados intentos. Por favor, espera un minuto.');
+            return redirect()->back()->withInput()->with('error', 'Demasiados intentos. Por favor, espera un minuto.')->with('reopen_modal', 'login');
         }
 
         $resultado = $this->usuarioService->autenticar(
@@ -44,10 +45,47 @@ class LoginController extends BaseController {
         if($resultado['status'] === 'success') {
             session()->regenerate();
             session()->set($resultado['data']);
-            return redirect()->to('/')->with('success', '¡Bienvenido de nuevo!');
+            return redirect()->to($this->safeRedirect($this->request->getPost('redirect_to')))->with('success', '¡Bienvenido de nuevo!');
         } else {
-            return redirect()->back()->withInput()->with('error', $resultado['message']);
+            return redirect()->back()->withInput()->with('error', $resultado['message'])->with('reopen_modal', 'login');
         }
+    }
+
+    /**
+     * Valida que $target sea una ruta relativa al mismo host (o una URL
+     * absoluta cuyo host coincida con base_url()), rechazando esquemas
+     * externos, rutas protocol-relative/backslash y bytes de inyección de
+     * encabezados (CR/LF/NUL). Cualquier valor fuera de esta allow-list
+     * cae a '/'.
+     *
+     * @return string
+     */
+    private function safeRedirect(?string $target): string {
+        $target = trim((string) $target);
+
+        if ($target === '' || strlen($target) > 512) {
+            return '/';
+        }
+
+        if (preg_match('/[\r\n\0]/', $target)) {
+            return '/';
+        }
+
+        if (str_starts_with($target, '//') || str_starts_with($target, '/\\')) {
+            return '/';
+        }
+
+        if (preg_match('#^[a-z][a-z0-9+.-]*:#i', $target)) {
+            $host = parse_url($target, PHP_URL_HOST);
+
+            if ($host === null || $host !== parse_url(base_url(), PHP_URL_HOST)) {
+                return '/';
+            }
+
+            return $target;
+        }
+
+        return str_starts_with($target, '/') ? $target : '/';
     }
 
     /**

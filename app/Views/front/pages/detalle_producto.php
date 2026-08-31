@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.1') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.2') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -114,7 +114,7 @@
                                 </a>
                             <?php endif; ?>
                         <?php else: ?>
-                            <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-3 mb-3 rounded-3">
+                            <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-3 mb-3 rounded-3" data-bs-toggle="modal" data-bs-target="#modalLogin">
                                 <i class="bi bi-person-lock me-2"></i> INICIÁ SESIÓN PARA COMPRAR
                             </a>
                         <?php endif; ?>
@@ -127,7 +127,7 @@
                                 <i class="bi bi-whatsapp"></i> CONSULTAR POR WHATSAPP
                             </a>
                         <?php else: ?>
-                            <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-3 mb-3 rounded-3">
+                            <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-3 mb-3 rounded-3" data-bs-toggle="modal" data-bs-target="#modalLogin">
                                 <i class="bi bi-person-lock me-2"></i> INICIÁ SESIÓN PARA CONSULTAR
                             </a>
                         <?php endif; ?>

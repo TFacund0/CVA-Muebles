@@ -158,6 +158,23 @@
     box-shadow: 0 8px 25px rgba(184, 134, 11, 0.08);
 }
 
+/* Mismo verde que #productos .btn-whatsapp-artisan / .btn-whatsapp-premium
+   del detalle de producto, para que "Consultar" se reconozca como accion
+   de WhatsApp en todo el sitio. */
+#favoritos-page .btn-whatsapp-fav {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#favoritos-page .btn-whatsapp-fav:hover {
+    background-color: #1b5e20;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+}
+
 #favoritos-page .clear-search-btn {
     color: #a08d7c;
     transition: color 0.2s ease;

@@ -193,19 +193,13 @@
 
 @media (max-width: 991px) {
     .auth-wrapper { padding: 1.5rem 1rem; }
-    .auth-card { flex-direction: column; max-width: 600px; border-radius: 1.5rem; }
+    .auth-card { flex-direction: column; max-width: 480px; border-radius: 1.5rem; }
 
-    /* El formulario es la accion principal: en mobile va primero en la
-       pantalla, aunque en el HTML el bloque de branding este antes
-       (source order intacto para lectores de pantalla / SEO). */
-    .auth-side-form { order: 1; padding: 2rem 1.5rem; }
-    .auth-side-branding { order: 2; padding: 1.5rem; min-height: 0; text-align: center; align-items: center; }
-
-    .auth-logo-circle { width: 56px; height: 56px; font-size: 1.4rem; margin-bottom: 1rem; }
-    .auth-quote { font-size: 1.1rem; margin-bottom: 0; }
-    .auth-side-branding .mt-4,
-    .auth-side-branding .mt-auto,
-    .auth-side-branding p { display: none; }
+    /* En mobile el foco es unicamente el formulario: el panel de imagen
+       y frase institucional no aporta a la tarea (iniciar sesion /
+       crear cuenta) y antes empujaba el form fuera de la pantalla. */
+    .auth-side-branding { display: none; }
+    .auth-side-form { padding: 2rem 1.5rem; }
 
     .auth-header { margin-bottom: 1.5rem; }
     .auth-header h2 { font-size: 1.6rem; }
@@ -214,13 +208,22 @@
 @media (max-width: 480px) {
     .auth-wrapper { padding: 0.5rem; }
     .auth-card { border-radius: 1rem; }
-    .auth-side-branding { padding: 1.2rem; }
-    .auth-logo-circle { width: 48px; height: 48px; font-size: 1.2rem; margin-bottom: 0.8rem; }
-    .auth-quote { font-size: 1rem; }
     .auth-side-form { padding: 1.5rem 1.2rem; }
     .auth-header h2 { font-size: 1.4rem; }
     .auth-header p { font-size: 0.85rem; }
     .artisan-input-group { margin-bottom: 1.1rem; }
     .artisan-control { padding: 0.8rem 1rem; font-size: 0.9rem; }
     .btn-auth-primary { padding: 0.8rem; margin-top: 1rem;}
+}
+
+/* Modal de login/registro: fondo desenfocado */
+.modal-backdrop.auth-blur {
+    background-color: rgba(33, 24, 18, .55);
+}
+
+@supports ((backdrop-filter: blur(6px)) or (-webkit-backdrop-filter: blur(6px))) {
+    .modal-backdrop.auth-blur {
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
 }
