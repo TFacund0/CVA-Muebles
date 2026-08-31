@@ -1,6 +1,8 @@
 .profile-container-v3 {
     max-width: 1000px;
     margin: 40px auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .profile-main-card {
@@ -11,14 +13,17 @@
     overflow: hidden;
     display: flex;
     flex-direction: row;
+    align-items: stretch;
     min-height: 600px;
 }
 
 /* Columna de Resumen (Izquierda) */
 .profile-sidebar-summary {
-    width: 350px;
-    background: #fdfaf7;
+    width: 320px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #fdfaf7 0%, #f7f1e8 100%);
     border-right: 1px solid #f0e6d6;
+    border-top: 4px solid var(--cva-gold);
     padding: 3rem 2rem;
     display: flex;
     flex-direction: column;
@@ -37,6 +42,12 @@
     margin-bottom: 1.5rem;
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatar-circle-v3:hover {
+    transform: scale(1.04);
+    box-shadow: 0 14px 28px rgba(184, 134, 11, 0.18);
 }
 
 .avatar-circle-v3 img {
@@ -176,28 +187,51 @@
 @media (max-width: 991px) {
     .profile-container-v3 { margin: 0; padding: 0; max-width: 100%; }
     .profile-main-card { flex-direction: column; border-radius: 0; border: none; }
-    .profile-sidebar-summary { 
-        width: 100%; 
-        border-right: none; 
-        border-bottom: 1px solid #f0e6d6; 
-        padding: 3rem 1.5rem 2rem;
+    .profile-sidebar-summary {
+        width: 100%;
+        border-right: none;
+        border-top: none;
+        border-bottom: 1px solid #f0e6d6;
+        padding: 2.5rem 1.5rem 2rem;
     }
     .avatar-circle-v3 { width: 130px; height: 130px; }
     .profile-sidebar-summary h3 { font-size: 1.5rem; }
-    
+
     .profile-form-content { padding: 2.5rem 1.5rem; }
-    .profile-form-content h2 { font-size: 1.6rem; }
-    
+
+    /* "Configuracion" + boton EDITAR DATOS venian en una sola fila
+       (d-flex justify-content-between) sin ningun ajuste para mobile:
+       en pantallas angostas el titulo empujaba al boton fuera de la
+       vista o lo comprimia. Se apilan y el boton pasa a ancho completo. */
+    .profile-form-content .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 1rem;
+    }
+    .profile-form-content h2 { font-size: 1.5rem; }
+    .profile-form-content #toggleEdit { width: 100%; }
+
     .artisan-label-v3 { font-size: 0.65rem; }
     .artisan-control-v3 { padding: 0.8rem 1rem; font-size: 0.9rem; }
-    
+
     .btn-artisan-v3 { width: 100%; padding: 1rem; }
-    .btnGroup .d-flex { flex-direction: column; gap: 10px; }
+    /* Bug: esta regla apuntaba a ".btnGroup" (clase), pero el markup usa
+       id="btnGroup" -- nunca aplicaba y los botones Guardar/Cancelar
+       quedaban lado a lado, angostos, en mobile. */
+    #btnGroup .d-flex { flex-direction: column; gap: 10px; }
     #cancelEdit { width: 100%; }
+
+    /* Modal de cambiar contraseña: padding fijo de 3rem (p-5) demasiado
+       grande para una pantalla chica. */
+    #modalPassword .modal-body { padding: 1.5rem !important; }
+    #modalPassword .modal-footer { padding: 0 1.5rem 1.5rem !important; }
+    #modalPassword .modal-header { padding: 1.2rem 1.5rem !important; }
 }
 
 @media (max-width: 575px) {
     .profile-sidebar-summary { padding: 2rem 1.5rem 1.5rem; }
     .avatar-circle-v3 { width: 110px; height: 110px; }
     .form-section-title { font-size: 1.2rem; }
+    .profile-form-content h2 { font-size: 1.3rem; }
+    .row.g-4 { --bs-gutter-y: 1rem; }
 }
