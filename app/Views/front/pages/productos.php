@@ -32,7 +32,7 @@
              barra normal (Bootstrap la resetea a estatica en ese breakpoint);
              en móvil es un panel que sube desde abajo, disparado por el botón
              de arriba, en vez de una fila con scroll horizontal escondido. -->
-        <div class="offcanvas offcanvas-bottom offcanvas-lg filter-container mb-5 animate-fade-in" tabindex="-1" id="filtrosOffcanvas" aria-labelledby="filtrosOffcanvasLabel">
+        <div class="offcanvas offcanvas-bottom offcanvas-lg filter-container animate-fade-in" tabindex="-1" id="filtrosOffcanvas" aria-labelledby="filtrosOffcanvasLabel">
             <div class="offcanvas-header d-lg-none">
                 <h5 class="offcanvas-title" id="filtrosOffcanvasLabel">Filtrar por categoría</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>

@@ -60,6 +60,13 @@
    clics de las categorias. */
 @media (min-width: 992px) {
     #productos .filter-container {
+        /* Bootstrap tiene una regla incondicional .offcanvas{visibility:
+           hidden;...} (sin @media) que aplica siempre por la clase base
+           "offcanvas" -- el reset de .offcanvas-lg en este breakpoint solo
+           toca variables cosmeticas, nunca visibility, asi que sin esto el
+           filtro quedaba invisible en escritorio (ocupando su lugar, pero
+           sin dibujarse: confirmado con getComputedStyle en Playwright). */
+        visibility: visible;
         background: white;
         padding: 8px;
         border-radius: var(--radius-pill);
@@ -294,6 +301,7 @@
         justify-content: center;
         gap: 0.5rem;
         width: 100%;
+        margin-top: 1.5rem; /* separacion real del header oscuro, no depender solo de su padding-bottom */
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: var(--radius-pill);
@@ -315,7 +323,12 @@
        manos de Bootstrap; aca solo se ajusta el look para que combine con
        el resto del sitio. */
     #productos .filter-container.offcanvas-lg {
-        --bs-offcanvas-height: 65vh;
+        /* dvh en vez de vh: en iOS, vh se calcula contra un viewport que no
+           coincide con el real cuando la barra del navegador se
+           esconde/aparece, y el panel quedaba mas corto que la pantalla
+           visible -- se veia el fondo oscuro del backdrop como una franja
+           vacia debajo de las categorias. dvh sigue el viewport real. */
+        --bs-offcanvas-height: 65dvh;
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
 
