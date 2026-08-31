@@ -130,11 +130,11 @@
 </section>
 
 <!-- UBICACIÓN (RESTAURADO COLOR BLANCO Y ALINEACIÓN) -->
-<section class="section-ubicacion py-0">
+<section class="section-ubicacion">
     <div class="container-fluid p-0">
         <div class="row g-0 align-items-stretch row-min-height">
             <div class="col-lg-5 d-flex align-items-center bg-white">
-                <div class="p-5 p-xl-5 w-100 mx-auto ubicacion-content">
+                <div class="w-100 mx-auto ubicacion-content">
                     <span class="text-gold fw-bold text-uppercase x-small kicker-spacing-3">Vení al Taller</span>
                     <h2 class="display-3 fw-bold font-lora mt-2 mb-4 text-cva-brown">Mantilla, <span class="text-gold">Corrientes</span></h2>
                     <p class="lead mb-5 text-muted">Donde la pasión por el oficio se encuentra. Un rincón correntino dedicado a crear muebles para toda la vida.</p>

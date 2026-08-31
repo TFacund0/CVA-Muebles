@@ -82,20 +82,11 @@
     border: 1px solid rgba(0,0,0,0.03);
 }
 
-#home-page .catalogo-card-premium:hover {
-    transform: translateY(-15px);
-    box-shadow: 0 40px 80px rgba(62, 39, 35, 0.15);
-}
-
 #home-page .card-img-artisan {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 1.2s ease;
-}
-
-#home-page .catalogo-card-premium:hover .card-img-artisan {
-    transform: scale(1.1);
 }
 
 #home-page .card-overlay-modern {
@@ -110,12 +101,26 @@
     transition: background 0.4s;
 }
 
-#home-page .catalogo-card-premium:hover .card-overlay-modern {
-    background: linear-gradient(to top, var(--cva-brown) 0%, rgba(62, 39, 35, 0.6) 100%);
-}
+/* CONVENCIÓN DEL PROYECTO: todo :hover que deje un estado visual
+   persistente va dentro de este guard. En touch, :hover se queda
+   "pegado" tras el tap hasta que se toca otro elemento. */
+@media (hover: hover) and (pointer: fine) {
+    #home-page .catalogo-card-premium:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 40px 80px rgba(62, 39, 35, 0.15);
+    }
+    #home-page .catalogo-card-premium:hover .card-img-artisan { transform: scale(1.1); }
+    #home-page .catalogo-card-premium:hover .card-overlay-modern {
+        background: linear-gradient(to top, var(--cva-brown) 0%, rgba(62, 39, 35, 0.6) 100%);
+    }
+    #home-page .catalogo-card-premium:hover .category-line { width: 100%; }
 
-#home-page .catalogo-card-premium:hover .category-line {
-    width: 100%;
+    #home-page .product-card-vivid:hover {
+        transform: scale(1.05) translateY(-10px);
+        box-shadow: 0 30px 60px rgba(62, 39, 35, 0.15);
+        z-index: 10;
+    }
+    #home-page .product-card-vivid:hover .product-img-container img { transform: scale(1.1); }
 }
 
 /* 2. PRODUCTOS DESTACADOS */
@@ -133,12 +138,6 @@
     position: relative;
 }
 
-#home-page .product-card-vivid:hover {
-    transform: scale(1.05) translateY(-10px);
-    box-shadow: 0 30px 60px rgba(62, 39, 35, 0.15);
-    z-index: 10;
-}
-
 #home-page .product-img-container {
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -152,10 +151,6 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s;
-}
-
-#home-page .product-card-vivid:hover .product-img-container img {
-    transform: scale(1.1);
 }
 
 #home-page .price-badge-artisan {
@@ -222,6 +217,24 @@
 
 #home-page .swiper-pagination-bullet-active {
     background: var(--cva-gold) !important;
+}
+
+@media (max-width: 575.98px) {
+    #home-page .swiper-button-next,
+    #home-page .swiper-button-prev {
+        width: 38px !important;
+        height: 38px !important;
+        /* Sacarlas de encima de la foto: bajarlas al carril que ya
+           reserva el padding-bottom: 4rem de .swiper-destacados. */
+        top: auto !important;
+        bottom: 0.35rem;
+        margin-top: 0 !important;
+        transform: none;
+    }
+    #home-page .swiper-button-prev { left: 12px !important; right: auto !important; }
+    #home-page .swiper-button-next { right: 12px !important; left: auto !important; }
+    #home-page .swiper-button-next:after,
+    #home-page .swiper-button-prev:after { font-size: 0.95rem !important; }
 }
 
 /* 4. SECCIÓN MISIÓN (Verde Bosque Premium) */
@@ -295,9 +308,18 @@
    por ser CSS muerto/duplicado que competía con este archivo) */
 #home-page .section-ubicacion {
     background-color: #faf7f2;
-    padding: 100px 0;
+    /* padding-top: 0 lo aportaba .py-0 (Bootstrap, !important). Se quitó
+       la utilidad del HTML y se declara acá para no pelear especificidad.
+       El padding-bottom separa el iframe del footer, que no tiene margin-top. */
+    padding: 0 0 100px;
     width: 100%;
     border-top: 1px solid rgba(0,0,0,0.03);
+}
+
+/* Padding propio (antes venía de la utilidad Bootstrap .p-5, que es
+   !important y no se podía ajustar por breakpoint). */
+#home-page .section-ubicacion .ubicacion-content {
+    padding: 3rem;
 }
 
 #home-page .section-ubicacion h3 {
@@ -393,11 +415,19 @@
 
 /* Ubicación Responsivo */
 @media (max-width: 991.98px) {
+    #home-page .section-ubicacion {
+        padding-bottom: 60px;
+    }
     #home-page .section-ubicacion .row.g-0 {
         flex-direction: column;
     }
     #home-page .section-ubicacion .col-lg-5 {
-        padding: 40px 20px;
+        padding: 40px 0;
+    }
+    /* 12px = calc(--bs-gutter-x * .5), el mismo inset lateral efectivo
+       que usan las otras 3 secciones del home vía .container. */
+    #home-page .section-ubicacion .ubicacion-content {
+        padding: 0 12px;
     }
     /* display-3 ya lo cubre la regla centralizada de global.css. */
     #home-page .section-ubicacion iframe {
