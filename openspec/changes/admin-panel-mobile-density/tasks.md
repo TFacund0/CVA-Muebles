@@ -82,7 +82,7 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   3. [x] Encabezado y resto del formulario ya seguían el patrón compartido correctamente (`g-4`, `display-6 display-md-5`, `col-lg-7`/`col-lg-5`) — este no era el caso atípico, `editar_producto.php` sí lo era (ver Fase 5.6).
 - Criterio de hecho: medido con `getComputedStyle` — altura de la caja de referencia 350px (antes) → 120px (después, ajustada a contenido). Detalle en `apply-progress.md`.
 
-## Fase 5 — QA cruzado (manual, no delegable) [ ]
+## Fase 5 — QA cruzado (manual, no delegable) [x]
 
 - Sequential, al final, después de las fases anteriores.
 - Verificaciones en dispositivo real:
@@ -90,7 +90,11 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   2. Nada se rompió en desktop (`≥992px`).
   3. Con datos reales (nombres largos, montos grandes, muchos ítems) el layout se sostiene.
   4. Consultas y Galería (Fase 5.5): tocar una tarjeta de foto en Galería y confirmar que no queda "pegada" con el lift/zoom después de soltar.
-- Criterio de hecho: confirmación del usuario en dispositivo real.
+- Criterio de hecho: confirmación del usuario en dispositivo real. **Confirmado por el usuario ("Sí, ya confirmé").**
+
+## Estado final del change: COMPLETO
+
+Todas las fases (0, 1, 2, 3, 4, 5.5, 5.6, 5.7, 5) están cerradas. Las 11 pantallas del panel admin que usan `admin_layout.php` fueron revisadas; `perfil_config.php` queda fuera por usar el layout público del sitio. Ver `apply-progress.md` para el detalle completo de cada fase.
 
 ## Review Workload Forecast
 

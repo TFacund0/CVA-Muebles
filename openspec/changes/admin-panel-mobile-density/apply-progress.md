@@ -212,3 +212,30 @@ Fase 5 (QA en dispositivo real) — con esta fase se completó la revisión de l
 
 1. Tercera aparición del mismo patrón de bug (`min-height`/`height` inerte por cascada) en dos fases seguidas — confirma que vale la pena, en un futuro trabajo sobre este CSS, hacer un barrido dedicado de todas las clases `*-min-h`/`*-h[0-9]+` del panel para revisar si hay más casos silenciosos.
 2. `perfil_config.php` es un recordatorio útil de que "está en el sidebar del admin" no es lo mismo que "es parte del layout del admin" — vale la pena confirmar el `extend()` de cada vista antes de asumir que comparte CSS/convenciones con el resto del panel.
+
+## Fase 5 — QA cruzado: CONFIRMADA POR EL USUARIO
+
+El usuario probó las 11 pantallas en un dispositivo real y confirmó ("Sí, ya confirmé"). Con esto se cierra el change completo.
+
+## Resumen final del change
+
+| Fase | Pantalla(s) | Resultado |
+|---|---|---|
+| 0 | Fundación compartida | Ícono de encabezado + avatar/imagen + botón de acción centralizados y achicados en las 11 pantallas; corregido avatar deformado en elipse |
+| 1 | Dashboard | KPIs compactados; corregida tarjeta "Rendimiento Histórico" (fondo blanco + texto invisible + panel opaco) |
+| 2 | Ventas (listado + detalle) | Corregidos botones de aprobación deformados y watermark de billetera sólido |
+| 3 | Catálogo (Productos + Categorías) | Verificado — ya estaba bien tras la Fase 0, sin cambios |
+| 4 | Usuarios | Corregido email largo desbordando la tarjeta |
+| 5.5 | Consultas + Galería | Consultas verificada sin cambios; corregido hover pegado en touch en Galería |
+| 5.6 | Productos (alta + editar) | Corregidos ícono aplastado (bug compartido, protege las 11 pantallas), dropzone que no se achicaba, y encabezado desalineado del patrón común |
+| 5.7 | Ventas (Pedido Manual) | Corregida caja de referencia gigante/vacía y `</form>` duplicado |
+| 5 | QA en dispositivo real | Confirmado por el usuario |
+
+**Alcance final**: 11 pantallas de `admin_layout.php` revisadas (Dashboard, Ventas ×3, Productos ×3, Categorías, Usuarios, Consultas, Galería). `perfil_config.php` queda fuera por usar el layout público del sitio, no el del panel admin.
+
+**Total de commits**: 8, uno por fase, cada uno con verificación visual (repro estático con Chromium headless, medición `getComputedStyle` cuando el defecto no era obvio a simple vista) antes de dar la fase por cerrada.
+
+## Key Learnings (cierre del change)
+
+1. La técnica de reconstruir fragmentos reales del HTML/CSS del proyecto (no un mockup aproximado) y capturarlos con Chromium headless — con medición `getComputedStyle` cuando hacía falta certeza, no solo la captura — encontró bugs reales en 7 de las 9 fases de implementación, muchos de los cuales no estaban en el relevamiento inicial. Vale la pena mantener esta técnica como práctica estándar para futuros trabajos de CSS/layout en este proyecto, en vez de confiar solo en la lectura del diff.
+2. Un puñado de patrones de bug se repitió varias veces a lo largo del change: (a) una regla mobile sin `!important` pierde contra una clase de tamaño fijo definida después en cascada — apareció 3 veces (imagen de producto, dropzone, caja de referencia); (b) un `:hover` sin guard `@media (hover: hover)` queda "pegado" en touch — ya era un patrón conocido del proyecto (`refinamiento-mobile-home`), reapareció en Galería; (c) una celda/elemento con contenido propio de varias líneas queda a merced del `display:flex` genérico del motor de tarjetas — apareció en Usuarios. Quedan documentados por si se quiere hacer un barrido dedicado de estos 3 patrones en el resto del proyecto (público + admin) en una iniciativa futura.
