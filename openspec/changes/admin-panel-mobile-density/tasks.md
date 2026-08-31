@@ -2,15 +2,16 @@
 
 Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de OpenSpec/Engram disponible). Delivery strategy: fase por fase — cada fase se implementa, se verifica (repro estático 375px) y se entrega en un commit separado antes de pasar a la siguiente. Presupuesto: sin definir aún por fase (se estima al empezar cada una, tras re-explorar esa pantalla puntualmente).
 
-## Fase 0 — Fundación compartida [ ]
+## Fase 0 — Fundación compartida [x]
 
 - Sequential, primero (beneficia a las 5 pantallas, evita duplicar el mismo ajuste 4 veces).
-- Archivos: `admin-panel.css` (agregar/mover override de `.dashboard-icon-main` al bloque `@media max-width:767.98px` o `991.98px` existente), `admin-products.css` (quitar el override duplicado).
+- Archivos: `admin-panel.css` (movido override de `.dashboard-icon-main` a `@media max-width:991.98px`, agregado override de `.btn-action-premium`, achicado avatar/imagen compartido, eliminado selector CSS genérico que rompía el avatar), `admin-products.css` (quitado el override duplicado + limpiada regla muerta de imagen de producto).
 - Sub-tareas:
-  1. Mover `.dashboard-icon-main { width: 50px; height: 50px; font-size: 1.5rem; border-radius: 0.8rem; }` de `admin-products.css:35` a un `@media` de `admin-panel.css` (evaluar si usa `767.98px` como hoy, o el `991.98px` ya existente ahí — decidir al implementar según cómo se vea en 768-991px).
-  2. Revisar tamaño de avatar/imagen de fila compartido (`admin-panel.css:589-596`, hoy 60px) y del ícono de acción (`.btn-action-premium`, 40px) — bajar a un valor compacto sin perder área táctil mínima (~36-40px táctil aunque el ícono visual se vea más chico).
-  3. Bump de cache-busting en los `<link>` de los CSS tocados, siguiendo la convención del proyecto.
-- Criterio de hecho: repro estático 375px de Dashboard, Ventas (listado) y Usuarios muestra el ícono de encabezado ya achicado (antes no se achicaba en esas 3); Productos/Categorías se ven igual que antes (sin regresión); avatares/imágenes de fila visiblemente más compactos en las 4 pantallas con tabla, sin salirse de un tamaño tocable razonable.
+  1. [x] `.dashboard-icon-main` centralizado en `admin-panel.css` dentro del `@media max-width: 991.98px` ya existente (60px→50px, 2rem→1.5rem) — se eligió `991.98px` en vez de `767.98px` para alinear con el breakpoint "modo mobile" real del layout (sidebar/topbar ya cambian ahí).
+  2. [x] Avatar/imagen de fila compartido 60px→50px, `.btn-action-premium` 40px→36px.
+  3. [x] Bump de cache-busting (`admin-panel.css` v32→v33, `admin-products.css` v3→v4).
+  4. [x] **No planeado originalmente**: la verificación visual encontró que el selector `div.d-flex.justify-content-center` (pensado solo para las pestañas segmentadas) también capturaba `.avatar-premium` (que usa esas mismas clases Bootstrap para centrar sus iniciales) y lo forzaba a `width:100%`, deformándolo en una elipse en mobile — afectaba Usuarios, Ventas y Categorías. Se quitó el selector genérico (el otro selector del mismo bloque, `.d-flex:has(> .custom-segmented-tabs)`, ya cubre los 4 usos reales de pestañas del proyecto).
+- Criterio de hecho: repro estático 375px confirmó ícono de encabezado achicado (antes no se achicaba en Dashboard/Ventas/Usuarios), avatares circulares correctos (antes elípticos en Usuarios/Ventas/Categorías), botones de acción 36px, y las pestañas segmentadas siguen ocupando 100% de ancho sin regresión. Detalle completo en `apply-progress.md`.
 
 ## Fase 1 — Dashboard [ ]
 

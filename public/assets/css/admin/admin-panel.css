@@ -443,6 +443,26 @@
         margin-bottom: 2rem !important;
     }
 
+    /* Encabezado de página (ícono + título) más compacto en mobile/tablet.
+       Antes solo se achicaba en las páginas que cargaban admin-products.css
+       (Productos/Categorías); centralizado acá para que aplique parejo en
+       las 5 pantallas del panel (Dashboard, Ventas, Productos, Categorías,
+       Usuarios), todas comparten este mismo componente. */
+    .dashboard-icon-main {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        border-radius: 0.8rem;
+    }
+
+    /* Botones de acción de fila (editar/archivar/eliminar/etc.) más
+       compactos en mobile. Se mantiene un área tocable razonable (36px). */
+    .btn-action-premium {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+
     /* Transformación de Tablas a Cards en Mobile (Motor Unificado) */
     .table-responsive-stack table,
     .table-responsive-stack thead,
@@ -586,19 +606,19 @@
     .solicitud-row .avatar-premium,
     .inquiry-row .avatar-premium,
     .category-row .avatar-premium {
-        width: 60px !important;
-        height: 60px !important;
+        width: 50px !important;
+        height: 50px !important;
         aspect-ratio: 1 / 1 !important;
         border-radius: 50% !important;
-        font-size: 1.2rem !important;
+        font-size: 1rem !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
     }
 
     .product-row .product-img-container img {
-        width: 60px !important;
-        height: 60px !important;
-        border-radius: 12px !important;
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 10px !important;
     }
 
     .user-text-details .fw-bold,
@@ -863,9 +883,17 @@
 
 /* === RESPONSIVO DE PESTAÑAS SEGMENTADAS EN MÓVILES Y TABLETAS === */
 @media (max-width: 991.98px) {
-    /* Forzar que el contenedor flex padre ocupe todo el ancho */
-    .d-flex:has(> .custom-segmented-tabs),
-    div.d-flex.justify-content-center {
+    /* Forzar que el contenedor flex padre ocupe todo el ancho.
+       Antes también incluía el selector genérico "div.d-flex.justify-
+       content-center" como respaldo para navegadores sin :has() — pero
+       ese selector no está acotado a las pestañas, así que también
+       capturaba cualquier otro div con esas dos utilidades de Bootstrap
+       (p.ej. .avatar-premium, que usa d-flex + justify-content-center
+       para centrar sus iniciales) y lo estiraba a width:100%, deformando
+       el círculo en una elipse en mobile. Los 4 usos reales de las
+       pestañas ya son hijos directos de .custom-segmented-tabs, así que
+       :has() alcanza sin el respaldo. */
+    .d-flex:has(> .custom-segmented-tabs) {
         width: 100% !important;
     }
     .custom-segmented-tabs {
