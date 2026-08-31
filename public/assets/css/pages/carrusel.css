@@ -233,16 +233,30 @@
 }
 
 @media (max-width: 575.98px) {
-    #heroCarousel .carousel-inner { height: 55vh; min-height: 350px; }
+    #heroCarousel .carousel-inner { height: 60vh; min-height: 380px; }
     #heroCarousel h1.display-2, #heroCarousel h2.display-2,
     #heroCarousel h1.display-3, #heroCarousel h2.display-3 { font-size: 1.55rem; }
-    #heroCarousel .glass-caption { padding: 1.5rem; border-radius: var(--radius-md); }
+    #heroCarousel .glass-caption { padding: 1.25rem; border-radius: var(--radius-md); }
     #heroCarousel .carousel-control-prev,
     #heroCarousel .carousel-control-next { display: none; } /* Ocultar flechas en móvil muy pequeño */
+
+    /* Medido en dispositivo real (375x600): el contenido del slide 1
+       (insignia + parrafo ancho + 2 botones) media 429px de alto contra
+       un contenedor de 350px -- se desbordaba, empujando los botones sobre
+       los indicadores de abajo. Los slides 2 y 3 no tienen insignia ni
+       segundo boton, asi que estos selectores solo afectan al slide 1. */
+    #heroCarousel .hero-badge-spacing { display: none; }
+    #heroCarousel .hero-caption-lead-wide { display: none; }
+
+    /* Los indicadores (Bootstrap, position:absolute + bottom:0) quedaban
+       justo en la franja donde caian los botones. El autoplay del carrusel
+       ya indica el avance, no dependen de ellos para navegar. */
+    #heroCarousel .carousel-indicators { display: none; }
 
     /* En celulares chicos, apilar los botones a ancho completo en vez de
        dejarlos envueltos uno al lado del otro. */
     #heroCarousel .hero-cta-group .btn {
         width: 100%;
+        height: 42px;
     }
 }
