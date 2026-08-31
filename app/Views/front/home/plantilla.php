@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/carrusel.css?v=5.1')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/carrusel.css?v=5.2')?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/pages/catalogo.css?v=3.1')?>">
 <?= $this->endSection() ?>
 

@@ -78,15 +78,6 @@
 #heroCarousel .glass-caption.right-align { border-right: 5px solid var(--cva-vivid); }
 
 /* Animations - Dynamic Active Triggers */
-#heroCarousel .zoom-animation {
-    animation: slowZoom 20s infinite alternate linear;
-}
-
-@keyframes slowZoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
-}
-
 /* Inactive slides have opacity 0 so they fade in cleanly when they become active */
 #heroCarousel .carousel-item:not(.active) .glass-caption {
     opacity: 0;

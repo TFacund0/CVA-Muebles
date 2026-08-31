@@ -18,7 +18,7 @@
         <!-- Slide 1: El Taller -->
         <div class="carousel-item active h-100">
             <div class="hero-overlay-artisan"></div>
-            <img src="<?= base_url('assets/img/content/hero/taller.jpg') ?>" class="d-block w-100 h-100 object-fit-cover zoom-animation" alt="Taller">
+            <img src="<?= base_url('assets/img/content/hero/taller.jpg') ?>" class="d-block w-100 h-100 object-fit-cover" alt="Taller">
             <div class="carousel-caption d-flex align-items-center justify-content-center h-100 text-center">
                 <div class="glass-caption animate-up">
                     <span class="badge bg-gold mb-3 px-3 py-2 rounded-pill text-uppercase hero-badge-spacing">Mueblería de Autor</span>
@@ -35,7 +35,7 @@
         <!-- Slide 2: El Detalle -->
         <div class="carousel-item h-100">
             <div class="hero-overlay-artisan"></div>
-            <img src="<?= base_url('assets/img/content/hero/Muebles 22.jpeg') ?>" class="d-block w-100 h-100 object-fit-cover zoom-animation" alt="Calidad">
+            <img src="<?= base_url('assets/img/content/hero/Muebles 22.jpeg') ?>" class="d-block w-100 h-100 object-fit-cover" alt="Calidad">
             <div class="carousel-caption d-flex align-items-center justify-content-start h-100 text-start ps-lg-5">
                 <div class="glass-caption left-align animate-left">
                     <h2 class="display-3 fw-bold font-lora mb-3">Oficio que <br>Perdura</h2>
@@ -48,7 +48,7 @@
         <!-- Slide 3: El Hogar -->
         <div class="carousel-item h-100">
             <div class="hero-overlay-artisan"></div>
-            <img src="<?= base_url('assets/img/content/hero/Muebles 69.jpeg') ?>" class="d-block w-100 h-100 object-fit-cover zoom-animation" alt="Pasión">
+            <img src="<?= base_url('assets/img/content/hero/Muebles 69.jpeg') ?>" class="d-block w-100 h-100 object-fit-cover" alt="Pasión">
             <div class="carousel-caption d-flex align-items-center justify-content-end h-100 text-end pe-lg-5">
                 <div class="glass-caption right-align animate-right">
                     <h2 class="display-3 fw-bold font-lora mb-3">Diseño para <br>Toda la Vida</h2>
