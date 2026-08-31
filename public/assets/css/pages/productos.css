@@ -71,11 +71,19 @@
         padding: 8px;
         border-radius: var(--radius-pill);
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-        margin: -45px auto 60px;
+        /* Antes: margin-top -45px, pensado para una sola fila de chips
+           (~56px de alto) "flotando" sobre el header. Con 9 categorias
+           (la 9na, "Comodas", no entra en el ancho de escritorio y pasa a
+           una segunda fila) el panel pasa a ~120px de alto, y el margen
+           negativo lo mete por encima del grid de productos. Un margen
+           positivo normal no depende de cuantas filas termine ocupando:
+           el espacio despues del panel siempre es real, sea 1 fila o 2. */
+        margin: 24px auto 90px;
         display: flex;
         justify-content: center;
         border: 1px solid rgba(0, 0, 0, 0.05);
         width: fit-content;
+        max-width: 100%;
         z-index: 20;
         position: relative;
     }
@@ -93,7 +101,12 @@
     background: transparent;
     color: var(--cva-text);
     font-weight: 700;
-    padding: 0.8rem 2.5rem;
+    /* 1.75rem en vez de 2.5rem: con 9 categorias reales en la base (la
+       cantidad crece a medida que se cargan mas), menos padding horizontal
+       ayuda a que entren en una sola fila en mas anchos de escritorio.
+       No es indispensable -- el panel ya no se rompe si igual pasan a una
+       segunda fila -- pero se ve mejor cuando entran en una. */
+    padding: 0.8rem 1.75rem;
     border-radius: var(--radius-pill);
     transition: all 0.3s ease;
     text-transform: uppercase;
@@ -327,7 +340,12 @@
 /* RESPONSIVE PRODUCTOS */
 @media (max-width: 991.98px) {
     #productos.contenedor-productos { padding-bottom: 60px; }
-    #productos .header-productos { padding: 50px 15px; }
+    /* background-attachment:fixed (el efecto parallax) se renderiza mal en
+       navegadores mobile -- especialmente iOS, donde historicamente ni
+       siquiera se soportaba bien -- y puede verse borrosa o con un zoom
+       exagerado. En mobile se desactiva y la imagen se comporta como
+       fondo normal, sin perder nitidez. */
+    #productos .header-productos { padding: 50px 15px; background-attachment: scroll; }
     #productos .header-productos h2 { font-size: 1.8rem; margin-bottom: 1rem; }
     #productos .header-productos p { font-size: 0.85rem; line-height: 1.4; }
 
