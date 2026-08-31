@@ -220,21 +220,15 @@
 }
 
 @media (max-width: 575.98px) {
+    /* Reposicionarlas (bottom + left/right) dejaba de responder al toque en
+       dispositivo real -- probablemente tapadas por la paginacion, que
+       ocupa el mismo carril. En vez de perseguir el z-index, se ocultan:
+       el swipe con el dedo ya navega el carrusel sin necesidad de botones
+       (Swiper trae el arrastre tactil activado por defecto). */
     #home-page .swiper-button-next,
     #home-page .swiper-button-prev {
-        width: 38px !important;
-        height: 38px !important;
-        /* Sacarlas de encima de la foto: bajarlas al carril que ya
-           reserva el padding-bottom: 4rem de .swiper-destacados. */
-        top: auto !important;
-        bottom: 0.35rem;
-        margin-top: 0 !important;
-        transform: none;
+        display: none !important;
     }
-    #home-page .swiper-button-prev { left: 12px !important; right: auto !important; }
-    #home-page .swiper-button-next { right: 12px !important; left: auto !important; }
-    #home-page .swiper-button-next:after,
-    #home-page .swiper-button-prev:after { font-size: 0.95rem !important; }
 }
 
 /* 4. SECCIÓN MISIÓN (Verde Bosque Premium) */

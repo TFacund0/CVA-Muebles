@@ -211,8 +211,10 @@
     /* Hero-scoped display sizes: ID+element+class (1-0-2) beats the
        centralized h1.display-2 (0-1-1) in global.css without !important.
        Intentional divergence: only the hero shrinks; the rest of the
-       site keeps the global scale. */
-    #heroCarousel h1.display-2, #heroCarousel h2.display-2 { font-size: 2.1rem; }
+       site keeps the global scale. display-2 iguala a display-3 aca --
+       el slide 1 (h1.display-2) se veia notoriamente mas grande que los
+       slides 2 y 3 (h2.display-3), pese a ser el mismo tipo de titular. */
+    #heroCarousel h1.display-2, #heroCarousel h2.display-2,
     #heroCarousel h1.display-3, #heroCarousel h2.display-3 { font-size: 1.9rem; }
 
     #heroCarousel .glass-caption .btn {
@@ -232,7 +234,7 @@
 
 @media (max-width: 575.98px) {
     #heroCarousel .carousel-inner { height: 55vh; min-height: 350px; }
-    #heroCarousel h1.display-2, #heroCarousel h2.display-2 { font-size: 1.75rem; }
+    #heroCarousel h1.display-2, #heroCarousel h2.display-2,
     #heroCarousel h1.display-3, #heroCarousel h2.display-3 { font-size: 1.55rem; }
     #heroCarousel .glass-caption { padding: 1.5rem; border-radius: var(--radius-md); }
     #heroCarousel .carousel-control-prev,
