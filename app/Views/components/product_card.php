@@ -31,15 +31,15 @@
 
     <div class="card-body d-flex flex-column p-4">
         <h5 class="card-title font-lora fw-bold text-cva-brown mb-2"><?= esc($producto['nombre_prod']) ?></h5>
-        <p class="card-text text-muted small mb-4 line-clamp-2"><?= esc($producto['descripcion']) ?></p>
+        <p class="card-text text-muted small line-clamp-2"><?= esc($producto['descripcion']) ?></p>
 
-        <div class="d-flex justify-content-between align-items-center mb-4 mt-auto">
+        <div class="precio-row d-flex justify-content-between align-items-center mt-auto">
             <span class="precio-tag">$<?= money($producto['precio_vta'], 0) ?></span>
             <span class="badge-stock bespoke"><i class="bi bi-hammer me-1"></i> Fabricación bajo pedido</span>
         </div>
 
-        <div class="action-buttons mb-3">
-            <a href="<?= base_url('producto/detalle/' . $producto['id_producto']) ?>" class="btn btn-artisan-gold w-100 py-3 fw-bold">
+        <div class="action-buttons">
+            <a href="<?= base_url('producto/detalle/' . $producto['id_producto']) ?>" class="btn btn-artisan-gold w-100 fw-bold">
                 VER DETALLES
             </a>
         </div>
@@ -54,7 +54,7 @@
                             <input type="hidden" name="precio_vta" value="<?= esc($producto['precio_vta']) ?>">
                             <input type="hidden" name="nombre_prod" value="<?= esc($producto['nombre_prod']) ?>">
                             <input type="hidden" name="imagen" value="<?= esc($producto['imagen']) ?>">
-                            <button type="submit" class="btn btn-brown-solid w-100 py-3">
+                            <button type="submit" class="btn btn-brown-solid w-100">
                                 <i class="bi bi-cart-plus me-2"></i> Agregar al Carrito
                             </button>
                         </form>
@@ -63,12 +63,12 @@
                         $msg_stock = "Hola! Me interesa el mueble " . $producto['nombre_prod'] . " y me gustaría consultar para encargarlo.";
                         ?>
                         <a href="<?= wa_link($env_whatsapp, $msg_stock) ?>"
-                            target="_blank" class="btn btn-outline-brown w-100 py-3">
+                            target="_blank" class="btn btn-outline-brown w-100">
                             <i class="bi bi-whatsapp me-2"></i> Consultar Fabricación
                         </a>
                     <?php endif; ?>
                 <?php else: ?>
-                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-3 small">Iniciá sesión para comprar</a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 small">Iniciá sesión para comprar</a>
                 <?php endif; ?>
             <?php else: ?>
                 <?php if (session()->get('logged_in')): ?>
@@ -76,11 +76,11 @@
                     $mensaje = "Hola! Estoy interesado en el producto: " . $producto['nombre_prod'] . " (ID: " . $producto['id_producto'] . "). Me podrías dar más información?";
                     $url_whatsapp = wa_link($env_whatsapp, $mensaje);
                     ?>
-                    <a href="<?= $url_whatsapp ?>" target="_blank" class="btn btn-whatsapp-artisan w-100 py-3">
+                    <a href="<?= $url_whatsapp ?>" target="_blank" class="btn btn-whatsapp-artisan w-100">
                         <i class="bi bi-whatsapp me-2"></i> Consultar por WhatsApp
                     </a>
                 <?php else: ?>
-                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-3 small">Iniciá sesión para consultar</a>
+                    <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 small">Iniciá sesión para consultar</a>
                 <?php endif; ?>
             <?php endif; ?>
         </div>

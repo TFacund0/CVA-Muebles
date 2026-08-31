@@ -174,6 +174,25 @@
     margin-bottom: 0.5rem;
 }
 
+/* Recorte real de la descripcion (antes la clase line-clamp-2 no tenia
+   ninguna regla scopeada a #productos -- no truncaba nada, el parrafo
+   crecia libre segun el largo del texto). */
+#productos .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+#productos .precio-row {
+    margin-bottom: 1.5rem;
+}
+
+#productos .action-buttons {
+    margin-bottom: 1rem;
+}
+
 #productos .precio-tag {
     font-size: 1.8rem;
     font-weight: 800;
@@ -233,6 +252,25 @@
 #productos .btn-whatsapp-artisan:hover {
     background-color: #1b5e20;
     transform: scale(1.02);
+}
+
+/* Estas dos dependian por completo de la utilidad py-3 de Bootstrap para su
+   padding vertical (!important, ganaba en cualquier caso a un ajuste mobile
+   propio) -- sin una regla scopeada, quedaban con el padding minimo de
+   Bootstrap al sacarla, inconsistentes con los otros tres botones. */
+#productos .btn-outline-brown {
+    border: 2px solid var(--cva-brown);
+    color: var(--cva-brown);
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    padding: 0.7rem 1.5rem;
+    font-size: 0.8rem;
+}
+
+#productos .btn-outline-secondary {
+    border-radius: var(--radius-pill);
+    padding: 0.7rem 1.5rem;
+    font-size: 0.8rem;
 }
 
 #productos .btn-fav-artisan {
@@ -387,11 +425,20 @@
 
     #productos .card-footer { padding: 1rem; }
 
+    /* Foco en la foto: la descripcion y el espacio entre bloques se
+       achican, y los 5 botones bajan de tamaño ahora que ya no compiten
+       contra el py-3 !important de Bootstrap que tenian antes. */
+    #productos .line-clamp-2 { margin-bottom: 1rem; }
+    #productos .precio-row { margin-bottom: 0.85rem; }
+    #productos .action-buttons { margin-bottom: 0.6rem; }
+
     #productos .btn-artisan-gold,
     #productos .btn-brown-solid,
-    #productos .btn-whatsapp-artisan {
-        padding: 0.7rem 1rem;
-        font-size: 0.75rem;
+    #productos .btn-whatsapp-artisan,
+    #productos .btn-outline-brown,
+    #productos .btn-outline-secondary {
+        padding: 0.55rem 1rem;
+        font-size: 0.72rem;
     }
     #productos .btn-fav-artisan { width: 32px; height: 32px; top: 12px; right: 12px; font-size: 0.9rem; }
 
@@ -410,6 +457,20 @@
        quedan apretados como pasaria en 2 columnas. */
     #productos .filter-group { grid-template-columns: 1fr; }
     #productos .filtro-categoria { padding: 0.7rem 0.9rem; font-size: 0.75rem; }
-    #productos .btn-artisan-gold, #productos .btn-brown-solid, #productos .btn-whatsapp-artisan { padding: 0.6rem 0.8rem; font-size: 0.7rem; }
+
+    /* Celulares chicos: la descripcion baja a 1 sola linea (antes 2) para
+       que la foto del mueble siga siendo lo primero que se vea. */
+    #productos .line-clamp-2 { -webkit-line-clamp: 1; margin-bottom: 0.75rem; }
+    #productos .precio-row { margin-bottom: 0.7rem; }
+    #productos .action-buttons { margin-bottom: 0.5rem; }
+
+    #productos .btn-artisan-gold,
+    #productos .btn-brown-solid,
+    #productos .btn-whatsapp-artisan,
+    #productos .btn-outline-brown,
+    #productos .btn-outline-secondary {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.68rem;
+    }
     #productos .card-footer { padding: 0.8rem; }
 }
