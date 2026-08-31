@@ -95,6 +95,27 @@
 .btn-priority:hover { background: var(--cva-gold); color: white; border-color: var(--cva-gold); }
 
 /* === GESTION PEDIDO ADMIN === */
+/* Botones de aprobación/rechazo de una solicitud (bloque "Pedido
+   Pendiente de Aprobación"). Antes usaban utilidades Bootstrap sueltas
+   (px-5 py-3) que en mobile, con "ACEPTAR Y EMPEZAR OBRA" partiéndose en
+   4 líneas dentro de un rounded-pill angosto, deformaban el botón en un
+   óvalo/círculo con el texto desbordando el borde. */
+.btn-approval {
+    padding: 0.9rem 2rem;
+}
+@media (max-width: 575.98px) {
+    .approval-actions {
+        flex-direction: column;
+    }
+    .approval-actions form {
+        width: 100%;
+    }
+    .btn-approval {
+        width: 100%;
+        padding: 0.9rem 1.5rem;
+    }
+}
+
 .gestion-timeline-item {
     display: flex; gap: 1rem; padding-bottom: 1.5rem;
     border-left: 2px solid #f0e6d6; margin-left: 1rem; padding-left: 1.5rem;
@@ -164,9 +185,9 @@
 
 /* === RESPONSIVE UTILITIES === */
 @media (max-width: 767.98px) {
-    .kpi-value { font-size: 2rem; }
-    .kpi-icon-container { width: 50px; height: 50px; font-size: 1.4rem; }
-    .kpi-body { padding: 1.5rem 1rem; }
+    .kpi-value { font-size: 1.75rem; }
+    .kpi-icon-container { width: 44px; height: 44px; font-size: 1.2rem; }
+    .kpi-body { padding: 1.25rem 0.75rem; }
     .action-btn-v2 { padding: 1rem; }
     .action-icon { width: 35px; height: 35px; font-size: 1rem; }
     .action-text span { font-size: 0.9rem; }
@@ -179,6 +200,10 @@
     .input-group-text { padding: 0.5rem 0.75rem; }
     .factura-header { padding: 1.5rem; }
     .order-card { border-radius: 1rem; }
+    /* Tarjeta "Rendimiento Histórico" (Dashboard): número más chico y
+       menos padding para que no se sienta tan vacía/grande en mobile. */
+    .production-display-compact { padding: 1.25rem !important; }
+    .production-display-compact .display-4 { font-size: 2.75rem; }
 }
 
 
@@ -399,6 +424,11 @@
 .wallet-icon-bg {
     font-size: 8rem;
     transform: translate(20%, 20%);
+    /* El markup usaba "opacity-05" esperando 5%, pero Bootstrap solo
+       define opacity-0/25/50/75/100 — esa clase no existe, así que el
+       ícono quedaba a opacidad 1 (sólido) en vez del watermark tenue
+       que el diseño pedía. Se fija acá, en la clase propia del ícono. */
+    opacity: 0.05;
 }
 .nota-cliente-text {
     font-size: 1.25rem;
@@ -412,6 +442,12 @@
     max-width: 150px;
 }
 .admin-img-preview-min-h {
+    /* .admin-img-preview trae "height: 350px" fijo (admin-panel.css) —
+       min-height nunca puede bajar por debajo de un height ya más alto,
+       así que sin "height: auto" acá esta clase no hacía nada: la caja
+       de "Cargar referencia visual" (un simple ícono + texto en línea,
+       no un dropzone grande) se quedaba en 350px igual. */
+    height: auto;
     min-height: 120px;
 }
 .money-input-rounded-start {

@@ -104,7 +104,12 @@ h6 {
 }
 
 .bg-cva-brown {
-    background-color: var(--cva-brown);
+    /* !important: sin esto, ".admin-card-v2 { background: white; }"
+       (admin-panel.css, que carga después de este archivo) le ganaba en
+       cascada a elementos con ambas clases — ej. la tarjeta "Rendimiento
+       Histórico" del Dashboard quedaba blanca en vez de marrón, y su
+       texto (.text-white) se volvía invisible sobre ese fondo blanco. */
+    background-color: var(--cva-brown) !important;
 }
 
 .bg-cva-parchment {

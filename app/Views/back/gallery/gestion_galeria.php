@@ -5,7 +5,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('extra-css') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-gallery.css?v=2.0') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-gallery.css?v=3.0') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

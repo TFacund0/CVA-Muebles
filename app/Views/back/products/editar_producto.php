@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=3.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-products.css?v=5.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -11,20 +11,20 @@
 
 <?= $this->section('content') ?>
 <!-- Encabezado Estilo Artisan -->
-<div class="row mb-5 align-items-center">
-    <div class="col-md-8">
-        <div class="d-flex align-items-center gap-4">
+<div class="row mb-5 align-items-center g-4">
+    <div class="col-lg-8">
+        <div class="d-flex align-items-center gap-3 gap-md-4">
             <div class="dashboard-icon-main bg-brown text-gold shadow">
                 <i class="bi bi-pencil-square"></i>
             </div>
             <div>
-                <h1 class="display-5 fw-bold text-cva-brown mb-1">Modificar Producto</h1>
-                <p class="text-muted mb-0">Actualiza los detalles técnicos, precios y stock del catálogo artesanal.</p>
+                <h1 class="display-6 display-md-5 fw-bold text-cva-brown mb-1">Modificar Producto</h1>
+                <p class="text-muted mb-0 small">Actualiza los detalles técnicos, precios y stock del catálogo artesanal.</p>
             </div>
         </div>
     </div>
-    <div class="col-md-4 text-md-end">
-        <div class="badge bg-gold-soft text-gold px-4 py-2 rounded-pill fs-6 fw-bold border border-gold shadow-sm">
+    <div class="col-lg-4 text-lg-end">
+        <div class="badge bg-gold-soft text-gold px-4 py-2 rounded-pill fs-6 fw-bold border border-gold shadow-sm w-sm-100 justify-content-center">
             ID PRODUCTO: #<?= $producto['id_producto'] ?>
         </div>
     </div>

@@ -20,8 +20,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <!-- Admin Design System -->
-    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=3.0')?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-panel.css?v=31.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/base/global.css?v=3.1')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-panel.css?v=35.0')?>">
 
 
     <?= $this->renderSection('extra-css') ?>

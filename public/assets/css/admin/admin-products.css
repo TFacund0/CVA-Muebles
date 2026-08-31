@@ -31,8 +31,14 @@
 }
 
 @media (max-width: 767.98px) {
-    .dropzone-premium-v2 { height: 300px; }
-    .dashboard-icon-main { width: 50px; height: 50px; font-size: 1.5rem; border-radius: 0.8rem; }
+    /* !important: sin esto, ".dropzone-h380 { height: 380px; }" (más
+       abajo en este mismo archivo, sin media query) le ganaba en
+       cascada por orden de aparición — el dropzone nunca se achicaba
+       en mobile a pesar de esta regla. */
+    .dropzone-premium-v2 { height: 300px !important; }
+    /* .dashboard-icon-main ahora se achica de forma centralizada en
+       admin-panel.css (@media max-width: 991.98px), aplicando parejo a
+       las 5 pantallas del panel en vez de solo a esta. */
     .display-6 { font-size: 1.8rem; }
     .admin-card-v2 .p-4 { padding: 1.5rem; }
     .btn-admin-primary { padding: 1.2rem; }
@@ -113,8 +119,10 @@
 }
 
 @media (max-width: 767.98px) {
-    .product-img-container { width: 80px; }
-    .product-row td[data-label="PIEZA"] { min-height: 80px; }
+    /* El tamaño real de .product-img-container en mobile lo define
+       admin-panel.css (motor de tarjetas, !important) — acá solo se
+       ajusta la altura mínima de la fila para que combine con esa imagen. */
+    .product-row td[data-label="PIEZA"] { min-height: 64px; }
 }
 
 /* === Utilidades extraídas de style="" inline (CSP) === */
