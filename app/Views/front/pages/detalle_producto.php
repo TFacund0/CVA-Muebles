@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.0') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.1') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

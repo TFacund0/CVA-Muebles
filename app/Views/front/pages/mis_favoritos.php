@@ -1,7 +1,7 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/pages/favoritos.css?v=3.1') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/css/pages/favoritos.css?v=3.2') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
@@ -104,7 +104,7 @@
                                 </div>
                                 <?php if ($env_cart_enabled): ?>
                                     <?php if (session()->get('logged_in')): ?>
-                                        <form action="<?= base_url('carrito/add') ?>" method="post" class="w-100">
+                                        <form action="<?= base_url('carrito/add') ?>" method="post" class="w-100 mb-2">
                                             <?= csrf_field(); ?>
                                             <input type="hidden" name="id_producto" value="<?= esc($fav['producto_id']) ?>">
                                             <input type="hidden" name="precio_vta" value="<?= esc($fav['precio_vta']) ?>">
@@ -115,9 +115,16 @@
                                             </button>
                                         </form>
                                     <?php else: ?>
-                                        <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-2.5 rounded-pill small fw-bold">Iniciá sesión para comprar</a>
+                                        <a href="<?= base_url('login') ?>" class="btn btn-outline-secondary w-100 py-2.5 rounded-pill small fw-bold mb-2">Iniciá sesión para comprar</a>
                                     <?php endif; ?>
                                 <?php endif; ?>
+
+                                <?php
+                                $msg_consulta_fav = "Hola! Me interesa el mueble " . $fav['nombre_prod'] . " y me gustaría consultar por él.";
+                                ?>
+                                <a href="<?= wa_link($env_whatsapp, $msg_consulta_fav) ?>" target="_blank" class="btn btn-outline-brown w-100 py-2.5 rounded-pill fw-bold">
+                                    <i class="bi bi-whatsapp me-2"></i> Consultar
+                                </a>
                             </div>
                         </div>
                     </div>

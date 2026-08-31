@@ -318,6 +318,7 @@
 
 /* Responsive */
 @media (max-width: 991.98px) {
+    .product-detail-wrapper { padding-top: 2rem; padding-bottom: 2rem; }
     .product-detail-wrapper .image-container {
         min-height: 400px;
     }
@@ -327,6 +328,51 @@
     .product-detail-wrapper .product-title {
         font-size: 2.2rem;
     }
+    .product-detail-wrapper .price-value { font-size: 2.2rem; }
+    .product-detail-wrapper .technical-section { padding: 2.5rem 1.5rem; }
+    .product-detail-wrapper .description-box { padding: 1.8rem; font-size: 1rem; line-height: 1.6; }
+    .product-detail-wrapper .trust-badges { margin-top: 2.5rem; padding-top: 2.5rem; }
+}
+
+@media (max-width: 767.98px) {
+    .product-detail-wrapper { padding-top: 1.2rem; padding-bottom: 1.2rem; }
+    .product-detail-wrapper .image-column { padding: 1.2rem; }
+    .product-detail-wrapper .image-container { min-height: 280px; }
+    .product-detail-wrapper .info-column { padding: 1.5rem; }
+
+    .product-detail-wrapper .category-tag { font-size: 0.65rem; margin-bottom: 0.3rem; }
+    .product-detail-wrapper .product-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .product-detail-wrapper .title-divider { margin-bottom: 1.2rem; }
+
+    .product-detail-wrapper .price-box { padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+    .product-detail-wrapper .price-value { font-size: 1.8rem; }
+    .product-detail-wrapper .price-symbol { font-size: 1rem; }
+    .product-detail-wrapper .stock-info { font-size: 0.75rem; }
+
+    .product-detail-wrapper .features-list { margin-bottom: 1.5rem; }
+    .product-detail-wrapper .feature-item { gap: 0.8rem; margin-bottom: 1rem; }
+    .product-detail-wrapper .feature-icon { width: 38px; height: 38px; font-size: 1rem; }
+    .product-detail-wrapper .feature-text h6 { font-size: 0.85rem; }
+    .product-detail-wrapper .feature-text p { font-size: 0.75rem; }
+
+    /* !important necesario: el markup aplica fs-5 (Bootstrap, !important)
+       a btn-detalle-primary, que gana a cualquier regla sin !important. */
+    .product-detail-wrapper .btn-detalle-primary,
+    .product-detail-wrapper .btn-whatsapp-premium,
+    .product-detail-wrapper .btn-personalizar {
+        padding: 0.75rem;
+        font-size: 0.85rem !important;
+    }
+
+    .product-detail-wrapper .technical-section { padding: 2rem 1.2rem; }
+    .product-detail-wrapper .technical-title { font-size: 1.6rem; margin-bottom: 1.2rem; }
+    .product-detail-wrapper .description-box { padding: 1.2rem; font-size: 0.9rem; line-height: 1.5; }
+
+    .product-detail-wrapper .trust-badges { margin-top: 2rem; padding-top: 2rem; }
+    .product-detail-wrapper .badge-icon-wrap { font-size: 2rem; margin-bottom: 0.8rem; }
+    .product-detail-wrapper .badge-card h5 { font-size: 0.95rem; }
+
+    .product-detail-wrapper .thumb-item { width: 60px; height: 60px; }
 }
 
 /* -------------------- Galería de Miniaturas -------------------- */
