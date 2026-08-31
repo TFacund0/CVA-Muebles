@@ -352,14 +352,24 @@
     }
 }
 
+@media (max-width: 575.98px) {
+    #home-page .catalogo-card-premium {
+        height: 220px;
+    }
+    #home-page .display-5 {
+        font-size: 1.8rem;
+    }
+    #home-page .card-overlay-modern h3 {
+        font-size: 1.3rem;
+    }
+}
+
 /* Misión Responsivo */
 @media (max-width: 991.98px) {
     #home-page .mission-statement-premium {
         padding: 100px 0;
     }
-    #home-page .display-3 {
-        font-size: 2.5rem;
-    }
+    /* display-3 ya lo cubre la regla centralizada de global.css. */
     #home-page .mission-quote {
         font-size: 1.2rem;
         padding: 0 20px;
@@ -373,11 +383,11 @@
     #home-page .mission-statement-premium {
         padding: 80px 0;
     }
-    #home-page .display-3 {
-        font-size: 2rem;
-    }
     #home-page .mission-quote {
         font-size: 1.1rem;
+    }
+    #home-page .mission-bg-accent {
+        font-size: 8rem;
     }
 }
 
@@ -389,9 +399,7 @@
     #home-page .section-ubicacion .col-lg-5 {
         padding: 40px 20px;
     }
-    #home-page .section-ubicacion .display-3 {
-        font-size: 2.5rem;
-    }
+    /* display-3 ya lo cubre la regla centralizada de global.css. */
     #home-page .section-ubicacion iframe {
         min-height: 400px;
     }

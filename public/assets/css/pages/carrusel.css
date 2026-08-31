@@ -204,8 +204,8 @@
 @media (max-width: 991.98px) {
     #heroCarousel .carousel-inner { height: 70vh; min-height: 500px; }
     #heroCarousel .glass-caption { padding: 2rem; margin: 0 1.5rem; max-width: calc(100% - 3rem); }
-    #heroCarousel .display-2 { font-size: 2.5rem; }
-    #heroCarousel .display-3 { font-size: 2.2rem; }
+    /* display-2/display-3 ya los cubre la regla centralizada de global.css
+       (h1.display-*, h2.display-*), con los mismos valores -- no duplicar. */
     #heroCarousel .fs-5 { font-size: 1rem; }
 
     #heroCarousel .glass-caption .btn {
@@ -214,13 +214,24 @@
         font-size: 0.85rem;
     }
     #heroCarousel .carousel-caption { padding: 0; }
+
+    /* El slide 1 tiene dos botones lado a lado sin flex-wrap: en pantallas
+       angostas se desbordaban del contenedor. */
+    #heroCarousel .hero-cta-group {
+        flex-wrap: wrap;
+        row-gap: 0.75rem;
+    }
 }
 
 @media (max-width: 575.98px) {
     #heroCarousel .carousel-inner { height: 60vh; min-height: 400px; }
-    #heroCarousel .display-2 { font-size: 2rem; }
-    #heroCarousel .display-3 { font-size: 1.8rem; }
     #heroCarousel .glass-caption { padding: 1.5rem; border-radius: var(--radius-md); }
     #heroCarousel .carousel-control-prev,
     #heroCarousel .carousel-control-next { display: none; } /* Ocultar flechas en móvil muy pequeño */
+
+    /* En celulares chicos, apilar los botones a ancho completo en vez de
+       dejarlos envueltos uno al lado del otro. */
+    #heroCarousel .hero-cta-group .btn {
+        width: 100%;
+    }
 }
