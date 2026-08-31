@@ -6,7 +6,7 @@
  * @param bool $isFav Indica si es favorito (opcional)
  */
 ?>
-<div class="product-card h-100 d-flex flex-column" data-aos="fade-up">
+<div class="product-card h-100 d-flex flex-column" data-aos="fade-up" data-producto-id="<?= esc($producto['id_producto']) ?>">
     <div class="img-wrapper position-relative">
         <img src="<?= imagen_url($producto['imagen']) ?>"
             class="card-img-top img-fluid"
@@ -39,7 +39,7 @@
         </div>
 
         <div class="action-buttons">
-            <a href="<?= base_url('producto/detalle/' . $producto['id_producto']) ?>" class="btn btn-artisan-gold w-100 fw-bold">
+            <a href="<?= base_url('producto/detalle/' . $producto['id_producto']) ?>" class="btn btn-artisan-gold w-100 fw-bold js-ver-detalles">
                 VER DETALLES
             </a>
         </div>

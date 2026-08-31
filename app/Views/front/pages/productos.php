@@ -69,5 +69,5 @@
 
 <?= $this->section('extra-js') ?>
 <script src="<?= base_url('assets/js/favoritos.js?v=1.0') ?>"></script>
-<script src="<?= base_url('assets/js/pages/productos.js?v=1.1') ?>"></script>
+<script src="<?= base_url('assets/js/pages/productos.js?v=1.2') ?>"></script>
 <?= $this->endSection() ?>

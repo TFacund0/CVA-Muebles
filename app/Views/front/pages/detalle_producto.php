@@ -1,23 +1,35 @@
 <?= $this->extend('layout/main') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.2') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/pages/detalle_producto.css?v=5.3') ?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>
 <?php
     $imagenPrincipalUrl = imagen_url($producto['imagen']);
     $galeriaUrls = array_map(fn($img) => imagen_url($img['imagen']), $producto['galeria'] ?? []);
+
+    // Round trip de retorno al catálogo (catalog-navigation-state): ambos
+    // params son opcionales y se leen tal cual, sin capa de slug. Si
+    // ninguno llegó, $urlVolver degrada a la URL plana de siempre.
+    $req      = service('request');
+    $fromCat  = trim((string) $req->getGet('from_categoria'));
+    $fromId   = trim((string) $req->getGet('from_id'));
+    $qsVolver = array_filter(['categoria' => $fromCat, 'producto' => $fromId], 'strlen');
+    $urlVolver = base_url('productos') . ($qsVolver ? '?' . http_build_query($qsVolver) : '');
 ?>
 <div class="product-detail-wrapper">
     <!-- Breadcrumb Nav (Sutil) -->
     <div class="container mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="<?= base_url('productos') ?>" class="text-decoration-none text-gold fw-bold small">CATÁLOGO</a></li>
+                <li class="breadcrumb-item"><a href="<?= esc($urlVolver) ?>" class="text-decoration-none text-gold fw-bold small">CATÁLOGO</a></li>
                 <li class="breadcrumb-item active small" aria-current="page"><?= strtoupper(esc($producto['nombre_prod'])) ?></li>
             </ol>
         </nav>
+        <a href="<?= esc($urlVolver) ?>" class="btn btn-volver-catalogo">
+            <i class="bi bi-arrow-left"></i> Volver al catálogo
+        </a>
     </div>
 
     <div class="container main-artisan-card rounded-4 overflow-hidden animate-fade-in-up">
@@ -77,6 +89,7 @@
                 </div>
 
                 <div class="features-list">
+                    <span class="text-vivid fw-bold text-uppercase small kicker-spacing-3 d-block mb-2">Artesanía CVA</span>
                     <div class="feature-item">
                         <div class="feature-icon"><i class="bi bi-hammer"></i></div>
                         <div class="feature-text">
@@ -151,6 +164,11 @@
                     <p class="text-muted">Cada veta y nudo de la madera es único, lo que garantiza que tu mueble sea una pieza irrepetible.</p>
                 </div>
                 <div class="col-lg-8">
+                    <div class="text-center text-lg-start mb-3">
+                        <span class="text-vivid fw-bold text-uppercase small kicker-spacing-2">Nuestra Historia</span>
+                        <h3 class="font-lora fw-bold text-cva-brown mt-2">Sobre esta pieza</h3>
+                        <div class="divider-artisan mx-auto mx-lg-0"></div>
+                    </div>
                     <div class="description-box">
                         <?php if (!empty($producto['descripcion'])): ?>
                             <?= nl2br(esc($producto['descripcion'])) ?>
@@ -162,24 +180,29 @@
             </div>
 
             <!-- Trust Badges -->
+            <div class="text-center mb-5 mt-5">
+                <span class="text-vivid fw-bold text-uppercase small kicker-spacing-2">Nuestro Compromiso</span>
+                <h2 class="font-lora fw-bold text-cva-brown mt-2">Por qué elegirnos</h2>
+                <div class="divider-artisan mx-auto"></div>
+            </div>
             <div class="row trust-badges g-4">
                 <div class="col-md-4">
                     <div class="badge-card">
-                        <div class="badge-icon-wrap">🚚</div>
+                        <div class="badge-icon-wrap icon-wrapper"><i class="bi bi-truck"></i></div>
                         <h5>Envío Seguro</h5>
                         <p class="small text-muted">Coordinamos la logística para que tu mueble llegue impecable.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="badge-card">
-                        <div class="badge-icon-wrap">🛡️</div>
+                        <div class="badge-icon-wrap icon-wrapper"><i class="bi bi-shield-check"></i></div>
                         <h5>Garantía de Obra</h5>
                         <p class="small text-muted">Aseguramos la integridad estructural de cada pieza.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="badge-card">
-                        <div class="badge-icon-wrap">🌿</div>
+                        <div class="badge-icon-wrap icon-wrapper"><i class="bi bi-tree"></i></div>
                         <h5>Madera Sustentable</h5>
                         <p class="small text-muted">Utilizamos recursos de bosques gestionados responsablemente.</p>
                     </div>
