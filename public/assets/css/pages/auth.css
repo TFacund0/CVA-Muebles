@@ -194,12 +194,19 @@
 @media (max-width: 991px) {
     .auth-wrapper { padding: 1.5rem 1rem; }
     .auth-card { flex-direction: column; max-width: 600px; border-radius: 1.5rem; }
-    .auth-side-branding { padding: 2.5rem 2rem; min-height: 250px; text-align: center; align-items: center; }
-    .auth-quote { font-size: 1.5rem; margin-bottom: 1rem; }
-    .auth-side-branding .mt-4 { display: none; } 
-    .auth-side-branding p { font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .auth-side-branding .mt-auto { padding-top: 1.5rem; }
-    .auth-side-form { padding: 2.5rem 2rem; }
+
+    /* El formulario es la accion principal: en mobile va primero en la
+       pantalla, aunque en el HTML el bloque de branding este antes
+       (source order intacto para lectores de pantalla / SEO). */
+    .auth-side-form { order: 1; padding: 2rem 1.5rem; }
+    .auth-side-branding { order: 2; padding: 1.5rem; min-height: 0; text-align: center; align-items: center; }
+
+    .auth-logo-circle { width: 56px; height: 56px; font-size: 1.4rem; margin-bottom: 1rem; }
+    .auth-quote { font-size: 1.1rem; margin-bottom: 0; }
+    .auth-side-branding .mt-4,
+    .auth-side-branding .mt-auto,
+    .auth-side-branding p { display: none; }
+
     .auth-header { margin-bottom: 1.5rem; }
     .auth-header h2 { font-size: 1.6rem; }
 }
@@ -207,8 +214,13 @@
 @media (max-width: 480px) {
     .auth-wrapper { padding: 0.5rem; }
     .auth-card { border-radius: 1rem; }
-    .auth-side-branding { padding: 2rem 1.5rem; min-height: 180px; }
-    .auth-side-form { padding: 2rem 1.5rem; }
+    .auth-side-branding { padding: 1.2rem; }
+    .auth-logo-circle { width: 48px; height: 48px; font-size: 1.2rem; margin-bottom: 0.8rem; }
+    .auth-quote { font-size: 1rem; }
+    .auth-side-form { padding: 1.5rem 1.2rem; }
+    .auth-header h2 { font-size: 1.4rem; }
+    .auth-header p { font-size: 0.85rem; }
+    .artisan-input-group { margin-bottom: 1.1rem; }
     .artisan-control { padding: 0.8rem 1rem; font-size: 0.9rem; }
     .btn-auth-primary { padding: 0.8rem; margin-top: 1rem;}
 }
