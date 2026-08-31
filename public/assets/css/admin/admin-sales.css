@@ -95,6 +95,27 @@
 .btn-priority:hover { background: var(--cva-gold); color: white; border-color: var(--cva-gold); }
 
 /* === GESTION PEDIDO ADMIN === */
+/* Botones de aprobación/rechazo de una solicitud (bloque "Pedido
+   Pendiente de Aprobación"). Antes usaban utilidades Bootstrap sueltas
+   (px-5 py-3) que en mobile, con "ACEPTAR Y EMPEZAR OBRA" partiéndose en
+   4 líneas dentro de un rounded-pill angosto, deformaban el botón en un
+   óvalo/círculo con el texto desbordando el borde. */
+.btn-approval {
+    padding: 0.9rem 2rem;
+}
+@media (max-width: 575.98px) {
+    .approval-actions {
+        flex-direction: column;
+    }
+    .approval-actions form {
+        width: 100%;
+    }
+    .btn-approval {
+        width: 100%;
+        padding: 0.9rem 1.5rem;
+    }
+}
+
 .gestion-timeline-item {
     display: flex; gap: 1rem; padding-bottom: 1.5rem;
     border-left: 2px solid #f0e6d6; margin-left: 1rem; padding-left: 1.5rem;
@@ -403,6 +424,11 @@
 .wallet-icon-bg {
     font-size: 8rem;
     transform: translate(20%, 20%);
+    /* El markup usaba "opacity-05" esperando 5%, pero Bootstrap solo
+       define opacity-0/25/50/75/100 — esa clase no existe, así que el
+       ícono quedaba a opacidad 1 (sólido) en vez del watermark tenue
+       que el diseño pedía. Se fija acá, en la clase propia del ícono. */
+    opacity: 0.05;
 }
 .nota-cliente-text {
     font-size: 1.25rem;

@@ -55,3 +55,30 @@ Fases 2-4 (Ventas, Productos/Catálogo, Usuarios) y Fase 5 (QA en dispositivo re
 1. Un bug de contraste/legibilidad puede pasar desapercibido durante mucho tiempo si el resto de la tarjeta (ícono, número grande) sigue siendo visualmente coherente — solo una línea de texto secundario quedaba invisible, no toda la tarjeta.
 2. Medir con `getComputedStyle` (no solo mirar la captura) fue clave para confirmar con certeza el color de fondo real antes de escribir el fix — evita "creer que ya está bien" por una captura ambigua.
 3. Vale la pena, en las próximas fases, revisar si aparecen más combinaciones `bg-*` + `bg-opacity-*` con un paso inválido (Bootstrap solo admite 10/25/50/75/100) — es un error fácil de cometer al escribir Tailwind-style opacity de memoria.
+
+## Fase 2 — Ventas (listado + detalle): COMPLETADA
+
+### Cambios aplicados
+
+1. **`detalleVentas.php` (listado)**: revisado con repro fiel de `order-row` y `solicitud-row` (avatar, badge de ID, botones de prioridad, botones de acción/gestión) — ya quedaba bien después de la Fase 0, sin cambios adicionales. Los 4 KPIs del listado usan un componente distinto y ya compacto por diseño (ícono oculto bajo 576px), no se tocaron.
+2. **Bug real encontrado al verificar (no estaba en el plan)**: en `gestion_pedido_admin.php`, el bloque "Pedido Pendiente de Aprobación" tenía dos botones lado a lado con `px-5 py-3 rounded-pill` y `justify-content-center` sin wrap. En 375px, el texto largo ("ACEPTAR Y EMPEZAR OBRA") se partía en 4 líneas dentro de un pill angosto — el botón se deformaba en un óvalo/casi-círculo y el texto del segundo botón se desbordaba fuera del borde visible. Se creó una clase dedicada `.approval-actions` (contenedor) + `.btn-approval` (botones) en `admin-sales.css`: en `≤575.98px` se apilan a ancho completo con padding reducido; en desktop mantienen el layout side-by-side original (verificado a 900px, sin regresión).
+3. **Otro hallazgo menor en la misma página**: el ícono decorativo de billetera (`bi-wallet2`) en la tarjeta "Estado Financiero" usaba la clase `opacity-05`, que Bootstrap no define (los pasos reales son 0/25/50/75/100) — quedaba a opacidad 1 (sólido) en vez del watermark tenue que el diseño pedía (un ícono grande de 8rem semi-invisible detrás de los números). Se movió `opacity: 0.05` directo a `.wallet-icon-bg` (la clase propia del ícono, ya scoped a un solo uso) y se quitó la clase muerta del markup.
+
+### Verificación realizada
+
+Repros estáticos fieles (mismo HTML/CSS real): fila `order-row`/`solicitud-row` de la tabla de pedidos, y el bloque de aprobación pendiente en dos anchos (375px mobile y 900px desktop). Medición directa de `opacity` computada del ícono de billetera antes/después.
+
+- **Bloque de aprobación, antes (375px)**: botones deformados en óvalos, texto "RECHAZAR PEDIDO" desbordando el borde visible del botón outline.
+- **Bloque de aprobación, después (375px)**: botones apilados, ancho completo, texto legible dentro del borde.
+- **Bloque de aprobación, después (900px)**: idéntico al diseño original (side-by-side), sin regresión de desktop.
+- **Ícono billetera**: opacidad computada antes = `1`, después = `0.05` (confirmado con `getComputedStyle`).
+- No se ejecutó `vendor/bin/phpunit` (no disponible en el sandbox) — cambios CSS + clases de markup, sin lógica PHP tocada (los botones de aprobación mantienen los mismos `<form>`/inputs, solo cambiaron las clases CSS del `<button>` y del `<div>` contenedor).
+
+### Pendiente
+
+Fases 3-4 (Productos/Catálogo, Usuarios) y Fase 5 (QA en dispositivo real).
+
+## Key Learnings (Fase 2)
+
+1. Segundo caso en dos fases seguidas de una clase de opacidad Bootstrap inválida (`bg-opacity-5` en Fase 1, `opacity-05` acá) — parece un patrón de error recurrente en el proyecto (asumir que Bootstrap admite cualquier múltiplo de 5, cuando solo admite 0/25/50/75/100). Vale la pena, antes de cerrar Fase 5, un grep rápido de `opacity-0[0-9]` y `bg-opacity-0[0-9]` en todo `app/Views` para descartar más casos.
+2. `justify-content-center` sin `flex-wrap` en un contenedor con texto largo y botones de ancho fijo es una combinación de riesgo — no colapsa ni hace scroll, directamente deforma el botón (el pill intenta mantener su proporción con `border-radius:50rem` mientras el texto lo empuja en altura). Vale la pena recordar este patrón para las fases siguientes.

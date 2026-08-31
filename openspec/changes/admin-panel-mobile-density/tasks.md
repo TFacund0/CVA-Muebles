@@ -25,15 +25,16 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   5. [x] **Otro hallazgo menor en el mismo bloque**: `bg-opacity-5` en el panel interior del número "142" no es una clase válida de Bootstrap (los pasos son 10/25/50/75/100) — el panel se veía sólido blanco en vez de un panel translúcido "vidrio esmerilado". Cambiado a `bg-opacity-10` (el paso más chico real, consistente con el `border-opacity-10` ya usado ahí mismo).
 - Criterio de hecho: repro 375px de Dashboard antes/después — tarjeta de rendimiento ahora se ve marrón con texto legible y panel translúcido coherente; KPIs visiblemente más compactos. Detalle en `apply-progress.md`.
 
-## Fase 2 — Ventas (listado + detalle) [ ]
+## Fase 2 — Ventas (listado + detalle) [x]
 
 - Sequential, depende de Fase 0.
-- Archivos: `admin-sales.css`, posible markup en `detalleVentas.php`/`gestion_pedido_admin.php`.
+- Archivos: `admin-sales.css`, `gestion_pedido_admin.php`.
 - Sub-tareas:
-  1. Re-explorar ambas vistas puntualmente.
-  2. Aplicar a los 4 KPIs de `detalleVentas.php` el mismo tratamiento que Dashboard (mismo patrón de componente, mismo ajuste).
-  3. Compactar en el detalle de pedido (`gestion_pedido_admin.php`) el bloque de aprobación pendiente y el stepper de producción para mobile.
-- Criterio de hecho: repro 375px de listado y detalle antes/después.
+  1. [x] Re-exploradas ambas vistas con repro estático fiel (fila de `order-row`/`solicitud-row` con avatar+badge+botones, y el bloque de aprobación pendiente).
+  2. [x] `detalleVentas.php` (listado): las filas de tabla (order-row/solicitud-row) ya quedaban bien tras la Fase 0 (avatar circular correcto, botones 36px/32px) — verificado, sin cambios adicionales necesarios. Los 4 KPIs del listado usan un componente más liviano (`admin-card-v2` + `h3`/`h4`, ícono oculto bajo 576px) que ya es compacto por diseño, no el mismo `kpi-card-premium` del Dashboard — no se tocó.
+  3. [x] **Bug real encontrado al verificar (no estaba en el plan)**: el bloque "Pedido Pendiente de Aprobación" (`gestion_pedido_admin.php`) tenía dos botones (`ACEPTAR Y EMPEZAR OBRA` / `RECHAZAR PEDIDO`) con `px-5 py-3 rounded-pill` uno al lado del otro sin wrap — en 375px el texto largo se partía en 4 líneas dentro de un pill angosto, deformando el botón en un óvalo/círculo con texto desbordando el borde. Se creó `.approval-actions`/`.btn-approval` para apilarlos a ancho completo en `≤575.98px` (y mantener el layout side-by-side original en desktop).
+  4. [x] **Otro hallazgo menor en la misma página**: el ícono decorativo de billetera en la tarjeta financiera usaba `opacity-05` (clase inexistente en Bootstrap, que solo define 0/25/50/75/100) — el watermark tenue pensado por el diseño se veía a opacidad completa. Movido a `opacity: 0.05` directo en `.wallet-icon-bg` (su clase propia).
+- Criterio de hecho: repro 375px y desktop (900px) del bloque de aprobación antes/después — ya no se deforma en mobile y el layout desktop original se mantiene intacto. Detalle en `apply-progress.md`.
 
 ## Fase 3 — Catálogo (Productos + Categorías) [ ]
 

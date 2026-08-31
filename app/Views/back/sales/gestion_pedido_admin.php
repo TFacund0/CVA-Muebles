@@ -1,7 +1,7 @@
 <?= $this->extend('layout/admin_layout') ?>
 
 <?= $this->section('extra-css') ?>
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=34.0')?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin/admin-sales.css?v=35.0')?>">
 <?= $this->endSection() ?>
 
 <?= $this->section('breadcrumbs') ?>
@@ -52,18 +52,18 @@
                         <h4 class="fw-bold text-brown">Pedido Pendiente de Aprobación</h4>
                         <p class="text-muted">Revisa los detalles antes de aceptar este pedido para producción.</p>
                         
-                        <div class="d-flex justify-content-center gap-3 mt-4">
+                        <div class="d-flex justify-content-center gap-3 mt-4 approval-actions">
                             <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="estado" value="ACEPTADO">
-                                <button type="submit" class="btn btn-success px-5 py-3 rounded-pill fw-bold shadow-sm">
+                                <button type="submit" class="btn btn-success btn-approval rounded-pill fw-bold shadow-sm">
                                     <i class="bi bi-check-lg me-2"></i> ACEPTAR Y EMPEZAR OBRA
                                 </button>
                             </form>
                             <form action="<?= base_url('ventas/actualizar_estado/' . $venta['id']) ?>" method="post" data-confirm="¿Seguro que deseas rechazar este pedido?">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="estado" value="RECHAZADO">
-                                <button type="submit" class="btn btn-outline-danger px-5 py-3 rounded-pill fw-bold">
+                                <button type="submit" class="btn btn-outline-danger btn-approval rounded-pill fw-bold">
                                     <i class="bi bi-x-lg me-2"></i> RECHAZAR PEDIDO
                                 </button>
                             </form>
@@ -255,7 +255,7 @@
                     </h2>
                 </div>
             </div>
-            <i class="bi bi-wallet2 position-absolute end-0 bottom-0 text-white opacity-05 wallet-icon-bg"></i>
+            <i class="bi bi-wallet2 position-absolute end-0 bottom-0 text-white wallet-icon-bg"></i>
         </div>
 
         <!-- REGISTRAR PAGO -->
