@@ -36,15 +36,15 @@ Backend: manual (mismo criterio que `admin-panel-mobile-navbar-fix`, sin CLI de 
   4. [x] **Otro hallazgo menor en la misma página**: el ícono decorativo de billetera en la tarjeta financiera usaba `opacity-05` (clase inexistente en Bootstrap, que solo define 0/25/50/75/100) — el watermark tenue pensado por el diseño se veía a opacidad completa. Movido a `opacity: 0.05` directo en `.wallet-icon-bg` (su clase propia).
 - Criterio de hecho: repro 375px y desktop (900px) del bloque de aprobación antes/después — ya no se deforma en mobile y el layout desktop original se mantiene intacto. Detalle en `apply-progress.md`.
 
-## Fase 3 — Catálogo (Productos + Categorías) [ ]
+## Fase 3 — Catálogo (Productos + Categorías) [x]
 
 - Sequential, depende de Fase 0.
-- Archivos: `admin-products.css`, posible markup en `crud_productos.php`/`crud_categorias.php`.
 - Sub-tareas:
-  1. Re-explorar ambas vistas puntualmente.
-  2. Corregir el override de imagen de producto que hoy no reduce nada en mobile (`admin-products.css:115-118`, sigue en 80px) — bajar a un tamaño más chico.
-  3. Revisar filtros y botones de acción de fila (evaluar fila compacta de íconos en vez de apilado full-width donde el ancho lo permita).
-- Criterio de hecho: repro 375px de ambas pantallas antes/después; imágenes de producto visiblemente más chicas.
+  1. [x] Re-exploradas ambas vistas con repros fieles: fila de producto (imagen+título+badge, columna GESTIÓN de 3 botones full-width), barra de filtros (buscador+categoría+reset), fila de categoría (avatar+3 botones ícono).
+  2. [x] La imagen de producto (`product-img-container img`, clase `product-thumb-80`) **ya quedó resuelta por la Fase 0** — el override "muerto" de 80px que se había limpiado del CSS en esa fase confirma que el tamaño real ya es 50px (medido: contenedor + `<img>` a 50×50px, título ya no se superpone con el badge de ID).
+  3. [x] Barra de filtros: verificada tal cual está — buscador full-width, categoría+reset en la misma fila (`col-6`/`col-6`), se ve prolija y compacta a 375px, **sin cambios necesarios**.
+  4. [x] Botones de acción de fila: en Productos (texto+ícono, apilados `w-100`, ya con altura 36px por Fase 0) y en Categorías (solo ícono, fila centrada, mismo patrón ya verificado en Ventas) — ambos se ven bien, **sin cambios necesarios**. No se forzó el rediseño a "fila compacta de íconos" planteado como posible en la propuesta: el apilado actual ya es legible y no está roto, cambiarlo sería una decisión de gusto sin un defecto concreto detrás.
+- Criterio de hecho: repros 375px de fila de producto, filtro y fila de categoría — todo correcto tras la Fase 0, **no se necesitó ningún cambio de código adicional en esta fase** (a diferencia de las Fases 1 y 2, acá la verificación no encontró bugs nuevos). Detalle en `apply-progress.md`.
 
 ## Fase 4 — Usuarios [ ]
 

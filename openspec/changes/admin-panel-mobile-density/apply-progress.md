@@ -82,3 +82,24 @@ Fases 3-4 (Productos/Catálogo, Usuarios) y Fase 5 (QA en dispositivo real).
 
 1. Segundo caso en dos fases seguidas de una clase de opacidad Bootstrap inválida (`bg-opacity-5` en Fase 1, `opacity-05` acá) — parece un patrón de error recurrente en el proyecto (asumir que Bootstrap admite cualquier múltiplo de 5, cuando solo admite 0/25/50/75/100). Vale la pena, antes de cerrar Fase 5, un grep rápido de `opacity-0[0-9]` y `bg-opacity-0[0-9]` en todo `app/Views` para descartar más casos.
 2. `justify-content-center` sin `flex-wrap` en un contenedor con texto largo y botones de ancho fijo es una combinación de riesgo — no colapsa ni hace scroll, directamente deforma el botón (el pill intenta mantener su proporción con `border-radius:50rem` mientras el texto lo empuja en altura). Vale la pena recordar este patrón para las fases siguientes.
+
+## Fase 3 — Catálogo (Productos + Categorías): COMPLETADA (sin cambios de código)
+
+### Verificación realizada
+
+Repros fieles a 375px de: fila de producto (`product-row`, imagen + título + 3 botones de gestión apilados), barra de filtros de `crud_productos.php`, y fila de categoría (`category-row`, avatar + 3 botones ícono, mismo patrón que `order-row`/`user-row` ya verificado en fases anteriores).
+
+- **Imagen de producto**: confirmado que la Fase 0 ya resolvió el tamaño (50×50px real, medido con un `<img>` real en el repro — un primer intento con un `<div>` de reemplazo dio una lectura falsa de "sigue en 80px" porque el selector CSS de la Fase 0 apunta específicamente a la etiqueta `img`, no a cualquier hijo del contenedor; corregido el repro y confirmado el tamaño correcto).
+- **Filtros**: buscador + categoría + reset se ven prolijos y usables a 375px tal como están.
+- **Botones de acción**: tanto el patrón "texto + ícono apilado" (Productos) como "solo ícono en fila" (Categorías) se ven bien a 36px de alto (ajuste de Fase 0).
+- No se aplicó ningún cambio de código en esta fase — la verificación no encontró defectos nuevos, y no se forzó un rediseño (ej. "fila compacta de íconos" en vez de apilado) sin un problema concreto que lo justifique.
+- No se ejecutó `vendor/bin/phpunit` (no aplica, no hubo cambios de código en esta fase).
+
+### Pendiente
+
+Fase 4 (Usuarios) y Fase 5 (QA en dispositivo real).
+
+## Key Learnings (Fase 3)
+
+1. No todas las fases necesitan cambios de código — verificar y confirmar "ya está bien" es un resultado válido y vale la pena documentarlo con la misma rigurosidad que un fix, para que quede registro de que sí se revisó.
+2. Un repro con un `<div>` de relleno en vez de un `<img>` real puede dar falsos positivos cuando el CSS real usa un selector de etiqueta (`... img { ... }`) en vez de una clase — al armar repros para las próximas fases, usar siempre la etiqueta HTML real del elemento que se está midiendo, no un sustituto "equivalente".
